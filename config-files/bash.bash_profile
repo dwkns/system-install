@@ -24,7 +24,12 @@ alias rsm='cscreen -d 32 -x 2560 -y 1440'
 
 
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+
 alias hf='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 
 export PATH=/usr/local/bin:$PATH
+
+#make the default install location for cask apps /Applications
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
 #source ~/.profile
