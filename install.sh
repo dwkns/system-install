@@ -268,6 +268,8 @@ if $cask
      transmission
      Mplayerx
      charles
+     lightpaper
+     fluidapp
     )
 
     # # Install apps to /Applications as default is: /Users/$user/Applications
