@@ -1,0 +1,22 @@
+[user]
+	name = dwkns
+	email = dwkns@me.com
+[core]
+	autocrlf = input
+	safecrlf = true
+[credential]
+	helper = osxkeychain
+[alias]
+	co = checkout
+ 	ci = commit
+ 	st = status
+ 	br = branch
+ 	hist = log --pretty=format:'%h %Cgreen %ad | %Cblue %s%C(yellow)%d %Creset [%an] ' --graph --date=short
+ 	type = cat-file -t
+ 	dump = cat-file -p
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+	
