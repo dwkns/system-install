@@ -299,6 +299,10 @@ if $cask
           appname=`echo ${appNameFromCask:0:${#appNameFromCask}-10}`
         fi
       done
+
+      echo ""
+      echo "Installing Krep"
+      bash "$installFilesDirectory/install-krep.sh"
     else
       echo "Not installing dock"
     fi
