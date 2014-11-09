@@ -303,6 +303,11 @@ if $cask
       echo ""
       echo "Installing Krep"
       bash "$installFilesDirectory/install-krep.sh"
+     
+      #adds Krep app to the dock. 
+      appNameAndPath="/Applications/Krep.app"
+      defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$appNameAndPath</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
+
     else
       echo "Not installing dock"
     fi
