@@ -53,16 +53,18 @@ while read -e -t 1; do : ; done
 ###### for testing #####
 # rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
 # rm -rf `brew --cache`
- host=true
+
  homebrew=true
  cask=true
  dock= true
  rvm= true
  rails= true
- skipQuestions=true
+ # can't do interactive questions when called from a curl
+ doQuestions=false
+ host=false
  
 
-if $skipQuestions
+if $doQuestions
   then
   while true; do
     read -p "Set host name? y/n : " yn
