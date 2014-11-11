@@ -263,13 +263,13 @@ if $cask
      google-chrome
      iterm2
      sublime-text3
-     flash
      things
      transmission
      Mplayerx
      charles
      lightpaper
      fluidapp
+     flash
     )
 
     # # Install apps to /Applications as default is: /Users/$user/Applications
