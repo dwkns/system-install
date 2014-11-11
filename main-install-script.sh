@@ -156,7 +156,7 @@ if $host
     echo ""
     echo "Setting your computer name (as done via System Preferences & Sharing)"
     echo "What would you like it to be?"
-    read COMPUTER_NAME
+    read COMPUTER_NAME < /dev/tty
     sudo scutil --set ComputerName $COMPUTER_NAME
     sudo scutil --set HostName $COMPUTER_NAME
     sudo scutil --set LocalHostName $COMPUTER_NAME
