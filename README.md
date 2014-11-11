@@ -3,10 +3,9 @@ Bash Script to set up a new mac with Homebrew, Cask, RMV, Rails etc.
 
 To use it :
 
-    $ chmod +x install.sh
+   $ curl http://dwkns.com/install | bash
 
-Then :
+This runs the `install` file which downloads this repoistory and then calls the main install script `main-install-script.sh`.
 
-    $ ./install.sh
+As with all ***bash*** scripts read it before you run it!!!
 
-It will ask some questions then do it's stuff. You should read the script before you use it because it installs some quite specific stuff. 
