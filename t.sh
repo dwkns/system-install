@@ -14,3 +14,12 @@ if $answer
       else 
     echo "Not doing anything as you answered no" 
 fi
+
+
+echo “first”
+read SOMETHING < /dev/tty
+echo $SOMETHING 
+
+echo “second”
+read SOMETHINGELSE 
+echo $SOMETHINGELSE 
