@@ -1,6 +1,6 @@
 #!/bin/bash
 while true; do
-    read -p "Give me an answer ? y/n : " yn yn < /dev/tty
+    read -p "Give me an answer ? y/n : " yn < /dev/tty
     case $yn in
         [Yy]* ) answer=true ; break;;
         [Nn]* ) answer=false ; break;;
