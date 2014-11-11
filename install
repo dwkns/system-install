@@ -1,14 +1,16 @@
 #!/bin/bash
 echo "Lets install some shit"
-git clone https://github.com/dwkns/system-install.git
+
+curl -LOk https://github.com/dwkns/system-install/archive/master.zip
+unzip master.zip 
+
 if [ $? -eq 0 ]; then
-    
-    cd system-install
+    rm master.zip
     echo "---- Download succeded ----"
-    echo "---- Running main install script"
-    bash main-install-script.sh
+    echo "cd into system-install-master and run ./install-script.sh"
+
 else
-    echo "---- Couldn't download the repository. ----"
-    echo "---- Check to see if a folder named 'system-install' already exists."
+    echo "---- Couldn't download the installer files. ----"
+    echo "---- Check to see if a folder named 'system-install-master' already exists."
     echo "---- Delete it and try again."
 fi
