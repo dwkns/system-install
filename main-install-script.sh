@@ -60,7 +60,7 @@ while read -e -t 1; do : ; done
  rvm= true
  rails= true
  host=true
- doQuestions=false
+ doQuestions=true
 
 if $doQuestions
   then
