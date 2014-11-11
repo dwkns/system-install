@@ -1,5 +1,14 @@
 #!/bin/bash
 echo "Lets install some shit"
 git clone https://github.com/dwkns/system-install.git
-cd system-install
-bash main-install-script.sh
+if [ $? -eq 0 ]; then
+    echo "Download succeded"
+    cd system-install
+    echo "bash main-install-script.sh is being run"
+else
+    echo "Couldn't download the repository."
+    echo "Check to see if a folder named 'system-install' already exists."
+    echo "Delete it and try again."
+fi
+
+
