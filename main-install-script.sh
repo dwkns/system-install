@@ -59,15 +59,13 @@ while read -e -t 1; do : ; done
  dock= true
  rvm= true
  rails= true
- # can't do interactive questions when called from a curl
+ host=true
  doQuestions=false
- host=false
- 
 
 if $doQuestions
   then
   while true; do
-    read -p "Set host name? y/n : " yn
+    read -p "Set host name? y/n : " yn < /dev/tty
     case $yn in
         [Yy]* ) host=true ; break;;
         [Nn]* ) host=false ; break;;
@@ -76,7 +74,7 @@ if $doQuestions
   done
 
   while true; do
-      read -p "Install Homebrew Apps? y/n : " yn
+      read -p "Install Homebrew Apps? y/n : " yn < /dev/tty
       case $yn in
           [Yy]* ) homebrew=true ; break;;
           [Nn]* ) homebrew=false ; break;;
@@ -84,7 +82,7 @@ if $doQuestions
       esac
   done
   while true; do
-      read -p "Install Cask Apps? y/n : " yn
+      read -p "Install Cask Apps? y/n : " yn < /dev/tty
       case $yn in
           [Yy]* ) cask=true ; break;;
           [Nn]* ) cask=false ; break;;
@@ -95,7 +93,7 @@ if $doQuestions
   if $cask 
     then
       while true; do
-        read -p "Add apps to dock? y/n : " yn
+        read -p "Add apps to dock? y/n : " yn < /dev/tty
         case $yn in
             [Yy]* ) dock=true ; break;;
             [Nn]* ) dock=false ; break;;
@@ -105,7 +103,7 @@ if $doQuestions
   fi
 
   while true; do
-      read -p "Install RVM and latest Ruby? y/n : " yn
+      read -p "Install RVM and latest Ruby? y/n : " yn < /dev/tty
       case $yn in
           [Yy]* ) rvm=true ; break;;
           [Nn]* ) rvm=false ; break;;
@@ -114,7 +112,7 @@ if $doQuestions
   done
 
   while true; do
-      read -p "Install Rails? y/n : " yn
+      read -p "Install Rails? y/n : " yn < /dev/tty
       case $yn in
           [Yy]* ) rails=true ; break;;
           [Nn]* ) rails=false ; break;;
