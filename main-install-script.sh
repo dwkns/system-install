@@ -59,7 +59,7 @@ while read -e -t 1; do : ; done
  dock= true
  rvm= true
  rails= true
- skipQuestions=false
+ skipQuestions=true
  
 
 if $skipQuestions
