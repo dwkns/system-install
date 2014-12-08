@@ -131,20 +131,19 @@ echo ""
 echo "—————- Current Direcory is : $installFilesDirectory"
 echo ""
 
-echo "Copying .bash_profile"
-echo "From $installFilesDirectory/bash.bash_profile"
+echo "--- Copying .bash_profile"
 echo cp -f "$installFilesDirectory"/bash.bash_profile ~/.bash_profile
 
-echo "Copying .gitconfig"
+echo "--- Copying .gitconfig"
 cp -fv "$installFilesDirectory"/bash.gitconfig ~/.gitconfig
 
-echo "Copying .gitignore_global"
+echo "--- Copying .gitignore_global"
 cp -fv "$installFilesDirectory"/bash.gitignore_global ~/.gitignore_global
 
-echo "Copying .rspec"
+echo "--- Copying .rspec"
 cp -fv "$installFilesDirectory"/bash.rspec ~/.rspec
 
-echo "Copying .gemrc"
+echo "--- Copying .gemrc"
 cp -fv "$installFilesDirectory"/bash.gemrc ~/.gemrc
 
 source ~/.bash_profile
@@ -154,7 +153,7 @@ source ~/.bash_profile
 if $host 
   then 
     echo ""
-    echo "Setting your computer name (as done via System Preferences & Sharing)"
+    echo "--- Setting your computer name (as done via System Preferences & Sharing)"
     echo "What would you like it to be?"
     read COMPUTER_NAME < /dev/tty
     sudo scutil --set ComputerName $COMPUTER_NAME
@@ -169,56 +168,56 @@ fi
 
  
 echo ""
-echo "Increasing the window resize speed for Cocoa applications"
+echo "--- Increasing the window resize speed for Cocoa applications"
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 echo ""
-echo "Saving to disk (not to iCloud) by default"
+echo "--- Saving to disk (not to iCloud) by default"
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 echo ""
-echo "Setting a blazingly fast keyboard repeat rate"
+echo "--- Setting a blazingly fast keyboard repeat rate"
 defaults write NSGlobalDomain KeyRepeat -int 0
 
 echo ""
-echo "Turn off keyboard illumination when computer is not used for 5 minutes"
+echo "--- Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
 echo ""
-echo "Showing all filename extensions in Finder by default"
+echo "--- Showing all filename extensions in Finder by default"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 echo ""
-echo "Displaying full POSIX path as Finder window title"
+echo "--- Displaying full POSIX path as Finder window title"
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
 echo ""
-echo "Disabling the warning when changing a file extension"
+echo "--- Disabling the warning when changing a file extension"
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
  
 echo ""
-echo "Use column view in all Finder windows by default"
+echo "--- Use column view in all Finder windows by default"
 defaults write com.apple.finder FXPreferredViewStyle Clmv
  
 echo ""
-echo "Avoiding the creation of .DS_Store files on network volumes"
+echo "--- Avoiding the creation of .DS_Store files on network volumes"
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
 echo ""
-echo "Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate"
+echo "--- Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate"
 defaults write com.apple.dock tilesize -int 36
 
 echo ""
-echo "Hiding dashboard"
+echo "--- Hiding dashboard"
 defaults write com.apple.dashboard mcx-disabled -boolean true
 
 echo ""
-echo "Showing Library & ~Library "
+echo "--- Showing Library & ~Library "
 chflags nohidden ~/Library
 chflags nohidden /Library
 
 echo ""
-echo "Check for Homebrew and install if we don't have it"
+echo "--- Check for Homebrew and install if we don't have it"
 if test ! $(which brew); then
   echo "Installing homebrew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -233,25 +232,26 @@ brew update
 if $homebrew 
   then # install a load of other stiuff
     echo""
-    echo "installing various brew binaries..."
+    echo "--- installing various brew binaries..."
     brew install wget
     brew install git
     git config --global core.excludesfile ~/.gitignore_global
     
-    echo "Installing posgres"
-    echo "launch posgres at startup using : ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents"
-    echo "launching posgres now using launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+    echo""
+    echo "--- Installing posgres"
+    echo "--- launch posgres at startup using : ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents"
+    echo "--- launching posgres now using launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
     brew install postgresql
     ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
     launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
   else
-    echo "Not installing homebrew apps"
+    echo "--- Not installing homebrew apps"
 fi
 
 if $cask 
   then
     echo ""
-    echo "installing cask..."
+    echo "--- installing cask..."
     brew install caskroom/cask/brew-cask
     brew tap caskroom/versions
 
@@ -276,7 +276,7 @@ if $cask
     brew cask install --force --appdir="/Applications" ${apps[@]}
     if $dock
       then
-      echo "Adding thinds to the dock"
+      echo "--- Adding thinds to the dock"
       # loop through the list of apps and add them to the dock
       for i in "${apps[@]}"
       do
@@ -301,7 +301,7 @@ if $cask
       done
 
       echo ""
-      echo "Installing Krep"
+      echo "--- Installing Krep"
       bash "$installFilesDirectory/install-krep.sh"
      
       #adds Krep app to the dock. 
@@ -309,14 +309,14 @@ if $cask
       defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$appNameAndPath</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
 
     else
-      echo "Not installing dock"
+      echo "--- Not installing dock"
     fi
 
     echo "-------- Installing cscreen so you can change screen resolutions via the terminal"
     
     echo ""
     mkdir -p /usr/local/bin/
-    unzip $installFilesDirectory/cscreen.zip -d /usr/local/bin
+    unzip -o $installFilesDirectory/cscreen.zip -d /usr/local/bin
 
     echo "-------- configuring sublime"
     
