@@ -265,7 +265,7 @@ if $cask
      sublime-text3
      things
      transmission
-     Mplayerx
+     mplayerx
      charles
      lightpaper
      fluidapp
