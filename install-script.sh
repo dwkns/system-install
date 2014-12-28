@@ -270,6 +270,7 @@ if $cask
      lightpaper
      fluidapp
      flash
+     handbrake
     )
 
     # # Install apps to /Applications as default is: /Users/$user/Applications
