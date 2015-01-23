@@ -7,7 +7,7 @@ sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 echo ""
-echo "Disabling OS X Gate Keeper so no annoying you can't open this app messages"
+echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
 sudo spctl --master-disable
 sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
 defaults write com.apple.LaunchServices LSQuarantine -bool false
@@ -43,8 +43,7 @@ echo "--- Closing the unused windows"
 osascript -e 'tell application "Terminal" to close the front window'
 osascript -e 'tell application "Terminal" to close the front window'
 
-echo "--- Reloading bash profile into this window."
-osascript -e 'tell application "Terminal" to do script "source ~/.bash_profile" in front window'
+echo
 
 #hack to flush the stdin so it's empty when we start to ask the user questions.
 while read -e -t 1; do : ; done
@@ -60,7 +59,17 @@ while read -e -t 1; do : ; done
  rvm= true
  rails= true
  host=true
- doQuestions=true
+
+while true; do
+    read -p "Full install (f) or choose options (o) : " fo < /dev/tty
+        case $fo in
+        [Oo]* ) doQuestions=true ; break;;
+        [Ff]* ) doQuestions=false ; break;;
+        * ) echo "Please choose Full (f) or Options (o).";;
+    esac
+done
+
+echo
 
 if $doQuestions
   then
@@ -119,6 +128,14 @@ if $doQuestions
           * ) echo "Please answer yes or no.";;
       esac
   done
+
+    echo
+    echo "Doing full install init"
+    echo
+
+else
+    echo "Doing full install init"
+    echo
 fi
 
 
@@ -127,24 +144,24 @@ fi
 origninalDirectory=`pwd`
 
 
-echo ""
-echo "—————- Current Direcory is : $installFilesDirectory"
-echo ""
+#echo
+#echo "—————- Current Direcory is : $installFilesDirectory"
 
 echo "--- Copying .bash_profile"
-echo cp -f "$installFilesDirectory"/bash.bash_profile ~/.bash_profile
+cp -f "$installFilesDirectory"/bash.bash_profile ~/.bash_profile
 
 echo "--- Copying .gitconfig"
-cp -fv "$installFilesDirectory"/bash.gitconfig ~/.gitconfig
+cp -f "$installFilesDirectory"/bash.gitconfig ~/.gitconfig
 
 echo "--- Copying .gitignore_global"
-cp -fv "$installFilesDirectory"/bash.gitignore_global ~/.gitignore_global
+cp -f "$installFilesDirectory"/bash.gitignore_global ~/.gitignore_global
 
 echo "--- Copying .rspec"
-cp -fv "$installFilesDirectory"/bash.rspec ~/.rspec
+cp -f "$installFilesDirectory"/bash.rspec ~/.rspec
 
 echo "--- Copying .gemrc"
-cp -fv "$installFilesDirectory"/bash.gemrc ~/.gemrc
+cp -f "$installFilesDirectory"/bash.gemrc ~/.gemrc
+echo
 
 source ~/.bash_profile
 
@@ -237,10 +254,12 @@ if $homebrew
     brew install git
     git config --global core.excludesfile ~/.gitignore_global
     
-    echo""
+    echo
     echo "--- Installing posgres"
     echo "--- launch posgres at startup using : ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents"
     echo "--- launching posgres now using launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+
+    echo
     brew install postgresql
     ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
     launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
@@ -268,9 +287,10 @@ if $cask
      mplayerx
      charles
      lightpaper
-     fluidapp
+     fluid
      flash
      handbrake
+     omnigraffle
     )
 
     # # Install apps to /Applications as default is: /Users/$user/Applications
@@ -411,5 +431,8 @@ fi
 
 killall Dock
 cd $origninalDirectory
-source ~/.bash_profile
+echo "--- Reloading bash profile into this window."
+
+osascript -e 'tell application "Terminal" to do script "source ~/.bash_profile" in front window'
+
 
