@@ -20,7 +20,8 @@ alias gb='git branch'
 alias gp='git push --all'
 alias gco='git checkout'
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
-
+alias rd='killall Dock'
+alias ep='subl ~/.bash_profile'
 
 
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
