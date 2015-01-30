@@ -24,7 +24,7 @@ while read -e -t 1; do : ; done
  clean=true
 
 while true; do
-    read -p "Clean Full Install (c) Full install (f) or choose options (o) : " fo < /dev/tty
+    read -p "Clean sytem and full install (c), Full install (f), Choose options (o) or Quit (q) : " fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
         [Ff]* ) doQuestions=false ; clean=false break;;
