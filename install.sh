@@ -29,7 +29,9 @@ Clean system (c)
 Clean then full install (f)
 Just install everything (e)
 Choose options (o)
-Quit (q)" fo < /dev/tty
+Quit (q)
+
+" fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
         [Ff]* ) doQuestions=false ; clean=true ; break;;
