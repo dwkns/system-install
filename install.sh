@@ -25,12 +25,11 @@ while read -e -t 1; do : ; done
 
 while true; do
     read -p "What do you want to do :
- Clean system (c)
- Clean then full install (f)
- Just install everything (e)
- Choose options (o)
- Quit (q)
- :" fo < /dev/tty
+Clean system (c)
+Clean then full install (f)
+Just install everything (e)
+Choose options (o)
+Quit (q)" fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
         [Ff]* ) doQuestions=false ; clean=true ; break;;
