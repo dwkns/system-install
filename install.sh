@@ -6,6 +6,22 @@ sudo -v
 # Keep-alive: update existing `sudo` time stamp until script has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+
+while true; do
+    read -p "Do you want to clean things up before you start? : " yn < /dev/tty
+    case $yn in
+        [Yy]* ) clean=true ; break;;
+        [Nn]* ) clean=false ; break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+ done
+ 
+if $clean
+  then
+  bash "config-files/clean.sh"
+fi
+
+
 echo ""
 echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
 sudo spctl --master-disable
