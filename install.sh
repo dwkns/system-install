@@ -24,10 +24,10 @@ while read -e -t 1; do : ; done
  clean=true
 
 while true; do
-    read -p "Clean system (c)`echo $'\n> '`
-             Clean then full install (f)`echo $'\n> '`
-             Just install everything (e)`echo $'\n> '`
-             Choose options (o)`echo $'\n> '`
+    read -p "Clean system (c)'\n'
+             Clean then full install (f)'\n'
+             Just install everything (e)'\n'
+             Choose options (o)'\n'
              Quit (q) : " fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
