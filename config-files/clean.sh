@@ -18,7 +18,7 @@ if [[ $? = 0 ]] ; then
 else
     echo "--- Brew not detected - not a problem, just letting you know"
 fi
-
+sudo rm -rf /usr/local/.git
 sudo rm  -rf /Library/Caches/Homebrew
 sudo rm  -rf /usr/local/*
 sudo rm  -rf /opt/homebrew-cask
