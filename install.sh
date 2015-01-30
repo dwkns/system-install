@@ -22,45 +22,6 @@ if $clean
 fi
 
 
-echo ""
-echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
-sudo spctl --master-disable
-sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-
-
-#get the location of the current script
-currentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-installFilesDirectory=$currentDir/config-files
-
-
-#copy bash profile in first
-echo "--- Copy the bash profile file"
-cp -f $installFilesDirectory/bash.bash_profile ~/.bash_profile
-
-
-#load the terminal styles in
-echo "--- Open dwkns-dark terminal file."
-open $installFilesDirectory/dwkns-dark.terminal
-
-echo "--- Open dwkns-light terminal file."
-open $installFilesDirectory/dwkns-light.terminal
-
-#set the default terminal style
-echo "--- set the default Termianl settings to dwkns-dark"
-osascript -e 'tell application "Terminal" to set default settings to settings set "dwkns-dark"'
-
-#set the current window to the dwkns-dark style
-echo "--- set all open windows to dwkns-dark"
-osascript -e 'tell application "Terminal" to set current settings of every tab of (every window whose visible is true) to settings set named "dwkns-dark"'
-
-
-echo "--- Closing the unused windows"
-osascript -e 'tell application "Terminal" to close the front window'
-osascript -e 'tell application "Terminal" to close the front window'
-
-echo
-
 #hack to flush the stdin so it's empty when we start to ask the user questions.
 while read -e -t 1; do : ; done
 
@@ -156,7 +117,7 @@ if $doQuestions
   done
 
     echo
-    echo "Doing full install init"
+    echo "Got your anwers, doing install"
     echo
 
 else
@@ -165,6 +126,45 @@ else
 fi
 
 
+
+echo ""
+echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
+sudo spctl --master-disable
+sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+
+#get the location of the current script
+currentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+installFilesDirectory=$currentDir/config-files
+
+
+#copy bash profile in first
+echo "--- Copy the bash profile file"
+cp -f $installFilesDirectory/bash.bash_profile ~/.bash_profile
+
+
+#load the terminal styles in
+echo "--- Open dwkns-dark terminal file."
+open $installFilesDirectory/dwkns-dark.terminal
+
+echo "--- Open dwkns-light terminal file."
+open $installFilesDirectory/dwkns-light.terminal
+
+#set the default terminal style
+echo "--- set the default Termianl settings to dwkns-dark"
+osascript -e 'tell application "Terminal" to set default settings to settings set "dwkns-dark"'
+
+#set the current window to the dwkns-dark style
+echo "--- set all open windows to dwkns-dark"
+osascript -e 'tell application "Terminal" to set current settings of every tab of (every window whose visible is true) to settings set named "dwkns-dark"'
+
+
+echo "--- Closing the unused windows"
+osascript -e 'tell application "Terminal" to close the front window'
+osascript -e 'tell application "Terminal" to close the front window'
+
+echo
 
 #get the original directory
 origninalDirectory=`pwd`
