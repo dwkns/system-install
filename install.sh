@@ -128,6 +128,15 @@ if $doQuestions
           * ) echo "Please answer yes or no.";;
       esac
   done
+  
+  while true; do
+      read -p "Install RubyMotion? y/n : " yn < /dev/tty
+      case $yn in
+          [Yy]* ) rubymotion=true ; break;;
+          [Nn]* ) rubymotion=false ; break;;
+          * ) echo "Please answer yes or no.";;
+      esac
+  done
 
     echo
     echo "Doing full install init"
@@ -420,6 +429,12 @@ if $rails
   gem install rails 
 else
   echo "Not installing rails"
+fi
+
+if $rubymotion
+  curl  -O http://www.rubymotion.com/files/RubyMotion%20Installer.zip
+  unzip "RubyMotion%20Installer.zip"
+  open "RubyMotion Installer.app"
 fi
 
 if $cask 
