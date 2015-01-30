@@ -433,6 +433,7 @@ else
 fi
 
 if $rubymotion
+  then
   curl  -O http://www.rubymotion.com/files/RubyMotion%20Installer.zip
   unzip "RubyMotion%20Installer.zip"
   open "RubyMotion Installer.app"
