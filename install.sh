@@ -125,8 +125,10 @@ fi
 if $clean
   then
   bash "config-files/clean.sh"
+  echo
+  echo "Cleaning done. Starting Install now..."
 fi
-sleep 2
+sleep 3
 
 echo ""
 echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
