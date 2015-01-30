@@ -22,6 +22,7 @@ while read -e -t 1; do : ; done
  host=false
  rubymotion=true
  clean=true
+ justClean=false
 echo
 
 while true; do
