@@ -40,5 +40,5 @@ cd ~/Desktop
 
 
 echo
-echo "--- Got to the end - all done"
+echo "--- Clean up has finished ---"
 echo
