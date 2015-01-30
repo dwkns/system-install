@@ -35,10 +35,10 @@ Quit (q)
 
 " fo < /dev/tty
         case $fo in
-        [Oo]* ) doQuestions=true ; break;;
-        [Ff]* ) doQuestions=false ; clean=true ; break;;
-        [Ee]* ) doQuestions=false ;  break;;
-        [Cc]* ) doQuestions=false ; justClean=true ; clean=true ; break;;
+        [Oo]* ) doQuestions=true  ; clean=false ; break;;
+        [Ff]* ) doQuestions=false ; clean=true  ; break;;
+        [Ee]* ) doQuestions=false ; clean=false ; break;;
+        [Cc]* ) doQuestions=false ; clean=true  ; justClean=true ; break;;
         [Qq]* ) exit ; break;;
         * ) echo "Please choose from :
 Clean system (c)
