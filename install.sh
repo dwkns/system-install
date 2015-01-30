@@ -19,7 +19,7 @@ while read -e -t 1; do : ; done
  dock= true
  rvm= true
  rails= true
- host=true
+ host=false
  rubymotion=true
  clean=true
 
