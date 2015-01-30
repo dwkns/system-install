@@ -24,7 +24,7 @@ while read -e -t 1; do : ; done
  clean=true
 
 while true; do
-    read -p "
+    read -p "What do you want to do :
  Clean system (c)
  Clean then full install (f)
  Just install everything (e)
