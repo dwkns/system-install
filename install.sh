@@ -286,3 +286,207 @@ else
   echo "Nope homebrew is already installed"
   fi
 fi
+
+
+echo ""
+echo "Update homebrew recipes"
+brew update
+
+if $homebrew 
+  then # install a load of other stiuff
+    echo""
+    echo "--- installing various brew binaries..."
+    brew install wget
+    brew install git
+    git config --global core.excludesfile ~/.gitignore_global
+    
+    echo
+    echo "--- Installing posgres"
+    echo "--- launch posgres at startup using : ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents"
+    echo "--- launching posgres now using launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+
+    echo
+    brew install postgresql
+    ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
+    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+  else
+    echo "--- Not installing homebrew apps"
+fi
+
+if $cask 
+  then
+    echo ""
+    echo "--- installing cask..."
+    brew install caskroom/cask/brew-cask
+    brew tap caskroom/versions
+
+    echo ""
+    echo "install cask applications"
+    # Apps
+    apps=(
+     dropbox
+     google-chrome
+     iterm2
+     sublime-text3
+     things
+     transmission
+     mplayerx
+     charles
+     lightpaper
+     fluid
+     flash
+     handbrake
+     omnigraffle
+    )
+
+    # # Install apps to /Applications as default is: /Users/$user/Applications
+    brew cask install --force --appdir="/Applications" ${apps[@]}
+    if $dock
+      then
+      echo "--- Adding thinds to the dock"
+      # loop through the list of apps and add them to the dock
+      for i in "${apps[@]}"
+      do
+         :
+         #brew cask info lists some info about the app
+         #get the line after the one that contains : /==> Contents as this is the app’s real name.
+         appNameFromCask=`brew cask info $i | sed -n '/==> Contents/{n;p;}'`
+         # do whatever on $i in the loop
+        if [[ $appNameFromCask == *link* ]]
+        then
+
+          appname=`echo ${appNameFromCask:0:${#appNameFromCask}-7}`
+          appNameAndPath="/Applications/"$appname
+          #adds the app to the dock. 
+        defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$appNameAndPath</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
+
+        elif [[ $appNameFromCask == *install* ]]
+          then
+
+          appname=`echo ${appNameFromCask:0:${#appNameFromCask}-10}`
+        fi
+      done
+
+      echo ""
+      echo "--- Installing Krep"
+      bash "$installFilesDirectory/install-krep.sh"
+     
+      #adds Krep app to the dock. 
+      appNameAndPath="/Applications/Krep.app"
+      defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$appNameAndPath</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
+
+    else
+      echo "--- Not installing dock"
+    fi
+
+    echo "-------- Installing cscreen so you can change screen resolutions via the terminal"
+    
+    echo ""
+    mkdir -p /usr/local/bin/
+    unzip -o $installFilesDirectory/cscreen.zip -d /usr/local/bin
+
+    echo "-------- configuring sublime"
+    
+    echo ""
+    echo "-------- create the subl symlink"
+    mkdir -p /usr/local/bin/ # ensure the folder is there
+    ln -sf /Applications/'Sublime Text.app'/Contents/SharedSupport/bin/subl /usr/local/bin
+
+
+    echo ""
+    echo "-------- Ensure the directories we need are there"
+    mkdir -p  ~/Library/'Application Support/Sublime Text 3'/Local
+    mkdir -p  ~/Library/'Application Support/Sublime Text 3'/Packages/User
+
+    echo ""
+    echo "-------- Copy the licence file in"
+    cp -f $installFilesDirectory/License.sublime_license ~/Library/'Application Support/Sublime Text 3'/Local
+
+    echo ""
+    echo "-------- Change to the Sublime directory"
+    cd ~/Library/'Application Support/Sublime Text 3'/Packages/
+
+    echo ""
+    echo "-------- Install package manager"
+
+    git clone git://github.com/wbond/sublime_package_control.git 'Package Control'
+    cd 'Package Control'
+    git checkout python3
+    cd .. 
+
+    echo ""
+    echo "-------- Install Sublime Ruby Terminal package"
+    git clone https://github.com/dwkns/sublime-ruby-terminal.git
+    chmod  a+x sublime-ruby-terminal/ruby-terminal.sh
+    ln -s ~/Library/'Application Support/Sublime Text 3'/Packages/sublime-ruby-terminal/ruby-terminal.sh /usr/local/bin
+
+
+    echo ""
+    echo "-------- Install Sublime Ruby Terminal package"
+    git clone https://github.com/dwkns/sublime-terminal.git
+    chmod  a+x sublime-terminal/terminal.sh
+    ln -s ~/Library/'Application Support/Sublime Text 3'/Packages/sublime-terminal/terminal.sh /usr/local/bin
+
+
+    echo ""
+    echo "-------- Change to the User folder and install config files & snipits"
+    cd ~/Library/'Application Support/Sublime Text 3'/Packages/User
+    git clone https://github.com/dwkns/dwkns-sublime-config.git
+    git clone https://github.com/dwkns/sublime-code-snipits.git
+
+    cp -r  dwkns-sublime-config/*.* ./
+    rm -rf dwkns-sublime-config/age%20Control.sublime-package -P ~/Library/'Application Support/Sublime Text 3/Installed Packages'
+        
+  else
+    echo "Not installing cask apps"
+fi
+
+brew tap --repair
+brew doctor
+
+if $rvm
+  then
+  echo "Installing RVM and Ruby"
+  curl -sSL https://get.rvm.io | bash -s stable 
+  source ~/.profile
+  source ~/.bash_profile
+  source ~/.rvm/scripts/rvm
+  type rvm | head -n 1 
+  rvm install ruby --auto-dotfiles 
+  echo `rvm -v` 
+else
+  echo "Not installing RVM and Ruby"
+fi
+
+if $rails
+  then
+  echo "Installing rails"
+  gem update
+  gem install bundler
+  gem install rails 
+else
+  echo "Not installing rails"
+fi
+
+if $rubymotion
+  then
+  curl  -O http://www.rubymotion.com/files/RubyMotion%20Installer.zip
+  unzip "RubyMotion%20Installer.zip"
+  open "RubyMotion Installer.app"
+fi
+
+if $cask 
+  then
+  echo "open dropbox"
+  open /Applications/Dropbox.app
+  subl
+fi
+
+killall Dock
+cd $origninalDirectory
+echo "--- Reloading bash profile into this window."
+
+osascript -e 'tell application "Terminal" to do script "source ~/.bash_profile" in front window'
+
+
+
