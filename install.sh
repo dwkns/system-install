@@ -39,11 +39,12 @@ while read -e -t 1; do : ; done
  rubymotion=true
 
 while true; do
-    read -p "Full install (f) or choose options (o) : " fo < /dev/tty
+    read -p "Clean Full Install (c) Full install (f) or choose options (o) : " fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
         [Ff]* ) doQuestions=false ; break;;
-        * ) echo "Please choose Full (f) or Options (o).";;
+        [Cc]* ) doQuestions=false ; clean=true ; break;;
+        * ) echo "Please choose Clean (c) Full (f) or Options (o).";;
     esac
 done
 
@@ -52,6 +53,16 @@ echo
 if $doQuestions
   then
   while true; do
+    read -p "Do you want to clean things up before you start? : " yn < /dev/tty
+    case $yn in
+        [Yy]* ) clean=true ; break;;
+        [Nn]* ) clean=false ; break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+ done
+
+
+ while true; do
     read -p "Set host name? y/n : " yn < /dev/tty
     case $yn in
         [Yy]* ) host=true ; break;;
