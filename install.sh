@@ -38,7 +38,13 @@ Quit (q)
         [Ee]* ) doQuestions=false ;  break;;
         [Cc]* ) doQuestions=false ; justClean=true ; clean=true ; break;;
         [Qq]* ) exit ; break;;
-        * ) echo "Please choose Clean (c) Full (f) or Options (o).";;
+        * ) echo "Please choose from :
+Clean system (c)
+Clean then full install (f)
+Just install everything (e)
+Choose options (o)
+Quit (q)
+";;
     esac
 done
 
