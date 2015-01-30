@@ -29,6 +29,7 @@ while true; do
         [Oo]* ) doQuestions=true ; break;;
         [Ff]* ) doQuestions=false ; clean=false break;;
         [Cc]* ) doQuestions=false ; clean=true ; break;;
+        [Qq]* ) exit ; break;;
         * ) echo "Please choose Clean (c) Full (f) or Options (o).";;
     esac
 done
