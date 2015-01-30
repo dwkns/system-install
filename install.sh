@@ -6,22 +6,6 @@ sudo -v
 # Keep-alive: update existing `sudo` time stamp until script has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-
-while true; do
-    read -p "Do you want to clean things up before you start? : " yn < /dev/tty
-    case $yn in
-        [Yy]* ) clean=true ; break;;
-        [Nn]* ) clean=false ; break;;
-        * ) echo "Please answer yes or no.";;
-    esac
- done
- 
-if $clean
-  then
-  bash "config-files/clean.sh"
-fi
-
-
 #hack to flush the stdin so it's empty when we start to ask the user questions.
 while read -e -t 1; do : ; done
 
@@ -37,12 +21,13 @@ while read -e -t 1; do : ; done
  rails= true
  host=true
  rubymotion=true
+ clean=true
 
 while true; do
     read -p "Clean Full Install (c) Full install (f) or choose options (o) : " fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
-        [Ff]* ) doQuestions=false ; break;;
+        [Ff]* ) doQuestions=false ; clean=false break;;
         [Cc]* ) doQuestions=false ; clean=true ; break;;
         * ) echo "Please choose Clean (c) Full (f) or Options (o).";;
     esac
@@ -136,6 +121,10 @@ else
     echo
 fi
 
+if $clean
+  then
+  bash "config-files/clean.sh"
+fi
 
 
 echo ""
