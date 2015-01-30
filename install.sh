@@ -59,6 +59,7 @@ while read -e -t 1; do : ; done
  rvm= true
  rails= true
  host=true
+ rubymotion=true
 
 while true; do
     read -p "Full install (f) or choose options (o) : " fo < /dev/tty
