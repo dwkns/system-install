@@ -265,7 +265,7 @@ chflags nohidden /Library
 echo ""
 echo "--- Check for Homebrew and install if we don't have it"
 if test ! $(which brew); then
-  echo "Installing homebrew..."
+  echo "Homebrew was not found. Installing homebrew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 else
  echo "Found homebrew however it migh be bad clean up."
