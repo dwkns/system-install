@@ -153,7 +153,7 @@ fi
 sleep 3
 
 echo ""
-echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
+echo "--- Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
 sudo spctl --master-disable
 sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
 defaults write com.apple.LaunchServices LSQuarantine -bool false
@@ -239,52 +239,40 @@ echo ""
 echo "--- Increasing the window resize speed for Cocoa applications"
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
-echo ""
 echo "--- Saving to disk (not to iCloud) by default"
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
-echo ""
 echo "--- Setting a blazingly fast keyboard repeat rate"
 defaults write NSGlobalDomain KeyRepeat -int 0
 
-echo ""
 echo "--- Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
-echo ""
 echo "--- Showing all filename extensions in Finder by default"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-echo ""
 echo "--- Displaying full POSIX path as Finder window title"
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
-echo ""
 echo "--- Disabling the warning when changing a file extension"
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
  
-echo ""
 echo "--- Use column view in all Finder windows by default"
 defaults write com.apple.finder FXPreferredViewStyle Clmv
  
-echo ""
 echo "--- Avoiding the creation of .DS_Store files on network volumes"
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-echo ""
 echo "--- Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate"
 defaults write com.apple.dock tilesize -int 36
 
-echo ""
 echo "--- Hiding dashboard"
 defaults write com.apple.dashboard mcx-disabled -boolean true
 
-echo ""
 echo "--- Showing Library & ~Library "
 chflags nohidden ~/Library
 chflags nohidden /Library
 
-echo ""
 echo "--- Check for Homebrew and install if we don't have it"
 if test ! $(which brew); then
   echo "Homebrew was not found. Installing homebrew..."
