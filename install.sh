@@ -114,11 +114,11 @@ if $doQuestions
   done
 
     echo
-    echo "Got your anwers, doing install"
+    echo "Got your anwers, working..."
     echo
 
 else
-    echo "Doing full install init"
+    echo "Ok, lets go..."
     echo
 fi
 
@@ -126,7 +126,7 @@ if $clean
   then
   bash "config-files/clean.sh"
 fi
-
+sleep 2
 
 echo ""
 echo "Disabling OS X Gate Keeper so no annoying 'you can't open this app messages'"
