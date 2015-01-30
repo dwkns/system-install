@@ -24,11 +24,12 @@ while read -e -t 1; do : ; done
  clean=true
 
 while true; do
-    read -p "Clean sytem and full install (c), Full install (f), Choose options (o) or Quit (q) : " fo < /dev/tty
+    read -p "Clean system (c), Clean then full install (f), Just install everything (e), Choose options (o) or Quit (q) : " fo < /dev/tty
         case $fo in
         [Oo]* ) doQuestions=true ; break;;
-        [Ff]* ) doQuestions=false ; clean=false break;;
-        [Cc]* ) doQuestions=false ; clean=true ; break;;
+        [Ff]* ) doQuestions=false ; clean=true ; break;;
+        [Ee]* ) doQuestions=false ;  break;;
+        [Cc]* ) justClean=true ; clean=true ; break;;
         [Qq]* ) exit ; break;;
         * ) echo "Please choose Clean (c) Full (f) or Options (o).";;
     esac
@@ -125,8 +126,14 @@ fi
 if $clean
   then
   bash "config-files/clean.sh"
-  echo
-  echo "Cleaning done. Starting Install now..."
+  if $justClean; then
+    echo 
+    echo "Clean up files. Exiting..."
+    exit
+    else
+     echo
+     echo "Cleaning done. Starting Install now..."
+  fi
 fi
 sleep 3
 
