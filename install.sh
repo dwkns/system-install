@@ -473,6 +473,7 @@ if $rubymotion
   curl  -O http://www.rubymotion.com/files/RubyMotion%20Installer.zip
   unzip "RubyMotion%20Installer.zip"
   open "RubyMotion Installer.app"
+  rm -rf "RubyMotion%20Installer.zip"
 fi
 
 if $cask 
@@ -482,8 +483,14 @@ if $cask
   subl
 fi
 
+
 killall Dock
 cd $origninalDirectory
+
+dirName="system-install-master"
+if [ -d "$dirName" ]; then 
+  rm -rf "system-install-master"
+fi
 echo "--- Reloading bash profile into this window."
 
 osascript -e 'tell application "Terminal" to do script "source ~/.bash_profile" in front window'
