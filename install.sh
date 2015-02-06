@@ -298,6 +298,7 @@ if $homebrew
     echo "--- installing various brew binaries..."
     brew install wget
     brew install git
+    brew install python
     git config --global core.excludesfile ~/.gitignore_global
     
     echo
