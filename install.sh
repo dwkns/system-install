@@ -342,7 +342,7 @@ if $cask
     )
 
     # # Install apps to /Applications as default is: /Users/$user/Applications
-    brew cask install --force --appdir="/Applications" ${apps[@]}
+    sudo brew cask install --force --appdir="/Applications" ${apps[@]}
     if $dock
       then
       echo "--- Adding thinds to the dock"
