@@ -299,6 +299,7 @@ if $homebrew
     brew install wget
     brew install git
     brew install python
+    brew install node
     git config --global core.excludesfile ~/.gitignore_global
     
     echo
