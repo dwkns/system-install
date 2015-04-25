@@ -13,7 +13,7 @@ module Tty extend self
 end
 
 def success args
-   puts "#{Tty.green}====>#{args}#{Tty.reset}"
+ puts "#{Tty.green}====>#{args}#{Tty.reset}"
 end
 
 def msg args
@@ -25,42 +25,42 @@ def warn warning
 end
 
 def clean
-    msg "Clean has started"
-    
-    if `command -v rvm` == ""
-            p "RVM is not installed"
-            `ruby -v`
-        else
-            `rvm use system`
-    end
-    
-	
-	delete_array = [
-		 "/usr/local",
-		 "/Library/Caches/Homebrew",
-		 "/opt/homebrew-cask",
-		 "/usr/bin/motion",
-		 "/Library/RubyMotion",
-		 "/tmp/homebrew.rb",
-         "/tmp/krep",
-         "/Applications/Krep.app",
-		 "~/.bash_profile",
-		 "~/.git*",
-		 "~/.rspec",
-		 "~/.profile",
-		 "~/.zshrc",
-		 "~/.zlogin",
-		 "~/.bashrc",
-		 "~/.rvm",
-		 "~/.gem",
-		 "~/.dropbox",
-		 "~/.subversion",
-		 "~/.bash_profile",
-		 "~/Library/'Application Support/Sublime Text 3'"
-	]
+  msg "Clean has started"
 
-	delete_array.each do |location|
-		do_command_print_output "sudo rm -rf #{location}"
+  if `command -v rvm` == ""
+    p "RVM is not installed"
+    `ruby -v`
+  else
+    `rvm use system`
+  end
+
+
+  delete_array = [
+   "/usr/local",
+   "/Library/Caches/Homebrew",
+   "/opt/homebrew-cask",
+   "/usr/bin/motion",
+   "/Library/RubyMotion",
+   "/tmp/homebrew.rb",
+   "/tmp/krep",
+   "/Applications/Krep.app",
+   "~/.bash_profile",
+   "~/.git*",
+   "~/.rspec",
+   "~/.profile",
+   "~/.zshrc",
+   "~/.zlogin",
+   "~/.bashrc",
+   "~/.rvm",
+   "~/.gem",
+   "~/.dropbox",
+   "~/.subversion",
+   "~/.bash_profile",
+   "~/Library/'Application Support/Sublime Text 3'"
+ ]
+
+ delete_array.each do |location|
+  do_command_print_output "sudo rm -rf #{location}"
 		# do_command_print_output "sudo rm -rfv #{location}" #verbose
 	end
 	#remove symlinks from Application folder - anoying escaping at end.
@@ -215,51 +215,51 @@ brew_packages = [
 brew_packages = [
 	"git",
 	"python"
-] if quick
+  ] if quick
 
-brew_packages.each do |package|
-	msg "installing #{package}"
-	do_command_print_output "brew install #{package}"
-end
+  brew_packages.each do |package|
+   msg "installing #{package}"
+   do_command_print_output "brew install #{package}"
+ end
 
 #-------------------- Install nodejs Packages--------------------
 if !quick
-    nodejs_packages = [
-      "jshint",
-      "http-server",
-      "gulp",
-      "bower"
-    ]
-    nodejs_packages.each do |package|
-      msg "installing #{package}"
-      do_command_print_output "npm install -g #{package}"
-    end
+  nodejs_packages = [
+    "jshint",
+    "http-server",
+    "gulp",
+    "bower"
+  ]
+  nodejs_packages.each do |package|
+    msg "installing #{package}"
+    do_command_print_output "npm install -g #{package}"
+  end
 end
 
 #-------------------- Install Cask Applications --------------------
 casks = [
-	 	"dropbox",
-    "sublime-text3",
-		"things",
-		"flash",
-		"handbrake",
-		"omnigraffle",
-		"transmission",
-		"mplayerx",
-		"charles",
-		"lightpaper",
-        "fluid",
-        "codekit"
+ "dropbox",
+ "sublime-text3",
+ "things",
+ "flash",
+ "handbrake",
+ "omnigraffle",
+ "transmission",
+ "mplayerx",
+ "charles",
+ "lightpaper",
+ "fluid",
+ "codekit"
 
 ]
 
 
 casks = [
-	 	"dropbox",
-		"sublime-text3"] if quick
+ "dropbox",
+ "sublime-text3"] if quick
 
 
-casks.each do |cask|
+ casks.each do |cask|
   do_command_print_output "brew cask install --force --appdir='/Applications' #{cask}"
 
   msg "that should be the install of #{cask}"
@@ -306,31 +306,31 @@ end
 
 #-------------------- Install dotfiles --------------------
 #install .rspec
-url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/bash.rspec"
+url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/bash.rspec"
 file_name = "#{home_dir}/.rspec"
 download_and_write_file url, file_name
 
 
 #install .gitignore_global
-url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/bash.gitignore_global"
+url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/bash.gitignore_global"
 file_name = "#{home_dir}/.gitignore_global"
 download_and_write_file url, file_name
 
 
 #install .gitconfig
-url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/bash.gitconfig"
+url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/bash.gitconfig"
 file_name = "#{home_dir}/.gitconfig"
 download_and_write_file url, file_name
 
 
 #install .gemrc
-url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/bash.gemrc"
+url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/bash.gemrc"
 file_name = "#{home_dir}/.gemrc"
 download_and_write_file url, file_name
 
 
 #install .bash_profile
-url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/bash.bash_profile"
+url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/bash.bash_profile"
 file_name = "#{home_dir}/.bash_profile"
 download_and_write_file url, file_name
 
@@ -385,38 +385,38 @@ msg "Showing Library & ~Library"
 
 
 #-------------------- Install RVM and Ruby --------------------
-msg "Installing RVM and Ruby"
-do_command_print_output "curl -sSL https://get.rvm.io | bash -s stable --ruby"
+# msg "Installing RVM and Ruby"
+# do_command_print_output "curl -sSL https://get.rvm.io | bash -s stable --ruby"
 
 
-# Reload the bash and .rvm profiles
-msg "Doing source"
-msg "source ~/.bash_profile"
-do_command_print_output "source ~/.bash_profile"
+# # Reload the bash and .rvm profiles
+# msg "Doing source"
+# msg "source ~/.bash_profile"
+# do_command_print_output "source ~/.bash_profile"
 
-msg "source ~/.rvm/scripts/rvm"
-do_command_print_output "source ~/.rvm/scripts/rvm"
+# msg "source ~/.rvm/scripts/rvm"
+# do_command_print_output "source ~/.rvm/scripts/rvm"
 
 
-# Print out the Ruby and RVM versions
-do_command_print_output "rvm -v"
-do_command_print_output "ruby -v"
+# # Print out the Ruby and RVM versions
+# do_command_print_output "rvm -v"
+# do_command_print_output "ruby -v"
 
 
 #-------------------- Install some Ruby gems --------------------
-msg "Installing some gems"
-gemlist = [
-			"bundler",
-			"rails"
-]
+# msg "Installing some gems"
+# gemlist = [
+#  "bundler",
+#  "rails"
+# ]
 
-gemlist = [
-			"bundler"
-] if quick
+# gemlist = [
+#  "bundler"
+#  ] if quick
 
-gemlist.each do |this_gem|
-	do_command_print_output "gem install #{ this_gem }"
-end
+#  gemlist.each do |this_gem|
+#    do_command_print_output "gem install #{ this_gem }"
+#  end
 
 
 #-------------------- Configure sublime --------------------
@@ -431,55 +431,75 @@ sublime_dir = "#{home_dir}/Library/Application Support/Sublime Text 3"
 `mkdir -p '#{sublime_dir}/Packages/User'`
 `mkdir -p '#{sublime_dir}/Installed Packages'`
 
-msg "-------- intalling license"
-url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/License.sublime_license"
-file_name = "#{sublime_dir}/Local/License.sublime_license"
-download_and_write_file url, file_name
-
-
 msg "-------- intalling Package Control"
 `git clone git://github.com/wbond/sublime_package_control.git '#{sublime_dir}/Packages/Package Control'`
 
 
-msg "-------- intalling sublime config files"
-`git clone https://github.com/dwkns/dwkns-sublime-config.git '#{sublime_dir}/Packages/User'`
+base_url = "https://raw.githubusercontent.com/dwkns/system-install/master/"
+
+msg "-------- intalling license"
+url = base_url+"sublime-config-files/License.sublime_license"
+file_name = "#{sublime_dir}/Local/License.sublime_license"
+download_and_write_file url, file_name
 
 
-msg "-------- intalling sublime-code-snipits"
-`git clone https://github.com/dwkns/sublime-code-snipits.git '#{sublime_dir}/Packages/sublime-code-snipits'`
+
+msg "-------- installing sublime preferences"
+url = base_url+"sublime-config-files/Preferences.sublime-settings"
+file_name = "#{sublime_dir}/Packages/User/Preferences.sublime-settings"
+download_and_write_file url, file_name
+
+msg "-------- installing sublime Package Control Settings"
+url = base_url+"sublime-config-files/Package Control.sublime-settings"
+file_name = "#{sublime_dir}/Packages/User/Package Control.sublime-settings"
+download_and_write_file url, file_name
+
+msg "-------- installing sublime theme dwkns.tmTheme"
+url = base_url+"sublime-config-files/dwkns.tmTheme"
+file_name = "#{sublime_dir}/Packages/User/dwkns.tmTheme"
+download_and_write_file url, file_name
+
+msg "-------- installing sublime keymap"
+url = base_url+"sublime-config-files/Default (OSX).sublime-keymap"
+file_name = "#{sublime_dir}/Packages/User/Default (OSX).sublime-keymap"
+download_and_write_file url, file_name
 
 
-msg "-------- intalling sublime-ruby-terminal build system"
+# msg "-------- intalling sublime-code-snipits"
+# `git clone https://github.com/dwkns/sublime-code-snipits.git '#{sublime_dir}/Packages/sublime-code-snipits'`
+
+
+msg "-------- intalling ruby-terminal build system"
 `git clone https://github.com/dwkns/ruby-terminal.git '#{sublime_dir}/Packages/ruby-terminal'`
 `chmod  a+x '#{sublime_dir}/Packages/ruby-terminal/ruby-terminal.sh'`
 `ln -s '#{sublime_dir}/Packages/ruby-terminal/ruby-terminal.sh' /usr/local/bin`
 
 
-msg "-------- intalling sublime-terminal build system"
-`git clone https://github.com/dwkns/sublime-terminal.git '#{sublime_dir}/Packages/sublime-terminal'`
-`chmod  a+x '#{sublime_dir}/Packages/sublime-terminal/terminal.sh'`
-`ln -s '#{sublime_dir}/Packages/sublime-terminal/terminal.sh' /usr/local/bin`
+# msg "-------- intalling sublime-terminal build system"
+# `git clone https://github.com/dwkns/sublime-terminal.git '#{sublime_dir}/Packages/sublime-terminal'`
+# `chmod  a+x '#{sublime_dir}/Packages/sublime-terminal/terminal.sh'`
+# `ln -s '#{sublime_dir}/Packages/sublime-terminal/terminal.sh' /usr/local/bin`
 
 
 # #-------------------- Install Krep and Ruby Motion --------------------
- if !quick
- 	msg "-------- Installing Krep"
- 	`git clone https://github.com/dwkns/krep.git '/tmp/krep'`
- 	`cp -rf /tmp/krep/Krep.app /Applications`
- 	appNameAndPath="/Applications/Krep.app"
- 	`defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>#{appNameAndPath}</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"`
+if !quick
+  msg "-------- Installing Krep"
+  `git clone https://github.com/dwkns/krep.git '/tmp/krep'`
+  `cp -rf /tmp/krep/Krep.app /Applications`
+  appNameAndPath="/Applications/Krep.app"
+  `defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>#{appNameAndPath}</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"`
 
- 	`rm -rf /tmp/krep`
+  `rm -rf /tmp/krep`
 
- 	msg "-------- Intalling RubyMotion"
- 	url =  "http://www.rubymotion.com/files/RubyMotion%20Installer.zip"
- 	file_name = "#{home_dir}/Downloads/RubyMotionInstaller.zip"
- 	download_and_write_file url, file_name
+  msg "-------- Intalling RubyMotion"
+  url =  "http://www.rubymotion.com/files/RubyMotion%20Installer.zip"
+  file_name = "#{home_dir}/Downloads/RubyMotionInstaller.zip"
+  download_and_write_file url, file_name
 
- 	`unzip -o #{file_name} -d #{home_dir}/Downloads`
- 	`open '#{home_dir}/Downloads/RubyMotion Installer.app'`
- 	`rm -rf #{file_name}`
- end
+  `unzip -o #{file_name} -d #{home_dir}/Downloads`
+  `open '#{home_dir}/Downloads/RubyMotion Installer.app'`
+  `rm -rf #{file_name}`
+end
 
 
 #-------------------- Clean up --------------------
