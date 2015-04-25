@@ -1,0 +1,18 @@
+{
+  "always_show_minimap_viewport": true,
+  "color_scheme": "Packages/User/dwkns.tmTheme",
+  "font_face": "Source Code Pro light",
+  "font_size": 14,
+  "hide_minimap": true,
+  "ignored_packages":
+  [
+    "CSS",
+    "HTML",
+    "Vintage"
+  ],
+  "show_minimap": false,
+  "tab_size": 2,
+  "theme": "Spacegray.sublime-theme",
+  "translate_tabs_to_spaces": true,
+  "trim_automatic_white_space": true
+}
