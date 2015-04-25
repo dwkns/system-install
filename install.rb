@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'net/http'
+require 'open-uri'
 
 module Tty extend self
   def blue; bold 34; end
@@ -24,18 +25,26 @@ def warn warning
   puts "#{Tty.red}Warning#{Tty.reset}: #{warning.chomp}"
 end
 
-def clean
-  msg "Clean has started"
-
-  if `command -v rvm` == ""
-    p "RVM is not installed"
-    `ruby -v`
-  else
-    `rvm use system`
+def clean quick
+  
+  if quick ruby
+      msg "Quick clean has started"
+      else
+      
+       msg "Full clean has started"
+      end
+  
+  begin
+       `rvm use system`
+       
+      
+      rescue
+     msg "rvm wasn't found - assuming system ruby"
+     msg `ruby -v`
   end
+ 
 
-
-  delete_array = [
+delete_array = [
    "/usr/local",
    "/Library/Caches/Homebrew",
    "/opt/homebrew-cask",
@@ -58,11 +67,26 @@ def clean
    "~/.bash_profile",
    "~/Library/'Application Support/Sublime Text 3'"
  ]
+ 
+ delete_array = [
+     "~/.bash_profile",
+     "~/.git*",
+     "~/.rspec",
+     "~/.profile",
+     "~/.zshrc",
+     "~/.zlogin",
+     "~/.bashrc",
+     "~/.gem",
+     "~/.dropbox",
+     "~/.subversion",
+     "~/.bash_profile",
+     "~/Library/'Application Support/Sublime Text 3'"
+     ] if quick # dump this
 
  delete_array.each do |location|
   do_command_print_output "sudo rm -rf #{location}"
 		# do_command_print_output "sudo rm -rfv #{location}" #verbose
-	end
+  end
 	#remove symlinks from Application folder - anoying escaping at end.
 	`find /Applications -maxdepth 1 -lname '*' -exec rm {} \\\;`
 
@@ -79,7 +103,8 @@ end
 
 def download_and_write_file url, file_name
 	#downloads text from a URL and writes it to file
-	uri = URI(url)
+    encoded_url = URI::encode(url)
+	uri = URI(encoded_url)
 	script = Net::HTTP.get(uri)
 	somefile = File.open(file_name, "w")
 	somefile.puts script
@@ -120,7 +145,7 @@ msg "Doing a quick install" if quick
 
 
 #-------------------- Clean the system --------------------
-clean
+clean quick
 
 
 # #-------------------- Configure Terminal --------------------
@@ -184,9 +209,11 @@ homebrew_script = Net::HTTP.get(homebrew_uri)
 File.write('/tmp/homebrew.rb', homebrew_script)
 
 
-#run the script. The yes '' command supresses the need to press 'Enter'
-do_command_print_output "yes '' | ruby /tmp/homebrew.rb"
-msg "homebrew : #{Tty.green}is now installed"
+# uncomment-----------------------------------------------------------------------------------------------------------------------------------------
+
+##run the script. The yes '' command supresses the need to press 'Enter'
+#do_command_print_output "yes '' | ruby /tmp/homebrew.rb"
+#msg "homebrew : #{Tty.green}is now installed"
 
 
 #check homebrew with brew doctor
@@ -209,7 +236,6 @@ brew_packages = [
 	"postgresql",
 	"ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-libass --with-libquvi --with-libvorbis --with-libvpx --with-opus --with-x265 --with-faac"
 ]
-
 
 
 brew_packages = [
@@ -254,9 +280,7 @@ casks = [
 ]
 
 
-casks = [
- "dropbox",
- "sublime-text3"] if quick
+casks = ["sublime-text3"] if quick
 
 
  casks.each do |cask|
@@ -443,7 +467,6 @@ file_name = "#{sublime_dir}/Local/License.sublime_license"
 download_and_write_file url, file_name
 
 
-
 msg "-------- installing sublime preferences"
 url = base_url+"sublime-config-files/Preferences.sublime-settings"
 file_name = "#{sublime_dir}/Packages/User/Preferences.sublime-settings"
@@ -470,15 +493,11 @@ download_and_write_file url, file_name
 
 
 msg "-------- intalling ruby-terminal build system"
-`git clone https://github.com/dwkns/ruby-terminal.git '#{sublime_dir}/Packages/ruby-terminal'`
-`chmod  a+x '#{sublime_dir}/Packages/ruby-terminal/ruby-terminal.sh'`
-`ln -s '#{sublime_dir}/Packages/ruby-terminal/ruby-terminal.sh' /usr/local/bin`
+`git clone https://github.com/dwkns/ruby-iTerm2.git '#{sublime_dir}/Packages/ruby-iTerm2'`
+`chmod u+x '#{sublime_dir}/Packages/ruby-iTerm2/ruby-iterm2.sh'`
+`ln -s '#{sublime_dir}/Packages/ruby-iTerm2/ruby-iterm2.sh' /usr/local/bin`
 
 
-# msg "-------- intalling sublime-terminal build system"
-# `git clone https://github.com/dwkns/sublime-terminal.git '#{sublime_dir}/Packages/sublime-terminal'`
-# `chmod  a+x '#{sublime_dir}/Packages/sublime-terminal/terminal.sh'`
-# `ln -s '#{sublime_dir}/Packages/sublime-terminal/terminal.sh' /usr/local/bin`
 
 
 # #-------------------- Install Krep and Ruby Motion --------------------
