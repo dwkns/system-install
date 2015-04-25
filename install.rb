@@ -534,8 +534,12 @@ msg "Opening Dropbox"
 msg "Opening sublime"
 `open "/Applications/Sublime Text.app"`
 
+sleep 3
 msg "Quitting sublime"
 `osascript -e 'tell application "Sublime Text" to quit'`
+
+sleep 3
+
 
 msg "Opening sublime again"
 `open "/Applications/Sublime Text.app"`
