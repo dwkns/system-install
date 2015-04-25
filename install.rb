@@ -176,14 +176,14 @@ clean quick
 # `rm -rf #{home_dir}/Downloads/dwkns-dark.terminal`
 
 
-msg "Downloading iTerm2 Nightly"
-url = "https://iterm2.com/nightly/latest"
-url = "http://www.iterm2.com/nightly/iTerm2-2_9_20150425-nightly.zip"
-file_name = "/Applications/iTerm2.zip"
-
-download_and_write_file url, file_name
-`unzip -o /Applications/iTerm2.zip -d /Applications`
-`rm /Applications/iTerm2.zip`
+#msg "Downloading iTerm2 Nightly"
+#url = "https://iterm2.com/nightly/latest"
+#url = "http://www.iterm2.com/nightly/iTerm2-2_9_20150425-nightly.zip"
+#file_name = "/Applications/iTerm2.zip"
+#
+#download_and_write_file url, file_name
+#`unzip -o /Applications/iTerm2.zip -d /Applications`
+#`rm /Applications/iTerm2.zip`
 
 
 #-------------------- Set the Hostname --------------------

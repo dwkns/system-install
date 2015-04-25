@@ -5,6 +5,7 @@
   "installed_packages":
   [
    "Package Control",
+ "Theme - Spacegray",
     "AngularJS",
     "BeautifyRuby",
     "Better Completion",
@@ -17,9 +18,7 @@
     "PackageResourceViewer",
     "ScopeHunter",
     "SideBarEnhancements",
-    "SublimeLinter",
-    "SublimeLinter-jshint",
-    "SublimeLinter-ruby",
+    "SublimeLinter"
     
   ]
 }
