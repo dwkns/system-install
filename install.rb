@@ -523,7 +523,7 @@ msg "Opening sublime"
 
 sleep 10
 
-msg "Quitting sublime as it needs to reboot
+msg "Quitting sublime as it needs to reboot"
 `osascript -e 'tell application "Sublime Text" to quit'`
 
 sleep 3
