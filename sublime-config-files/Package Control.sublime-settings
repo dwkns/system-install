@@ -4,6 +4,7 @@
   ],
   "installed_packages":
   [
+    "Theme - Spacegray",
     "AngularJS",
     "BeautifyRuby",
     "Better Completion",
@@ -13,13 +14,12 @@
     "JavaScriptNext - ES6 Syntax",
     "jQuery",
     "LESS",
-    "Package Control",
     "PackageResourceViewer",
     "ScopeHunter",
     "SideBarEnhancements",
     "SublimeLinter",
     "SublimeLinter-jshint",
     "SublimeLinter-ruby",
-    "Theme - Spacegray"
+    
   ]
 }

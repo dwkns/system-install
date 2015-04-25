@@ -531,5 +531,14 @@ msg "Loading bash profile into this terminal window."
 msg "Opening Dropbox"
 `open /Applications/Dropbox.app`
 
+msg "Opening sublime"
+`open "/Applications/Sublime Text.app"`
+
+msg "Quitting sublime"
+`osascript -e 'tell application "Sublime Text" to quit'`
+
+msg "Opening sublime again"
+`open "/Applications/Sublime Text.app"`
+
 
 
