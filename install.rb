@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/lib/ruby
 require 'net/http'
 require 'open-uri'
 
@@ -33,13 +33,13 @@ def clean quick
        msg "Full clean has started"
   end
   
-  begin
-       `rvm use system`
-      rescue
-         msg "rvm wasn't found - assuming system ruby"
-         msg `ruby -v`
-  end
- 
+#  begin
+#       `rvm use system`
+#      rescue
+#         msg "rvm wasn't found - assuming system ruby"
+#         msg `ruby -v`
+#  end
+
 
 delete_array = [
    "/usr/local",
@@ -71,13 +71,26 @@ delete_array = [
 		# do_command_print_output "sudo rm -rfv #{location}" #verbose
   end
 	#remove symlinks from Application folder - anoying escaping at end.
-	`find /Applications -maxdepth 1 -lname '*' -exec rm {} \\\;`
+	
 
 	#show the dashboard
 	`defaults write com.apple.dashboard mcx-disabled -boolean false`
 
 	`touch ~/.bash_profile`
+    
+    
 	`source ~/.bash_profile`
+    `unset PATH`
+    `unset MY_RUBY_HOME`
+    `unset GEM_HOME`
+    `unset IRBRC`
+    `unset OLDPWD`
+    `unset rvm_path`
+    `unset GEM_PATH`
+    `unset RUBY_VERSION`
+ 
+ `export PATH=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin`
+    
 
 	#reboot the dock
 	`killall Dock`
@@ -95,7 +108,7 @@ def download_and_write_file url, file_name
 end
 
 def do_command_print_output command
-	#runs a command in the termianl and prints out each line of output.
+	#runs a command in the terminal and prints out each line of output.
 	output = []
 	IO.popen(command) do |f|
 		f.each do |line|
@@ -133,13 +146,18 @@ msg "Doing a quick install" if quick
 clean quick
 
 
+
+
 # #-------------------- Configure Terminal --------------------
- # dowload terminal styles dwkns-dark.terminal
- url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/dwkns-dark.terminal"
+
+
+if !quick
+    # dowload terminal styles dwkns-dark.terminal
+ url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/dwkns-dark.terminal"
  file_name = "#{home_dir}/Downloads/dwkns-dark.terminal"
  download_and_write_file url, file_name
 
- url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/dwkns-light.terminal"
+ url = "https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/dwkns-light.terminal"
  file_name = "#{home_dir}/Downloads/dwkns-light.terminal"
  download_and_write_file url, file_name
 
@@ -169,21 +187,17 @@ file_name = "/Applications/iTerm2.zip"
 download_and_write_file url, file_name
 `unzip -o /Applications/iTerm2.zip -d /Applications`
 `rm /Applications/iTerm2.zip`
-
+end
 
 #-------------------- Set the Hostname --------------------
 input = "dwkns-mbp"
 
-if !quick
-  msg "--- Setting your computer name (as done via System Preferences & Sharing)"
-  puts "What would you like it to be?"
-  input = gets.chomp
-end
+#if !quick
+#  msg "--- Setting your computer name (as done via System Preferences & Sharing)"
+#  puts "What would you like it to be?"
+#  input = gets.chomp
+#end
 
-`sudo scutil --set ComputerName #{input}`
-`sudo scutil --set HostName #{input}`
-`sudo scutil --set LocalHostName #{input}`
-`sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string #{input}`
 
 #-------------------- Install Homebrew --------------------
 
@@ -207,6 +221,7 @@ msg "brew doctor : #{Tty.green}#{output}"
 msg "installing cask"
 `brew install caskroom/cask/brew-cask`
 `brew tap caskroom/versions`
+`brew tap caskroom/fonts`
 
 
 #-------------------- Install Homebrew Packages--------------------
@@ -257,7 +272,8 @@ casks = [
  "charles",
  "lightpaper",
  "fluid",
- "codekit"
+ "codekit",
+"font-source-code-pro"
 
 ]
 
@@ -397,11 +413,12 @@ msg "Showing Library & ~Library"
 
  # Reload the bash and .rvm profiles
  msg "Doing source"
+
  msg "source ~/.bash_profile"
- do_command_print_output "source ~/.bash_profile"
+ `source ~/.bash_profile`
 
  msg "source ~/.rvm/scripts/rvm"
- do_command_print_output "source ~/.rvm/scripts/rvm"
+`source $HOME/.rvm/scripts/rvm`
 
 
  # Print out the Ruby and RVM versions
