@@ -28,19 +28,16 @@ end
 def clean quick
   
   if quick then
-      msg "Quick clean has started"
+        msg "Quick clean has started"
       else
-      
        msg "Full clean has started"
   end
   
   begin
        `rvm use system`
-       
-      
       rescue
-     msg "rvm wasn't found - assuming system ruby"
-     msg `ruby -v`
+         msg "rvm wasn't found - assuming system ruby"
+         msg `ruby -v`
   end
  
 
@@ -67,21 +64,7 @@ delete_array = [
    "~/.bash_profile",
    "~/Library/'Application Support/Sublime Text 3'"
  ]
- 
- delete_array = [
-     "~/.bash_profile",
-     "~/.git*",
-     "~/.rspec",
-     "~/.profile",
-     "~/.zshrc",
-     "~/.zlogin",
-     "~/.bashrc",
-     "~/.gem",
-     "~/.dropbox",
-     "~/.subversion",
-     "~/.bash_profile",
-     "~/Library/'Application Support/Sublime Text 3'"
-     ] if quick # dump this
+
 
  delete_array.each do |location|
   do_command_print_output "sudo rm -rf #{location}"
@@ -124,6 +107,8 @@ end
 
 #-------------------- Set things up --------------------
 
+debug = true
+
 # check to see if a '--quick' flag is passed.
 if ARGV.any?
   quick = true if ARGV[0].include? "quick"
@@ -149,41 +134,41 @@ clean quick
 
 
 # #-------------------- Configure Terminal --------------------
-# # dowload terminal styles dwkns-dark.terminal
-# url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/dwkns-dark.terminal"
-# file_name = "#{home_dir}/Downloads/dwkns-dark.terminal"
-# download_and_write_file url, file_name
+ # dowload terminal styles dwkns-dark.terminal
+ url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/dwkns-dark.terminal"
+ file_name = "#{home_dir}/Downloads/dwkns-dark.terminal"
+ download_and_write_file url, file_name
 
-# url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/dwkns-light.terminal"
-# file_name = "#{home_dir}/Downloads/dwkns-light.terminal"
-# download_and_write_file url, file_name
+ url = "https://raw.githubusercontent.com/dwkns/system-install/master/config-files/dwkns-light.terminal"
+ file_name = "#{home_dir}/Downloads/dwkns-light.terminal"
+ download_and_write_file url, file_name
 
-# # opening the terminal style file loads it into the preferences.
-# `open "#{home_dir}/Downloads/dwkns-dark.terminal"`
-# `open "#{home_dir}/Downloads/dwkns-light.terminal"`
+ # opening the terminal style file loads it into the preferences.
+ `open "#{home_dir}/Downloads/dwkns-dark.terminal"`
+ `open "#{home_dir}/Downloads/dwkns-light.terminal"`
 
-# # set the default style
-# `osascript -e 'tell application "Terminal" to set default settings to settings set "dwkns-dark"'`
+ # set the default style
+ `osascript -e 'tell application "Terminal" to set default settings to settings set "dwkns-dark"'`
 
-# # set the current terminal window the the (new) default style
-# `osascript -e 'tell application "Terminal" to set current settings of every tab of (every window whose visible is true) to settings set named "dwkns-dark"'`
+ # set the current terminal window the the (new) default style
+ `osascript -e 'tell application "Terminal" to set current settings of every tab of (every window whose visible is true) to settings set named "dwkns-dark"'`
 
-# # load the terminal styles in
-# `osascript -e 'tell application "Terminal" to close the front window'`
-# `osascript -e 'tell application "Terminal" to close the front window'`
+ # load the terminal styles in
+ `osascript -e 'tell application "Terminal" to close the front window'`
+ `osascript -e 'tell application "Terminal" to close the front window'`
 
-# `rm -rf #{home_dir}/Downloads/dwkns-light.terminal`
-# `rm -rf #{home_dir}/Downloads/dwkns-dark.terminal`
+ `rm -rf #{home_dir}/Downloads/dwkns-light.terminal`
+ `rm -rf #{home_dir}/Downloads/dwkns-dark.terminal`
 
 
-#msg "Downloading iTerm2 Nightly"
-#url = "https://iterm2.com/nightly/latest"
-#url = "http://www.iterm2.com/nightly/iTerm2-2_9_20150425-nightly.zip"
-#file_name = "/Applications/iTerm2.zip"
-#
-#download_and_write_file url, file_name
-#`unzip -o /Applications/iTerm2.zip -d /Applications`
-#`rm /Applications/iTerm2.zip`
+msg "Downloading iTerm2 Nightly"
+url = "https://iterm2.com/nightly/latest"
+url = "http://www.iterm2.com/nightly/iTerm2-2_9_20150425-nightly.zip"
+file_name = "/Applications/iTerm2.zip"
+
+download_and_write_file url, file_name
+`unzip -o /Applications/iTerm2.zip -d /Applications`
+`rm /Applications/iTerm2.zip`
 
 
 #-------------------- Set the Hostname --------------------
@@ -208,12 +193,9 @@ homebrew_uri = URI('https://raw.githubusercontent.com/Homebrew/install/master/in
 homebrew_script = Net::HTTP.get(homebrew_uri)
 File.write('/tmp/homebrew.rb', homebrew_script)
 
-
-# uncomment-----------------------------------------------------------------------------------------------------------------------------------------
-
-##run the script. The yes '' command supresses the need to press 'Enter'
-#do_command_print_output "yes '' | ruby /tmp/homebrew.rb"
-#msg "homebrew : #{Tty.green}is now installed"
+#run the script. The yes '' command supresses the need to press 'Enter'
+do_command_print_output "yes '' | ruby /tmp/homebrew.rb"
+msg "homebrew : #{Tty.green}is now installed"
 
 
 #check homebrew with brew doctor
@@ -409,38 +391,38 @@ msg "Showing Library & ~Library"
 
 
 #-------------------- Install RVM and Ruby --------------------
-# msg "Installing RVM and Ruby"
-# do_command_print_output "curl -sSL https://get.rvm.io | bash -s stable --ruby"
+ msg "Installing RVM and Ruby"
+ do_command_print_output "curl -sSL https://get.rvm.io | bash -s stable --ruby"
 
 
-# # Reload the bash and .rvm profiles
-# msg "Doing source"
-# msg "source ~/.bash_profile"
-# do_command_print_output "source ~/.bash_profile"
+ # Reload the bash and .rvm profiles
+ msg "Doing source"
+ msg "source ~/.bash_profile"
+ do_command_print_output "source ~/.bash_profile"
 
-# msg "source ~/.rvm/scripts/rvm"
-# do_command_print_output "source ~/.rvm/scripts/rvm"
+ msg "source ~/.rvm/scripts/rvm"
+ do_command_print_output "source ~/.rvm/scripts/rvm"
 
 
-# # Print out the Ruby and RVM versions
-# do_command_print_output "rvm -v"
-# do_command_print_output "ruby -v"
+ # Print out the Ruby and RVM versions
+ do_command_print_output "rvm -v"
+ do_command_print_output "ruby -v"
 
 
 #-------------------- Install some Ruby gems --------------------
-# msg "Installing some gems"
-# gemlist = [
-#  "bundler",
-#  "rails"
-# ]
+ msg "Installing some gems"
+ gemlist = [
+  "bundler",
+  "rails"
+ ]
 
-# gemlist = [
-#  "bundler"
-#  ] if quick
+ gemlist = [
+  "bundler"
+  ] if quick
 
-#  gemlist.each do |this_gem|
-#    do_command_print_output "gem install #{ this_gem }"
-#  end
+  gemlist.each do |this_gem|
+    do_command_print_output "gem install #{ this_gem }"
+  end
 
 
 #-------------------- Configure sublime --------------------
@@ -456,8 +438,17 @@ sublime_dir = "#{home_dir}/Library/Application Support/Sublime Text 3"
 `mkdir -p '#{sublime_dir}/Installed Packages'`
 
 msg "-------- intalling Package Control"
-`git clone git://github.com/wbond/sublime_package_control.git '#{sublime_dir}/Packages/Package Control'`
+url = "http://sublime.wbond.net/Package Control.sublime-package"
+file_name = "#{sublime_dir}/Installed Packages/Package Control.sublime-package"
+download_and_write_file url, file_name
 
+
+if debug then
+    msg "-------- intalling console opener"
+    url = base_url+"sublime-config-files/pin_console.py"
+    file_name = "#{sublime_dir}/Packages/pin_console.py"
+    download_and_write_file url, file_name
+end
 
 base_url = "https://raw.githubusercontent.com/dwkns/system-install/master/"
 
@@ -486,10 +477,6 @@ msg "-------- installing sublime keymap"
 url = base_url+"sublime-config-files/Default (OSX).sublime-keymap"
 file_name = "#{sublime_dir}/Packages/User/Default (OSX).sublime-keymap"
 download_and_write_file url, file_name
-
-
-# msg "-------- intalling sublime-code-snipits"
-# `git clone https://github.com/dwkns/sublime-code-snipits.git '#{sublime_dir}/Packages/sublime-code-snipits'`
 
 
 msg "-------- intalling ruby-terminal build system"
@@ -534,12 +521,12 @@ msg "Opening Dropbox"
 msg "Opening sublime"
 `open "/Applications/Sublime Text.app"`
 
-sleep 3
-msg "Quitting sublime"
+sleep 10
+
+msg "Quitting sublime as it needs to reboot
 `osascript -e 'tell application "Sublime Text" to quit'`
 
 sleep 3
-
 
 msg "Opening sublime again"
 `open "/Applications/Sublime Text.app"`
