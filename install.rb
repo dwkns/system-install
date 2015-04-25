@@ -27,12 +27,12 @@ end
 
 def clean quick
   
-  if quick ruby
+  if quick then
       msg "Quick clean has started"
       else
       
        msg "Full clean has started"
-      end
+  end
   
   begin
        `rvm use system`
