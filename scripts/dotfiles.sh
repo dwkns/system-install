@@ -1,11 +1,8 @@
 #!/bin/bash
 ######################## DOTFILES ########################
 
-############ CONFIG ############
+###################### CONFIG ######################
 SYSTEM_CONFIG_FILES="https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files"
-
-
-############# FUNCTIONS ############
 
 
 ###################### SCRIPT ######################
@@ -29,6 +26,4 @@ wget -r "$SYSTEM_CONFIG_FILES/bash.gitignore_global" -O "$HOME/.gitignore_global
 echo -e "$PG  Configuring git"
 git config --global core.excludesfile $HOME/.gitignore_global
 
-echo -e "$PG  load bash profile into shell"
-source $HOME/.bash_profile
 

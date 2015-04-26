@@ -1,14 +1,14 @@
 #!/bin/sh
-echo "$PR Gems"
+echo -e "$PG Gems"
 
-# #-------------------- Install some Ruby gems --------------------
-# echo -e "$PG Installing some gems"
+#-------------------- Install some Ruby gems --------------------
+echo -e "$PG Installing some gems"
 
-# gems=( "bundler" "rails" )
+gems=( "bundler" )
+gems=( "bundler" "rails" )
+for pkg in "${gems[@]}"
+do
+  gem install $pkg
 
-# for pkg in "${gems[@]}"
-# do
-# gem install $pkg
-
-# done
+done
 
