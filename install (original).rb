@@ -1,4 +1,4 @@
-#!/usr/lib/ruby
+#!/usr/bin/env ruby
 require 'net/http'
 require 'open-uri'
 
@@ -71,26 +71,13 @@ delete_array = [
 		# do_command_print_output "sudo rm -rfv #{location}" #verbose
   end
 	#remove symlinks from Application folder - anoying escaping at end.
-	
+	`find /Applications -maxdepth 1 -lname '*' -exec rm {} \\\;`
 
 	#show the dashboard
 	`defaults write com.apple.dashboard mcx-disabled -boolean false`
 
 	`touch ~/.bash_profile`
-    
-    
 	`source ~/.bash_profile`
-    `unset PATH`
-    `unset MY_RUBY_HOME`
-    `unset GEM_HOME`
-    `unset IRBRC`
-    `unset OLDPWD`
-    `unset rvm_path`
-    `unset GEM_PATH`
-    `unset RUBY_VERSION`
- 
- `export PATH=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin`
-    
 
 	#reboot the dock
 	`killall Dock`
@@ -419,10 +406,10 @@ msg "Showing Library & ~Library"
  msg "Doing source"
 
  msg "source ~/.bash_profile"
- `source ~/.bash_profile`
+ do_command_print_output "source ~/.bash_profile"
 
  msg "source ~/.rvm/scripts/rvm"
-`source $HOME/.rvm/scripts/rvm`
+`source ~/.rvm/scripts/rvm`
 
 
  # Print out the Ruby and RVM versions
