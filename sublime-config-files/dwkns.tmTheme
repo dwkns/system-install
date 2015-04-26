@@ -1691,9 +1691,23 @@
 				<key>settings</key>
 				<dict>
 					<key>foreground</key>
-					<string>#748B00</string>
+					<string>#FAFAFA</string>
 				</dict>
 			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: Backticks</string>
+				<key>scope</key>
+				<string>string.interpolated.backtick.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
+
 			<dict>
 				<key>name</key>
 				<string>Shell: variable</string>
@@ -1718,19 +1732,7 @@
 					<string>#268BD2</string>
 				</dict>
 			</dict>
-			<dict>
-				<key>name</key>
-				<string>Shell: meta scope in loop</string>
-				<key>scope</key>
-				<string>meta.scope.for-in-loop.shell, variable.other.loop.shell</string>
-				<key>settings</key>
-				<dict>
-					<key>fontStyle</key>
-					<string />
-					<key>foreground</key>
-					<string>#536871</string>
-				</dict>
-			</dict>
+			
 			<dict>
 				<key>name</key>
 				<string>Shell: ""</string>
@@ -1741,9 +1743,71 @@
 					<key>fontStyle</key>
 					<string />
 					<key>foreground</key>
-					<string>#748B00</string>
+					<string>#e0d69a</string>
 				</dict>
 			</dict>
+			<dict>
+				<key>name</key>
+				<string>Shell: base colour</string>
+				<key>scope</key>
+				<string>source.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Shell: Variable start</string>
+				<key>scope</key>
+				<string>source.shell punctuation.definition.variable</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#66D9EF</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: Variable</string>
+				<key>scope</key>
+				<string>source.shell variable.other.positional.shell, source.shell variable.other.special.shell, source.shell variable.other.normal.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#66D9EF</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: String interpolated</string>
+				<key>scope</key>
+				<string>source.shell string.interpolated.process-substitution.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: Function Name</string>
+				<key>scope</key>
+				<string>source.shell meta.function.shell entity.name.function.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A6E22E</string>
+				</dict>
+			</dict>
+
+
 			<dict>
 				<key>name</key>
 				<string>Shell: Meta Block</string>
@@ -1779,6 +1843,21 @@
 				<dict>
 					<key>fontStyle</key>
 					<string>italic</string>
+					<key>foreground</key>
+					<string>#A0A0A0</string>
+				</dict>
+			</dict>
+				<dict>
+				<key>name</key>
+				<string>Shell: Comment</string>
+				<key>scope</key>
+				<string>source.shell constant.character.escape.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string>italic</string>
+					<key>foreground</key>
+					<string>#ae160e</string>
 				</dict>
 			</dict>
 			<dict>
@@ -2117,13 +2196,9 @@
 				</dict>
 			</dict>
 
-		
+		<!-- Comments -->
 
-
-
-				
-
-	<dict>
+			<dict>
 				<key>name</key>
 				<string>JSON: numbers</string>
 				<key>scope</key>
@@ -2135,6 +2210,153 @@
 				</dict>
 			</dict>
 
+			<dict>
+				<key>name</key>
+				<string>XML: Comment</string>
+				<key>scope</key>
+				<string>text.xml comment.block.xml</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#AE81FF</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>XML: Angle Brackets</string>
+				<key>scope</key>
+				<string>text.xml meta.tag.xml punctuation.definition.tag.begin.xml, text.xml meta.tag.xml punctuation.definition.tag.end.xml </string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#E8CD4D</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>XML: Tag</string>
+				<key>scope</key>
+				<string>text.xml meta.tag.xml entity.name.tag.localname.xml </string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#66D9EF</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>XML: Text</string>
+				<key>scope</key>
+				<string>text.xml</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
+
+<!-- 				<dict>
+				<key>name</key>
+				<string>Shell: Text</string>
+				<key>scope</key>
+				<string>source.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
+
+				<dict>
+				<key>name</key>
+				<string>Shell: Text</string>
+				<key>scope</key>
+				<string>source.shell meta.scope.for-in-loop.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
+				<dict>
+				<key>name</key>
+				<string>Shell: Built in Functions</string>
+				<key>scope</key>
+				<string>source.shell support.function.builtin.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: Variables</string>
+				<key>scope</key>
+				<string>source.shell variable.other.normal.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A6E22E</string>
+				</dict>
+			</dict>
+	<dict>
+				<key>name</key>
+				<string>Shell: Punctation $</string>
+				<key>scope</key>
+				<string>source.shell punctuation.definition.variable.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A6E22E</string>
+				</dict>
+			</dict>
+
+				<dict>
+				<key>name</key>
+				<string>Shell: Punctation $</string>
+				<key>scope</key>
+				<string>source.shell punctuation.definition.variable.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A6E22E</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: Double Quotes</string>
+				<key>scope</key>
+				<string>source.shell punctuation.definition.string.end.shell, punctuation.definition.string.begin.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A6E22E</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Shell: function name</string>
+				<key>scope</key>
+				<string>source.shell entity.name.function.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A6E22E</string>
+				</dict>
+			</dict>
+ -->
+			
+			
 
 
 
