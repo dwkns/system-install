@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+echo `date +"%T"`
 ############ Set up ############
 sudo -v # ask for sudo upfront
 
@@ -30,11 +32,12 @@ brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
 brew tap caskroom/fonts
 
-
+echo `date +"%T"`
 ############ Install some cask apps ############
 brew cask install  --appdir='/Applications' 'dropbox'
 brew cask install  --appdir='/Applications' 'sublime-text3'
 brew cask install  --appdir='/Applications' 'things'
 brew cask install  --appdir='/Applications' 'font-source-code-pro'
 
+echo `date +"%T"`
 echo "And done..."
