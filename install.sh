@@ -30,17 +30,17 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 
 source scripts/clean.sh
-download_and_run $BASE_URL/sripts/ scripts/homebrew.sh
-# source scripts/postgres.sh
-# source scripts/casks.sh
-# source scripts/node.sh
-# source scripts/krep.sh
-# source scripts/dotfiles.sh
-# source scripts/system-settings.sh
 
-# source scripts/sublime.sh
-# source scripts/rvm-ruby.sh
-# source scripts/gems.sh
+download_and_run $BASE_URL/scripts/homebrew.sh
+download_and_run $BASE_URL/scripts/postgres.sh
+download_and_run $BASE_URL/scripts/casks.sh
+download_and_run $BASE_URL/scripts/node.sh
+download_and_run $BASE_URL/scripts/krep.sh
+download_and_run $BASE_URL/scripts/dotfiles.sh
+download_and_run $BASE_URL/scripts/system-settings.sh
+download_and_run $BASE_URL/scripts/sublime.sh
+download_and_run $BASE_URL/scripts/rvm-ruby.sh
+download_and_run $BASE_URL/scripts/gems.sh
 
 
 ######################## cleanup ########################
