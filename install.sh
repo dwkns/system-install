@@ -27,20 +27,20 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 
 # # download_and_run URL scriptname
-# download_and_run $BASE_URL/sripts/hello.sh
 
- source scripts/clean.sh
-source scripts/homebrew.sh
-source scripts/postgres.sh
-source scripts/casks.sh
-source scripts/node.sh
-source scripts/krep.sh
-source scripts/dotfiles.sh
-source scripts/system-settings.sh
 
-source scripts/sublime.sh
-source scripts/rvm-ruby.sh
-source scripts/gems.sh
+source scripts/clean.sh
+download_and_run $BASE_URL/sripts/ scripts/homebrew.sh
+# source scripts/postgres.sh
+# source scripts/casks.sh
+# source scripts/node.sh
+# source scripts/krep.sh
+# source scripts/dotfiles.sh
+# source scripts/system-settings.sh
+
+# source scripts/sublime.sh
+# source scripts/rvm-ruby.sh
+# source scripts/gems.sh
 
 
 ######################## cleanup ########################
