@@ -2,9 +2,8 @@
 ######################## HOMEBREW ########################
 
 ############ CONFIG ############
-
-# CASKS_PACKAGES=("dropbox" "sublime-text3" "things" "flash" "handbrake" "omnigraffle" "transmission" "mplayerx" "charles" "lightpaper" "fluid" "codekit" "font-source-code-pro" )
-CASKS_PACKAGES=( "dropbox" "sublime-text3" "things" "font-source-code-pro" "omnigraffle" )
+CASKS_PACKAGES=("dropbox" "sublime-text3" "things" "flash" "handbrake" "omnigraffle" "transmission" "mplayerx" "charles" "lightpaper" "fluid" "codekit" "font-source-code-pro" )
+#CASKS_PACKAGES=( "dropbox" "sublime-text3" "things" "font-source-code-pro" "omnigraffle" )
 
 ############ FUNCTIONS ############
 
