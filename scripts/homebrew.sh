@@ -10,7 +10,8 @@ BREW_PACKAGES=( "wget" "git" "python" )
 install_brew () {
   if ! command -v brew > /dev/null 2>&1; then
    echo -e "$PG Downloading Homebrew"
-   yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  # yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   else
    echo -e "$PY Homebrew was already installed. Updating it..."
     brew update
