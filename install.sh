@@ -41,6 +41,8 @@ download_and_run $BASE_URL/scripts/rvm-ruby.sh
 download_and_run $BASE_URL/scripts/gems.sh
 
 
+## Install any Apple System Updates
+sudo softwareupdate -ia
 ######################## cleanup ########################
 
 echo -e "$PG  load bash profile into shell"
