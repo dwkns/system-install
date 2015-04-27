@@ -28,9 +28,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # # download_and_run URL scriptname
 
-
-source scripts/clean.sh
-
+download_and_run $BASE_URL/scripts/clean.sh
 download_and_run $BASE_URL/scripts/homebrew.sh
 download_and_run $BASE_URL/scripts/postgres.sh
 download_and_run $BASE_URL/scripts/casks.sh
