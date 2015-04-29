@@ -1695,6 +1695,18 @@
 				</dict>
 			</dict>
 
+				<dict>
+				<key>name</key>
+				<string>Shell: heredoc</string>
+				<key>scope</key>
+				<string>string.unquoted.heredoc.shell</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#FAFAFA</string>
+				</dict>
+			</dict>
+
 			<dict>
 				<key>name</key>
 				<string>Shell: Backticks</string>

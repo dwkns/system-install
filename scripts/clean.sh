@@ -16,12 +16,7 @@ remove_cask () {
     find /Applications -maxdepth 1 -lname '*' -exec rm {} \;
 }
 
-remove_node () {
-    #nothing special for
-    echo
-}
-
-remove_node () {
+remove_krep () {
     sudo rm -rf "/Applications/Krep.app"
 }
 
@@ -56,10 +51,11 @@ remove_apps(){
   sudo rm -rf "/tmp/krep"
 }
 
-
-
 remove_homebrew
 remove_cask
-remove_node
 remove_krep
 remove_dotfiles
+remove_sublime_config
+
+
+
