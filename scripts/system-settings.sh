@@ -25,6 +25,12 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 echo -e "$PG   Setting a blazingly fast keyboard repeat rate"
 defaults write NSGlobalDomain KeyRepeat -int 0
 
+echo -e "$PG   Turn off Screen shot shadows"
+defaults write com.apple.screencapture disable-shadow -bool true
+
+echo -e "$PG   Enable text selection in Quick Look"
+defaults write com.apple.finder QLEnableTextSelection -bool TRUE
+
 echo -e "$PG   Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
