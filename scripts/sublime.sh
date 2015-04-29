@@ -35,9 +35,11 @@ wget "$BASE_URL/sublime-config-files/pin_console.py" -O "$SUBLIME_PACKAGES_DIR/p
 echo -e "$PG  intalling license"
 wget "$BASE_URL/sublime-config-files/License.sublime_license" -O "$SUBLIME_LOCAL_DIR/License.sublime_license"
 
-
 echo -e "$PG   installing sublime preferences"
 wget "$BASE_URL/sublime-config-files/Preferences.sublime-settings" -O "$SUBLIME_USER_DIR/Preferences.sublime-settings"
+
+echo -e "$PG   installing scopehunter preferences"
+wget "$BASE_URL/sublime-config-files/scope_hunter.sublime-settings" -O "$SUBLIME_USER_DIR/scope_hunter.sublime-settings"
 
 
 echo -e "$PG   installing sublime Package Control Settings"
