@@ -20,6 +20,10 @@ remove_krep () {
     sudo rm -rf "/Applications/Krep.app"
 }
 
+remove_postgres () {
+    sudo rm -rf "/usr/local/var"
+}
+
 remove_dotfiles () {
   echo -e "$PR Removing dotfiles"
   sudo rm -rf "$HOME/.git*"
@@ -53,6 +57,7 @@ remove_apps(){
 remove_homebrew
 remove_cask
 remove_krep
+remove_postgres
 remove_dotfiles
 remove_sublime_config
 remove_rvm
