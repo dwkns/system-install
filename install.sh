@@ -1,10 +1,6 @@
 
 #!/bin/bash
 ######################## CONFIG ########################
-#red=''
-#green='\033[0;32m'
-#yellow='\033[1;33m'
-#white='\033[1;37m'
 PG="\n\033[0;32m==============>\033[1;37m"
 PY="\n\033[1;33m==============>\033[1;37m"
 PR="\n\033[0;31m==============>\033[1;37m"
@@ -32,22 +28,29 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # # download_and_run URL scriptname
 # download_and_run $BASE_URL/sripts/hello.sh
-source scripts/clean.sh
-source scripts/homebrew.sh
-source scripts/postgres.sh
-source scripts/casks.sh
-source scripts/node.sh
-source scripts/krep.sh
-source scripts/dotfiles.sh
-source scripts/system-settings.sh
-source scripts/sublime.sh
-source scripts/rvm-ruby.sh
-source scripts/gems.sh
+download_and_run $BASE_URL/sripts/clean.sh
+download_and_run $BASE_URL/sripts/homebrew.sh
+download_and_run $BASE_URL/sripts/postgres.sh
+download_and_run $BASE_URL/sripts/casks.sh
+download_and_run $BASE_URL/sripts/node.sh
+download_and_run $BASE_URL/sripts/krep.sh
+download_and_run $BASE_URL/sripts/dotfiles.sh
+download_and_run $BASE_URL/sripts/system-settings.sh
+
+download_and_run $BASE_URL/sripts/sublime.sh
+download_and_run $BASE_URL/sripts/rvm-ruby.sh
+download_and_run $BASE_URL/sripts/gems.sh
 
 
 ######################## cleanup ########################
+
+echo -e "$PG  load bash profile into shell"
+source $HOME/.bash_profile
+
 killall Dock
 echo -e "$PG Deleteing Temp Directory"
 rm -rf $TEMP_DIR
 echo -e "$PG All done \033[0;32m<=======\033[1;37m\n"
+
+
 
