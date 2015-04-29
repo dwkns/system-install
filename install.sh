@@ -28,6 +28,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 
 # # download_and_run URL scriptname
+<<<<<<< HEAD
 download_and_run $BASE_URL/sripts/hello.sh
 # download_and_run $BASE_URL/sripts/clean.sh
 # download_and_run $BASE_URL/sripts/homebrew.sh
@@ -42,11 +43,13 @@ download_and_run $BASE_URL/sripts/hello.sh
 # download_and_run $BASE_URL/sripts/rvm-ruby.sh
 # download_and_run $BASE_URL/sripts/gems.sh
 
-
+## Install any Apple System Updates
+sudo softwareupdate -ia
 ######################## cleanup ########################
 
 echo -e "$PG  load bash profile into shell"
-# source $HOME/.bash_profile
+source $HOME/.bash_profile
+
 
 killall Dock
 echo -e "$PG Deleteing Temp Directory"
