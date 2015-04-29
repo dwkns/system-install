@@ -669,13 +669,12 @@
 			</dict>
 			<dict>
 				<key>name</key>
-				<string>HTML: Text</string>
+				<string>HTML: erb text</string>
 				<key>scope</key>
 				<string>text.html.ruby</string>
 				<key>settings</key>
 				<dict>
-					<key>fontStyle</key>
-					<string>bold</string>
+			
 					<key>foreground</key>
 					<string>#BD3800</string>
 				</dict>
@@ -951,17 +950,7 @@
 					<string>#ae160e</string>
 				</dict>
 			</dict>
-			<dict>
-				<key>name</key>
-				<string>PHP: Include</string>
-				<key>scope</key>
-				<string>keyword.control.import.include.php</string>
-				<key>settings</key>
-				<dict>
-					<key>foreground</key>
-					<string>#BD3800</string>
-				</dict>
-			</dict>
+			
 			<dict>
 				<key>name</key>
 				<string>Ruby: erb =</string>
@@ -973,6 +962,118 @@
 					<string />
 					<key>foreground</key>
 					<string>#819090</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Ruby: entity names</string>
+				<key>scope</key>
+				<string>text.html.ruby entity.name.tag.block.any.html, text.html.ruby entity.name.tag.inline.any.html</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#e8cd4d</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Ruby: erb % tags</string>
+				<key>scope</key>
+				<string>text.html.ruby punctuation.section.embedded.ruby</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#ae160e</string>
+				</dict>
+			</dict>
+
+						<dict>
+				<key>name</key>
+				<string>Ruby: erb attribute = </string>
+				<key>scope</key>
+				<string>text.html.ruby meta.tag.block.any.html meta.attribute-with-value.id.html punctuation.separator.key-value.html</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#66d9ef</string>
+				</dict>
+			</dict>
+
+				<dict>
+				<key>name</key>
+				<string>Ruby: erb do block keyword</string>
+				<key>scope</key>
+				<string>text.html.ruby keyword.control.start-block.ruby</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#ae160e</string>
+				</dict>
+			</dict>
+
+			<dict>
+				<key>name</key>
+				<string>Ruby: instance variable</string>
+				<key>scope</key>
+				<string>text.html.ruby variable.other.readwrite.instance.ruby</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#A57800</string>
+				</dict>
+			</dict>
+
+				<dict>
+				<key>name</key>
+				<string>Ruby: instance variable @</string>
+				<key>scope</key>
+				<string>text.html.ruby source.ruby.rails.embedded.html variable.other.readwrite.instance.ruby punctuation.definition.variable.ruby</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#A57800</string>
+				</dict>
+			</dict>
+
+				<dict>
+				<key>name</key>
+				<string>Ruby: erb variable </string>
+				<key>scope</key>
+				<string>text.html.ruby variable.other.block.ruby</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string />
+					<key>foreground</key>
+					<string>#ffffff</string>
+				</dict>
+			</dict>
+
+
+		
+
+				<dict>
+				<key>name</key>
+				<string>PHP: Include</string>
+				<key>scope</key>
+				<string>keyword.control.import.include.php</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#BD3800</string>
 				</dict>
 			</dict>
 			<dict>
@@ -2143,13 +2244,14 @@
 				<key>name</key>
 				<string>Ruby: text (variable)</string>
 				<key>scope</key>
-				<string>source.ruby</string>
+				<string>source.ruby, text.html.ruby</string>
 				<key>settings</key>
 				<dict>
 					<key>foreground</key>
 					<string>#ffffff</string>
 				</dict>
 			</dict>
+
 			<dict>
 				<key>name</key>
 				<string>Ruby: class name (new)</string>
