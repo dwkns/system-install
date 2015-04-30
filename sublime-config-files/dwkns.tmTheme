@@ -783,7 +783,7 @@
 					<key>fontStyle</key>
 					<string />
 					<key>foreground</key>
-					<string>#268BD2</string>
+					<string>#A57800</string>
 				</dict>
 			</dict>
 			<dict>
@@ -806,6 +806,17 @@
 				<dict>
 					<key>foreground</key>
 					<string>#469186</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Ruby: Instance Variable</string>
+				<key>scope</key>
+				<string>source.ruby variable.other.readwrite.instance.ruby</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#A57800</string>
 				</dict>
 			</dict>
 			<dict>

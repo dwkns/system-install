@@ -18,7 +18,9 @@
     "PackageResourceViewer",
     "ScopeHunter",
     "SideBarEnhancements",
-    "SublimeLinter"
+    "SublimeLinter",
+    "SublimeLinter-ruby",
+    "SublimeLinter-jshint"
     
   ]
 }
