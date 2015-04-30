@@ -45,6 +45,7 @@ wget "$BASE_URL/sublime-config-files/scope_hunter.sublime-settings" -O "$SUBLIME
 echo -e "$PG   installing sublime Package Control Settings"
 wget "$BASE_URL/sublime-config-files/Package Control.sublime-settings" -O "$SUBLIME_USER_DIR/Package Control.sublime-settings"
 
+git clone "https://github.com/dwkns/sublime-code-snipits.git" "$SUBLIME_USER_DIR/"
 
 echo -e "$PG   installing sublime theme dwkns.tmTheme"
 wget "$BASE_URL/sublime-config-files/dwkns.tmTheme" -O "$SUBLIME_USER_DIR/dwkns.tmTheme"
