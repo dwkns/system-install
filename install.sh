@@ -7,7 +7,7 @@ PR="\n\033[0;31m==============>\033[1;37m"
 
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
-LOCAL_SCRIPTS=true
+LOCAL_SCRIPTS=false
 SOFTWARE_UPDATE=true
 
 BREW_PACKAGES=( "wget" "git" "python" "dockutil") 
@@ -76,7 +76,7 @@ source $HOME/.bash_profile
 
 echo -e "$PG Deleteing Temp Directory"
 rm -rf $TEMP_DIR
-echo -e "$PG All done I recommend Rebooting\033[0;32m<=======\033[1;37m\n"
+echo -e "$PG All done I recommend Rebooting \033[0;32m<=======\033[1;37m\n"
 
 
 
