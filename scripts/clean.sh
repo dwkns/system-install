@@ -1,7 +1,5 @@
 #!/bin/bash
 ######################## CLEAN ########################
-ADD_TO_DOCK=("iterm2-nightly" "sublime-text3" "things" "omnigraffle" "transmission" "mplayerx"  "lightpaper" "codekit")
-
 
 ############ FUNCTIONS ############
 remove_homebrew () {
