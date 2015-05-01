@@ -22,7 +22,7 @@ alias gco='git checkout'
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
-
+alias cdd='cd ~/Desktop'
 
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 

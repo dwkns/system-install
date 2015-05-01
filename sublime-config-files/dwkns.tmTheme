@@ -54,7 +54,7 @@
 					<key>fontStyle</key>
 					<string> italic</string>
 					<key>foreground</key>
-					<string>#586E75</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -642,7 +642,7 @@
 					<key>fontStyle</key>
 					<string>italic</string>
 					<key>foreground</key>
-					<string>#839496</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -770,7 +770,7 @@
 					<key>fontStyle</key>
 					<string>italic</string>
 					<key>foreground</key>
-					<string>#ae160e</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -1321,7 +1321,7 @@
 					<key>fontStyle</key>
 					<string />
 					<key>foreground</key>
-					<string>#899090</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -1968,7 +1968,7 @@
 					<key>fontStyle</key>
 					<string>italic</string>
 					<key>foreground</key>
-					<string>#A0A0A0</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 				<dict>
@@ -2033,7 +2033,7 @@
 					<key>fontStyle</key>
 					<string />
 					<key>foreground</key>
-					<string>#536871</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -2046,7 +2046,7 @@
 					<key>fontStyle</key>
 					<string />
 					<key>foreground</key>
-					<string>#536871</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -2081,7 +2081,7 @@
 					<key>fontStyle</key>
 					<string>italic</string>
 					<key>foreground</key>
-					<string>#586E75</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 			<dict>
@@ -2321,7 +2321,7 @@
 				</dict>
 			</dict>
 
-		<!-- Comments -->
+
 
 			<dict>
 				<key>name</key>
@@ -2343,7 +2343,7 @@
 				<key>settings</key>
 				<dict>
 					<key>foreground</key>
-					<string>#AE81FF</string>
+					<string>#BEBEBE</string>
 				</dict>
 			</dict>
 
@@ -2383,6 +2383,19 @@
 				</dict>
 			</dict>
 
+			<dict>
+				<key>name</key>
+				<string>JSON: Comment</string>
+				<key>scope</key>
+				<string>source.json meta.structure.dictionary.json comment.line.double-slash.js</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#BEBEBE</string>
+				</dict>
+			</dict>
+
+		
 
 <!-- 				<dict>
 				<key>name</key>
