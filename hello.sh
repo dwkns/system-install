@@ -13,6 +13,8 @@
 
 # osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
 
+
+#reset iTerm 2
 rm -rfv "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 rm -rfv "$HOME/Library/Application Support/iTerm"
 rm -rfv "$HOME/Library/Application Support/iTerm2"
@@ -20,10 +22,14 @@ rm -rfv "$HOME/Library/Caches/com.googlecode.iterm2"
 killall cfprefsd
 open /Applications/iTerm.app
 
-sleep 5
 
+
+sleep 5 # Quit iTerm while sleeping.
+
+
+
+defaults delete com.googlecode.iterm2
 URL="https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/com.googlecode.iterm2.plist"
-
 curl $URL > "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-killall cfprefsd
+defaults read -app iTerm
 open /Applications/iTerm.app
