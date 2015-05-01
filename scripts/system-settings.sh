@@ -335,7 +335,6 @@ for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Transmission"  "iCal"; do
   killall "${app}" > /dev/null 2>&1
 done
-echo -e "Done. Note that some of these changes require a logout/restart to take effect."
 
 
 
