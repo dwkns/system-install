@@ -8,21 +8,15 @@ BREW_PACKAGES=( "wget" "git" "python" )
 ############ FUNCTIONS ############
 
 install_brew () {
-#  if ! command -v brew > /dev/null 2>&1; then
-   echo -e "$PG Downloading Homebrew"
-   
-   if  command -v gcc > /dev/null 2>&1; then
-    # gcc is installed so we can shortcut having to press 'return' by using the 'yes' command
-    yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    
-    else
-      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    fi
-  
-#  else
-#   echo -e "$PY Homebrew was already installed. Updating it..."
-#    brew update
-#  fi
+   	echo -e "$PG Downloading Homebrew"
+	
+	if xcode-select -p; then
+ 		echo "tools installed";
+		yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	else
+		echo "tools not installed";
+		ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	fi
 }
 
 install_brew_packages () {
