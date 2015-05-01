@@ -7,7 +7,7 @@ PR="\n\033[0;31m==============>\033[1;37m"
 
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
-LOCAL_SCRIPTS=false
+LOCAL_SCRIPTS=true
 SOFTWARE_UPDATE=true
 
 BREW_PACKAGES=( "wget" "git" "python" "dockutil") 
