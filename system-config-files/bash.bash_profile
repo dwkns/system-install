@@ -24,6 +24,8 @@ alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
 alias cdd='cd ~/Desktop'
 
+chflags hidden ~/Applications
+
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 
 alias hf='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'

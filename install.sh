@@ -1,9 +1,11 @@
 
 #!/bin/bash
 ######################## CONFIG ########################
-PG="\n\033[0;32m==============>\033[0;37m"
-PY="\n\033[1;33m==============>\033[0;37m"
-PR="\n\033[0;31m==============>\033[0;37m"
+PG="\n\033[0;32m==============>\033[0m"
+PY="\n\033[1;33m==============>\033[0m"
+PR="\n\033[0;31m==============>\033[0m"
+PDONE="\n\033[0;34m====> Done\033[0m"
+
 CURRENT_USER=`whoami`
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
@@ -45,28 +47,30 @@ if $LOCAL_SCRIPTS; then
     source scripts/homebrew.sh
     source scripts/postgres.sh
     source scripts/casks.sh
+    source scripts/sublime.sh
+    source scripts/rvm-ruby.sh
+    source scripts/gems.sh
     source scripts/node.sh
     source scripts/krep.sh
     source scripts/dotfiles.sh
     source scripts/system-settings.sh
-    source scripts/sublime.sh
-    source scripts/rvm-ruby.sh
-    source scripts/gems.sh
     source scripts/time-machine.sh
 else
     echo -e "$PG using remote scripts"
-    download_and_run $BASE_URL/scripts/clean.sh
-    download_and_run $BASE_URL/scripts/homebrew.sh
-    download_and_run $BASE_URL/scripts/postgres.sh
-    download_and_run $BASE_URL/scripts/casks.sh
-    download_and_run $BASE_URL/scripts/node.sh
-    download_and_run $BASE_URL/scripts/krep.sh
-    download_and_run $BASE_URL/scripts/dotfiles.sh
-    download_and_run $BASE_URL/scripts/system-settings.sh
-    download_and_run $BASE_URL/scripts/sublime.sh
-    download_and_run $BASE_URL/scripts/rvm-ruby.sh
-    download_and_run $BASE_URL/scripts/gems.sh
-    download_and_run $BASE_URL/scripts/time-machine.sh
+
+    download_and_run $BASE_URL/clean.sh
+    download_and_run $BASE_URL/homebrew.sh
+    download_and_run $BASE_URL/postgres.sh
+    download_and_run $BASE_URL/casks.sh
+    download_and_run $BASE_URL/sublime.sh
+    download_and_run $BASE_URL/rvm-ruby.sh
+    download_and_run $BASE_URL/gems.sh
+    download_and_run $BASE_URL/node.sh
+    download_and_run $BASE_URL/krep.sh
+    download_and_run $BASE_URL/dotfiles.sh
+    download_and_run $BASE_URL/system-settings.sh
+    download_and_run $BASE_URL/time-machine.sh
+
 fi
 
 ## Install any Apple System Updates
