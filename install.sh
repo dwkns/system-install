@@ -1,9 +1,9 @@
 
 #!/bin/bash
 ######################## CONFIG ########################
-PG="\n\033[0;32m==============>\033[1;37m"
-PY="\n\033[1;33m==============>\033[1;37m"
-PR="\n\033[0;31m==============>\033[1;37m"
+PG="\n\033[0;32m==============>\033[0;37m"
+PY="\n\033[1;33m==============>\033[0;37m"
+PR="\n\033[0;31m==============>\033[0;37m"
 CURRENT_USER=`whoami`
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
