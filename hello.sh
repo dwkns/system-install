@@ -17,6 +17,10 @@ rm -rfv "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 rm -rfv "$HOME/Library/Application Support/iTerm"
 rm -rfv "$HOME/Library/Application Support/iTerm2"
 rm -rfv "$HOME/Library/Caches/com.googlecode.iterm2"
+killall cfprefsd
+open /Applications/iTerm.app
+
+sleep 5
 
 URL="https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/com.googlecode.iterm2.plist"
 
