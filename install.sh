@@ -4,10 +4,10 @@
 PG="\n\033[0;32m==============>\033[1;37m"
 PY="\n\033[1;33m==============>\033[1;37m"
 PR="\n\033[0;31m==============>\033[1;37m"
-
+CURRENT_USER=`whoami`
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
-LOCAL_SCRIPTS=false
+LOCAL_SCRIPTS=true
 SOFTWARE_UPDATE=true
 
 BREW_PACKAGES=( "wget" "git" "python" "dockutil") 
@@ -18,6 +18,7 @@ ADD_TO_DOCK=("iterm2-nightly" "sublime-text3" "things" "omnigraffle" "transmissi
 
 # add "slingbox" when the pull request is accepted.
 
+EXCLUSION_LIST=("/Applications/" "/Library/" "/System/" "/bin/" "/cores/" "/opt/" "/private/" "/sbin/" "/usr/" "/.vol" "/.fseventsd" "/Users/$CURRENT_USER/Downloads/" "/Users/$CURRENT_USER/Library/Caches/" "/Users/$CURRENT_USER/Library/Mail/" "/Users/$CURRENT_USER/Documents/Torrents/" )
 
 
  ################### FUNCTIONS ###################

@@ -81,24 +81,29 @@ echo "Done"
 }
 
 remove_apps_from_dock () {
-echo -e "$PR Removing apps from Dock"
- if command -v dockutil > /dev/null 2>&1; then
- for APP in "${ADD_TO_DOCK[@]}"
-	do
-  		appNameFromCask=`brew cask info $APP | sed -n '/==> Contents/{n;p;}'`
-  		appname=`echo -e ${appNameFromCask:0:${#appNameFromCask}-6}`
+  echo -e "$PR Removing apps from Dock"
+   if command -v dockutil > /dev/null 2>&1; then
+   for APP in "${ADD_TO_DOCK[@]}"
+  	do
+    		appNameFromCask=`brew cask info $APP | sed -n '/==> Contents/{n;p;}'`
+    		appname=`echo -e ${appNameFromCask:0:${#appNameFromCask}-6}`
 
+    		appnameWithoutSuffix="${appname%????}"
 
-  		appnameWithoutSuffix="${appname%????}"
+    		dockutil --remove "$appnameWithoutSuffix" --no-restart
+  	done
+    	Killall Dock
+  fi
+  echo "Done"
+}
 
-  		dockutil --remove "$appnameWithoutSuffix" --no-restart
-	done
-  	Killall Dock
-  
-fi
-
-echo "Done"
-	
+remove_time_machine_exclusions () {
+for LOCATION in "${EXCLUSION_LIST[@]}"
+do
+  sudo tmutil removeexclusion "$LOCATION"
+done
+echo -e "$PG These locations will still be backed up :"
+sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
 }
 
 remove_krep
@@ -109,4 +114,5 @@ remove_sublime_config
 remove_rvm
 remove_cask
 remove_homebrew
+remove_time_machine_exclusions
 
