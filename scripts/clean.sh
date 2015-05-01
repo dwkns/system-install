@@ -22,14 +22,16 @@ remove_krep () {
 
 remove_postgres () {
     launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist # quit posgres
-    brew uninstall postgresql # test if brew is installed first?
+	
+	if command -v brew > /dev/null 2>&1; then
+  	  brew uninstall postgresql # test if brew is installed first?
+	fi
+
     sudo rm -rf "/usr/local/var"  && (echo "/usr/local/var removed"; exit 0) || (c=$?; echo "NOK"; (exit $c))
     sudo rm -rf "$HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
     sudo rm -rf "$HOME/Library/LaunchAgents/*.plist"
 
 }
-
-
 
 
 remove_dotfiles () {
