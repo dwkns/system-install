@@ -51,6 +51,7 @@ if $LOCAL_SCRIPTS; then
     source scripts/sublime.sh
     source scripts/rvm-ruby.sh
     source scripts/gems.sh
+    source scripts/time-machine.sh
 else
     echo -e "$PG using remote scripts"
     download_and_run $BASE_URL/scripts/clean.sh
@@ -64,6 +65,7 @@ else
     download_and_run $BASE_URL/scripts/sublime.sh
     download_and_run $BASE_URL/scripts/rvm-ruby.sh
     download_and_run $BASE_URL/scripts/gems.sh
+    download_and_run $BASE_URL/scripts/time-machine.sh
 fi
 
 ## Install any Apple System Updates

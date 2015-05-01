@@ -6,6 +6,7 @@ remove_homebrew () {
     echo -e "$PR Removing Homebrew"
     sudo rm -rf "/usr/local"
     sudo rm -rf "/Library/Caches/Homebrew"
+	echo "Done"
 }
 
 remove_cask () {
@@ -14,12 +15,14 @@ remove_cask () {
     sudo rm -rf  "/opt/homebrew-cask"
     #remove symlinks from Application folder - anoying escaping at end.
     find /Applications -maxdepth 1 -lname '*' -exec rm {} \;
+echo "Done"	
 }
 
 remove_krep () {
-	echo -e "$PR Removing Krep"
+    echo -e "$PR Removing Krep"
     sudo rm -rf "/Applications/Krep.app"
     dockutil --remove "Krep" --no-restart
+echo "Done"
 }
 
 remove_postgres () {
@@ -32,7 +35,7 @@ remove_postgres () {
     sudo rm -rf "/usr/local/var"  && (echo "/usr/local/var removed"; exit 0) || (c=$?; echo "NOK"; (exit $c))
     sudo rm -rf "$HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
     sudo rm -rf "$HOME/Library/LaunchAgents/*.plist"
-
+echo "Done"
 }
 
 
@@ -47,17 +50,20 @@ remove_dotfiles () {
   sudo rm -rf "$HOME/.gem"
   sudo rm -rf "$HOME/.dropbox"
   sudo rm -rf "$HOME/.subversion"
+echo "Done"
 }
 
 remove_sublime_config () {
   echo -e "$PR Removing SublimeConfig"
   sudo rm -rf "$HOME/Library/Application Support/Sublime Text 3"
   sudo rm -rf "/usr/local/bin/ruby-iterm2.sh"
+echo "Done"
 }
 
 remove_rvm () {
   echo -e "$PR Removing rvm"
   sudo rm -rf "$HOME/.rvm"
+echo "Done"
 }
 remove_apps(){
   echo -e "$PR Removing Apps"
@@ -71,9 +77,11 @@ remove_apps(){
   rm -rfv "$HOME/Library/Application Support/iTerm2"
   rm -rfv "$HOME/Library/Caches/com.googlecode.iterm2"
   killall cfprefsd
+echo "Done"
 }
 
 remove_apps_from_dock () {
+echo -e "$PR Removing apps from Dock"
  if command -v dockutil > /dev/null 2>&1; then
  for APP in "${ADD_TO_DOCK[@]}"
 	do
@@ -89,7 +97,7 @@ remove_apps_from_dock () {
   
 fi
 
-
+echo "Done"
 	
 }
 
