@@ -60,7 +60,6 @@ remove_apps(){
   sudo rm -rf "/tmp/krep"
 }
 
-
 remove_cask
 remove_krep
 remove_postgres
