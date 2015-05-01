@@ -18,6 +18,7 @@ remove_cask () {
 
 remove_krep () {
     sudo rm -rf "/Applications/Krep.app"
+	dockutil --remove "Krep" --no-restart
 }
 
 remove_postgres () {
