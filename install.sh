@@ -7,8 +7,8 @@ PR="\n\033[0;31m==============>\033[1;37m"
 
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
-LOCAL_SCRIPTS=true
-SOFTWARE_UPDATE=false
+LOCAL_SCRIPTS=false
+SOFTWARE_UPDATE=true
 
  ################### FUNCTIONS ###################
  download_and_run() {
@@ -67,7 +67,7 @@ echo -e "$PG  load bash profile into shell"
 source $HOME/.bash_profile
 
 
-#killall Dock
+killall Dock
 echo -e "$PG Deleteing Temp Directory"
 rm -rf $TEMP_DIR
 echo -e "$PG All done \033[0;32m<=======\033[1;37m\n"

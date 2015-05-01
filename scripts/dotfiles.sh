@@ -22,6 +22,9 @@ echo -e "$PG  Downloading .gitignore"
 wget -r "$SYSTEM_CONFIG_FILES/bash.gitignore_global" -O "$HOME/.gitignore_global"
 
 
+echo -e "$PG  Downloading iTerm config"
+wget -r "$SYSTEM_CONFIG_FILES/com.googlecode.iterm2.plist" -O "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+
 ###################### configure git ######################
 echo -e "$PG  Configuring git"
 git config --global core.excludesfile $HOME/.gitignore_global
