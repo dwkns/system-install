@@ -23,7 +23,11 @@ wget -r "$SYSTEM_CONFIG_FILES/bash.gitignore_global" -O "$HOME/.gitignore_global
 
 
 echo -e "$PG  Downloading iTerm config"
-wget -r "$SYSTEM_CONFIG_FILES/com.googlecode.iterm2.plist" -O "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+defaults delete com.googlecode.iterm2
+URL="https://raw.githubusercontent.com/dwkns/system-install/master/system-config-files/com.googlecode.iterm2.plist"
+curl $URL > "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+defaults read -app iTerm
+
 
 ###################### configure git ######################
 echo -e "$PG  Configuring git"

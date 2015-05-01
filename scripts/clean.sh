@@ -29,6 +29,10 @@ remove_postgres () {
 
 }
 
+remove_iterm () {
+
+}
+
 
 remove_dotfiles () {
   echo -e "$PR Removing dotfiles"
@@ -58,6 +62,13 @@ remove_apps(){
   sudo rm -rf "/usr/bin/motion"
   sudo rm -rf "/Library/RubyMotion"
   sudo rm -rf "/tmp/krep"
+
+  echo -e "$PR Removing iterm"
+  rm -rfv "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+  rm -rfv "$HOME/Library/Application Support/iTerm"
+  rm -rfv "$HOME/Library/Application Support/iTerm2"
+  rm -rfv "$HOME/Library/Caches/com.googlecode.iterm2"
+  killall cfprefsd
 }
 
 remove_cask
