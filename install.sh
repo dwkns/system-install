@@ -7,8 +7,16 @@ PR="\n\033[0;31m==============>\033[1;37m"
 
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
-LOCAL_SCRIPTS=false
+LOCAL_SCRIPTS=true
 SOFTWARE_UPDATE=true
+
+BREW_PACKAGES=( "wget" "git" "python" "dockutil") 
+
+CASKS_PACKAGES=("iterm2-nightly" "dropbox" "sublime-text3" "things" "flash" "handbrake" "omnigraffle" "transmission" "mplayerx" "charles" "lightpaper" "fluid" "codekit" "font-source-code-pro" )
+
+ADD_TO_DOCK=("iterm2-nightly" "sublime-text3" "things" "omnigraffle" "transmission" "mplayerx"  "lightpaper" "codekit")
+
+
 
  ################### FUNCTIONS ###################
  download_and_run() {
@@ -68,7 +76,7 @@ source $HOME/.bash_profile
 
 echo -e "$PG Deleteing Temp Directory"
 rm -rf $TEMP_DIR
-echo -e "$PG All done Rebooting\033[0;32m<=======\033[1;37m\n"
+echo -e "$PG All done I recommend Rebooting\033[0;32m<=======\033[1;37m\n"
 
 
 

@@ -1,10 +1,6 @@
 #!/bin/bash
 ######################## HOMEBREW ########################
 
-############ CONFIG ############
-
-BREW_PACKAGES=( "wget" "git" "python" ) 
-
 ############ SCRIPT ############
 echo -e "$PG Installing Homebrew"
 

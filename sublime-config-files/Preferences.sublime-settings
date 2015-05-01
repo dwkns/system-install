@@ -1,5 +1,5 @@
 {
-  "always_show_minimap_viewport": true,
+
   "color_scheme": "Packages/User/dwkns.tmTheme",
   "font_face": "Source Code Pro light",
   "font_size": 14,
@@ -11,9 +11,20 @@
     "Vintage",
     "PHP"
   ],
-  "show_minimap": false,
   "tab_size": 2,
   "theme": "Spacegray.sublime-theme",
   "translate_tabs_to_spaces": true,
-  "trim_automatic_white_space": true
+  "trim_automatic_white_space": true,
+  "create_window_at_startup": false,
+  "highlight_line": true,
+  "line_padding_bottom": 0,
+  "open_files_in_new_window": false,
+  // set to true to save each file when you select anotuher one.
+  "save_on_focus_lost": false,
+  "scroll_past_end": true,
+  "word_wrap": true,
+
+  "draw_minimap_border": false,
+
+  "always_show_minimap_viewport": false,  
 }

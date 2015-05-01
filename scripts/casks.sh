@@ -1,11 +1,12 @@
 #!/bin/bash
 ######################## HOMEBREW ########################
 
-############ CONFIG ############
-CASKS_PACKAGES=("iterm2-nightly" "dropbox" "sublime-text3" "things" "flash" "handbrake" "omnigraffle" "transmission" "mplayerx" "charles" "lightpaper" "fluid" "codekit" "font-source-code-pro" )
-#CASKS_PACKAGES=( "dropbox" "sublime-text3" "things" "font-source-code-pro" "omnigraffle" )
 
-############ FUNCTIONS ############
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
 
 install_cask () {
     echo -e "$PG Installing Cask"
@@ -21,26 +22,21 @@ install_cask () {
 install_cask_packages () {
   for pkg in "${CASKS_PACKAGES[@]}"
   do
-   if brew cask list -1 | grep -q "^${pkg}\$"; then
-     echo -e "$PY Cask '$pkg' is installed, skipping it..."
-   else
+
      echo -e "$PG Installing '$pkg'..."
-     brew cask install --force --appdir='/Applications' $pkg #do the install
+     
+      brew cask install --force --appdir='/Applications' $pkg #do the install
 
+     # if this package is in the ADD_TO_DOCK array then add it to the dock
+     if containsElement $pkg "${ADD_TO_DOCK[@]}"; then
 
-     # get the casks Applicaiton name
-     appNameFromCask=`brew cask info $pkg | sed -n '/==> Contents/{n;p;}'`
-
-
-     if [[ $appNameFromCask == *app* ]]; then # if it's an app add to dock
+    	appNameFromCask=`brew cask info $pkg | sed -n '/==> Contents/{n;p;}'`
+ 
       appname=`echo -e ${appNameFromCask:0:${#appNameFromCask}-6}`
-      appNameAndPath="/Applications/"$appname
-      
-      echo -e "appNameAndPath is $appNameAndPath"
 
-      defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$appNameAndPath</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
-    fi
-  fi
+        dockutil --add "/Applications/$appname" --no-restart
+      fi
+  
   done
 }
 

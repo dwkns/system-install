@@ -1,5 +1,7 @@
 #!/bin/bash
-######################## HOMEBREW ########################
+######################## CLEAN ########################
+ADD_TO_DOCK=("iterm2-nightly" "sublime-text3" "things" "omnigraffle" "transmission" "mplayerx"  "lightpaper" "codekit")
+
 
 ############ FUNCTIONS ############
 remove_homebrew () {
@@ -29,9 +31,7 @@ remove_postgres () {
 
 }
 
-remove_iterm () {
 
-}
 
 
 remove_dotfiles () {
@@ -71,6 +71,28 @@ remove_apps(){
   killall cfprefsd
 }
 
+remove_apps_from_dock () {
+ if command -v dockutil > /dev/null 2>&1; then
+ for APP in "${ADD_TO_DOCK[@]}"
+	do
+  		appNameFromCask=`brew cask info $APP | sed -n '/==> Contents/{n;p;}'`
+  		appname=`echo -e ${appNameFromCask:0:${#appNameFromCask}-6}`
+
+
+  		appnameWithoutSuffix="${appname%????}"
+
+  		dockutil --remove "$appnameWithoutSuffix" --no-restart
+	done
+  	Killall Dock
+  
+fi
+
+
+	
+}
+
+
+remove_apps_from_dock
 remove_cask
 remove_krep
 remove_postgres
