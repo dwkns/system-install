@@ -28,8 +28,8 @@ wget "http://sublime.wbond.net/Package Control.sublime-package" -O "$SUBLIME_INS
 
 
 
-echo -e "$PG  installing pin_console.py"
-wget "$BASE_URL/sublime-config-files/pin_console.py" -O "$SUBLIME_PACKAGES_DIR/pin_console.py"
+# echo -e "$PG  installing pin_console.py"
+# wget "$BASE_URL/sublime-config-files/pin_console.py" -O "$SUBLIME_PACKAGES_DIR/pin_console.py"
 
 
 echo -e "$PG  intalling license"

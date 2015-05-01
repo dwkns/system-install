@@ -73,6 +73,7 @@ else
 
 fi
 
+echo -e "$PG  Checking for Apple System Updates"
 ## Install any Apple System Updates
 if $SOFTWARE_UPDATE; then
     sudo softwareupdate -ia
