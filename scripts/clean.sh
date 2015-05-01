@@ -26,6 +26,7 @@ echo "Done"
 }
 
 remove_postgres () {
+echo -e "$PR Removing Postgres"
     launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist # quit posgres
 	
 	if command -v brew > /dev/null 2>&1; then
