@@ -68,7 +68,7 @@ source $HOME/.bash_profile
 
 echo -e "$PG Deleteing Temp Directory"
 rm -rf $TEMP_DIR
-echo -e "$PG All done \033[0;32m<=======\033[1;37m\n"
+echo -e "$PG All done Rebooting\033[0;32m<=======\033[1;37m\n"
 
 
 

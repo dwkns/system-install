@@ -33,9 +33,7 @@ install_cask_packages () {
 
 
      if [[ $appNameFromCask == *app* ]]; then # if it's an app add to dock
-
       appname=`echo -e ${appNameFromCask:0:${#appNameFromCask}-6}`
-
       appNameAndPath="/Applications/"$appname
       
       echo -e "appNameAndPath is $appNameAndPath"
