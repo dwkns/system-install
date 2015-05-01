@@ -321,6 +321,9 @@ defaults write org.m0k.transmission WarningDonate -bool false
 echo -e "$PG Hide the legal disclaimer"
 defaults write org.m0k.transmission WarningLegal -bool false
 
+echo -e "$PG Set the background colour"
+osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
+
 
 ###############################################################################
 # Kill affected applications                                                  #
