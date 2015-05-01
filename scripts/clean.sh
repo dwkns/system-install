@@ -93,13 +93,12 @@ fi
 	
 }
 
-
-remove_apps_from_dock
-remove_cask
 remove_krep
+remove_apps_from_dock
 remove_postgres
 remove_dotfiles
 remove_sublime_config
 remove_rvm
+remove_cask
 remove_homebrew
 

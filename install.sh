@@ -7,7 +7,7 @@ PR="\n\033[0;31m==============>\033[1;37m"
 
 MACHINE_NAME="dwkns-mbp"
 BASE_URL="https://raw.githubusercontent.com/dwkns/system-install/master"
-LOCAL_SCRIPTS=true
+LOCAL_SCRIPTS=false
 SOFTWARE_UPDATE=true
 
 BREW_PACKAGES=( "wget" "git" "python" "dockutil") 
@@ -15,6 +15,8 @@ BREW_PACKAGES=( "wget" "git" "python" "dockutil")
 CASKS_PACKAGES=("iterm2-nightly" "dropbox" "sublime-text3" "things" "flash" "handbrake" "omnigraffle" "transmission" "mplayerx" "charles" "lightpaper" "fluid" "codekit" "font-source-code-pro" )
 
 ADD_TO_DOCK=("iterm2-nightly" "sublime-text3" "things" "omnigraffle" "transmission" "mplayerx"  "lightpaper" "codekit")
+
+# add "slingbox" when the pull request is accepted.
 
 
 
