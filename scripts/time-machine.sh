@@ -1,27 +1,16 @@
 #!/bin/bash 
 ######################## Time Machine ########################
-echo -e "$PG Adding Time Machine Exclusion"
-CURRENT_USER=`whoami`
+echo -e "$PG Adding Time Machine Exclusions"
 
-sudo tmutil addexclusion "/Applications/"
-sudo tmutil addexclusion "/Library/"
-sudo tmutil addexclusion "/System/"
-sudo tmutil addexclusion "/bin/"
-sudo tmutil addexclusion "/cores/"
-sudo tmutil addexclusion "/dev/"
-sudo tmutil addexclusion "/home/"
-sudo tmutil addexclusion "/net/"
-sudo tmutil addexclusion "/opt/"
-sudo tmutil addexclusion "/private/"
-sudo tmutil addexclusion "/sbin/"
-sudo tmutil addexclusion "/usr/"
-sudo tmutil addexclusion "/.vol"
-sudo tmutil addexclusion "/.fseventsd"
 
-sudo tmutil addexclusion "/Users/$CURRENT_USER/Downloads/"
-sudo tmutil addexclusion "/Users/$CURRENT_USER/Library/Caches/"
-sudo tmutil addexclusion "/Users/$CURRENT_USER/Library/Mail/"
-sudo tmutil addexclusion "/Users/$CURRENT_USER/Library/Torrents/"
-sudo tmutil addexclusion "/Users/$CURRENT_USER/Library/Mail Downloads/"
+
+for LOCATION in "${EXCLUSION_LIST[@]}"
+do
+  sudo tmutil addexclusion "$LOCATION"
+done
+
+echo -e "$PG These locations are being excluded :"
+sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
 
 open /System/Library/PreferencePanes/TimeMachine.prefPane/
+
