@@ -6,7 +6,7 @@ remove_homebrew () {
     echo -e "$PR Removing Homebrew"
     sudo rm -rf "/usr/local"
     sudo rm -rf "/Library/Caches/Homebrew"
-	echo "Done"
+    echo -e "$PDONE"
 }
 
 remove_cask () {
@@ -15,14 +15,14 @@ remove_cask () {
     sudo rm -rf  "/opt/homebrew-cask"
     #remove symlinks from Application folder - anoying escaping at end.
     find /Applications -maxdepth 1 -lname '*' -exec rm {} \;
-echo "Done"	
+echo -e "$PDONE"	
 }
 
 remove_krep () {
     echo -e "$PR Removing Krep"
     sudo rm -rf "/Applications/Krep.app"
     dockutil --remove "Krep" --no-restart
-echo "Done"
+echo -e "$PDONE"
 }
 
 remove_postgres () {
@@ -36,7 +36,7 @@ echo -e "$PR Removing Postgres"
     sudo rm -rf "/usr/local/var"  && (echo "/usr/local/var removed"; exit 0) || (c=$?; echo "NOK"; (exit $c))
     sudo rm -rf "$HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
     sudo rm -rf "$HOME/Library/LaunchAgents/*.plist"
-echo "Done"
+echo -e "$PDONE"
 }
 
 
@@ -51,21 +51,22 @@ remove_dotfiles () {
   sudo rm -rf "$HOME/.gem"
   sudo rm -rf "$HOME/.dropbox"
   sudo rm -rf "$HOME/.subversion"
-echo "Done"
+ echo -e "$PDONE"
 }
 
 remove_sublime_config () {
   echo -e "$PR Removing SublimeConfig"
   sudo rm -rf "$HOME/Library/Application Support/Sublime Text 3"
   sudo rm -rf "/usr/local/bin/ruby-iterm2.sh"
-echo "Done"
+ echo -e "$PDONE"
 }
 
 remove_rvm () {
   echo -e "$PR Removing rvm"
   sudo rm -rf "$HOME/.rvm"
-echo "Done"
+echo -e "$PDONE"
 }
+
 remove_apps(){
   echo -e "$PR Removing Apps"
   sudo rm -rf "/usr/bin/motion"
@@ -78,7 +79,7 @@ remove_apps(){
   rm -rfv "$HOME/Library/Application Support/iTerm2"
   rm -rfv "$HOME/Library/Caches/com.googlecode.iterm2"
   killall cfprefsd
-echo "Done"
+ echo -e "$PDONE"
 }
 
 remove_apps_from_dock () {
@@ -95,7 +96,7 @@ remove_apps_from_dock () {
   	done
     	Killall Dock
   fi
-  echo "Done"
+ echo -e "$PDONE"
 }
 
 remove_time_machine_exclusions () {
@@ -105,6 +106,7 @@ do
 done
 echo -e "$PG These locations will still be backed up :"
 sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+ echo -e "$PDONE"
 }
 
 remove_krep
