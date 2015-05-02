@@ -83,4 +83,4 @@ fi
 echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
 
-# source "$ROOT_DIR/scripts/main-install.sh"
+source "$ROOT_DIR/scripts/main-install.sh"
