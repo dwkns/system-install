@@ -19,6 +19,7 @@ if ! $CLEAN_INSTALL; then
   # remove_sublime_config
   # remove_time_machine_exclusions
   # remove_rvm_ruby_gems
+ killall Dock
 fi
 
 source $ROOT_DIR/scripts/dotfiles.sh  
