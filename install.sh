@@ -74,10 +74,10 @@ else
   cd $ROOT_DIR
 fi
 
-if $WORKING_DIR; then 
-  warn "Resetting ROOT_DIR to $WORKING_DIR we are working locally"
-  ROOT_DIR="$WORKING_DIR"
-fi
+#if $WORKING_DIR; then 
+ # warn "Resetting ROOT_DIR to $WORKING_DIR we are working locally"
+ # ROOT_DIR="$WORKING_DIR"
+#fi
 
 echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
