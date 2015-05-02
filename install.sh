@@ -17,7 +17,7 @@ sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 DEBUG=true
-CLEAN_INSTALL=true
+CLEAN_INSTALL=false
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 TMP_DIR=`mktemp -d /tmp/os-install.XXXXXXXXX`
@@ -27,6 +27,7 @@ msg "Starting install"
 if $DEBUG; then
   warn "Debug is active"
   warn "Software update is set to false"
+  TM_DEBUG=false
   WORKING_DIR="`( cd \"$MY_PATH\" && pwd )`"
 fi
 
@@ -82,4 +83,4 @@ fi
 echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
 
-source "$ROOT_DIR/scripts/main-install.sh"
+# source "$ROOT_DIR/scripts/main-install.sh"
