@@ -70,8 +70,6 @@ remove_iterm () {
   rm -rf "$HOME/Library/Application Support/iTerm"
   rm -rf "$HOME/Library/Application Support/iTerm2"
   rm -rf "$HOME/Library/Caches/com.googlecode.iterm2"
-  killall cfprefsd
-
 }
 
 remove_apps_from_dock () {
@@ -130,5 +128,6 @@ clean_all () {
   remove_time_machine_exclusions
   remove_rvm_ruby_gems
   killall Dock
+killall cfprefsd
   note "done"
 }
