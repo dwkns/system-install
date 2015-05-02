@@ -8,8 +8,8 @@ do
 done
 
 if $DEGBUG; then
-warn "These locations are being excluded :"
-sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+  warn "These locations are being excluded :"
+  sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
 fi
 note "done"
 
