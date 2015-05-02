@@ -12,6 +12,7 @@ warn () {
 
 DEBUG=true
 ROOT_DIR="$HOME/.system-config"
+REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 
 # ask for sudo upfront
 sudo -v 
@@ -20,14 +21,19 @@ sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 msg "Starting install"
+
 echo "Linking to clean script"
-source $WORKING_DIR/scripts/clean.sh
+mkdir -p /tmp/os-install/
+curl "$REMOTE_URL/scripts/clean.sh" -o "/tmp/os-install/clean.sh"
+source /tmp/os-install/clean.sh
+
 
 
 if $DEBUG; then
   warn "Debug is active"
   warn "Software update is set to false"
   WORKING_DIR="`( cd \"$MY_PATH\" && pwd )`"
+  # source $WORKING_DIR/scripts/clean.sh
   #clean up before we install
   remove_krep
   remove_iterm
@@ -40,10 +46,8 @@ if $DEBUG; then
   remove_time_machine_exclusions
   remove_rvm_ruby_gems
   killall Dock
-else
-  #clean up before we install
-  warn "Cleaning everything"
-  clean_all
+
+  
 fi
 
 ############ Install Homebrew ############
@@ -88,3 +92,4 @@ echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
 
 source "$ROOT_DIR/scripts/main-install.sh"
+

@@ -2,6 +2,7 @@
 msg "Starting the main install"
 
 # load all the configuation variables 
+source $ROOT_DIR/scripts/config.sh  
 source $ROOT_DIR/scripts/dotfiles.sh  
 source $ROOT_DIR/scripts/brew-packages.sh
 source $ROOT_DIR/scripts/apps.sh
