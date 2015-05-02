@@ -13,11 +13,12 @@ remove_cask () {
 }
 
 remove_krep () {
-    warn "Removing Krep"
-     rm -rf "/Applications/Krep.app"
-    if command -v dockutil > /dev/null 2>&1; then
-      dockutil --remove "Krep" --no-restart
-      else
+  warn "Removing Krep"
+  rm -rf "/Applications/Krep.app"
+  if command -v dockutil > /dev/null 2>&1; then
+    echo "removing Krep"
+    dockutil --remove "Krep" --no-restart
+  else
     echo "Dockutil not installed. Unable to remove Krep from Dock"
   fi
    
@@ -119,8 +120,8 @@ remove_system_files () {
 clean_all () {
   msg "Doing a complete clean up - this deletes shits loads of stuff"
   remove_krep
-  remove_iterm
   remove_apps_from_dock
+  remove_iterm
   remove_homebrew
   remove_system_files
   remove_dotfiles
