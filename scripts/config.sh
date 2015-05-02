@@ -1,4 +1,5 @@
 #!/bin/bash
+msg "Config has been loaded" 
 MACHINE_NAME="dwkns-mbp"
 SOFTWARE_UPDATE=true
 

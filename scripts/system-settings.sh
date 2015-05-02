@@ -3,7 +3,7 @@
 
 
 ###################### set machine name ######################
-msg "Setting Machine name to : $PY $MACHINE_NAME"
+msg "Setting Machine name to : $MACHINE_NAME"
 sudo scutil --set ComputerName $MACHINE_NAME
 sudo scutil --set HostName $MACHINE_NAME
 sudo scutil --set LocalHostName $MACHINE_NAME
