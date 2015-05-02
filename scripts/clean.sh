@@ -17,8 +17,7 @@ remove_krep () {
      rm -rf "/Applications/Krep.app"
     if command -v dockutil > /dev/null 2>&1; then
       dockutil --remove "Krep" --no-restart
-       Killall Dock 
-  else
+      else
     echo "Dockutil not installed. Unable to remove Krep from Dock"
   fi
    
@@ -85,8 +84,7 @@ remove_apps_from_dock () {
     		appnameWithoutSuffix="${appname%????}"
 
     		dockutil --remove "$appnameWithoutSuffix" --no-restart
-  	done
-    Killall Dock	
+  	done	
   else
     echo "Dockutil not installed. Unable to remove apps from Dock"
   fi
@@ -130,5 +128,6 @@ clean_all () {
   remove_sublime_config
   remove_time_machine_exclusions
   remove_rvm_ruby_gems
+  killall Dock
   note "done"
 }
