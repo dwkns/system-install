@@ -4,15 +4,15 @@
 
 ###################### set machine name ######################
 msg "Setting Machine name to : $MACHINE_NAME"
-sudo scutil --set ComputerName $MACHINE_NAME
-sudo scutil --set HostName $MACHINE_NAME
-sudo scutil --set LocalHostName $MACHINE_NAME
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
+ scutil --set ComputerName $MACHINE_NAME
+ scutil --set HostName $MACHINE_NAME
+ scutil --set LocalHostName $MACHINE_NAME
+ defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
 note "done"
 ######################  Random other configurations ######################
 echo "Disabling OS X Gate Keeper so no more annoying 'you can't open this app messages'"
-sudo spctl --master-disable
-sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
+ spctl --master-disable
+ defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 echo "Turn off keyboard illumination when computer is not used for 5 minutes"

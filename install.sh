@@ -10,17 +10,17 @@ warn () {
   echo -e "\n\033[0;31m====> $1 \033[0m"
 }
 
-DEBUG=true
-CLEAN_INSTALL=true
-ROOT_DIR="$HOME/.system-config"
-REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
-TMP_DIR=`mktemp -d`
-
 # ask for sudo upfront
 sudo -v 
 
 # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+DEBUG=true
+CLEAN_INSTALL=true
+ROOT_DIR="$HOME/.system-config"
+REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
+TMP_DIR=`mktemp -d /tmp/os-install.XXXXXXXXX`
 
 msg "Starting install"
 
@@ -33,6 +33,7 @@ fi
 if $CLEAN_INSTALL; then
     # this is a special case when you want to clean everything 
     # before starting an install.
+    echo "TMP_DIR is $TMP_DIR"
     curl $REMOTE_URL/scripts/clean.sh -o $TMP_DIR/clean.sh
     curl $REMOTE_URL/scripts/config.sh -o $TMP_DIR/config.sh
     source $TMP_DIR/clean.sh
