@@ -7,7 +7,7 @@ do
   sudo tmutil addexclusion "$LOCATION"
 done
 
-if $DEGBUG; then
+if $TM_DEBUG; then
   warn "These locations are being excluded :"
   sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
 fi

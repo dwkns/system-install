@@ -99,7 +99,7 @@ remove_time_machine_exclusions () {
   do
     	sudo tmutil removeexclusion "$LOCATION"
   done
-	if $DEBUG; then
+	if $TM_DEBUG; then
   		echo "These locations will still be backed up :"
   		sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
 	fi
