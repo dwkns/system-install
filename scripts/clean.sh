@@ -105,10 +105,24 @@ remove_time_machine_exclusions () {
   	
 }
 
+remove_homebrew () {
+  warn "Removing Homebrew"
+  sudo rm -rf "/usr/local"
+  sudo rm -rf "/Library/Caches/Homebrew"  
+}
+
+remove_system_files () {
+  warn "Removing '~/.system-config'"
+  rm -rf "$HOME/.system-config"
+}
+
+
 clean_all () {
   remove_krep
   remove_iterm
   remove_apps_from_dock
+  remove_homebrew
+  remove_system_files
   remove_dotfiles
   remove_postgres
   remove_sublime_config

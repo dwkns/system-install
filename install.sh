@@ -14,6 +14,7 @@ DEBUG=true
 CLEAN_INSTALL=true
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
+TMP_DIR=`mktemp -d`
 
 # ask for sudo upfront
 sudo -v 
@@ -24,21 +25,19 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 msg "Starting install"
 
 if $DEBUG; then
-  warn "Debug is active - we are working locally"
+  warn "Debug is active"
   warn "Software update is set to false"
   WORKING_DIR="`( cd \"$MY_PATH\" && pwd )`"
-  source $WORKING_DIR/scripts/clean.sh
 fi
 
 if $CLEAN_INSTALL; then
-    # this is a special case when you want to clean everything up.
-    warn "Removing Homebrew"
-    sudo rm -rf "/usr/local"
-    sudo rm -rf "/Library/Caches/Homebrew"  
-
-    warn "Removing '~/.system-config'"
-    rm -rf "$HOME/.system-config"
-    
+    # this is a special case when you want to clean everything 
+    # before starting an install.
+    curl $REMOTE_URL/scripts/clean.sh -o $TMP_DIR/clean.sh
+    curl $REMOTE_URL/scripts/config.sh -o $TMP_DIR/config.sh
+    source $TMP_DIR/clean.sh
+    source $TMP_DIR/config.sh
+    clean_all  
 fi
 
 ############ Install Homebrew ############
@@ -60,15 +59,6 @@ else
 fi
 note "Done"
 
-msg "Installing dockutil as we need it later"
- if brew list -1 | grep -q "dockutil"; then
-     echo "dockutil is installed, skipping it..."
-   else
-     echo "Installing 'dockutil'..."
-     brew install dockutil
-  fi
-note "Done"
-
 ############ Download config files  ############
 
 msg "$PG Downloading config files"
@@ -83,13 +73,12 @@ else
   cd $ROOT_DIR
 fi
 
-# if $DEBUG; then 
-#   warn "Resetting ROOT_DIR to $WORKING_DIR"
-#   ROOT_DIR="$WORKING_DIR"
-# fi
+if $WORKING_DIR; then 
+  warn "Resetting ROOT_DIR to $WORKING_DIR we are working locally"
+  ROOT_DIR="$WORKING_DIR"
+fi
 
 echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
 
 source "$ROOT_DIR/scripts/main-install.sh"
-
