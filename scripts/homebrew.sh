@@ -1,5 +1,14 @@
 #!/bin/bash
-######################## HOMEBREW ########################
+######################## HOMEBREW + CASK ########################
+# sets up Homebrew and installs basic packages as defined in install.sh
+
+############ FUNCTIONS ############
+
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
 
 ############ SCRIPT ############
 echo -e "$PG Installing Homebrew"
@@ -24,4 +33,11 @@ for PACKAGE in "${BREW_PACKAGES[@]}"
   fi
 done
 
+echo -e "$PG Installing Cask"
+brew install caskroom/cask/brew-cask
 
+echo -e "$PG Tapping up caskroom/versions"
+brew tap caskroom/versions
+
+echo -e "$PG Tapping up caskroom/fonts"
+brew tap caskroom/fonts

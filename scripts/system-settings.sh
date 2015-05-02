@@ -3,13 +3,11 @@
 
 
 ###################### set machine name ######################
-
 echo -e "$PG Setting Machine name to : $PY $MACHINE_NAME"
 sudo scutil --set ComputerName $MACHINE_NAME
 sudo scutil --set HostName $MACHINE_NAME
 sudo scutil --set LocalHostName $MACHINE_NAME
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
-
 
 ######################  Random other configurations ######################
 echo -e "$PG Disabling OS X Gate Keeper so no more annoying 'you can't open this app messages'"
@@ -239,24 +237,6 @@ echo -e "$PG Add a context menu item for showing the Web Inspector in web views"
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 
-###############################################################################
-# Terminal & iTerm 2                                                         #
-###############################################################################
-
-echo -e "$PG Only use UTF-8 in Terminal.app"
-defaults write com.apple.terminal StringEncodings -array 4
-
-
-echo -e "$PG Don’t display the annoying prompt when quitting iTerm"
-defaults write com.googlecode.iterm2 PromptOnQuit -bool false
-
-###############################################################################
-# Time Machine                                                                #
-###############################################################################
-
-echo -e "$PG Prevent Time Machine from prompting to use new hard drives as backup volume"
-defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-
 
 ###############################################################################
 # Activity Monitor                                                            #
@@ -328,16 +308,6 @@ echo -e "$PG Set the background colour"
 osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
 
 
-###############################################################################
-# Kill affected applications                                                  #
-###############################################################################
-
-for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-  "Dock" "Finder" "Google Chrome" "Mail" "Messages" \
-  "Safari" "SystemUIServer"  \
-  "Transmission"  "iCal"; do
-  killall "${app}" > /dev/null 2>&1
-done
 
 
 

@@ -2,10 +2,18 @@
 ######################## CLEAN ########################
 
 ############ FUNCTIONS ############
+
+
 remove_homebrew () {
     echo -e "$PR Removing Homebrew"
     sudo rm -rf "/usr/local"
     sudo rm -rf "/Library/Caches/Homebrew"
+    echo -e "$PDONE"
+}
+
+remove_system_config () {
+    echo -e "$PR Removing '~/.system-config'"
+    rm -rf "$HOME/.system-config"
     echo -e "$PDONE"
 }
 
@@ -58,7 +66,7 @@ remove_sublime_config () {
   echo -e "$PR Removing SublimeConfig"
   sudo rm -rf "$HOME/Library/Application Support/Sublime Text 3"
   sudo rm -rf "/usr/local/bin/ruby-iterm2.sh"
- echo -e "$PDONE"
+  echo -e "$PDONE"
 }
 
 remove_rvm () {
@@ -73,13 +81,17 @@ remove_apps(){
   sudo rm -rf "/Library/RubyMotion"
   sudo rm -rf "/tmp/krep"
 
-  echo -e "$PR Removing iterm"
-  rm -rfv "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-  rm -rfv "$HOME/Library/Application Support/iTerm"
-  rm -rfv "$HOME/Library/Application Support/iTerm2"
-  rm -rfv "$HOME/Library/Caches/com.googlecode.iterm2"
-  killall cfprefsd
  echo -e "$PDONE"
+}
+
+remove_iterm () {
+  echo -e "$PR Removing iterm"
+  rm -rf "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+  rm -rf "$HOME/Library/Application Support/iTerm"
+  rm -rf "$HOME/Library/Application Support/iTerm2"
+  rm -rf "$HOME/Library/Caches/com.googlecode.iterm2"
+  killall cfprefsd
+echo -e "$PDONE"
 }
 
 remove_apps_from_dock () {
@@ -100,22 +112,27 @@ remove_apps_from_dock () {
 }
 
 remove_time_machine_exclusions () {
-for LOCATION in "${EXCLUSION_LIST[@]}"
-do
-  sudo tmutil removeexclusion "$LOCATION"
-done
-echo -e "$PG These locations will still be backed up :"
-sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
- echo -e "$PDONE"
+  for LOCATION in "${EXCLUSION_LIST[@]}"
+  do
+    	sudo tmutil removeexclusion "$LOCATION"
+  done
+	if $DEBUG; then
+  		echo -e "$PG These locations will still be backed up :"
+  		sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+	fi
+  	echo -e "$PDONE"
 }
 
-remove_krep
-remove_apps_from_dock
-remove_postgres
-remove_dotfiles
-remove_sublime_config
-remove_rvm
-remove_cask
-remove_homebrew
-remove_time_machine_exclusions
-
+clean_all () {
+  remove_krep
+  remove_apps_from_dock
+  remove_postgres
+  remove_dotfiles
+  remove_iterm
+  remove_apps
+  remove_sublime_config
+  remove_rvm
+  remove_cask
+  remove_homebrew
+  remove_time_machine_exclusions
+}
