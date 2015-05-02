@@ -1,8 +1,6 @@
 #!/bin/bash
 ######################## local config ########################
-ITERM=false
-KREP=false
-SUBLIME=true
+
 ############ functions ############
 containsElement () {
   local e
@@ -39,7 +37,7 @@ for pkg in "${CASKS_PACKAGES[@]}"
 done
 
 ############ CONFIGURE ITERM ############
-if $ITERM; then
+
   msg "Configure iTerm"
   echo "Downloading preference file and copy into place"
   cp -f "$ROOT_DIR/system-config-files/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
@@ -47,10 +45,10 @@ if $ITERM; then
   # curl $URL > 
   killall cfprefsd
  note "done"
-fi
+
 
 ######################## INSTALL KREP ########################
-if $KREP; then
+
   msg "Installing Krep"
 
   ps cax | grep Krep > /dev/null # Is Krep running?
@@ -75,11 +73,11 @@ if $KREP; then
 
   fi
   note "done"
-fi
+
 
 
 ##################### Configure Sublime ######################
-if $SUBLIME;then
+
   msg "configuring sublime"
 
   SUBLIME="$HOME/Library/Application Support/Sublime Text 3"
@@ -125,4 +123,3 @@ if $SUBLIME;then
   git clone "https://github.com/dwkns/ruby-iTerm2.git" "$SUBLIME_PACKAGES_DIR/ruby-iTerm2"
   chmod u+x "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh"
   ln -s "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh" "/usr/local/bin"
-fi

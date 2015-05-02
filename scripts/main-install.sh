@@ -14,19 +14,19 @@ if ! $CLEAN_INSTALL; then
   remove_apps_from_dock
   # remove_homebrew # probably not a good idea to do this here
   # remove_system_files # probably not a good idea to do this here
-  remove_dotfiles
-  remove_postgres
-  remove_sublime_config
-  remove_time_machine_exclusions
-  remove_rvm_ruby_gems
+  # remove_dotfiles
+  # remove_postgres
+  # remove_sublime_config
+  # remove_time_machine_exclusions
+  # remove_rvm_ruby_gems
 fi
 
-source $ROOT_DIR/scripts/dotfiles.sh  
-source $ROOT_DIR/scripts/brew-packages.sh
+# source $ROOT_DIR/scripts/dotfiles.sh  
+# source $ROOT_DIR/scripts/brew-packages.sh
 source $ROOT_DIR/scripts/apps.sh
-source $ROOT_DIR/scripts/system-settings.sh
-source $ROOT_DIR/scripts/time-machine.sh
-source $ROOT_DIR/scripts/rvm-ruby-gems.sh
+# source $ROOT_DIR/scripts/system-settings.sh
+# source $ROOT_DIR/scripts/time-machine.sh
+# source $ROOT_DIR/scripts/rvm-ruby-gems.sh
 
 ## Install any Apple System Updates
 if $SOFTWARE_UPDATE; then
