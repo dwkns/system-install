@@ -94,6 +94,7 @@ remove_apps_from_dock () {
 }
 
 remove_time_machine_exclusions () {
+  warn "Removing time machine exclusions"
   for LOCATION in "${EXCLUSION_LIST[@]}"
   do
     	sudo tmutil removeexclusion "$LOCATION"
