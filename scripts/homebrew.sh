@@ -32,12 +32,3 @@ for PACKAGE in "${BREW_PACKAGES[@]}"
      brew install $PACKAGE
   fi
 done
-
-echo -e "$PG Installing Cask"
-brew install caskroom/cask/brew-cask
-
-echo -e "$PG Tapping up caskroom/versions"
-brew tap caskroom/versions
-
-echo -e "$PG Tapping up caskroom/fonts"
-brew tap caskroom/fonts
