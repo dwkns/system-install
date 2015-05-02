@@ -21,11 +21,11 @@ if ! $CLEAN_INSTALL; then
   # remove_rvm_ruby_gems
 fi
 
-# source $ROOT_DIR/scripts/dotfiles.sh  
-# source $ROOT_DIR/scripts/brew-packages.sh
+ source $ROOT_DIR/scripts/dotfiles.sh  
+ source $ROOT_DIR/scripts/brew-packages.sh
 source $ROOT_DIR/scripts/apps.sh
-# source $ROOT_DIR/scripts/system-settings.sh
-# source $ROOT_DIR/scripts/time-machine.sh
+source $ROOT_DIR/scripts/system-settings.sh
+source $ROOT_DIR/scripts/time-machine.sh
 # source $ROOT_DIR/scripts/rvm-ruby-gems.sh
 
 ## Install any Apple System Updates
