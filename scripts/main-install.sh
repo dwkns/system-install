@@ -2,7 +2,22 @@
 msg "Starting the main install"
 
 # load all the configuation variables 
-source $ROOT_DIR/scripts/config.sh  
+source $ROOT_DIR/scripts/config.sh 
+
+# load the cleaing scripts
+source $ROOT_DIR/scripts/clean.sh 
+
+# choose what to clean
+remove_krep
+remove_iterm
+remove_apps_from_dock
+remove_dotfiles
+remove_postgres
+remove_sublime_config
+remove_time_machine_exclusions
+remove_rvm_ruby_gems
+
+
 source $ROOT_DIR/scripts/dotfiles.sh  
 source $ROOT_DIR/scripts/brew-packages.sh
 source $ROOT_DIR/scripts/apps.sh
