@@ -1,31 +1,32 @@
 #!/bin/bash
 ######################## DOTFILES ########################
 
-###################### CONFIG ######################
-SYSTEM_CONFIG_FILES="$BASE_URL/system-config-files"
+msg "Copying dotfiles"
 
-###################### SCRIPT ######################
-echo -e "$PG  Downloading bash profile"
-wget -r "$SYSTEM_CONFIG_FILES/bash.bash_profile" -O "$HOME/.bash_profile"
+echo "Copying .bash_profile"
+cp -f "$ROOT_DIR/system-config-files/bash.bash_profile"  "$HOME/.bash_profile"
 
-echo -e "$PG  Downloading rspec config"
-wget  -r "$SYSTEM_CONFIG_FILES/bash.rspec" -O "$HOME/.rspec"
+echo "Copying .rspec"
+cp -f  "$ROOT_DIR/system-config-files/bash.rspec" "$HOME/.rspec"
 
-echo -e "$PG  Downloading gemrc config"
-wget -r "$SYSTEM_CONFIG_FILES/bash.gemrc" -O "$HOME/.gemrc"
+echo "Copying .gemrc"
+cp -f "$ROOT_DIR/system-config-files/bash.gemrc" "$HOME/.gemrc"
 
-echo -e "$PG  Downloading .gitconfig"
-wget -r "$SYSTEM_CONFIG_FILES/bash.gitconfig" -O "$HOME/.gitconfig"
+echo "Copying .gitconfig"
+cp -f "$ROOT_DIR/system-config-files/bash.gitconfig" "$HOME/.gitconfig"
 
-echo -e "$PG  Downloading .gitignore"
-wget -r "$SYSTEM_CONFIG_FILES/bash.gitignore_global" -O "$HOME/.gitignore_global"
+echo "Copying .gitignore"
+cp -f "$ROOT_DIR/system-config-files/bash.gitignore_global" "$HOME/.gitignore_global"
+note "done"
 
 ###################### configure git ######################
-echo -e "$PG  Configuring git"
+msg "Configuring git"
 git config --global core.excludesfile $HOME/.gitignore_global
 
 #load bash profile into shell
 source $HOME/.bash_profile
+
+note "done"
 
 
 
