@@ -4,13 +4,13 @@ remove_homebrew () {
     warn "Removing Homebrew"
     sudo rm -rf "/usr/local"
     sudo rm -rf "/Library/Caches/Homebrew"
-    note "Done"
+    
 }
 
 remove_system_config () {
     warn "Removing '~/.system-config'"
     rm -rf "$HOME/.system-config"
-    note "Done"
+    
 }
 
 remove_cask () {
@@ -19,7 +19,7 @@ remove_cask () {
     sudo rm -rf  "/opt/homebrew-cask"
     #remove symlinks from Application folder - anoying escaping at end.
     find /Applications -maxdepth 1 -lname '*' -exec rm {} \;
-note "Done"	
+	
 }
 
 remove_krep () {
@@ -29,9 +29,9 @@ remove_krep () {
       dockutil --remove "Krep" --no-restart
        Killall Dock 
   else
-    warn "dockutil not installed. Unable to remove apps from Dock"
+    echo "Dockutil not installed. Unable to remove Krep from Dock"
   fi
-    note "Done"
+   
 }
 
 remove_postgres () {
@@ -45,7 +45,7 @@ warn "Removing Postgres"
     sudo rm -rf "/usr/local/var"  && (echo "/usr/local/var removed"; exit 0) || (c=$?; echo "NOK"; (exit $c))
     sudo rm -rf "$HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
     sudo rm -rf "$HOME/Library/LaunchAgents/*.plist"
-note "Done"
+
 }
 
 
@@ -60,20 +60,20 @@ remove_dotfiles () {
   sudo rm -rf "$HOME/.gem"
   sudo rm -rf "$HOME/.dropbox"
   sudo rm -rf "$HOME/.subversion"
- note "Done"
+ 
 }
 
 remove_sublime_config () {
   warn "Removing SublimeConfig"
   sudo rm -rf "$HOME/Library/Application Support/Sublime Text 3"
   sudo rm -rf "/usr/local/bin/ruby-iterm2.sh"
-  note "Done"
+  
 }
 
 remove_rvm_ruby_gems () {
   warn "Removing rvm"
   sudo rm -rf "$HOME/.rvm"
-  note "Done"
+  
 }
 
 remove_iterm () {
@@ -83,7 +83,7 @@ remove_iterm () {
   rm -rf "$HOME/Library/Application Support/iTerm2"
   rm -rf "$HOME/Library/Caches/com.googlecode.iterm2"
   killall cfprefsd
-note "Done"
+
 }
 
 remove_apps_from_dock () {
@@ -100,9 +100,9 @@ remove_apps_from_dock () {
   	done
     Killall Dock	
   else
-    warn "dockutil not installed. Unable to remove apps from Dock"
+    echo "Dockutil not installed. Unable to remove apps from Dock"
   fi
- note "Done"
+ 
 }
 
 remove_time_machine_exclusions () {
@@ -111,10 +111,10 @@ remove_time_machine_exclusions () {
     	sudo tmutil removeexclusion "$LOCATION"
   done
 	if $DEBUG; then
-  		echo -e "$PG These locations will still be backed up :"
+  		echo "These locations will still be backed up :"
   		sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
 	fi
-  	note "Done"
+  	
 }
 
 clean_all () {
