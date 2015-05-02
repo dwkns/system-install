@@ -1,17 +1,7 @@
 #!/bin/bash
 ######################## CLEAN ########################
-remove_homebrew () {
-    warn "Removing Homebrew"
-    sudo rm -rf "/usr/local"
-    sudo rm -rf "/Library/Caches/Homebrew"
-    
-}
 
-remove_system_config () {
-    warn "Removing '~/.system-config'"
-    rm -rf "$HOME/.system-config"
-    
-}
+
 
 remove_cask () {
     warn "Removing Cask"
@@ -24,7 +14,7 @@ remove_cask () {
 
 remove_krep () {
     warn "Removing Krep"
-    sudo rm -rf "/Applications/Krep.app"
+     rm -rf "/Applications/Krep.app"
     if command -v dockutil > /dev/null 2>&1; then
       dockutil --remove "Krep" --no-restart
        Killall Dock 
@@ -45,9 +35,7 @@ warn "Removing Postgres"
     sudo rm -rf "/usr/local/var"  && (echo "/usr/local/var removed"; exit 0) || (c=$?; echo "NOK"; (exit $c))
     sudo rm -rf "$HOME/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
     sudo rm -rf "$HOME/Library/LaunchAgents/*.plist"
-
 }
-
 
 remove_dotfiles () {
   warn "Removing dotfiles"
@@ -121,11 +109,9 @@ clean_all () {
   remove_krep
   remove_iterm
   remove_apps_from_dock
-  remove_homebrew
   remove_dotfiles
   remove_postgres
   remove_sublime_config
-  remove_system_config
   remove_time_machine_exclusions
   remove_rvm_ruby_gems
 }
