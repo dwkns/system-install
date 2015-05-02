@@ -118,7 +118,6 @@ remove_system_files () {
 
 
 clean_all () {
-  msg "Doing a complete clean up - this deletes shits loads of stuff"
   remove_krep
   remove_iterm
   remove_apps_from_dock
@@ -129,5 +128,4 @@ clean_all () {
   remove_sublime_config
   remove_time_machine_exclusions
   remove_rvm_ruby_gems
-  note "done"
 }
