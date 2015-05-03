@@ -689,7 +689,7 @@
 					<key>fontStyle</key>
 					<string />
 					<key>foreground</key>
-					<string>#708284</string>
+					<string>#c0c5ce</string>
 				</dict>
 			</dict>
 			<dict>
@@ -700,7 +700,7 @@
 				<key>settings</key>
 				<dict>
 					<key>foreground</key>
-					<string>#708284</string>
+					<string>#a6e22e</string>
 				</dict>
 			</dict>
 			<dict>
