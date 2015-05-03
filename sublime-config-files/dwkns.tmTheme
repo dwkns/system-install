@@ -694,7 +694,7 @@
 			</dict>
 			<dict>
 				<key>name</key>
-				<string>HTML: something=</string>
+				<string>HTML: something= </string>
 				<key>scope</key>
 				<string>text.html.basic entity.other.attribute-name.html</string>
 				<key>settings</key>
