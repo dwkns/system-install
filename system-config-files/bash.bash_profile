@@ -24,6 +24,9 @@ alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
 alias cdd='cd ~/Desktop'
 
+alias ssp="cp -rf $HOME/'Library/Application Support/Sublime Text 3/Packages/User/dwkns.tmTheme' $HOME/'.system-config/sublime-config-files/dwkns.tmTheme'; cd $HOME/'.system-config/'; ga; git commit -m 'updated theme'; gp"
+
+
 chflags hidden ~/Applications
 
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
