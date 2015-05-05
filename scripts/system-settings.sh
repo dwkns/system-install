@@ -206,8 +206,10 @@ defaults write com.apple.dock autohide -bool false
 # Safari & WebKit                                                             #
 ###############################################################################
 
-echo "Privacy: don’t send search queries to Apple"
+echo "UniversalSearchEnabled set to false"
 defaults write com.apple.Safari UniversalSearchEnabled -bool false
+
+echo "SuppressSearchSuggestions set to false"
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
 echo "Show the full URL in the address bar (note: this still hides the scheme)"
