@@ -50,6 +50,7 @@ CASKS_PACKAGES=(
   "fluid"
   "codekit"
   "font-source-code-pro" 
+  "parallels-desktop"
 )
 # add "slingbox" if the pull request is accepted.
 
