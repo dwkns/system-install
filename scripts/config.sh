@@ -17,6 +17,7 @@ TIME_MACHINE_EXCLUSION_LIST=(
   "$HOME/Downloads/"
   "$HOME/Library/Caches/"
   "$HOME/Documents/Torrents/"
+  "$HOME/Documents/Parallels/"
   "$HOME/Dropbox/"
   "$HOME/Library/Application Support/Google/"
 )
