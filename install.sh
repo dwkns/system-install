@@ -55,7 +55,7 @@ if xcode-select -p; then
     yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 else
-  echo "Developer tools are installed"
+  echo "No developer tools are installed"
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 note "Done"
