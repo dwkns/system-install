@@ -23,6 +23,10 @@ note "done"
 msg "Configuring git"
 git config --global core.excludesfile $HOME/.gitignore_global
 
+#ensure that an ~/Applicaitons exists. 
+# This removes an error when the following 'source' is called and ~/Applicaitons doesn't exist.
+mkdir -p ~/Applications
+
 #load bash profile into shell
 source $HOME/.bash_profile
 
