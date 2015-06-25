@@ -40,7 +40,6 @@ if $CLEAN_INSTALL; then
     source $TMP_DIR/config.sh
     clean_all  
 fi
-
 ############ Install Homebrew ############
 msg "$PG Installing Homebrew"
 
@@ -51,11 +50,11 @@ if xcode-select -p; then
      echo "Running 'brew update'"
      #brew update
    else
-    echo "Installing Homebrew"
+    echo "Installing Homebrew using yes''"
     yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 else
-  echo "Developer tools are installed"
+  echo "No developer tools are installed"
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 note "Done"
