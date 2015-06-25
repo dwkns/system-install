@@ -79,6 +79,14 @@ fi
 #  ROOT_DIR="$WORKING_DIR"
 # fi
 
+# if $rubymotion
+#   then
+#   curl  -O http://www.rubymotion.com/files/RubyMotion%20Installer.zip
+#   unzip "RubyMotion%20Installer.zip"
+#   open "RubyMotion Installer.app"
+#   rm -rf "RubyMotion%20Installer.zip"
+# fi
+
 echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
 
