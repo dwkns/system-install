@@ -4,6 +4,8 @@ msg "Adding Time Machine Exclusions"
 
 for LOCATION in "${TIME_MACHINE_EXCLUSION_LIST[@]}"
 do
+  # ensure that the directories exist.
+  mkdir -p "$LOCATION"
   sudo tmutil addexclusion "$LOCATION"
 done
 

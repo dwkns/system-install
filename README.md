@@ -5,7 +5,7 @@ As with all bash scripts **read it** before you run it. And if you don't underst
 
 If you want to run it then :
 
-    $ curl https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
+    $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 
 ###Known issues
 1. Although we issue a `sudo -v` at the beginning of the script for some reason you get asked for your password again later on. It's not `sudo` timing out and appears to be related to the mixing of commands that need `sudo` and those that don't.
