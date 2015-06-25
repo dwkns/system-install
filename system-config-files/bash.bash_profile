@@ -24,10 +24,30 @@ alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
 alias cdd='cd ~/Desktop'
 
-alias ssp="cp -rf $HOME/'Library/Application Support/Sublime Text 3/Packages/User/dwkns.tmTheme' $HOME/'.system-config/sublime-config-files/dwkns.tmTheme'; cd $HOME/'.system-config/'; ga; git commit -m 'updated theme'; gp"
 
+########### keep sublime up to date ###########
+SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
+SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
+SCD="$HOME/'.system-config/sublime-config-files'"
+SYSCD="$HOME/'.system-config/system-config-files'"
 
-chflags hidden ~/Applications
+alias bsp="
+cp -rf $SD/dwkns.tmTheme $SCD/dwkns.tmTheme; 
+cp -rf $SD/SublimeLinter.sublime-settings $SCD/SublimeLinter.sublime-settings; 
+cp -rf $SD/scope_hunter.sublime-settings $SCD/scope_hunter.sublime-settings; 
+cp -rf $SD/Preferences.sublime-settings $SCD/Preferences.sublime-settings; 
+cp -rf $SD/'Default (OSX).sublime-keymap' $SCD/'Default (OSX).sublime-keymap'; 
+cp -rf $SD/'Package Control.sublime-settings' $SCD/'Package Control.sublime-settings'; 
+cp -rf $SROOT/'Packages/HTML-CSS-JS Prettify/.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
+cp -rf $HOME/'.bash_profile' $SYSCD/'bash.bash_profile';
+cd $HOME/'.system-config/'; 
+ga;
+git commit -m 'updated theme'; 
+gp"
+########### ########### ###########
+alias esc="cd $HOME/.system-config; subl *;"
+
+chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
 
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 
@@ -39,3 +59,6 @@ export PATH=/usr/local/bin:$PATH
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 #source ~/.profile
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
