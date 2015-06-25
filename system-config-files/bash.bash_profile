@@ -31,7 +31,7 @@ SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
 SCD="$HOME/'.system-config/sublime-config-files'"
 SYSCD="$HOME/'.system-config/system-config-files'"
 
-alias bsp="
+alias bsc="
 cp -rf $SD/dwkns.tmTheme $SCD/dwkns.tmTheme; 
 cp -rf $SD/SublimeLinter.sublime-settings $SCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/scope_hunter.sublime-settings $SCD/scope_hunter.sublime-settings; 
@@ -44,8 +44,17 @@ cd $HOME/'.system-config/';
 ga;
 git commit -m 'updated theme'; 
 gp"
+
+alias usc="
+cd $HOME/.system-config;
+git pull;
+cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
+"
 ########### ########### ###########
 alias esc="cd $HOME/.system-config; subl *;"
+
+
+
 
 chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
 
