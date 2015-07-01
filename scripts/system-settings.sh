@@ -206,8 +206,8 @@ defaults write com.apple.dock autohide -bool false
 # Safari & WebKit                                                             #
 ###############################################################################
 
-echo "UniversalSearchEnabled set to false"
-defaults write com.apple.Safari UniversalSearchEnabled -bool false
+echo "UniversalSearchEnabled set to true"
+defaults write com.apple.Safari UniversalSearchEnabled -bool true
 
 echo "SuppressSearchSuggestions set to false"
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
