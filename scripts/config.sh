@@ -52,6 +52,7 @@ CASKS_PACKAGES=(
   "codekit"
   "font-source-code-pro" 
   "parallels-desktop"
+  "slingplayer-desktop"
 )
 # add "slingbox" if the pull request is accepted.
 
