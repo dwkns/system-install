@@ -25,12 +25,22 @@ alias ep='subl ~/.bash_profile'
 alias cdd='cd ~/Desktop'
 
 
-########### keep sublime up to date ###########
+# variables for update commands.
 SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
 SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
 SCD="$HOME/'.system-config/sublime-config-files'"
 SYSCD="$HOME/'.system-config/system-config-files'"
 
+# update system config
+# downloads the latest bash profile from GIT 
+alias usc="
+cd $HOME/.system-config;
+git pull;
+cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
+"
+
+# BackupSystemConfig
+# Backs up all sublime and system files to GIT
 alias bsc="
 cp -rf $SD/dwkns.tmTheme $SCD/dwkns.tmTheme; 
 cp -rf $SD/SublimeLinter.sublime-settings $SCD/SublimeLinter.sublime-settings; 
@@ -45,12 +55,7 @@ ga;
 git commit -m 'updated theme'; 
 gp"
 
-alias usc="
-cd $HOME/.system-config;
-git pull;
-cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
-"
-########### ########### ###########
+# EditSystemConfig
 alias esc="cd $HOME/.system-config; subl *;"
 
 
