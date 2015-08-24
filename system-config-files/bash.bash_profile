@@ -22,7 +22,6 @@ alias gco='git checkout'
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
-alias cdd='cd ~/Desktop'
 alias dt='cd ~/Desktop'
 
 # variables for update commands.
