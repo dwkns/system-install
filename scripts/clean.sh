@@ -105,7 +105,7 @@ remove_time_machine_exclusions () {
 
 remove_homebrew () {
   warn "Removing Homebrew"
-  sudo rm -rf "/usr/local"
+  sudo rm -rf "/usr/local/*"
   sudo rm -rf "/Library/Caches/Homebrew"  
 }
 
