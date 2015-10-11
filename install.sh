@@ -19,13 +19,12 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 
-source "$ROOT_DIR/new-scripts/colours.sh"
+source "$ROOT_DIR/scripts/colours.sh"
 
 
 msg "Starting install"
 
 ############ Download config files  ############
-
 msg "$PG Downloading config files"
 
 if [ -d "$ROOT_DIR" ]; then
@@ -40,7 +39,6 @@ fi
 
 
 ######################## DOTFILES ########################
-
 msg "Copying dotfiles"
 
 echo "Copying .bash_profile"
@@ -61,19 +59,20 @@ note "done"
 
 ###################### configure git ######################
 msg "Configuring git"
+
 git config --global core.excludesfile $HOME/.gitignore_global
 note "Done" 
 
 ############ CONFIGURE ITERM ############
+msg "Configure iTerm"
 
-  msg "Configure iTerm"
-  echo "Downloading preference file and copy into place"
-  cp -f "$ROOT_DIR/system-config-files/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-  killall cfprefsd
- note "done"
+echo "Downloading preference file and copy into place"
+cp -f "$ROOT_DIR/system-config-files/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+killall cfprefsd
+note "done"
 
 
 ############ CONFIGURE Sublime ############
-  msg "Configure sublime"
-source "$ROOT_DIR/new-scripts/sublime-config.sh"
- note "done"
+msg "Configure sublime"
+source "$ROOT_DIR/scripts/sublime-config.sh"
+note "done"
