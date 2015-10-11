@@ -43,7 +43,7 @@ cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_pr
 alias ust="
 cd $HOME/.system-config;
 git pull;
-source $HOME/.system-config/new-scripts/install-sublime-config.sh
+source $HOME/.system-config/new-scripts/sublime-config.sh
 "
 
 # BackupSystemConfig
