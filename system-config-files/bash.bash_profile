@@ -38,6 +38,13 @@ cd $HOME/.system-config;
 git pull;
 cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
 "
+# update sublime config
+# downloads teh latest sublime confiuration and overides the local one.
+alias ust="
+cd $HOME/.system-config;
+git pull;
+source $HOME/.system-config/new-scripts/install-sublime-config.sh
+"
 
 # BackupSystemConfig
 # Backs up all sublime and system files to GIT
