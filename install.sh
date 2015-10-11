@@ -73,6 +73,13 @@ note "done"
 
 
 ############ CONFIGURE Sublime ############
-msg "Configure sublime"
 source "$ROOT_DIR/scripts/sublime-config.sh"
+note "done"
+
+############ CONFIGURE Time Machine ############
+source "$ROOT_DIR/scripts/sublime-config.sh"
+note "done"
+
+############ CONFIGURE System Settings ############
+source "$ROOT_DIR/scripts/system-settings.sh"
 note "done"

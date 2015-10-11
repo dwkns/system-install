@@ -1,7 +1,7 @@
  
    source "$HOME/.system-config/scripts/colours.sh"
   ##################### Configure Sublime ######################
-  msg "-------------------------- configuring sublime"
+  msg "Configure sublime"
 
   
   ROOT_DIR="$HOME/.system-config"
