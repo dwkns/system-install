@@ -313,8 +313,7 @@ echo "Set the background colour"
 osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
 
 
-
-
+note "done"
 
 
 
