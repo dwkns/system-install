@@ -16,48 +16,48 @@ sudo -v
 # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-DEBUG=false
-CLEAN_INSTALL=true
+# DEBUG=false
+# CLEAN_INSTALL=true
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 TMP_DIR=`mktemp -d /tmp/os-install.XXXXXXXXX`
 
 msg "Starting install"
 
-if $DEBUG; then
-  warn "Debug is active"
-  warn "Software update is set to false"
-  WORKING_DIR="`( cd \"$MY_PATH\" && pwd )`"
-fi
+# if $DEBUG; then
+#   warn "Debug is active"
+#   warn "Software update is set to false"
+#   WORKING_DIR="`( cd \"$MY_PATH\" && pwd )`"
+# fi
 
-if $CLEAN_INSTALL; then
-    # this is a special case when you want to clean everything 
-    # before starting an install.
-    echo "TMP_DIR is $TMP_DIR"
-    curl $REMOTE_URL/scripts/clean.sh -o $TMP_DIR/clean.sh
-    curl $REMOTE_URL/scripts/config.sh -o $TMP_DIR/config.sh
-    source $TMP_DIR/clean.sh
-    source $TMP_DIR/config.sh
-    clean_all  
-fi
+# if $CLEAN_INSTALL; then
+#     # this is a special case when you want to clean everything 
+#     # before starting an install.
+#     echo "TMP_DIR is $TMP_DIR"
+#     curl $REMOTE_URL/scripts/clean.sh -o $TMP_DIR/clean.sh
+#     curl $REMOTE_URL/scripts/config.sh -o $TMP_DIR/config.sh
+#     source $TMP_DIR/clean.sh
+#     source $TMP_DIR/config.sh
+#     clean_all  
+# fi
 ############ Install Homebrew ############
-msg "$PG Installing Homebrew"
+# msg "$PG Installing Homebrew"
 
-if xcode-select -p; then
-  echo "Developer tools are installed"
-  if command -v brew > /dev/null 2>&1; then
-     echo "Homebrew is installed... skipping the installation"
-     echo "Running 'brew update'"
-     #brew update
-   else
-    echo "Installing Homebrew using yes''"
-    yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  fi
-else
-  echo "No developer tools are installed"
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-fi
-note "Done"
+# if xcode-select -p; then
+#   echo "Developer tools are installed"
+#   if command -v brew > /dev/null 2>&1; then
+#      echo "Homebrew is installed... skipping the installation"
+#      echo "Running 'brew update'"
+#      #brew update
+#    else
+#     echo "Installing Homebrew using yes''"
+#     yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#   fi
+# else
+#   echo "No developer tools are installed"
+#   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# fi
+# note "Done"
 
 ############ Download config files  ############
 
@@ -89,4 +89,4 @@ fi
 echo "ROOT_DIR is set to $ROOT_DIR"
 note "Done" 
 
-source "$ROOT_DIR/scripts/main-install.sh"
+# source "$ROOT_DIR/scripts/main-install.sh"
