@@ -1,6 +1,7 @@
 ##################### Configure Sublime ######################
   echo "-------------------------- configuring sublime"
 
+  ROOT_DIR="$HOME/.system-config"
   SUBLIME="$HOME/Library/Application Support/Sublime Text 3"
   SUBLIME_LOCAL_DIR="$SUBLIME/local"
   SUBLIME_PACKAGES_DIR="$SUBLIME/Packages"
@@ -35,6 +36,7 @@
   cp -f "$ROOT_DIR/sublime-config-files/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
  
   echo "-------------------------- Cloning in some code snipits"
+  rm -rf "$SUBLIME_USER_DIR/code-snipits"
   git clone "https://github.com/dwkns/sublime-code-snipits.git" "$SUBLIME_USER_DIR/code-snipits"
 
   echo "-------------------------- Installing sublime theme dwkns.tmTheme"
@@ -44,6 +46,7 @@
   cp -f "$ROOT_DIR/sublime-config-files/Default (OSX).sublime-keymap" "$SUBLIME_USER_DIR/Default (OSX).sublime-keymap"
 
   echo "-------------------------- Intalling ruby-terminal build system"
+  rm -rf "$SUBLIME_PACKAGES_DIR/ruby-iTerm2"
   git clone "https://github.com/dwkns/ruby-iTerm2.git" "$SUBLIME_PACKAGES_DIR/ruby-iTerm2"
   chmod u+x "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh"
   ln -s "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh" "/usr/local/bin"
