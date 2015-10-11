@@ -1,14 +1,5 @@
 #!/bin/bash
-# set up some colours
-note () {
-  echo -e "\n\033[0;34m====> $1 \033[0m"
-}
-msg () {
-  echo -e "\n\033[0;32m==============> $1 \033[0m"
-}
-warn () {
-  echo -e "\n\033[0;31m====> $1 \033[0m"
-}
+
 
 # ask for sudo upfront
 sudo -v 
@@ -18,6 +9,8 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
+
+source "$ROOT_DIR/new-scripts/colours.sh"
 
 
 msg "Starting install"
@@ -70,3 +63,8 @@ note "Done"
   killall cfprefsd
  note "done"
 
+
+############ CONFIGURE Sublime ############
+  msg "Configure sublime"
+source "$ROOT_DIR/new-scripts/sublime-config.sh"
+ note "done"

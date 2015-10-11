@@ -1,5 +1,7 @@
+source "$ROOT_DIR/new-scripts/colours.sh"
+
 ##################### Configure Sublime ######################
-  echo "-------------------------- configuring sublime"
+  msg "-------------------------- configuring sublime"
 
   ROOT_DIR="$HOME/.system-config"
   SUBLIME="$HOME/Library/Application Support/Sublime Text 3"
