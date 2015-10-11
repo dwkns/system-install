@@ -20,7 +20,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # CLEAN_INSTALL=true
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
-TMP_DIR=`mktemp -d /tmp/os-install.XXXXXXXXX`
+# TMP_DIR=`mktemp -d /tmp/os-install.XXXXXXXXX`
 
 msg "Starting install"
 
@@ -86,7 +86,31 @@ fi
 #   rm -rf "RubyMotion%20Installer.zip"
 # fi
 
-echo "ROOT_DIR is set to $ROOT_DIR"
+# echo "ROOT_DIR is set to $ROOT_DIR"
+
+######################## DOTFILES ########################
+
+msg "Copying dotfiles"
+
+echo "Copying .bash_profile"
+cp -f "$ROOT_DIR/system-config-files/bash.bash_profile"  "$HOME/.bash_profile"
+
+echo "Copying .rspec"
+cp -f  "$ROOT_DIR/system-config-files/bash.rspec" "$HOME/.rspec"
+
+echo "Copying .gemrc"
+cp -f "$ROOT_DIR/system-config-files/bash.gemrc" "$HOME/.gemrc"
+
+echo "Copying .gitconfig"
+cp -f "$ROOT_DIR/system-config-files/bash.gitconfig" "$HOME/.gitconfig"
+
+echo "Copying .gitignore"
+cp -f "$ROOT_DIR/system-config-files/bash.gitignore_global" "$HOME/.gitignore_global"
+note "done"
+
+###################### configure git ######################
+msg "Configuring git"
+git config --global core.excludesfile $HOME/.gitignore_global
 note "Done" 
 
 # source "$ROOT_DIR/scripts/main-install.sh"
