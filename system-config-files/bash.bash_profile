@@ -23,6 +23,7 @@ alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
 alias dt='cd ~/Desktop'
+alias sd='cd ~/.system-config'
 
 # variables for update commands.
 SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
