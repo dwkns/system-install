@@ -213,7 +213,7 @@ echo "UniversalSearchEnabled set to true"
 defaults write com.apple.Safari UniversalSearchEnabled -bool true
 
 echo "SuppressSearchSuggestions set to false"
-defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+defaults write com.apple.Safari SuppressSearchSuggestions -bool false
 
 echo "Show the full URL in the address bar (note: this still hides the scheme)"
 defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
@@ -222,7 +222,7 @@ echo "Set Safari’s home page to about:blank for faster loading"
 defaults write com.apple.Safari HomePage -string "about:blank"
 
 echo "Hide Safari’s bookmarks bar by default"
-defaults write com.apple.Safari ShowFavoritesBar -bool false
+defaults write com.apple.Safari ShowFavoritesBar -bool true
 
 echo "Hide Safari’s sidebar in Top Sites"
 defaults write com.apple.Safari ShowSidebarInTopSites -bool false
