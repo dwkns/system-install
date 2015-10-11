@@ -19,9 +19,6 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 
-source "$ROOT_DIR/scripts/colours.sh"
-
-
 msg "Starting install"
 
 ############ Download config files  ############
@@ -77,7 +74,7 @@ source "$ROOT_DIR/scripts/sublime-config.sh"
 note "done"
 
 ############ CONFIGURE Time Machine ############
-source "$ROOT_DIR/scripts/sublime-config.sh"
+source "$ROOT_DIR/scripts/time-machine.sh"
 note "done"
 
 ############ CONFIGURE System Settings ############
