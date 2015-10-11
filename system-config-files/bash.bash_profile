@@ -33,7 +33,7 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 
 # update system config
 # downloads the latest bash profile from GIT 
-alias usc="
+alias usp="
 cd $HOME/.system-config;
 git pull;
 cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
@@ -48,7 +48,7 @@ source $HOME/.system-config/new-scripts/install-sublime-config.sh
 
 # BackupSystemConfig
 # Backs up all sublime and system files to GIT
-alias bsc="
+alias bsp="
 cp -rf $SD/dwkns.tmTheme $SCD/dwkns.tmTheme; 
 cp -rf $SD/SublimeLinter.sublime-settings $SCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/scope_hunter.sublime-settings $SCD/scope_hunter.sublime-settings; 
@@ -63,7 +63,7 @@ git commit -m 'updated theme';
 gp"
 
 # EditSystemConfig
-alias esc="cd $HOME/.system-config; subl *;"
+alias esp="cd $HOME/.system-config; subl *;"
 
 
 
@@ -77,7 +77,7 @@ alias hf='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /
 export PATH=/usr/local/bin:$PATH
 
 #make the default install location for cask apps /Applications
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+# export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 #source ~/.profile
 
