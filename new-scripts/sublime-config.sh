@@ -1,9 +1,10 @@
- ROOT_DIR="$HOME/.system-config"
-  source "$ROOT_DIR/new-scripts/colours.sh"
+ 
+   source "$HOME/.system-config/scripts/colours.sh"
   ##################### Configure Sublime ######################
   msg "-------------------------- configuring sublime"
 
   
+  ROOT_DIR="$HOME/.system-config"
   SUBLIME="$HOME/Library/Application Support/Sublime Text 3"
   SUBLIME_LOCAL_DIR="$SUBLIME/local"
   SUBLIME_PACKAGES_DIR="$SUBLIME/Packages"
