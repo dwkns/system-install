@@ -1,5 +1,5 @@
 ##################### Configure Sublime ######################
-  msg "configuring sublime"
+  echo "-------------------------- configuring sublime"
 
   SUBLIME="$HOME/Library/Application Support/Sublime Text 3"
   SUBLIME_LOCAL_DIR="$SUBLIME/local"
@@ -11,39 +11,39 @@
   mkdir -p "$SUBLIME_USER_DIR"
   mkdir -p "$SUBLIME_INSTALLED_PACKAGES_DIR"
 
-  msg "Installing Package Control"
+  echo "-------------------------- Installing Package Control"
   curl -L "http://sublime.wbond.net/Package Control.sublime-package" -o "$SUBLIME_INSTALLED_PACKAGES_DIR/Package Control.sublime-package"
 
   # if $DEBUG; then
-  #   msg "Installing pin_console.py"
+  #   echo "-------------------------- Installing pin_console.py"
   #  cp -f "$ROOT_DIR/sublime-config-files/pin_console.py" "$SUBLIME_PACKAGES_DIR/pin_console.py"
   # fi 
 
-  msg "Intalling license"
+  echo "-------------------------- Intalling license"
   cp -f "$ROOT_DIR/sublime-config-files/License.sublime_license" "$SUBLIME_LOCAL_DIR/License.sublime_license"
 
-  msg "Installing sublime preferences"
+  echo "-------------------------- Installing sublime preferences"
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
 
-  msg "Installing scopehunter preferences"
+  echo "-------------------------- Installing scopehunter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/scope_hunter.sublime-settings" "$SUBLIME_USER_DIR/scope_hunter.sublime-settings"
 
-  msg "Installing SublimeLinter preferences"
+  echo "-------------------------- Installing SublimeLinter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
 
-  msg "Installing sublime Package Control Settings"
+  echo "-------------------------- Installing sublime Package Control Settings"
   cp -f "$ROOT_DIR/sublime-config-files/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
  
-  msg "Cloning in some code snipits"
+  echo "-------------------------- Cloning in some code snipits"
   git clone "https://github.com/dwkns/sublime-code-snipits.git" "$SUBLIME_USER_DIR/code-snipits"
 
-  msg "Installing sublime theme dwkns.tmTheme"
+  echo "-------------------------- Installing sublime theme dwkns.tmTheme"
   cp -f "$ROOT_DIR/sublime-config-files/dwkns.tmTheme" "$SUBLIME_USER_DIR/dwkns.tmTheme"
 
-  msg "Installing sublime keymap"
+  echo "-------------------------- Installing sublime keymap"
   cp -f "$ROOT_DIR/sublime-config-files/Default (OSX).sublime-keymap" "$SUBLIME_USER_DIR/Default (OSX).sublime-keymap"
 
-  msg "Intalling ruby-terminal build system"
+  echo "-------------------------- Intalling ruby-terminal build system"
   git clone "https://github.com/dwkns/ruby-iTerm2.git" "$SUBLIME_PACKAGES_DIR/ruby-iTerm2"
   chmod u+x "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh"
   ln -s "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh" "/usr/local/bin"
