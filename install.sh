@@ -79,3 +79,5 @@ source "$ROOT_DIR/scripts/time-machine.sh"
 
 ############ CONFIGURE System Settings ############
 source "$ROOT_DIR/scripts/system-settings.sh"
+
+msg "And that's it. All done."
