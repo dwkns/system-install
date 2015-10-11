@@ -63,7 +63,7 @@ git commit -m 'updated theme';
 gp"
 
 # EditSystemConfig
-alias esp="cd $HOME/.system-config; subl *;"
+alias esp="cd $HOME/.system-config; subl .;"
 
 
 
