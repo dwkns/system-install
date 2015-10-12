@@ -80,4 +80,26 @@ source "$ROOT_DIR/scripts/sublime-config.sh"
 ############ CONFIGURE System Settings ############
 source "$ROOT_DIR/scripts/system-settings.sh"
 
-msg "And that's it. All done."
+source "$HOME/.system-config/scripts/colours.sh"
+
+# ###################### set machine name ######################
+DEFAULT_NAME="dwkns-mbp"
+
+echo "Enter a machine name within 10 seconds (default is $DEFAULT_NAME)"
+
+read -t 5 MACHINE_NAME
+if [ $? -eq 0 ]; then
+    : #do nothing
+else
+    echo "No input detected. Defaulting to $DEFAULT_NAME"
+    MACHINE_NAME=$DEFAULT_NAME
+fi
+
+msg "Setting Machine name to : $MACHINE_NAME"
+sudo scutil --set ComputerName $MACHINE_NAME
+sudo scutil --set HostName $MACHINE_NAME
+sudo scutil --set LocalHostName $MACHINE_NAME
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
+note "done"
+
+# msg "And that's it. All done." 
