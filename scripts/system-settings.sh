@@ -3,15 +3,6 @@
 msg "Changing some system settings"
 
 
-
-###################### set machine name ######################
-MACHINE_NAME="dwkns-mbp"
-msg "Setting Machine name to : $MACHINE_NAME"
-sudo scutil --set ComputerName $MACHINE_NAME
-sudo scutil --set HostName $MACHINE_NAME
-sudo scutil --set LocalHostName $MACHINE_NAME
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
-note "done"
 ######################  Random other configurations ######################
 echo "Disabling OS X Gate Keeper so no more annoying 'you can't open this app messages'"
 sudo spctl --master-disable
