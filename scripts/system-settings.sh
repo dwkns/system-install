@@ -25,8 +25,8 @@ chflags hidden ~/Applications
 echo "Set sidebar icon size to small"
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
 
-echo "Scrollbars to automatic"
-defaults write NSGlobalDomain AppleShowScrollBars -string "Automatic"
+echo "Scrollbars to WhenScrolling"
+defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 # Possible values: `WhenScrolling`, `Automatic` and `Always`
 
 echo "Increase window resize speed for Cocoa applications"
@@ -309,17 +309,3 @@ osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/L
 
 
 note "done"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
