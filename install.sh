@@ -85,9 +85,9 @@ source "$HOME/.system-config/scripts/colours.sh"
 # ###################### set machine name ######################
 DEFAULT_NAME="dwkns-mbp"
 
-echo "Enter a machine name within 10 seconds (default is $DEFAULT_NAME)"
+echo "Enter a machine name within 15 seconds (default is $DEFAULT_NAME)"
 
-read -t 5 MACHINE_NAME
+read -t 15 MACHINE_NAME
 if [ $? -eq 0 ]; then
     : #do nothing
 else
