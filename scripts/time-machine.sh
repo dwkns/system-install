@@ -7,7 +7,6 @@ TIME_MACHINE_EXCLUSION_LIST=(
   "$HOME/Library/Caches/"
   "$HOME/Documents/Torrents/"
   "$HOME/Documents/Parallels/"
-  "$HOME/Dropbox/"
   "$HOME/Library/Application Support/Google/"
 )
 
@@ -28,9 +27,9 @@ msg "Prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 
-warn "~/Dropbox has been added to the time machine exclusion list"
-echo "If you want to remove the exclusion run :"
-echo "tmutil removeexclusion '~/Dropbox/'"
+warn "~/Dropbox has NOT added to the time machine exclusion list"
+echo "If you want to add the exclusion run :"
+echo "sudo tmutil addexclusion '~/Dropbox/'"
 
 note "done"
 
