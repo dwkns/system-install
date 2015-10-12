@@ -74,13 +74,13 @@ source "$ROOT_DIR/scripts/sublime-config.sh"
 
 
 ############ CONFIGURE Time Machine ############
-#source "$ROOT_DIR/scripts/time-machine.sh"
+source "$ROOT_DIR/scripts/time-machine.sh"
 
 
 ############ CONFIGURE System Settings ############
 source "$ROOT_DIR/scripts/system-settings.sh"
 
-source "$HOME/.system-config/scripts/colours.sh"
+
 
 # ###################### set machine name ######################
 DEFAULT_NAME="dwkns-mbp"
