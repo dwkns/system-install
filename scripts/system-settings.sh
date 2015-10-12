@@ -72,126 +72,126 @@ defaults write NSGlobalDomain KeyRepeat -int 0
 ###############################################################################
 
 
-echo "Save screenshots to the desktop"
+echo "Screen : Save screenshots to the desktop"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 
-echo "Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)"
+echo "Screen : Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)"
 defaults write com.apple.screencapture type -string "png"
 
-echo "Disable shadow in screenshots"
+echo "Screen : Disable shadow in screenshots"
 defaults write com.apple.screencapture disable-shadow -bool true
 
-echo "Enable subpixel font rendering on non-Apple LCDs"
+echo "Screen : Enable subpixel font rendering on non-Apple LCDs"
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
 ###############################################################################
 # Finder                                                                      #
 ###############################################################################
 
-echo "Set home folder as the default location for new Finder windows"
+echo "Finder : Set home folder as the default location for new Finder windows"
 # "PfDe" - "file://${HOME}/Desktop/"
 # For other paths, use "PfLo" - "file://${HOME}/Desktop/"
 defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 
-echo "Show / hide icons for hard drives, servers, and removable media on the desktop"
+echo "Finder : Show / hide icons for hard drives, servers, and removable media on the desktop"
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
-# echo "Finder: show hidden files by default"
+# echo "Finder : Finder: show hidden files by default"
 # defaults write com.apple.finder AppleShowAllFiles -bool true
 
-echo "Finder: show status bar"
+echo "Finder : Finder: show status bar"
 defaults write com.apple.finder ShowStatusBar -bool false
 
-echo "Finder: show path bar"
+echo "Finder : Finder: show path bar"
 defaults write com.apple.finder ShowPathbar -bool false
 
-echo "Finder: allow text selection in Quick Look"
+echo "Finder : Finder: allow text selection in Quick Look"
 defaults write com.apple.finder QLEnableTextSelection -bool true
 
-echo "Display full POSIX path as Finder window title"
+echo "Finder : Display full POSIX path as Finder window title"
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
-echo "When performing a search, search the current folder by default"
+echo "Finder : When performing a search, search the current folder by default"
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
-echo "Disable the warning when changing a file extension"
+echo "Finder : Disable the warning when changing a file extension"
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-echo "Enable spring loading for directories"
+echo "Finder : Enable spring loading for directories"
 defaults write NSGlobalDomain com.apple.springing.enabled -bool true
 
-echo "Remove the spring loading delay for directories"
+echo "Finder : Remove the spring loading delay for directories"
 defaults write NSGlobalDomain com.apple.springing.delay -float 0
 
-echo "Avoid creating .DS_Store files on network volumes"
+echo "Finder : Avoid creating .DS_Store files on network volumes"
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-echo "Disable disk image verification"
+echo "Finder : Disable disk image verification"
 defaults write com.apple.frameworks.diskimages skip-verify -bool true
 defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
 defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
 
-echo "Automatically open a new Finder window when a volume is mounted"
+echo "Finder : Automatically open a new Finder window when a volume is mounted"
 defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
 defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
 defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
-echo "Increase grid spacing for icons on the desktop and in other icon views"
+echo "Finder : Increase grid spacing for icons on the desktop and in other icon views"
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:gridSpacing 85" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:gridSpacing 85" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:gridSpacing 85" ~/Library/Preferences/com.apple.finder.plist
 
-echo "Increase the size of icons on the desktop and in other icon views"
+echo "Finder : Increase the size of icons on the desktop and in other icon views"
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 50" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 50" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 50" ~/Library/Preferences/com.apple.finder.plist
 
-echo "Use column view in all Finder windows by default"
+echo "Finder : Use column view in all Finder windows by default"
 # Flwv ▸ Cover Flow View
 # Nlsv ▸ List View
 # clmv ▸ Column View
 # icnv ▸ Icon View
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
-echo "Disable the warning before emptying the Trash"
+echo "Finder : Disable the warning before emptying the Trash"
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
-echo "Set the icon size of Dock items to 36 pixels"
+echo "Finder : Set the icon size of Dock items to 36 pixels"
 defaults write com.apple.dock tilesize -int 36
 
-echo "Show indicator lights for open applications in the Dock"
+echo "Finder : Show indicator lights for open applications in the Dock"
 defaults write com.apple.dock show-process-indicators -bool true
 
-echo "Speed up Mission Control animations"
+echo "Finder : Speed up Mission Control animations"
 defaults write com.apple.dock expose-animation-duration -float 0.1
 
 # # Don’t group windows by application in Mission Control
 # # (i.e. use the old Exposé behavior instead)
 # defaults write com.apple.dock expose-group-by-app -bool false
 
-echo "Disable Dashboard"
+echo "Finder : Disable Dashboard"
 defaults write com.apple.dashboard mcx-disabled -bool true
 
-echo "Don’t show Dashboard as a Space"
+echo "Finder : Don’t show Dashboard as a Space"
 defaults write com.apple.dock dashboard-in-overlay -bool true
 
-echo "Don’t automatically rearrange Spaces based on most recent use"
+echo "Finder : Don’t automatically rearrange Spaces based on most recent use"
 defaults write com.apple.dock mru-spaces -bool false
 
-echo "Remove the auto-hiding Dock delay"
+echo "Finder : Remove the auto-hiding Dock delay"
 defaults write com.apple.dock autohide-delay -float 0
 
-echo "Remove the animation when hiding/showing the Dock"
+echo "Finder : Remove the animation when hiding/showing the Dock"
 defaults write com.apple.dock autohide-time-modifier -float 0
 
-echo "Automatically hide and show the Dock"
+echo "Finder : Automatically hide and show the Dock"
 defaults write com.apple.dock autohide -bool false
 
-# echo "Make Dock icons of hidden applications translucent"
+# echo "Finder : Make Dock icons of hidden applications translucent"
 # defaults write com.apple.dock showhidden -bool false
 
 
@@ -200,36 +200,36 @@ defaults write com.apple.dock autohide -bool false
 # Safari & WebKit                                                             #
 ###############################################################################
 
-echo "UniversalSearchEnabled set to true"
+echo "Safari : UniversalSearchEnabled set to true"
 defaults write com.apple.Safari UniversalSearchEnabled -bool true
 
-echo "SuppressSearchSuggestions set to false"
+echo "Safari : SuppressSearchSuggestions set to false"
 defaults write com.apple.Safari SuppressSearchSuggestions -bool false
 
-echo "Show the full URL in the address bar (note: this still hides the scheme)"
+echo "Safari : Show the full URL in the address bar (note: this still hides the scheme)"
 defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 
-echo "Set Safari’s home page to about:blank for faster loading"
+echo "Safari : Set Safari’s home page to about:blank for faster loading"
 defaults write com.apple.Safari HomePage -string "about:blank"
 
-echo "Hide Safari’s bookmarks bar by default"
+echo "Safari : Show Safari’s bookmarks bar by default"
 defaults write com.apple.Safari ShowFavoritesBar -bool true
 
-echo "Hide Safari’s sidebar in Top Sites"
+echo "Safari : Hide Safari’s sidebar in Top Sites"
 defaults write com.apple.Safari ShowSidebarInTopSites -bool false
 
-echo "Make Safari’s search banners default to Contains instead of Starts With"
+echo "Safari : Make Safari’s search banners default to Contains instead of Starts With"
 defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
 
-echo "Remove useless icons from Safari’s bookmarks bar"
+echo "Safari : Remove useless icons from Safari’s bookmarks bar"
 defaults write com.apple.Safari ProxiesInBookmarksBar "()"
 
-echo "Enable the Develop menu and the Web Inspector in Safari"
+echo "Safari : Enable the Develop menu and the Web Inspector in Safari"
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
-echo "Add a context menu item for showing the Web Inspector in web views"
+echo "Safari : Add a context menu item for showing the Web Inspector in web views"
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 
@@ -238,16 +238,16 @@ defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 # Activity Monitor                                                            #
 ###############################################################################
 
-echo "Show the main window when launching Activity Monitor"
+echo "Activity Monitor : show the main window when launching"
 defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
 
-echo "Visualize CPU usage in the Activity Monitor Dock icon"
+echo "Activity Monitor : Visualize CPU usage in the Dock icon"
 defaults write com.apple.ActivityMonitor IconType -int 5
 
-echo "Show all processes in Activity Monitor"
+echo "Activity Monitor : Show all processes"
 defaults write com.apple.ActivityMonitor ShowCategory -int 0
 
-echo "Sort Activity Monitor results by CPU usage"
+echo "Activity Monitor : Sort results by CPU usage"
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
@@ -255,16 +255,16 @@ defaults write com.apple.ActivityMonitor SortDirection -int 0
 # Address Book, Dashboard, iCal, TextEdit, and Disk Utility                   #
 ###############################################################################
 
-echo "Enable the debug menu in Address Book"
+echo "Address Book : Enable the debug menu"
 defaults write com.apple.addressbook ABShowDebugMenu -bool true
 
-echo "Sort Names by First Name / Last Name"
+echo "Address Book : Sort Names by First Name / Last Name"
 defaults write com.apple.addressbook ABNameSortingFormat -string "sortingFirstName sortingLastName"
 
-echo "Use plain text mode for new TextEdit documents"
+echo "TextEdit : Use plain text mode for new = documents"
 defaults write com.apple.TextEdit RichText -int 0
 
-echo "Open and save files as UTF-8 in TextEdit"
+echo "TextEdit : Open and save files as UTF-8 in TextEdit"
 defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
@@ -272,10 +272,10 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 # Mac App Store                                                               #
 ###############################################################################
 
-echo "Enable the WebKit Developer Tools in the Mac App Store"
+echo "Mac App Store : Enable the WebKit Developer Tools in the Mac App Store"
 defaults write com.apple.appstore WebKitDeveloperExtras -bool true
 
-echo "Enable Debug Menu in the Mac App Store"
+echo "Mac App Store : Enable Debug Menu in the Mac App Store"
 defaults write com.apple.appstore ShowDebugMenu -bool true
 
 
@@ -283,24 +283,28 @@ defaults write com.apple.appstore ShowDebugMenu -bool true
 # Transmission.app                                                            #
 ###############################################################################
 
-echo "Use ~/Documents/Torrents to store incomplete downloads"
+echo "Transmission.app : Use ~/Documents/Torrents to store incomplete downloads"
 mkdir -p "$HOME/Documents/Torrents"
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Documents/Torrents"
 
-echo "Don’t prompt for confirmation before downloading"
+echo "Transmission.app : Don’t prompt for confirmation before downloading"
 defaults write org.m0k.transmission DownloadAsk -bool false
 
-echo "Trash original torrent files"
+echo "Transmission.app : Trash original torrent files"
 defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
 
-echo "Hide the donate message"
+echo "Transmission.app : Hide the donate message"
 defaults write org.m0k.transmission WarningDonate -bool false
 
-echo "Hide the legal disclaimer"
+echo "Transmission.app : Hide the legal disclaimer"
 defaults write org.m0k.transmission WarningLegal -bool false
 
-echo "Set the background colour"
+###############################################################################
+# Desktop                                                                     #
+###############################################################################
+
+echo "Desktop : Set the background colour"
 osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
 
 

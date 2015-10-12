@@ -1,0 +1,47 @@
+TIME_MACHINE_EXCLUSION_LIST=(
+  "/Users/dazza/Library/Calendars/Calendar Cache"
+"/Users/dazza/Library/LanguageModeling/en-dynamic.lm"
+"/Users/dazza/Library/iTunes/iPhone Software Updates"
+"/Users/dazza/Library/Containers/com.apple.cloudphotosd/Data/Library/Application Support/com.apple.cloudphotosd/services/com.apple.photo.icloud.sharedstreams/com.apple.photo.icloud.sharedstreams-424409541.cloudphotoservicelibrary/database"
+"/Users/dazza/Downloads"
+"/Users/dazza/Library/Application Support/Google"
+"/Users/dazza/Documents/Torrents"
+"/Library"
+"/System"
+"/bin"
+"/cores"
+"/private"
+"/sbin"
+"/Applications"
+"/opt"
+"/Users/dazza/Library/Application Support/Google/Chrome/Default/History"
+"/Users/dazza/Library/Application Support/Google/Chrome/Default/History-journal"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing Download"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing Bloom Prefix Set"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing Bloom"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing Csd Whitelist"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing Download Whitelist"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing Extension Blacklist"
+"/Users/dazza/Library/Application Support/Google/Chrome/Safe Browsing IP Blacklist"
+"/Users/dazza/Library/Application Support/Google/Chrome/Default/Favicons"
+"/Users/dazza/Library/LanguageModeling/nl-dynamic.lm"
+"/Users/dazza/Library/LanguageModeling/it-dynamic.lm"
+"/Users/dazza/Library/Application Support/Google/Chrome/Default/Favicons-journal"
+"/Users/dazza/Music/iTunes/iTunes Music Library.xml"
+"/Users/dazza/Music/iTunes/Album Artwork/Cache"
+"/Users/dazza/Library/LanguageModeling/es-dynamic.lm"
+"/Volumes/Promise RAID/media/iTunes/iTunes Library.xml"
+"/Volumes/Promise RAID/media/iTunes/Album Artwork/Generated"
+"/Volumes/Promise RAID/media/iTunes/Album Artwork/Editorial"
+"/Volumes/Promise RAID/media/iTunes/Album Artwork/Store"
+"/Volumes/Promise RAID/media/iTunes/Album Artwork/Cache"
+"/Volumes/Promise RAID/media/Photos Library.photoslibrary/database"
+)
+
+
+
+for LOCATION in "${TIME_MACHINE_EXCLUSION_LIST[@]}"
+do
+
+  sudo tmutil removeexclusion "$LOCATION"
+done

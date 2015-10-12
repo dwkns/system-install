@@ -74,20 +74,20 @@ source "$ROOT_DIR/scripts/sublime-config.sh"
 
 
 ############ CONFIGURE Time Machine ############
-#source "$ROOT_DIR/scripts/time-machine.sh"
+source "$ROOT_DIR/scripts/time-machine.sh"
 
 
 ############ CONFIGURE System Settings ############
 source "$ROOT_DIR/scripts/system-settings.sh"
 
-source "$HOME/.system-config/scripts/colours.sh"
+
 
 # ###################### set machine name ######################
 DEFAULT_NAME="dwkns-mbp"
 
-echo "Enter a machine name within 10 seconds (default is $DEFAULT_NAME)"
+echo "Enter a machine name within 30 seconds (or press Enter to default to $DEFAULT_NAME)"
 
-read -t 5 MACHINE_NAME
+read -t 30 MACHINE_NAME
 if [ $? -eq 0 ]; then
     : #do nothing
 else
