@@ -31,7 +31,7 @@ However you will probably want to use it with the following :
 
 ####Install apps
     
-    $ brew cask install sublime-text3 iterm2-nightly font-source-code-pro things flash handbrake omnigraffle transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox
+    $ brew cask install sublime-text3 iterm2-nightly font-source-code-pro 1password things flash handbrake omnigraffle transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox
 
 ####Install RVM and Ruby
     
