@@ -18,7 +18,7 @@ However you will probably want to use it with the following :
  
 ####Install git python and node
 
-    $ brew install git python node phantomjs
+    $ brew install caskroom/cask/brew-cask git python node phantomjs 
 
 ####Install Cask
 
