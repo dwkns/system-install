@@ -38,6 +38,7 @@ cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
 source $HOME/.system-config/scripts/sublime-config.sh
+source $HOME/.bash_profile
 "
 # cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
 
