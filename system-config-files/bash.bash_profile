@@ -36,8 +36,8 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 alias usc="
 cd $HOME/.system-config;
 git pull;
-source $HOME/.system-config/new-scripts/dotfiles.sh
-source $HOME/.system-config/new-scripts/sublime-config.sh
+source $HOME/.system-config/scripts/dotfiles.sh
+source $HOME/.system-config/scripts/sublime-config.sh
 "
 # cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
 
