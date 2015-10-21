@@ -21,7 +21,7 @@ alias gp='git push --all'
 alias gco='git checkout'
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'
-alias ep='subl ~/.bash_profile'
+alias ebp='subl ~/.bash_profile'
 alias dt='cd ~/Desktop'
 alias sd='cd ~/.system-config'
 
@@ -33,22 +33,25 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 
 # update system config
 # downloads the latest bash profile from GIT 
-alias usp="
+alias usc="
 cd $HOME/.system-config;
 git pull;
-cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
-"
-# update sublime config
-# downloads teh latest sublime confiuration and overides the local one.
-alias ust="
-cd $HOME/.system-config;
-git pull;
+source $HOME/.system-config/new-scripts/dotfiles.sh
 source $HOME/.system-config/new-scripts/sublime-config.sh
 "
+# cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
+
+# update sublime config
+# downloads teh latest sublime confiuration and overides the local one.
+# alias ust="
+# cd $HOME/.system-config;
+# git pull;
+# source $HOME/.system-config/new-scripts/sublime-config.sh
+# "
 
 # BackupSystemConfig
 # Backs up all sublime and system files to GIT
-alias bsp="
+alias bsc="
 cp -rf $SD/dwkns.tmTheme $SCD/dwkns.tmTheme; 
 cp -rf $SD/SublimeLinter.sublime-settings $SCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/scope_hunter.sublime-settings $SCD/scope_hunter.sublime-settings; 
@@ -63,12 +66,12 @@ git commit -m 'updated theme';
 gp"
 
 # EditSystemConfig
-alias esp="cd $HOME/.system-config; subl .;"
+alias esc="cd $HOME/.system-config; subl .;"
 
 
 
 
- chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
+chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
 
 alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 
