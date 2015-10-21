@@ -16,13 +16,9 @@ However you will probably want to use it with the following :
 
     $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
  
-####Install git python and node
+####Install cask git python and node
 
     $ brew install caskroom/cask/brew-cask git python node phantomjs 
-
-####Install Cask
-
-    $ brew install caskroom/cask/brew-cask
 
 ####Tap alternates 
     
