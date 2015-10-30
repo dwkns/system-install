@@ -1,4 +1,12 @@
 [
   { "keys": ["f12"], "command": "reindent"}  ,
-  { "keys": ["shift+f12"], "command": "reindent", "args": {"single_line": false} } 
+  { "keys": ["shift+f12"], "command": "reindent", "args": {"single_line": false} },
+  {
+    "keys": ["alt+down"],
+    "command": "run_macro_file",
+    "args": {
+        "file": "Packages/User/jump_to_eol_create_new_line.sublime-macro"
+    }
+}
 ]
+
