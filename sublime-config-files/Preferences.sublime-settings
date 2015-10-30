@@ -9,8 +9,7 @@
 	"highlight_line": true,
 	"ignored_packages":
 	[
-		"CSS",
-		"HTML",
+
 		"PHP",
 		"Vintage"
 	],
