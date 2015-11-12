@@ -24,6 +24,7 @@ alias rd='killall Dock'
 alias ep='subl ~/.bash_profile'
 alias dt='cd ~/Desktop'
 alias sd='cd ~/.system-config'
+alias bu='brew doctor && brew update && brew upgrade'
 
 # variables for update commands.
 SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
