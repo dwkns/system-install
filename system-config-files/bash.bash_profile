@@ -21,7 +21,7 @@ alias gp='git push --all'
 alias gco='git checkout'
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'
-alias ebp='subl ~/.bash_profile'
+alias ep='subl ~/.bash_profile'
 alias dt='cd ~/Desktop'
 alias sd='cd ~/.system-config'
 
@@ -40,6 +40,8 @@ source $HOME/.system-config/scripts/dotfiles.sh
 source $HOME/.system-config/scripts/sublime-config.sh
 source $HOME/.bash_profile
 "
+
+
 # cp -rf $HOME/.system-config/system-config-files/bash.bash_profile $HOME/.bash_profile 
 
 # update sublime config
