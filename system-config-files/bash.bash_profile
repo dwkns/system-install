@@ -43,7 +43,6 @@ alias esc="cd $HOME/.system-config; subl .;"
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
 alias usc="
-bsc
 cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
