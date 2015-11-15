@@ -27,7 +27,7 @@ alias ep='subl ~/.bash_profile'   # edit bash profile
 alias dt='cd ~/Desktop'           # cd to desktop
 alias sd='cd ~/.system-config'    # cd to system config directory
 # update and upgrade brew
-alias bu='brew doctor && brew update && brew upgrade' 
+alias ub='brew update && brew upgrade' 
 
 
 # variables for update commands.
