@@ -67,6 +67,14 @@ git commit -m 'updated theme';
 gp"
 
 
+# Check to see if a secrets file is present. This is not backed up to GITHUB.
+# It's a useful place to store ENV variable used for usernames / passwords.
+SECRETS_FILE="$HOME/.secrets.sh"
+if [ -f $SECRETS_FILE ];
+then
+
+ source $SECRETS_FILE
+fi
 
 
 chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
