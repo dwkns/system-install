@@ -21,5 +21,9 @@
 	"theme": "Spacegray.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
-	"word_wrap": true
+	"word_wrap": true,
+	"caret_extra_width": 2,
+	"caret_extra_bottom": 3,
+	"overlay_scroll_bars": "enabled",
+	"caret_extra_top": 3
 }
