@@ -20,5 +20,6 @@
 	"theme": "Spacegray.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
-	"word_wrap": true
+	"word_wrap": true,
+	"index_files": true
 }
