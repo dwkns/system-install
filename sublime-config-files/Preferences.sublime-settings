@@ -1,8 +1,25 @@
 {
+	"always_show_minimap_viewport": false,
 	"color_scheme": "Packages/Theme - dwkns/dwkns.dark.tmTheme",
+	"create_window_at_startup": false,
+	"draw_minimap_border": false,
+	"font_face": "Source Code Pro light",
+	"font_size": 14,
+	"hide_minimap": true,
+	"highlight_line": true,
 	"ignored_packages":
 	[
+		"PHP",
 		"Vintage"
 	],
-	"theme": "dwkns.sublime-theme"
+	"line_padding_bottom": 0,
+	"open_files_in_new_window": false,
+	"save_on_focus_lost": false,
+	"scroll_past_end": true,
+	"tab_size": 2,
+	"theme": "dwkns.sublime-theme",
+	"translate_tabs_to_spaces": true,
+	"trim_automatic_white_space": true,
+	"word_wrap": true,
+	"index_files": true
 }
