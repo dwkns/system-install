@@ -29,7 +29,8 @@
   cp -f "$ROOT_DIR/sublime-config-files/License.sublime_license" "$SUBLIME_LOCAL_DIR/License.sublime_license"
 
   echo "-------------------------- Installing dwkns Theme"
-  cp -rf "$ROOT_DIR/sublime-config-files/Theme - dwkns" "$SUBLIME_PACKAGES_DIR/Theme - dwkns"
+  rm -rf "$SUBLIME_PACKAGES_DIR/Theme - dwkns"
+  git clone "https://github.com/dwkns/dwkns-theme.git" "$SUBLIME_PACKAGES_DIR/Theme - dwkns"
 
   echo "-------------------------- Installing sublime preferences"
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
