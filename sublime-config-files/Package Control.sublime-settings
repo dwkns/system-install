@@ -5,10 +5,25 @@
 	],
 	"installed_packages":
 	[
+		"ApplySyntax",
+		"BeautifyRuby",
+		"Bootstrap 3 Snippets",
 		"ChannelRepositoryTools",
-		"Monokai - Spacegray",
+		"Emmet",
+		"HTML-CSS-JS Prettify",
+		"HTML5",
+		"JavaScriptNext - ES6 Syntax",
+		"jQuery",
+		"JSONLint",
+		"LESS",
 		"Package Control",
 		"PackageResourceViewer",
-		"Theme - Spacegray"
+		"Rails Developer Snippets",
+		"Sass",
+		"ScopeHunter",
+		"SideBarEnhancements",
+		"SublimeLinter",
+		"SublimeLinter-jshint",
+		"SublimeLinter-ruby"
 	]
 }
