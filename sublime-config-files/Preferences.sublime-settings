@@ -12,6 +12,7 @@
 		"PHP",
 		"Vintage"
 	],
+	"index_files": true,
 	"line_padding_bottom": 0,
 	"open_files_in_new_window": false,
 	"save_on_focus_lost": false,
@@ -20,6 +21,5 @@
 	"theme": "Spacegray.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
-	"word_wrap": true,
-	"index_files": true
+	"word_wrap": true
 }
