@@ -5,6 +5,7 @@
 	],
 	"installed_packages":
 	[
+		"ApplySyntax",
 		"BeautifyRuby",
 		"Bootstrap 3 Snippets",
 		"Emmet",
@@ -16,6 +17,8 @@
 		"LESS",
 		"Package Control",
 		"PackageResourceViewer",
+		"Rails Developer Snippets",
+		"Sass",
 		"ScopeHunter",
 		"SideBarEnhancements",
 		"SublimeLinter",

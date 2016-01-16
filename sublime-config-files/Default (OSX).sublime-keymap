@@ -1,5 +1,5 @@
 [
-  { "keys": ["f12"], "command": "reindent"}  ,
+  { "keys": ["command+shift+r"], "command": "reindent"}  ,
   { "keys": ["shift+f12"], "command": "reindent", "args": {"single_line": false} },
   {
     "keys": ["alt+down"],
