@@ -24,7 +24,6 @@
 		"SideBarEnhancements",
 		"SublimeLinter",
 		"SublimeLinter-jshint",
-		"SublimeLinter-ruby",
-		"Theme - Spacegray"
+		"SublimeLinter-ruby"
 	]
 }
