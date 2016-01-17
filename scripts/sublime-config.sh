@@ -29,7 +29,7 @@
   cp -f "$ROOT_DIR/sublime-config-files/License.sublime_license" "$SUBLIME_LOCAL_DIR/License.sublime_license"
 
   echo "-------------------------- Installing dwkns Theme"
-  rm -rf "$SUBLIME_PACKAGES_DIR/Theme - dwkns"
+  rm -rf "$SUBLIME_PACKAGES_DIR/Seti_UI"
   git clone "https://github.com/dwkns/Seti_UI_dwkns_additions.git" "$SUBLIME_PACKAGES_DIR/Seti_UI"
 
   echo "-------------------------- Installing sublime preferences"

@@ -1,6 +1,6 @@
 {
 	"always_show_minimap_viewport": false,
-	"color_scheme": "Packages/Seti_UI/douglas.dark.tmTheme",
+	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"create_window_at_startup": false,
 	"draw_minimap_border": false,
 	"font_face": "Source Code Pro light",
