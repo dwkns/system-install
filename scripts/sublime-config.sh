@@ -30,7 +30,7 @@
 
   echo "-------------------------- Installing dwkns Theme"
   rm -rf "$SUBLIME_PACKAGES_DIR/Theme - dwkns"
-  git clone "https://github.com/dwkns/dwkns-theme.git" "$SUBLIME_PACKAGES_DIR/Theme - dwkns"
+  git clone "https://github.com/dwkns/Seti_UI_dwkns_additions.git" "$SUBLIME_PACKAGES_DIR/Seti_UI"
 
   echo "-------------------------- Installing sublime preferences"
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"

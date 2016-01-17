@@ -33,6 +33,7 @@ alias bu='brew update && brew upgrade' 
 # variables for update commands.
 SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
 SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
+SPD="$HOME/'Library/Application Support/Sublime Text 3/Packages'"
 SUBCD="$HOME/'.system-config/sublime-config-files'"
 SYSCD="$HOME/'.system-config/system-config-files'"
 
@@ -53,6 +54,7 @@ source $HOME/.bash_profile
 # Backup System Config
 # Backs up all sublime and system files to GIT
 alias bsc="
+cp -rf $SPD/Seti_UI $SUBCD/Seti_UI; 
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/scope_hunter.sublime-settings $SUBCD/scope_hunter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
