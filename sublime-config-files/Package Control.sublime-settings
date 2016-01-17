@@ -2,6 +2,7 @@
 	"bootstrapped": true,
 	"in_process_packages":
 	[
+		"Theme - Seti_UI"
 	],
 	"installed_packages":
 	[
@@ -21,9 +22,11 @@
 		"Rails Developer Snippets",
 		"Sass",
 		"ScopeHunter",
+		"Seti_UI",
 		"SideBarEnhancements",
 		"SublimeLinter",
 		"SublimeLinter-jshint",
-		"SublimeLinter-ruby"
+		"SublimeLinter-ruby",
+		"Theme - Seti_UI"
 	]
 }

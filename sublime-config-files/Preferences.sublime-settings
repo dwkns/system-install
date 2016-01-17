@@ -1,6 +1,6 @@
 {
 	"always_show_minimap_viewport": false,
-	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
+	"color_scheme": "Packages/Seti_UI/douglas.dark.tmTheme",
 	"create_window_at_startup": false,
 	"draw_minimap_border": false,
 	"font_face": "Source Code Pro light",
@@ -10,6 +10,7 @@
 	"ignored_packages":
 	[
 		"PHP",
+		"Theme - Seti_UI",
 		"Vintage"
 	],
 	"index_files": true,
@@ -18,7 +19,7 @@
 	"save_on_focus_lost": false,
 	"scroll_past_end": true,
 	"tab_size": 2,
-	"theme": "Default.sublime-theme",
+	"theme": "Seti.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
 	"word_wrap": true
