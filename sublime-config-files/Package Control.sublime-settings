@@ -5,10 +5,10 @@
 	],
 	"installed_packages":
 	[
+		"All Autocomplete",
 		"ApplySyntax",
 		"BeautifyRuby",
 		"Bootstrap 3 Snippets",
-		"ChannelRepositoryTools",
 		"Emmet",
 		"HTML-CSS-JS Prettify",
 		"HTML5",
@@ -21,11 +21,10 @@
 		"Rails Developer Snippets",
 		"Sass",
 		"ScopeHunter",
-		"Seti_UI",
 		"SideBarEnhancements",
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-ruby",
-		"Theme - Seti_UI"
+		"Theme - Spacegray"
 	]
 }
