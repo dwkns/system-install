@@ -20,6 +20,8 @@ alias gb='git branch'       # git branch
 alias gp='git push --all'   # git push all
 alias gco='git checkout'    # git checkout
 
+alias gph='git push heroku master'    # git checkout
+
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'     # reboot desktop
 
