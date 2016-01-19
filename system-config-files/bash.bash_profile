@@ -61,7 +61,7 @@ cp -rf $SD/scope_hunter.sublime-settings $SUBCD/scope_hunter.sublime-settings;
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
 cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
-cp -rf $SROOT/'Packages/HTML-CSS-JS Prettify/.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
+cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'bash.jsbeautifyrc';
 cp -rf $HOME/'.bash_profile' $SYSCD/'bash.bash_profile';
 cd $HOME/'.system-config/'; 
 ga;

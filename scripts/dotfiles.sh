@@ -8,6 +8,11 @@ ROOT_DIR="$HOME/.system-config"
 echo "Copying .bash_profile"
 cp -f "$ROOT_DIR/system-config-files/bash.bash_profile"  "$HOME/.bash_profile"
 
+echo "Copying .jsbeautifyrc"
+cp -f "$ROOT_DIR/system-config-files/bash.jsbeautifyrc"  "$HOME/.jsbeautifyrc"
+
+
+
 echo "Copying .rspec"
 cp -f  "$ROOT_DIR/system-config-files/bash.rspec" "$HOME/.rspec"
 
