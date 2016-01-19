@@ -35,6 +35,11 @@
   echo "-------------------------- Installing sublime preferences"
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
 
+  echo "-------------------------- Installing BeautifyRuby preferences"
+  cp -f "$ROOT_DIR/sublime-config-files/BeautifyRuby.sublime-settings" "$SUBLIME_USER_DIR/BeautifyRuby.sublime-settings"
+
+
+
   echo "-------------------------- Installing scopehunter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/scope_hunter.sublime-settings" "$SUBLIME_USER_DIR/scope_hunter.sublime-settings"
 

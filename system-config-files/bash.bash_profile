@@ -59,6 +59,7 @@ cp -rf $SD/dwkns.tmTheme $SUBCD/dwkns.tmTheme;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/scope_hunter.sublime-settings $SUBCD/scope_hunter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
+cp -rf $SD/BeautifyRuby.sublime-settings $SUBCD/BeautifyRuby.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
 cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'bash.jsbeautifyrc';
