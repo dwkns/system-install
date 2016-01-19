@@ -36,7 +36,7 @@ However you will probably want to use it with the following :
 
 ####Install Bundler
     
-    $ gem install bundler rails
+    $ gem install bundler rails htmlbeautifier
 
 ####Copy Messages from another machine.
 
