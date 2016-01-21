@@ -16,5 +16,10 @@
   {
     "keys": ["command+alt+r"],
     "command": "beautify_ruby"
+  },
+  {
+    "keys": ["command+t"],
+    "command": "new_file"
   }
+
 ]
