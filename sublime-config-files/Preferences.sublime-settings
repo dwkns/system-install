@@ -1,16 +1,26 @@
 {
-	"always_show_minimap_viewport": false,
-	"color_scheme": "Packages/User/dwkns.tmTheme",
+	
+	"color_scheme": "Packages/User/dwkns-theme.tmTheme", 
+	"highlight_line": true,
+	"indent_guide_options": [ "draw_normal", "draw_active" ],
+	"highlight_modified_tabs": true,
+	"line_padding_bottom": 1,
+	"line_padding_top": 1,
+	"wide_caret": true,
+	"caret_extra_bottom": 2,
+	"caret_extra_top": 2,
+	"caret_extra_width": 3,
+	"caret_style": "phase",
+	"bold_folder_labels": true,
 	"create_window_at_startup": false,
 	"draw_minimap_border": false,
 	"font_face": "Source Code Pro light",
 	"font_size": 14,
-	"hide_minimap": true,
 	"highlight_line": true,
 	"ignored_packages":
 	[
-		"PHP",
-		"Vintage"
+	"PHP",
+	"Vintage"
 	],
 	"index_files": true,
 	"line_padding_bottom": 0,
@@ -18,7 +28,7 @@
 	"save_on_focus_lost": false,
 	"scroll_past_end": true,
 	"tab_size": 2,
-	"theme": "Spacegray.sublime-theme",
+	"theme": "Cobalt2.sublime-theme",  
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
 	"word_wrap": true
