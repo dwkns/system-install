@@ -7,24 +7,14 @@
 	[
 		"All Autocomplete",
 		"ApplySyntax",
-		"BeautifyRuby",
-		"Bootstrap 3 Snippets",
 		"Emmet",
-		"HTML-CSS-JS Prettify",
-		"HTML5",
-		"JavaScriptNext - ES6 Syntax",
-		"jQuery",
-		"JSONLint",
-		"LESS",
 		"Package Control",
 		"PackageResourceViewer",
-		"Rails Developer Snippets",
-		"Sass",
 		"ScopeHunter",
 		"SideBarEnhancements",
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-ruby",
-		"Theme - Spacegray"
+		"Theme - Cobalt2"
 	]
 }
