@@ -59,7 +59,7 @@ cp -rf $SD/dwkns.tmTheme $SUBCD/dwkns.tmTheme;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
-cp -rf $SD/BeautifyRuby.sublime-settings $SUBCD/BeautifyRuby.sublime-settings; 
+
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
 cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
 cp -rf $HOME/'.bash_profile' $SYSCD/'.bash_profile';
@@ -72,6 +72,7 @@ gp"
 ##
 #cp -rf $SD/scope_hunter.sublime-settings $SUBCD/scope_hunter.sublime-settings; 
 #cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'bash.jsbeautifyrc';
+# cp -rf $SD/BeautifyRuby.sublime-settings $SUBCD/BeautifyRuby.sublime-settings; 
 
 # Check to see if a secrets file is present. This is not backed up to GITHUB.
 # It's a useful place to store ENV variable used for usernames / passwords.
