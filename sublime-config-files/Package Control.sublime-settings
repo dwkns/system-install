@@ -1,5 +1,8 @@
 {
-	"in_process_packages":[ ],
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
 	"installed_packages":
 	[
 		"All Autocomplete",
@@ -14,9 +17,5 @@
 		"SublimeLinter-ruby",
 		"Theme - Cobalt2"
 	],
-		// If a package was installed by Package Control (has a
-	// package-metadata.json file) but is not in installed_packages, remove it
-	// based upon the assumption that it was removed on another machine and
-	// the Package Control.sublime-settings file was synced to this machine.
-	"remove_orphaned": true,
+	"remove_orphaned": true
 }
