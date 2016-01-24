@@ -11,6 +11,15 @@ export CLICOLOR=1
 export EDITOR='subl -w'
 cd ~/Desktop
 
+
+# variables for update commands.
+SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
+SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
+SUBCD="$HOME/'.system-config/sublime-config-files'"
+SYSCD="$HOME/'.system-config/system-config-files'"
+
+
+
 alias ls='ls -l'
 
 alias gc='git commit'       # git commit
@@ -27,16 +36,14 @@ alias rd='killall Dock'     # reboot desktop
 
 alias ep='subl ~/.bash_profile'   # edit bash profile
 alias dt='cd ~/Desktop'           # cd to desktop
-alias sd='cd ~/.system-config'    # cd to system config directory
+alias csub="cd $SROOT"              # cd to system config directory
+alias csys='cd ~/.system-config'    # cd to system config directory
+
 # update and upgrade brew
 alias bu='brew update && brew upgrade' 
 
 
-# variables for update commands.
-SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
-SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
-SUBCD="$HOME/'.system-config/sublime-config-files'"
-SYSCD="$HOME/'.system-config/system-config-files'"
+
 
 # Edit System Config
 # Opens all system config files in sublime.
