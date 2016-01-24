@@ -48,6 +48,7 @@ alias bu='brew update && brew upgrade' 
 # Edit System Config
 # Opens all system config files in sublime.
 alias esc="cd $HOME/.system-config; subl .;" 
+alias esp="echo 'did you mean esc - for edit system config?" 
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
