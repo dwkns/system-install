@@ -53,8 +53,12 @@
   # rm -rf "$SUBLIME_USER_DIR/code-snipits"
   # git clone "https://github.com/dwkns/sublime-code-snipits.git" "$SUBLIME_USER_DIR/code-snipits"
 
-  echo "-------------------------- Installing sublime theme dwkns.tmTheme"
-  cp -f "$ROOT_DIR/sublime-config-files/dwkns-theme.tmTheme" "$SUBLIME_USER_DIR/dwkns-theme.tmTheme"
+  # echo "-------------------------- Installing sublime theme dwkns.tmTheme"
+  # cp -f "$ROOT_DIR/sublime-config-files/dwkns-theme.tmTheme" "$SUBLIME_USER_DIR/dwkns-theme.tmTheme"
+
+   echo "-------------------------- Cloning in my Douglas theme"
+  rm -rf "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
+  git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
 
   echo "-------------------------- Installing sublime keymap"
   cp -f "$ROOT_DIR/sublime-config-files/Default (OSX).sublime-keymap" "$SUBLIME_USER_DIR/Default (OSX).sublime-keymap"
