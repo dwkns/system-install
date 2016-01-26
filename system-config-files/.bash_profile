@@ -47,8 +47,8 @@ alias esub="cd $SROOT; subl ."      # Edit the sublime files
 
 alias csys='cd ~/.system-config'    # cd to system config directory
 alias esys="cd $HOME/.system-config; subl .;" # Edit system fiels
-alias esp="echo 'did you mean esys - for edit system config?" 
-alias esc="echo 'did you mean esys - for edit system config?" 
+alias esp="echo 'Did you mean esys' - for edit system config?" 
+alias esc="echo 'Did you mean esys' - for edit system config?" 
 
 # update and upgrade brew
 alias bu='brew update && brew upgrade' 
