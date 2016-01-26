@@ -17,8 +17,7 @@
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-json",
-		"SublimeLinter-ruby",
-		"Theme - Cobalt2"
+		"SublimeLinter-ruby"
 	],
 	"remove_orphaned": true
 }

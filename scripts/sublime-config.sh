@@ -60,6 +60,12 @@
   rm -rf "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
   git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
 
+  echo "-------------------------- Cloning in my Rails snippets"
+  rm -rf "$SUBLIME_PACKAGES_DIR/Rails"
+  git clone "https://github.com/dwkns/sublime_rails_snippets.git" "$SUBLIME_PACKAGES_DIR/Rails"
+
+
+
   echo "-------------------------- Installing sublime keymap"
   cp -f "$ROOT_DIR/sublime-config-files/Default (OSX).sublime-keymap" "$SUBLIME_USER_DIR/Default (OSX).sublime-keymap"
 
