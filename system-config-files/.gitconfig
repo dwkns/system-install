@@ -2,7 +2,7 @@
 	name = dwkns
 	email = dwkns@me.com
 [core]
-	autocrlf = input
+	autocrlf = false
 	safecrlf = true
 [credential]
 	helper = osxkeychain
