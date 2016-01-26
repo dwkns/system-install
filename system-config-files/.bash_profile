@@ -36,8 +36,19 @@ alias rd='killall Dock'     # reboot desktop
 
 alias ep='subl ~/.bash_profile'   # edit bash profile
 alias dt='cd ~/Desktop'           # cd to desktop
-alias csub="cd $SROOT"              # cd to system config directory
+
+
+
+
+
+alias csub="cd $SROOT"              # Cd to sublime config directory
+alias esub="cd $SROOT; subl ."      # Edit the sublime files
+
+
 alias csys='cd ~/.system-config'    # cd to system config directory
+alias esys="cd $HOME/.system-config; subl .;" # Edit system fiels
+alias esp="echo 'did you mean esys - for edit system config?" 
+alias esc="echo 'did you mean esys - for edit system config?" 
 
 # update and upgrade brew
 alias bu='brew update && brew upgrade' 
@@ -45,10 +56,7 @@ alias bu='brew update && brew upgrade' 
 
 
 
-# Edit System Config
-# Opens all system config files in sublime.
-alias esc="cd $HOME/.system-config; subl .;" 
-alias esp="echo 'did you mean esc - for edit system config?" 
+
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
