@@ -29,6 +29,9 @@ alias gb='git branch'       # git branch
 alias gp='git push --all'   # git push all
 alias gco='git checkout'    # git checkout
 
+alias gac='git add -A; git commit' # git add all then commit
+
+
 alias gph='git push heroku master'    # git checkout
 
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
@@ -110,3 +113,4 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+export PGDATA=/usr/local/var/postgres
