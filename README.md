@@ -22,7 +22,7 @@ However you will probably want to use it with the following :
 
 ####Install cask git python and node etc.
 
-    $ brew install caskroom/cask/brew-cask git python node phantomjs heroku postgresql
+    $ brew install caskroom/cask/brew-cask openssl git python node phantomjs heroku postgresql
 
 ####Tap alternates 
     
@@ -33,10 +33,16 @@ However you will probably want to use it with the following :
     
     $ brew cask install sublime-text3 iterm2-nightly font-source-code-pro 1password things flash handbrake omnigraffle transmission mplayerx java charles parallels-desktop slingplayer-desktop dropbox macdown
 
-####Install RVM and Ruby
+####Install RVM
     
-    $ curl -sSL https://get.rvm.io | bash -s stable --ruby
+    $ curl -sSL https://get.rvm.io | bash -s stable 
     $ source $HOME/.rvm/scripts/rvm
+    
+    
+####Install Ruby
+Disabling the binary means we compile Ruby locally. This takes extra time but fixes any potenial SSL problems.
+
+    $ rvm install ruby --latest --disable-binary
 
 ####Install Bundler
     
