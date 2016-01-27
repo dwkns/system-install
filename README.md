@@ -16,6 +16,10 @@ However you will probably want to use it with the following :
 
     $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
  
+####Reload the bash profile
+
+    $ ~/.bash_profile 
+
 ####Install cask git python and node etc.
 
     $ brew install caskroom/cask/brew-cask git python node phantomjs heroku postgresql
@@ -27,7 +31,7 @@ However you will probably want to use it with the following :
 
 ####Install apps
     
-    $ brew cask install sublime-text3 iterm2-nightly font-source-code-pro 1password things flash handbrake omnigraffle transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox macdown
+    $ brew cask install sublime-text3 iterm2-nightly font-source-code-pro 1password things flash handbrake omnigraffle transmission mplayerx java charles parallels-desktop slingplayer-desktop dropbox macdown
 
 ####Install RVM and Ruby
     
