@@ -40,7 +40,7 @@ However you will probably want to use it with the following :
 
 ####Install Bundler
     
-    $ gem install bundler rails htmlbeautifier
+    $ gem install bundler rails 
 
 ####Copy Messages from another machine.
 
