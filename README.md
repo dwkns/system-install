@@ -16,9 +16,13 @@ However you will probably want to use it with the following :
 
     $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
  
+####Reload the bash profile
+
+    $ ~/.bash_profile 
+
 ####Install cask git python and node etc.
 
-    $ brew install caskroom/cask/brew-cask git python node phantomjs heroku postgresql
+    $ brew install caskroom/cask/brew-cask openssl git python node phantomjs heroku postgresql
 
 ####Tap alternates 
     
@@ -29,14 +33,20 @@ However you will probably want to use it with the following :
     
     $ brew cask install sublime-text3 iterm2-nightly font-source-code-pro things flash handbrake omnigraffle transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox macdown
 
-####Install RVM and Ruby
+####Install RVM
     
-    $ curl -sSL https://get.rvm.io | bash -s stable --ruby
+    $ curl -sSL https://get.rvm.io | bash -s stable 
     $ source $HOME/.rvm/scripts/rvm
+    
+    
+####Install Ruby
+Disabling the binary means we compile Ruby locally. This takes extra time but fixes any potenial SSL problems.
+
+    $ rvm install ruby --latest --disable-binary
 
 ####Install Bundler
     
-    $ gem install bundler rails htmlbeautifier
+    $ gem install bundler rails 
 
 ####Copy Messages from another machine.
 
