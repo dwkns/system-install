@@ -107,10 +107,11 @@ alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder 
 alias hf='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 
 export PATH=/usr/local/bin:$PATH
+export PGDATA=/usr/local/var/postgres
 
 #make the default install location for cask apps /Applications
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-export PGDATA=/usr/local/var/postgres
+
