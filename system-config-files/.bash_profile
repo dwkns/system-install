@@ -28,15 +28,13 @@ alias gs='git status'       # git status
 alias gb='git branch'       # git branch
 alias gp='git push --all'   # git push all
 alias gco='git checkout'    # git checkout
-
 alias gac='git add -A; git commit' # git add all then commit
 
 # git add, then commit, then push
 alias gcp="git add -A; git commit -m \"I'm Too lazy to write a commit message\"; git push --all" 
 
 
-
-alias gph='git push heroku master'    # git checkout
+alias gph='git push heroku master'    
 
 alias rsm='cscreen -d 32 -x 2560 -y 1440'
 alias rd='killall Dock'     # reboot desktop
@@ -67,7 +65,8 @@ alias bu='brew update && brew upgrade' 
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
-alias usc="
+alias usc="echo 'did you mean usys' - for Update system config?" 
+alias usys="
 cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
@@ -77,7 +76,8 @@ source $HOME/.bash_profile
 
 # Backup System Config
 # Backs up all sublime and system files to GIT
-alias bsc="
+alias bsc="echo 'did you mean bsys' - for backup system config?" 
+alias bsys="
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
