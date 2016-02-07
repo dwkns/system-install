@@ -31,6 +31,10 @@ alias gco='git checkout'    # git checkout
 
 alias gac='git add -A; git commit' # git add all then commit
 
+# git add, then commit, then push
+alias gcp="git add -A; git commit -m \"I'm Too lazy to write a commit message\"; git push --all" 
+
+
 
 alias gph='git push heroku master'    # git checkout
 
