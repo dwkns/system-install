@@ -22,25 +22,25 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 
 alias ls='ls -l'
 
-alias gc='git commit'       # git commit
-alias ga='git add -A'       # git add all
-alias gs='git status'       # git status
-alias gb='git branch'       # git branch
-alias gp='git push --all'   # git push all
-alias gco='git checkout'    # git checkout
-alias gac='git add -A; git commit' # git add all then commit
+alias gc="echo 'Doing git commit'; git commit"     # git commit
+alias ga="echo 'Doing git add -A'; git add -A"       # git add all
+# alias gs="git status"       # git status
+alias gb="echo 'Doing git branch'; git branch"       # git branch
+alias gp="echo 'Doing git push -- all'; git push --all"   # git push all
+alias gpa="echo 'Doing git push -- all'; git push --all"   # git push all
 
-# git add, then commit, then push
-alias gcp="git add -A; git commit -m \"I'm Too lazy to write a commit message\"; git push --all" 
+alias gco="echo 'Doing git checkout'; git checkout"  # git checkout
+
+alias gac="echo 'Doing git add -all, then git commit'; git add -A; git commit" # git add all then commit
 
 
-alias gph='git push heroku master'    
+alias gph="echo 'Doing git push heroku master'; git push heroku master"    # git checkout
 
-alias rsm='cscreen -d 32 -x 2560 -y 1440'
-alias rd='killall Dock'     # reboot desktop
+alias rsm="cscreen -d 32 -x 2560 -y 1440"
+alias rd="killall Dock"     # reboot desktop
 
-alias ep='subl ~/.bash_profile'   # edit bash profile
-alias dt='cd ~/Desktop'           # cd to desktop
+alias ep="subl ~/.bash_profile"   # edit bash profile
+alias dt="cd ~/Desktop"          # cd to desktop
 
 
 
@@ -65,8 +65,7 @@ alias bu='brew update && brew upgrade' 
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
-alias usc="echo 'did you mean usys' - for Update system config?" 
-alias usys="
+alias usc="
 cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
@@ -76,8 +75,7 @@ source $HOME/.bash_profile
 
 # Backup System Config
 # Backs up all sublime and system files to GIT
-alias bsc="echo 'did you mean bsys' - for backup system config?" 
-alias bsys="
+alias bsc="
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
@@ -111,11 +109,10 @@ alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder 
 alias hf='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 
 export PATH=/usr/local/bin:$PATH
-export PGDATA=/usr/local/var/postgres
 
 #make the default install location for cask apps /Applications
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-
+export PGDATA=/usr/local/var/postgres

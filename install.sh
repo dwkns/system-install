@@ -40,8 +40,6 @@ fi
 source "$ROOT_DIR/scripts/dotfiles.sh"
 
 
-
-
 ###################### configure git ######################
 msg "Configuring git"
 
