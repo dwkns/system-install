@@ -54,30 +54,24 @@ alias rd="killall Dock"     # reboot desktop
 alias ep="subl ~/.bash_profile"   # edit bash profile
 alias dt="cd ~/Desktop"          # cd to desktop
 
-
-
-
-
-alias cdsub="cd $SROOT"              # Cd to sublime config directory
+# alias cdsub="cd $SROOT"              # Cd to sublime config directory
+alias sub="cd $SROOT"              # Cd to sublime config directory
 alias esub="cd $SROOT; subl ."      # Edit the sublime files
 
-
-alias cdsys='cd ~/.system-config'    # cd to system config directory
+# alias cdsys='cd ~/.system-config'    # cd to system config directory
+alias sys='cd ~/.system-config'    # cd to system config directory
 alias esys="cd $HOME/.system-config; subl .;" # Edit system fiels
-alias esp="echo 'did you mean esys' - for edit system config?" 
-alias esc="echo 'did you mean esys' - for edit system config?" 
+alias esp="echo -e $RED'Did you mean '$WHITE'esys'$RED' to edit system config'$WHITE"
+alias esc="echo -e $RED'Did you mean '$WHITE'esys'$RED' to edit system config'$WHITE"
+
 
 # update and upgrade brew
 alias bu='brew update && brew upgrade' 
 
-
-
-
-
-
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
-alias usc="
+alias usc="echo -e $RED'Did you mean '$WHITE'usys'$RED' to update system files'$WHITE"
+alias usys="
 cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
