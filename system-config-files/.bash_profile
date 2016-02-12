@@ -87,7 +87,7 @@ source $HOME/.bash_profile
 
 # Backup System Config
 # Backs up all sublime and system files to GIT
-alias bsc="echo -e $RED'Did you mean'$WHITE'bsys'$RED'to back up system files'$WHITE"
+alias bsc="echo -e $RED'Did you mean '$WHITE'bsys'$RED' to back up system files'$WHITE"
 alias bsys="
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
