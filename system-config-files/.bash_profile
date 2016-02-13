@@ -94,6 +94,7 @@ echo -e $GREEN'Doing git commit'$WHITE;
 git commit -m 'updated theme'; 
 gp"
 
+
 #Sometimes you don't shutdown your rails server process properly. This will sort it out.
 
 alias kas="ps aux|grep 'rails'|grep -v 'grep'|awk '{ print $2 }'|xargs kill -9"
