@@ -2,6 +2,16 @@ COLOR_HOST="\[\033[0;31m\]"
 COLOUR_PATH="\[\033[0;33m\]"
 COLOR_DEFAULT="\[\033[0;37m\]"
 
+note () {
+  echo -e "\033[0;94m====> $1 \033[0m"
+}
+msg () {
+  echo -e "\033[0;32m==============> $1 \033[0m"
+}
+warn () {
+  echo -e "\033[0;31m====> $1 \033[0m"
+}
+
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
@@ -35,18 +45,15 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 
 alias ls='ls -l'
 
-alias gc="echo -e $GREEN'Doing git commit'$WHITE; git commit"   # git commit
-alias ga="echo -e $GREEN'Doing git add -A'$WHITE; git add -A"       # git add all
+alias gc="msg 'Doing git commit'; git commit"   # git commit
+alias ga="msg 'Doing git add -A'; git add -A"       # git add all
 # alias gs="git status"       # git status
-alias gb="echo -e $GREEN'Doing git branch'$WHITE; git branch"       # git branch
-alias gp="echo -e $GREEN'Doing git push -- all'$WHITE; git push --all"   # git push all
-alias gpa="echo -e $GREEN'Doing git push -- all'$WHITE; git push --all"   # git push all
-
-alias gco="echo -e $GREEN'Doing git checkout'$WHITE; git checkout"  # git checkout
-
-alias gac="echo -e $GREEN'Doing git add -all, then git commit'$WHITE; git add -A; git commit" # git add all then commit
-
-alias gph="echo -e $GREEN'Doing git push heroku master'$WHITE; git push heroku master"    # git checkout
+alias gb="msg 'Doing git branch'; git branch"       # git branch
+alias gp="msg 'Doing git push -- all'; git push --all"   # git push all
+alias gpa="msg 'Doing git push -- all'; git push --all"   # git push all
+alias gco="msg 'Doing git checkout'; git checkout"  # git checkout
+alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit" # git add all then commit
+alias gph="msg 'Doing git push heroku master'; git push heroku master"    # git checkout
 
 alias rsm="cscreen -d 32 -x 2560 -y 1440"
 alias rd="killall Dock"     # reboot desktop
@@ -61,8 +68,8 @@ alias esub="cd $SROOT; subl ."      # Edit the sublime files
 # alias cdsys='cd ~/.system-config'    # cd to system config directory
 alias sys='cd ~/.system-config'    # cd to system config directory
 alias esys="cd $HOME/.system-config; subl .;" # Edit system fiels
-alias esp="echo -e $RED'Did you mean '$WHITE'esys'$RED' to edit system config'$WHITE"
-alias esc="echo -e $RED'Did you mean '$WHITE'esys'$RED' to edit system config'$WHITE"
+alias esp="warn 'Did you mean esys to edit system config"
+alias esc="warn 'Did you mean esys to edit system config"
 
 
 # update and upgrade brew
@@ -70,7 +77,7 @@ alias bu='brew update && brew upgrade' 
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
-alias usc="echo -e $RED'Did you mean '$WHITE'usys'$RED' to update system files'$WHITE"
+alias usc="warn 'Did you mean usys to update system files'"
 alias usys="
 cd $HOME/.system-config;
 git pull;
@@ -81,7 +88,7 @@ source $HOME/.bash_profile
 
 # Backup System Config
 # Backs up all sublime and system files to GIT
-alias bsc="echo -e $RED'Did you mean '$WHITE'bsys'$RED' to back up system files'$WHITE"
+alias bsc="warn 'Did you mean bsys to back up system files"
 alias bsys="
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
@@ -90,7 +97,7 @@ cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-se
 cp -rf $HOME/'.bash_profile' $SYSCD/'.bash_profile';
 cd $HOME/'.system-config/'; 
 ga;
-echo -e $GREEN'Doing git commit'$WHITE;
+echo -e msg 'Doing git commit';
 git commit -m 'updated theme'; 
 gp"
 
