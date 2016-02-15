@@ -56,29 +56,29 @@ alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit" # 
 alias gph="msg 'Doing git push heroku master'; git push heroku master"    # git checkout
 
 alias rsm="cscreen -d 32 -x 2560 -y 1440"
-alias rd="killall Dock"     # reboot desktop
+alias rd="Killing the Dock'; killall Dock"     # reboot desktop
 
-alias ep="subl ~/.bash_profile"   # edit bash profile
-alias dt="cd ~/Desktop"          # cd to desktop
+alias ep="msg ''; subl ~/.bash_profile"   # edit bash profile
+alias dt="msg ''; cd ~/Desktop"          # cd to desktop
 
 # alias cdsub="cd $SROOT"              # Cd to sublime config directory
-alias sub="cd $SROOT"              # Cd to sublime config directory
-alias esub="cd $SROOT; subl ."      # Edit the sublime files
+alias sub="msg ''; cd $SROOT"              # Cd to sublime config directory
+alias esub="msg ''; cd $SROOT; subl ."      # Edit the sublime files
 
 # alias cdsys='cd ~/.system-config'    # cd to system config directory
-alias sys='cd ~/.system-config'    # cd to system config directory
-alias esys="cd $HOME/.system-config; subl .;" # Edit system fiels
+alias sys='msg ''; cd ~/.system-config'    # cd to system config directory
+alias esys="msg ''; cd $HOME/.system-config; subl .;" # Edit system fiels
 alias esp="warn 'Did you mean esys to edit system config"
 alias esc="warn 'Did you mean esys to edit system config"
 
 
 # update and upgrade brew
-alias bu='brew update && brew upgrade' 
+alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade" 
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
 alias usc="warn 'Did you mean usys to update system files'"
-alias usys="
+alias usys="msg 'updating system config files.'; 
 cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
@@ -89,7 +89,7 @@ source $HOME/.bash_profile
 # Backup System Config
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean bsys to back up system files"
-alias bsys="
+alias bsys="msg 'Backing up system files'; 
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
@@ -104,8 +104,8 @@ gp"
 
 #Sometimes you don't shutdown your rails server process properly. This will sort it out.
 
-alias kas="ps aux|grep 'rails'|grep -v 'grep'|awk '{ print $2 }'|xargs kill -9"
-alias sb="source ~/.bash_profile"
+alias kas="msg 'Killing all rails server processes'; ps aux|grep 'rails'|grep -v 'grep'|awk '{ print $2 }'|xargs kill -9"
+alias sb="msg 'Reloading .bash_profile'; source ~/.bash_profile"
 ##
 #cp -rf $SD/scope_hunter.sublime-settings $SUBCD/scope_hunter.sublime-settings; 
 #cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'bash.jsbeautifyrc';
@@ -123,9 +123,9 @@ fi
 
 chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
 
-alias sf='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+alias sf="msg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
 
-alias hf='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+alias hf="msg 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
 
 export PATH=/usr/local/bin:$PATH
 
