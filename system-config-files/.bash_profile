@@ -97,7 +97,7 @@ cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-se
 cp -rf $HOME/'.bash_profile' $SYSCD/'.bash_profile';
 cd $HOME/'.system-config/'; 
 ga;
-echo -e msg 'Doing git commit';
+msg 'Doing git commit';
 git commit -m 'updated theme'; 
 gp"
 
