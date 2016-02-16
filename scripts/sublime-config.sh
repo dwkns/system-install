@@ -17,28 +17,17 @@
   mkdir -p "$SUBLIME_USER_DIR"
   mkdir -p "$SUBLIME_INSTALLED_PACKAGES_DIR"
 
-  echo "-------------------------- Installing Package Control"
-  curl -L "http://sublime.wbond.net/Package Control.sublime-package" -o "$SUBLIME_INSTALLED_PACKAGES_DIR/Package Control.sublime-package"
-
-  # if $DEBUG; then
-  #   echo "-------------------------- Installing pin_console.py"
-  #  cp -f "$ROOT_DIR/sublime-config-files/pin_console.py" "$SUBLIME_PACKAGES_DIR/pin_console.py"
-  # fi 
-
   echo "-------------------------- Intalling license"
   cp -f "$ROOT_DIR/sublime-config-files/License.sublime_license" "$SUBLIME_LOCAL_DIR/License.sublime_license"
 
-  # echo "-------------------------- Installing dwkns Theme"
-  # rm -rf "$SUBLIME_PACKAGES_DIR/Seti_UI"
-  # git clone "https://github.com/dwkns/Seti_UI_dwkns_additions.git" "$SUBLIME_PACKAGES_DIR/Seti_UI"
+  echo "-------------------------- Installing Package Control"
+  curl -L "http://sublime.wbond.net/Package Control.sublime-package" -o "$SUBLIME_INSTALLED_PACKAGES_DIR/Package Control.sublime-package"
+
+ echo "-------------------------- Installing sublime Package Control Settings"
+  cp -f "$ROOT_DIR/sublime-config-files/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
 
   echo "-------------------------- Installing sublime preferences"
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
-
-  # echo "-------------------------- Installing BeautifyRuby preferences"
-  # cp -f "$ROOT_DIR/sublime-config-files/BeautifyRuby.sublime-settings" "$SUBLIME_USER_DIR/BeautifyRuby.sublime-settings"
-
-
 
   # echo "-------------------------- Installing scopehunter preferences"
   # cp -f "$ROOT_DIR/sublime-config-files/scope_hunter.sublime-settings" "$SUBLIME_USER_DIR/scope_hunter.sublime-settings"
@@ -46,16 +35,7 @@
   echo "-------------------------- Installing SublimeLinter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
 
-  echo "-------------------------- Installing sublime Package Control Settings"
-  cp -f "$ROOT_DIR/sublime-config-files/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
  
-  # echo "-------------------------- Cloning in some code snipits"
-  # rm -rf "$SUBLIME_USER_DIR/code-snipits"
-  # git clone "https://github.com/dwkns/sublime-code-snipits.git" "$SUBLIME_USER_DIR/code-snipits"
-
-  # echo "-------------------------- Installing sublime theme dwkns.tmTheme"
-  # cp -f "$ROOT_DIR/sublime-config-files/dwkns-theme.tmTheme" "$SUBLIME_USER_DIR/dwkns-theme.tmTheme"
-
    echo "-------------------------- Cloning in my Douglas theme"
   rm -rf "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
   git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
