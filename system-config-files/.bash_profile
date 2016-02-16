@@ -12,16 +12,6 @@ warn () {
   echo -e "\033[0;31m====> $1 \033[0m"
 }
 
-BLACK=$(tput setaf 0)
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-LIME_YELLOW=$(tput setaf 190)
-POWDER_BLUE=$(tput setaf 153)
-BLUE=$(tput setaf 4)
-MAGENTA=$(tput setaf 5)
-CYAN=$(tput setaf 6)
-WHITE=$(tput setaf 7)
 
 
 # PS1="$COLOR_HOST\u@\h $COLOUR_PATH\w $COLOR_DEFAULT\$"
@@ -56,10 +46,10 @@ alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit" # 
 alias gph="msg 'Doing git push heroku master'; git push heroku master"    # git checkout
 
 alias rsm="cscreen -d 32 -x 2560 -y 1440"
-alias rd="Killing the Dock'; killall Dock"     # reboot desktop
+alias kd="msg 'Killing the Dock'; killall Dock"     # reboot desktop
 
-alias ep="msg ''; subl ~/.bash_profile"   # edit bash profile
-alias dt="msg ''; cd ~/Desktop"          # cd to desktop
+alias ep="msg 'Editing bash profile'; subl ~/.bash_profile"   # edit bash profile
+alias dt="cd ~/Desktop"          # cd to desktop
 
 # alias cdsub="cd $SROOT"              # Cd to sublime config directory
 alias sub="msg ''; cd $SROOT"              # Cd to sublime config directory
