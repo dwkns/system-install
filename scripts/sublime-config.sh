@@ -42,7 +42,7 @@
 
   echo "-------------------------- Cloning in my Douglas theme"
   rm -rf "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
-  git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/custom_"
+  git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
 
   echo "-------------------------- Cloning in my Rails snippets"
   rm -rf "$SUBLIME_PACKAGES_DIR/Rails"
