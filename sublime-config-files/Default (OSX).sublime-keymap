@@ -11,7 +11,7 @@
   {
     "keys": ["alt+down"],
     "command": "run_macro_file",
-    "args": { "file": "Packages/User/jump_to_eol_create_new_line.sublime-macro" }
+    "args": { "file": "Packages/User/custom_macros/jump_to_eol_create_new_line.sublime-macro" }
   },
   {
     "keys": ["command+alt+r"],
