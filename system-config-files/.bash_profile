@@ -57,10 +57,10 @@ alias esub="msg ''; cd $SROOT; subl ."      # Edit the sublime files
 
 # alias cdsys='cd ~/.system-config'    # cd to system config directory
 alias sys='msg ''; cd ~/.system-config'    # cd to system config directory
-alias esys="msg ''; cd $HOME/.system-config; subl .;" # Edit system fiels
+alias esys="msg 'editing system files'; cd $HOME/.system-config; subl .;" # Edit system fiels
 alias esp="warn 'Did you mean esys to edit system config"
 alias esc="warn 'Did you mean esys to edit system config"
-
+alias s="msg 'opening current folder in sublime'; subl ."
 
 # update and upgrade brew
 alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade" 
@@ -78,7 +78,7 @@ source $HOME/.bash_profile
 
 # Backup System Config
 # Backs up all sublime and system files to GIT
-alias bsc="warn 'Did you mean bsys to back up system files"
+alias bsc="warn 'Did you mean bsys to back up system files'"
 alias bsys="msg 'Backing up system files'; 
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
