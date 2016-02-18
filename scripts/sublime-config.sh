@@ -34,11 +34,15 @@
 
   echo "-------------------------- Installing SublimeLinter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
-
+  
+  echo "-------------------------- Cloning in my Macros"
+  rm -rf "$SUBLIME_USER_DIR/custom_macros"
+  git clone "https://github.com/dwkns/sublime_macros.git" "$SUBLIME_USER_DIR/custom_macros"
  
-   echo "-------------------------- Cloning in my Douglas theme"
+
+  echo "-------------------------- Cloning in my Douglas theme"
   rm -rf "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
-  git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
+  git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/custom_"
 
   echo "-------------------------- Cloning in my Rails snippets"
   rm -rf "$SUBLIME_PACKAGES_DIR/Rails"
