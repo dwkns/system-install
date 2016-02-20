@@ -84,6 +84,7 @@ source $HOME/.bash_profile
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files'; 
+CURRENT_DIR=`pwd`
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
@@ -93,7 +94,8 @@ cd $HOME/'.system-config/';
 ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
-gp"
+gp;
+cd $CURRENT_DIR"
 
 
 #Sometimes you don't shutdown your rails server process properly. This will sort it out.
