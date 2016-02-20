@@ -35,39 +35,43 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 
 alias ls='ls -l'
 
-alias gc="msg 'Doing git commit'; git commit"   # git commit
-alias ga="msg 'Doing git add -A'; git add -A"       # git add all
-# alias gs="git status"       # git status
-alias gb="msg 'Doing git branch'; git branch"       # git branch
-alias gp="msg 'Doing git push -- all'; git push --all"   # git push all
-alias gpa="msg 'Doing git push -- all'; git push --all"   # git push all
-alias gco="msg 'Doing git checkout'; git checkout"  # git checkout
-alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit" # git add all then commit
-alias gph="msg 'Doing git push heroku master'; git push heroku master"    # git checkout
+alias gc="msg 'Doing git commit'; git commit"               # git commit
+alias ga="msg 'Doing git add -A'; git add -A"               # git add all
+alias gs="git status"                                       # git status
+alias gb="msg 'Doing git branch'; git branch"               # git branch
+alias gp="msg 'Doing git push -- all'; git push --all"      # git push all
+alias gpa="gp"                                              # second alias for git push all
+alias gco="msg 'Doing git checkout'; git checkout"          # git checkout
+alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
+alias gph="msg 'Doing git push heroku master'; git push heroku master"          # git checkout
 
 alias rsm="cscreen -d 32 -x 2560 -y 1440"
-alias kd="msg 'Killing the Dock'; killall Dock"     # reboot desktop
+alias kd="msg 'Killing the Dock'; killall Dock"             # reboot desktop
 
-alias ep="msg 'Editing bash profile'; subl ~/.bash_profile"   # edit bash profile
-alias dt="cd ~/Desktop"          # cd to desktop
+alias ep="msg 'Editing bash profile'; subl ~/.bash_profile" # edit bash profile
 
-# alias cdsub="cd $SROOT"              # Cd to sublime config directory
-alias sub="msg ''; cd $SROOT"              # Cd to sublime config directory
-alias esub="msg ''; cd $SROOT; subl ."      # Edit the sublime files
+alias dt="cd ~/Desktop"                                     # cd to desktop
 
-# alias cdsys='cd ~/.system-config'    # cd to system config directory
-alias sys='msg ''; cd ~/.system-config'    # cd to system config directory
-alias esys="msg 'editing system files'; cd $HOME/.system-config; subl .;" # Edit system fiels
-alias esp="warn 'Did you mean esys to edit system config"
-alias esc="warn 'Did you mean esys to edit system config"
+# alias cdsub="cd $SROOT"                                   # cd to sublime config directory
+alias sub="msg ''; cd $SROOT"                               # cd to sublime config directory
+alias esub="msg ''; cd $SROOT; subl ."                      # Edit the sublime files
+
+
+alias sys='msg ''; cd ~/.system-config'                     # cd to system config directory
+
+alias esys="msg 'editing system files'; cd $HOME/.system-config; subl .;"       # Edit system fiels
+alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"
+alias esc="esp"
+
 alias s="msg 'opening current folder in sublime'; subl ."
 
 # update and upgrade brew
 alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade" 
+alias ls="ls --color=auto"
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
-alias usc="warn 'Did you mean usys to update system files'"
+alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"
 alias usys="msg 'updating system config files.'; 
 cd $HOME/.system-config;
 git pull;
@@ -78,7 +82,7 @@ source $HOME/.bash_profile
 
 # Backup System Config
 # Backs up all sublime and system files to GIT
-alias bsc="warn 'Did you mean bsys to back up system files'"
+alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files'; 
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
