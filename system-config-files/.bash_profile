@@ -33,8 +33,8 @@ SYSCD="$HOME/'.system-config/system-config-files'"
 
 
 
-alias ls='ls -l'
-
+alias ls="ls -l"
+alias cd..="cd .."
 alias gc="msg 'Doing git commit'; git commit"               # git commit
 alias ga="msg 'Doing git add -A'; git add -A"               # git add all
 alias gs="git status"                                       # git status
@@ -55,7 +55,7 @@ alias dt="cd ~/Desktop"                                     # cd to desktop
 # alias cdsub="cd $SROOT"                                   # cd to sublime config directory
 alias sub="msg ''; cd $SROOT"                               # cd to sublime config directory
 alias esub="msg ''; cd $SROOT; subl ."                      # Edit the sublime files
-
+alias subu="msg ''; cd $SD"
 
 alias sys='msg ''; cd ~/.system-config'                     # cd to system config directory
 
@@ -65,9 +65,13 @@ alias esc="esp"
 
 alias s="msg 'opening current folder in sublime'; subl ."
 
+alias po="msg 'launching app...'; powder open"
+alias pl="msg 'linking app to ~/.pow...'; powder link"
+alias pr="msg 'restarting app'; powder restart"
+
 # update and upgrade brew
 alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade" 
-alias ls="ls --color=auto"
+# alias ls="ls --color=auto"
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
@@ -95,7 +99,6 @@ ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-echo $CURRENT_DIR;
 cd $CURRENT_DIR"
 
 
@@ -113,7 +116,6 @@ alias sb="msg 'Reloading .bash_profile'; source ~/.bash_profile"
 SECRETS_FILE="$HOME/.secrets.sh"
 if [ -f $SECRETS_FILE ];
 then
-
  source $SECRETS_FILE
 fi
 
@@ -121,9 +123,7 @@ fi
 chflags hidden ~/Applications # keep the local ~/Applicaiton file hidden.
 
 alias sf="msg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
-
 alias hf="msg 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
-
 export PATH=/usr/local/bin:$PATH
 
 #make the default install location for cask apps /Applications

@@ -22,7 +22,7 @@ However you will probably want to use it with the following :
 
 ####Install cask git python and node etc.
 
-    $ brew install caskroom/cask/brew-cask openssl git python node phantomjs heroku postgresql
+    $ brew install caskroom/cask/brew-cask openssl git python node phantomjs heroku postgresql pow
 
 ####Tap alternates 
     
@@ -50,7 +50,7 @@ Disabling the binary means we compile Ruby locally. This takes extra time but fi
 
 ####Install Bundler
     
-    $ gem install bundler rails 
+    $ gem install bundler rails powder
 
 ####Copy Messages from another machine.
 
