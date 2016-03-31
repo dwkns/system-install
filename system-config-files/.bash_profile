@@ -69,6 +69,10 @@ alias po="msg 'launching app...'; powder open"
 alias pl="msg 'linking app to ~/.pow...'; powder link"
 alias pr="msg 'restarting app'; powder restart"
 
+alias nstart="msg 'starting nginx...'; sudo nginx"
+alias nstop="msg 'stopping nginx...'; sudo nginx -s stop"
+alias nreload="msg 'reloading nginx config...'; sudo nginx -s reload"
+
 # update and upgrade brew
 alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade" 
 # alias ls="ls --color=auto"
