@@ -82,7 +82,7 @@ source $HOME/.bash_profile
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files'; 
 CURRENT_DIR=$(`pwd`);
-msg $CURRENT_DIR
+msg $CURRENT_DIR;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
@@ -93,7 +93,7 @@ ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-echo 'bum'
+echo 'bum';
 echo  $CURRENT_DIR; 
 cd $CURRENT_DIR"                                                              
 
