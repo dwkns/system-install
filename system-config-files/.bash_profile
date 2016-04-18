@@ -81,7 +81,7 @@ source $HOME/.bash_profile
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files'; 
-CURRENT_DIR=$(pwd);
+CURRENT_DIR=$(`pwd`);
 msg $CURRENT_DIR
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
