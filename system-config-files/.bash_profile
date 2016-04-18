@@ -92,7 +92,8 @@ ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-echo 'current dir : ' $CURRENT_DIR 
+echo " bum"
+echo  $CURRENT_DIR; 
 cd $CURRENT_DIR"                                                              
 
 
