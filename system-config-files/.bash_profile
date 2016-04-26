@@ -108,7 +108,7 @@ alias nstart="msg 'starting nginx...'; sudo nginx"
 alias nstop="msg 'stopping nginx...'; sudo nginx -s stop"
 alias nreload="msg 'reloading nginx config...'; sudo nginx -s reload"
 alias nstatus="nginxrunning"
-
+alias nedit="msg 'edit nginx config...'; subl '/usr/local/etc/nginx/nginx.conf'"
 
 ############### Brew ################
 alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
