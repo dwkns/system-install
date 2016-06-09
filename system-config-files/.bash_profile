@@ -48,7 +48,7 @@ alias hf="msg 'Hiding invisible files in the finder'; defaults write com.apple.f
 ############### Git ################
 alias gc="msg 'Doing git commit'; git commit"                                   # git commit
 alias ga="msg 'Doing git add -A'; git add -A"                                   # git add all
-alias gs="git status"                                                           # git status
+# alias gs="git status"                                                           # git status
 alias gb="msg 'Doing git branch'; git branch"                                   # git branch
 alias gp="msg 'Doing git push -- all'; git push --all"                          # git push all
 alias gpa="gp"                                                                  # second alias for git push all
