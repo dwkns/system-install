@@ -28,6 +28,7 @@ However you will probably want to use it with the following :
     
     $ brew tap caskroom/versions
     $ brew tap caskroom/fonts
+    $ brew tap homebrew/services
 
 ####Install apps
     
