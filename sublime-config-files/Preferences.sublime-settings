@@ -14,7 +14,8 @@
 	"ignored_packages":
 	[
 		"PHP",
-		"Vintage"
+		"Vintage",
+		"JavaScript"
 	],
 	"indent_guide_options":
 	[
