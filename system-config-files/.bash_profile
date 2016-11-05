@@ -48,7 +48,7 @@ alias hf="msg 'Hiding invisible files in the finder'; defaults write com.apple.f
 ############### Git ################
 alias gc="msg 'Doing git commit'; git commit"                                   # git commit
 alias ga="msg 'Doing git add -A'; git add -A"                                   # git add all
- alias gs="git status"                                                           # git status
+alias gs="git status"                                                           # git status
 alias gb="msg 'Doing git branch'; git branch"                                   # git branch
 alias gp="msg 'Doing git push -- all'; git push --all"                          # git push all
 alias gpa="gp"                                                                  # second alias for git push all
@@ -117,7 +117,7 @@ alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade
 ############### Rails ################
 #Sometimes you don't shutdown your rails server process properly. This will sort it out.
 alias kas="msg 'Killing all rails server processes'; ps aux|grep 'rails'|grep -v 'grep'|awk '{ print $2 }'|xargs kill -9"
-alias dpc="psql -U dazza -c \"SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'TARGET_DB' AND pid <> pg_backend_pid();\""
+alias dpc="msg 'Killing postgres connections'; psql -U dazza -c \"SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'TARGET_DB' AND pid <> pg_backend_pid();\""
 
 
 
@@ -144,6 +144,7 @@ export EDITOR='subl -w'                                                  # Set d
 export PGDATA=/usr/local/var/postgres                                    # Set Postgres path
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"                       # Make the default install location for cask apps /Applications
 export PATH=/usr/local/bin:$PATH                                         # Set Path Variable
+export AUTO_ACCEPT=true                                                  # Auto accepts the defaults when seeding with spree devise
 
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"     # Load RVM into a shell session *as a function*
