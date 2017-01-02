@@ -61,7 +61,11 @@ List all available versions and choose the one you want to install.
 
 ####Install Bundler and Rails
     
-    $ gem install bundler rails powder
+    $ gem install bundler 
+
+####Install Rails and Powder
+
+    $ gem install rails powder
 
 ####Install Pow
 
