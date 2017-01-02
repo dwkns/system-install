@@ -13,9 +13,9 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
+		"JavaScript",
 		"PHP",
-		"Vintage",
-		"JavaScript"
+		"Vintage"
 	],
 	"indent_guide_options":
 	[

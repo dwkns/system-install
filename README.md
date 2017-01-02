@@ -38,18 +38,28 @@ $ brew cask install sublime-text iterm2-nightly font-source-code-pro things flas
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
 
-####Install RVM
+####Install rbenv
     
-    $ curl -sSL https://get.rvm.io | bash -s stable 
+    $ brew install rbenv ruby-build
     $ source $HOME/.rvm/scripts/rvm
     
     
 ####Install Ruby
-Disabling the binary means we compile Ruby locally. This takes extra time but fixes any potenial SSL problems.
+List all available versions and choose the one you want to install.
 
-    $ rvm install ruby --latest --disable-binary
+    $ rbenv install -l
+    $ rbenv install 2.4.0
 
-####Install Bundler
+####Make the rbenv installed ruby the default system one.
+
+    $ rbenv global 2.4.0
+
+####Ensure that rbenv is added to .bash_profile
+
+    $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile  
+    $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
+
+####Install Bundler and Rails
     
     $ gem install bundler rails powder
 
