@@ -41,7 +41,6 @@ Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designe
 ####Install rbenv
     
     $ brew install rbenv ruby-build
-    $ source $HOME/.rvm/scripts/rvm
     
     
 ####Install Ruby
