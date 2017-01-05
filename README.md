@@ -40,17 +40,33 @@ Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designe
 
 ####Install rbenv
     
+    $ brew install rbenv ruby-build
     $ brew install rbenv ruby-build 
     $ rbenv init
     
 ####Install Ruby
+List all available versions and choose the one you want to install.
 
+    $ rbenv install -l
     $ rbenv install 2.2.4 // Or Whatever ruby version you want. 
     $ rbenv global  2.2.4 // Set this to be the global ruby version.
 
-####Install Bundler
+####Make the rbenv installed ruby the default system one.
+
+    $ rbenv global 2.4.0
+
+####Ensure that rbenv is added to .bash_profile
+
+    $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile  
+    $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
+
+####Install Bundler and Rails
     
-    $ gem install bundler rails powder
+    $ gem install bundler 
+
+####Install Rails and Powder
+
+    $ gem install rails powder
 
 ####Install Pow
 

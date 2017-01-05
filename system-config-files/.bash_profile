@@ -151,3 +151,5 @@ export AUTO_ACCEPT=true                                                  # Auto 
 
 export NVM_DIR="$HOME/.nvm"
   . "$(brew --prefix nvm)/nvm.sh"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
