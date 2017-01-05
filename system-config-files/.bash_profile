@@ -147,7 +147,7 @@ export PATH=/usr/local/bin:$PATH                                         # Set P
 export AUTO_ACCEPT=true                                                  # Auto accepts the defaults when seeding with spree devise
 
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"     # Load RVM into a shell session *as a function*
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"     # Load RVM into a shell session *as a function*
 
 export NVM_DIR="$HOME/.nvm"
   . "$(brew --prefix nvm)/nvm.sh"
