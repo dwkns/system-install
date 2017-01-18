@@ -54,6 +54,7 @@ cp -f "$ROOT_DIR/system-config-files/com.googlecode.iterm2.plist" "$HOME/Library
 killall cfprefsd
 note "done"
 
+mkdir -p ~/Applications
 
 ############ CONFIGURE Sublime ############
 source "$ROOT_DIR/scripts/sublime-config.sh"
