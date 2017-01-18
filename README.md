@@ -16,12 +16,12 @@ Here is what you do...
 
     $ ~/.bash_profile 
 
-####Install cask git python and node etc.
+####Install git python and node etc.
 
-    $ brew install caskroom/cask/brew-cask openssl git python node phantomjs heroku postgresql 
+    $ brew install  openssl git python node phantomjs heroku postgresql 
 
 ####Tap alternates 
-    
+    $ brew tap caskroom/cask
     $ brew tap caskroom/versions
     $ brew tap caskroom/fonts
     $ brew tap homebrew/services
@@ -29,14 +29,13 @@ Here is what you do...
 ####Install apps
     
 ````
-$ brew cask install sublime-text iterm2-nightly font-source-code-pro things flash handbrake omnigraffle transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox macdown codekit
+$ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox macdown codekit
 ````
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
 
 ####Install rbenv
-    
-    $ brew install rbenv ruby-build
+
     $ brew install rbenv ruby-build 
     $ rbenv init
     
@@ -49,7 +48,7 @@ List all available versions and choose the one you want to install.
 
 ####Make the rbenv installed ruby the default system one.
 
-    $ rbenv global 2.4.0
+    $ rbenv global 2.2.4 
 
 ####Ensure that rbenv is added to .bash_profile
 
