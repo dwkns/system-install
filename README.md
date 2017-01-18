@@ -4,6 +4,10 @@ As with all bash scripts **read it** before you run it. And if you don't underst
 
 If you want to run it then :
 
+    $ xcode-select --install
+    
+Then...
+
     $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 
 However you will probably want to use it with the following :
