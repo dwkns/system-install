@@ -27,9 +27,9 @@ Here is what you do...
     $ brew tap homebrew/services
 
 ####Install apps
-    
+   
 ````
-$ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mplayerx charles parallels-desktop slingplayer-desktop dropbox macdown codekit
+$ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mpv charles dropbox macdown codekit
 ````
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
