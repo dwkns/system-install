@@ -147,7 +147,8 @@ export PATH=/usr/local/bin:$PATH                                         # Set P
 export AUTO_ACCEPT=true                                                  # Auto accepts the defaults when seeding with spree devise
 
 
-if which rbenv 2> /dev/null; then
+# if which rbenv 2> /dev/null; then
    export PATH="$HOME/.rbenv/bin:$PATH"
     eval "$(rbenv init -)"
-fi
+   
+# fi
