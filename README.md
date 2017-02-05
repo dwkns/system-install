@@ -29,7 +29,7 @@ Here is what you do...
 ####Install apps
    
 ````
-$ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mpv charles dropbox macdown codekit
+$ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mpv charles dropbox macdown codekit flash-npapi
 ````
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
