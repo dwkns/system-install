@@ -104,6 +104,9 @@ alias po="msg 'launching app...'; powder open"
 alias pl="msg 'linking app to ~/.pow...'; powder link"
 alias pr="msg 'restarting app'; powder restart"
 
+############### rbenv ################
+alias rh="msg 'doing rbenv rehash...'; rbenv rehash"
+
 alias nstart="msg 'starting nginx...'; sudo nginx"
 alias nstop="msg 'stopping nginx...'; sudo nginx -s stop"
 alias nreload="msg 'reloading nginx config...'; sudo nginx -s reload"
