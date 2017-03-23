@@ -40,11 +40,7 @@ fi
 source "$ROOT_DIR/scripts/dotfiles.sh"
 
 
-###################### configure git ######################
-msg "Configuring git"
 
-git config --global core.excludesfile $HOME/.gitignore_global
-note "Done" 
 
 ############ CONFIGURE ITERM ############
 msg "Configure iTerm"
@@ -89,4 +85,11 @@ sudo scutil --set LocalHostName $MACHINE_NAME
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
 note "done"
 
-# msg "And that's it. All done." 
+###################### configure git ######################
+msg "Configuring git"
+
+git config --global core.excludesfile $HOME/.gitignore_global
+note "Done" 
+
+
+msg "And that's it. All done." 
