@@ -47,6 +47,7 @@ alias hf="msg 'Hiding invisible files in the finder'; defaults write com.apple.f
 
 ############### Git ################
 alias gc="msg 'Doing git commit'; git commit"                                   # git commit
+alias gca="msg 'Doing git commit'; git commit -a"                                   # git commit all
 alias ga="msg 'Doing git add -A'; git add -A"                                   # git add all
 alias gs="git status"                                                           # git status
 alias gb="msg 'Doing git branch'; git branch"                                   # git branch
@@ -81,16 +82,24 @@ source $HOME/.bash_profile
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files'; 
+CURRENT_DIR=`pwd`;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
 cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
 cp -rf $HOME/'.bash_profile' $SYSCD/'.bash_profile';
+cp -rf $HOME/'.gemrc' $SYSCD/'.gemrc';
+cp -rf $HOME/'.gitconfig' $SYSCD/'.gitconfig';
+cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
+cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
+cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
+cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
 cd $HOME/'.system-config/'; 
 ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
-gp;"                                                              
+gp;
+cd CURRENT_DIR"                                                              
 
 
 ############### Editing sublime files ################
