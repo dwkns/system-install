@@ -16,7 +16,6 @@ cp -f "$ROOT_DIR/system-config-files/.gitconfig" "$HOME/.gitconfig"
 
 echo "Copying .gitignore"
 cp -f "$ROOT_DIR/system-config-files/.gitignore_global" "$HOME/.gitignore_global"
-note "done"
 
 echo "Copying .irbrc"
 cp -f  "$ROOT_DIR/system-config-files/.irbrc" "$HOME/.irbrc"
@@ -26,3 +25,4 @@ cp -f "$ROOT_DIR/system-config-files/.jsbeautifyrc"  "$HOME/.jsbeautifyrc"
 
 echo "Copying .rspec"
 cp -f  "$ROOT_DIR/system-config-files/.rspec" "$HOME/.rspec"
+note "done"
