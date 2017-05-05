@@ -4,10 +4,7 @@ msg "Updating system settings"
 
 
 ######################  Random other configurations ######################
-echo "Disabling OS X Gate Keeper so no more annoying 'you can't open this app messages'"
-sudo spctl --master-disable
-sudo  defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
-defaults write com.apple.LaunchServices LSQuarantine -bool false
+
 
 echo "Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
@@ -49,8 +46,6 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 echo "Automatically quit printer app once the print jobs complete"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
-echo "Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window"
-sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 # echo "Restart automatically if the computer freezes"
 # sudo systemsetup -setrestartfreeze on

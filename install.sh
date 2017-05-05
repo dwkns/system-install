@@ -63,6 +63,16 @@ source "$ROOT_DIR/scripts/time-machine.sh"
 ############ CONFIGURE System Settings ############
 source "$ROOT_DIR/scripts/system-settings.sh"
 
+############ CONFIGURE System Settings that use sudo############
+## These are in here to allow system-settings.sh not to require sudo and thus get run on `usys`
+echo "Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window"
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+echo "Disabling OS X Gate Keeper so no more annoying 'you can't open this app messages'"
+sudo spctl --master-disable
+sudo  defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
 
 
 # ###################### set machine name ######################
