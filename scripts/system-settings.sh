@@ -1,6 +1,6 @@
 #!/bin/bash
 ######################## SYSTEM Settings ########################
-msg "Changing some system settings"
+msg "Updating system settings"
 
 
 ######################  Random other configurations ######################
@@ -317,17 +317,8 @@ echo "Desktop : Set the background colour"
 osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
 
 
-note "done"
+note "done - some settings may require a restart"
 
-  # # NEW THINGS TO LOOK INTO
-  # # Enable character repeat on keydown
-  # defaults write -g ApplePressAndHoldEnabled -bool false
-
-  # # Set a shorter Delay until key repeat
-  # defaults write NSGlobalDomain InitialKeyRepeat -int 12
-
-  # # Set a blazingly fast keyboard repeat rate
-  # defaults write NSGlobalDomain KeyRepeat -int 0
 
   # # Disable window animations ("new window" scale effect)
   # defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
