@@ -42,6 +42,7 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
+echo
 
 ###############################################################################
 # Screen                                                                    #
@@ -59,6 +60,9 @@ defaults write com.apple.screencapture disable-shadow -bool true
 
 echo "Screen : Enable subpixel font rendering on non-Apple LCDs"
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
+
+echo
+
 
 ###############################################################################
 # Finder                                                                      #
@@ -197,7 +201,7 @@ defaults write com.apple.dock autohide -bool false
 # echo "Finder : Make Dock icons of hidden applications translucent"
 # defaults write com.apple.dock showhidden -bool false
 
-
+echo
 
 ###############################################################################
 # Safari & WebKit                                                             #
@@ -235,7 +239,7 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 echo "Safari : Add a context menu item for showing the Web Inspector in web views"
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
-
+echo
 
 ###############################################################################
 # Activity Monitor                                                            #
@@ -254,6 +258,8 @@ echo "Activity Monitor : Sort results by CPU usage"
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
+echo
+
 ###############################################################################
 # Address Book, Dashboard, iCal, TextEdit, and Disk Utility                   #
 ###############################################################################
@@ -264,12 +270,16 @@ defaults write com.apple.addressbook ABShowDebugMenu -bool true
 echo "Address Book : Sort Names by First Name / Last Name"
 defaults write com.apple.addressbook ABNameSortingFormat -string "sortingFirstName sortingLastName"
 
+echo
+
 echo "TextEdit : Use plain text mode for new = documents"
 defaults write com.apple.TextEdit RichText -int 0
 
 echo "TextEdit : Open and save files as UTF-8 in TextEdit"
 defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+echo
 
 ###############################################################################
 # Mac App Store                                                               #
@@ -281,6 +291,7 @@ defaults write com.apple.appstore WebKitDeveloperExtras -bool true
 echo "Mac App Store : Enable Debug Menu in the Mac App Store"
 defaults write com.apple.appstore ShowDebugMenu -bool true
 
+echo
 
 ###############################################################################
 # Transmission.app                                                            #
@@ -303,6 +314,8 @@ defaults write org.m0k.transmission WarningDonate -bool false
 echo "Transmission.app : Hide the legal disclaimer"
 defaults write org.m0k.transmission WarningLegal -bool false
 
+echo
+
 ###############################################################################
 # Desktop                                                                     #
 ###############################################################################
@@ -310,6 +323,7 @@ defaults write org.m0k.transmission WarningLegal -bool false
 echo "Desktop : Set the background colour"
 osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
 
+echo
 
 note "done - some settings may require a restart"
 
