@@ -99,7 +99,7 @@ ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-cd CURRENT_DIR"                                                              
+cd $CURRENT_DIR"                                                              
 
 
 ############### Editing sublime files ################
