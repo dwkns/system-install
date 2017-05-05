@@ -25,7 +25,7 @@ defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 echo "General : Check for software updates daily, not just once per week"
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 
-echo "General : Disable smart quotes as they’re annoying when typing code"
+echo "General : Disable smart quotes as they're annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 echo "General : Disable smart dashes as they’re annoying when typing code"
@@ -85,7 +85,7 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 echo "Finder : Showing all filename extensions in Finder by default"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-echo "Finder : Showing Library & ~Library"
+echo "Finder : Showing Library & ~/Library"
 chflags nohidden ~/Library
 chflags nohidden /Library
 
@@ -110,10 +110,10 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 # echo "Finder : show hidden files by default"
 # defaults write com.apple.finder AppleShowAllFiles -bool true
 
-echo "Finder : show status bar"
+echo "Finder : hide status bar"
 defaults write com.apple.finder ShowStatusBar -bool false
 
-echo "Finder : show path bar"
+echo "Finder : hide path bar"
 defaults write com.apple.finder ShowPathbar -bool false
 
 echo "Finder : allow text selection in Quick Look"
