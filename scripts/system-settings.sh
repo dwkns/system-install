@@ -6,63 +6,35 @@ msg "Updating system settings"
 ######################  Random other configurations ######################
 
 
-echo "Turn off keyboard illumination when computer is not used for 5 minutes"
+echo "General : Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
-echo "Showing all filename extensions in Finder by default"
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-echo "Showing Library & ~Library"
-chflags nohidden ~/Library
-chflags nohidden /Library
-
-echo "Hiding ~/Applications"
-chflags hidden ~/Applications
-
-echo "Set sidebar icon size to small"
-defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
-
-echo "Scrollbars to WhenScrolling"
+echo "General : Scrollbars to WhenScrolling"
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 # Possible values: `WhenScrolling`, `Automatic` and `Always`
 
-echo "Increase window resize speed for Cocoa applications"
+echo "General : Increase window resize speed for Cocoa applications"
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
-echo "Setting interface style to Dark"
-defaults write NSGlobalDomain AppleInterfaceStyle Dark
-
-# echo "Expand save panel by default"
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-
-echo "Expand print panel by default"
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
-
-echo "Save to disk (not to iCloud) by default"
-defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-
-echo "Automatically quit printer app once the print jobs complete"
+echo "General : Automatically quit printer app once the print jobs complete"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
-
 
 # echo "Restart automatically if the computer freezes"
 # sudo systemsetup -setrestartfreeze on
 
-echo "Check for software updates daily, not just once per week"
+echo "General : Check for software updates daily, not just once per week"
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 
-echo "Disable smart quotes as they’re annoying when typing code"
+echo "General : Disable smart quotes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
-echo "Disable smart dashes as they’re annoying when typing code"
+echo "General : Disable smart dashes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
-echo "Increase sound quality for Bluetooth headphones/headsets"
+echo "General : Increase sound quality for Bluetooth headphones/headsets"
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
-echo "Set a blazingly fast keyboard repeat rate"
+echo "General : Set a blazingly fast keyboard repeat rate"
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
@@ -92,6 +64,33 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 2
 # Finder                                                                      #
 ###############################################################################
 
+echo "Finder : Setting interface style to Dark"
+defaults write NSGlobalDomain AppleInterfaceStyle Dark
+
+echo "Finder : Expand save panel by default"
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+echo "Finder : Expand print panel by default"
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+echo "Finder : Save to disk (not to iCloud) by default"
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+echo "Finder : Showing all filename extensions in Finder by default"
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+echo "Finder : Showing Library & ~Library"
+chflags nohidden ~/Library
+chflags nohidden /Library
+
+echo "Finder : Hiding ~/Applications"
+chflags hidden ~/Applications
+
+echo "Finder : Set sidebar icon size to small"
+defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
+
 echo "Finder : Set home folder as the default location for new Finder windows"
 # "PfDe" - "file://${HOME}/Desktop/"
 # For other paths, use "PfLo" - "file://${HOME}/Desktop/"
@@ -104,16 +103,16 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
-# echo "Finder : Finder: show hidden files by default"
+# echo "Finder : show hidden files by default"
 # defaults write com.apple.finder AppleShowAllFiles -bool true
 
-echo "Finder : Finder: show status bar"
+echo "Finder : show status bar"
 defaults write com.apple.finder ShowStatusBar -bool false
 
-echo "Finder : Finder: show path bar"
+echo "Finder : show path bar"
 defaults write com.apple.finder ShowPathbar -bool false
 
-echo "Finder : Finder: allow text selection in Quick Look"
+echo "Finder : allow text selection in Quick Look"
 defaults write com.apple.finder QLEnableTextSelection -bool true
 
 echo "Finder : Display full POSIX path as Finder window title"
