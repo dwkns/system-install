@@ -84,10 +84,10 @@ source $HOME/.bash_profile
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files'; 
 echo 'cd';
-echo CURRENT_DIR;
+echo $CURRENT_DIR;
 CURRENT_DIR=$(pwd);
 echo 'cd set';
-echo CURRENT_DIR;
+echo $CURRENT_DIR;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
