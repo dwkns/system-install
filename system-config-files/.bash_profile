@@ -85,6 +85,8 @@ alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files';
 CURRENT_DIR='$(pwd)';
 echo $CURRENT_DIR;
+echo $(pwd);
+echo '$(pwd)';
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
