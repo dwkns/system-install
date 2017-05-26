@@ -22,6 +22,29 @@ $ brew install  openssl git python node phantomjs heroku postgresql
 ```` 
 ###Tap alternates 
 ```` 
+=======
+####Install homebrew
+````bash
+$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+````
+
+####Install system config & dot files
+````bash
+$ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
+````
+
+####Reload the bash profile
+````bash
+$ ~/.bash_profile 
+````
+
+####Install git python and node etc.
+````bash
+$ brew install  openssl git python node phantomjs heroku postgresql 
+````
+
+####Tap alternates 
+````bash
 $ brew tap caskroom/cask
 $ brew tap caskroom/versions
 $ brew tap caskroom/fonts
@@ -30,6 +53,11 @@ $ brew tap homebrew/services
 ###Install apps  
 ````bash
 $ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mpv charles dropbox macdown codekit flash-npapi
+=======
+
+####Install apps
+````bash
+$ brew cask install sublime-text iterm2-nightly font-source-code-pro handbrake transmission mpv charles dropbox macdown codekit flash-npapi
 ````
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
