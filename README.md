@@ -52,12 +52,7 @@ $ brew tap homebrew/services
 ````
 ###Install apps  
 ````bash
-$ brew cask install sublime-text iterm2-nightly font-source-code-pro things handbrake transmission mpv charles dropbox macdown codekit flash-npapi
-=======
-
-####Install apps
-````bash
-$ brew cask install sublime-text iterm2-nightly font-source-code-pro handbrake transmission mpv charles dropbox macdown codekit flash-npapi
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro things handbrake transmission mpv charles dropbox macdown codekit flash-npapi
 ````
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
