@@ -4,6 +4,7 @@
 [core]
 	autocrlf = false
 	safecrlf = true
+	excludesfile = /Users/dazza/.gitignore_global
 [credential]
 	helper = osxkeychain
 [alias]
