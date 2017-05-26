@@ -67,6 +67,8 @@ alias esys="msg 'editing system files'; cd $HOME/.system-config; subl .;"       
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"          # Catch errors
 alias esc="esp"   
 
+alias sd="msg 'Changing to dotfiles directoryt'; cd $HOME/.system-config;" 
+
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
 alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"
