@@ -5,52 +5,40 @@ As with all bash scripts **read it** before you run it. And if you don't underst
 Here is what you do...
 
 ### Install homebrew
+
 ```` 
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```` 
+
 ### Install system config & dot files
+
 ```` 
 $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 ```` 
+
 ### Reload the bash profile
+
 ```` 
 $ ~/.bash_profile 
 ```` 
+
 ### Install git python and node etc.
+
 ```` 
 $ brew install  openssl git python node phantomjs heroku postgresql 
 ```` 
-### Tap alternates 
-```` 
-=======
-#### Install homebrew
-````bash
-$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-````
-
-#### Install system config & dot files
-````bash
-$ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
-````
-
-#### Reload the bash profile
-````bash
-$ ~/.bash_profile 
-````
-
-#### Install git python and node etc.
-````bash
-$ brew install  openssl git python node phantomjs heroku postgresql 
-````
 
 #### Tap alternates 
+
 ````bash
 $ brew tap caskroom/cask
 $ brew tap caskroom/versions
 $ brew tap caskroom/fonts
 $ brew tap homebrew/services
 ````
+
 ### Install apps  
+
 ````bash
 $ brew cask install sketch sublime-text iterm2 font-source-code-pro things handbrake transmission mpv charles dropbox typora codekit flash-npapi
 ````
@@ -58,10 +46,12 @@ $ brew cask install sketch sublime-text iterm2 font-source-code-pro things handb
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
 
 ### Install rbenv
+
 ```` 
 $ brew install rbenv ruby-build 
 $ rbenv init
 ```` 
+
 ### Install Ruby
 List all available versions and choose the one you want to install.
 
@@ -70,27 +60,38 @@ $ rbenv install -l
 $ rbenv install 2.2.4 // Or Whatever ruby version you want. 
 $ rbenv global  2.2.4 // Set this to be the global ruby version.
 ```` 
+
 ### Make the rbenv installed ruby the default system one.
+
 ````bash
 $ rbenv global 2.2.4 
 ```` 
+
 ### Ensure that rbenv is added to .bash_profile
+
 ````bash
 $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile  
 $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
 ```` 
+
 ### Install Bundler and Rails
+
 ````bash
 $ gem install bundler 
 ```` 
+
 ### Install Rails and Powder
+
 ````bash
 $ gem install rails powder
 ```` 
+
 ### Install Pow
+
 ````bash
 $ curl get.pow.cx | sh
 ```` 
+
 ### Copy Messages from another machine.
 
 1. Open **Message** on both machines and ensure you're signed out of iCloud. `Messages > Preferences > Accounts > <Your Account> > Sign Out`
