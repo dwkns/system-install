@@ -71,6 +71,8 @@ alias esys="msg 'editing system files'; cd $HOME/.system-config; subl .;"       
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"          # Catch errors
 alias esc="esp"   
 
+alias sd="msg 'Changing to dotfiles directoryt'; cd $HOME/.system-config;" 
+
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
 alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"
@@ -86,8 +88,8 @@ source $HOME/.bash_profile
 # Backup System Config
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
-alias bsys="msg 'Backing up system files'; 
-CURRENT_DIR=$(pwd);
+alias bsys="msg 'Backing up system files';
+CURRENT_DIR=`echo $(pwd)`;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
@@ -104,7 +106,7 @@ ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-cd $CURRENT_DIR"                                                              
+cd -"                                                              
 
 
 ############### Editing sublime files ################
