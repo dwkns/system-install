@@ -31,6 +31,10 @@ fi
 
 ############################### Alias' ###############################
 
+############### Random ################
+alias ws="msg 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./run.rb"
+
+
 ############### System ################
 alias ls="ls -l"                                                               # List files in a list
 alias cd..="cd .."                                                             # Because I allways forget the space.
