@@ -56,15 +56,9 @@ $ rbenv init
 List all available versions and choose the one you want to install.
 
 ````bash
-$ rbenv install -l
+$ rbenv install -l    // List the ruby version available. 
 $ rbenv install 2.2.4 // Or Whatever ruby version you want. 
 $ rbenv global  2.2.4 // Set this to be the global ruby version.
-```` 
-
-### Make the rbenv installed ruby the default system one.
-
-````bash
-$ rbenv global 2.2.4 
 ```` 
 
 ### Ensure that rbenv is added to .bash_profile
