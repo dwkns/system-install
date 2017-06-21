@@ -43,9 +43,9 @@ $ brew tap homebrew/services
 $ brew cask install sketch sublime-text iterm2 font-source-code-pro things handbrake transmission mpv charles dropbox typora codekit flash-npapi
 ````
 
-Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
+Install `Things 3`, `Omnigraffle 7`, `Final Cut`, `Motion`, `Soulver`, `Pixelmator`,`1Password`, `Dash 2`, `Transmit`, `Affinity Designer`  from the App Store
 
-Install [Sketch](#)
+Install [Sketch](https://www.sketchapp.com), [Chrome](https://www.google.com/chrome/index.html) directly.
 
 ### Install rbenv
 

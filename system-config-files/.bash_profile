@@ -135,8 +135,16 @@ alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade
 
 ############### Rails ################
 #Sometimes you don't shutdown your rails server process properly. This will sort it out.
-alias kas="msg 'Killing all rails server processes'; ps aux|grep 'rails'|grep -v 'grep'|awk '{ print $2 }'|xargs kill -9"
+alias kas="msg 'Killing all rails server processes'; kill -9 $(lsof -i tcp:3000 -t)"
+
+
+############### Postgres ################
 alias dpc="msg 'Killing postgres connections'; psql -U dazza -c \"SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'TARGET_DB' AND pid <> pg_backend_pid();\""
+
+
+alias pg-start="msg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pg-stop="msg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+
 
 
 
