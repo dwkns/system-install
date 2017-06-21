@@ -45,6 +45,8 @@ $ brew cask install sketch sublime-text iterm2 font-source-code-pro things handb
 
 Install `Chrome`, `1Password`, `Dash 2`, `Transmit`, `Sketch`, `Affinity Designer` from the App Store
 
+Install [Sketch](#)
+
 ### Install rbenv
 
 ```` 
