@@ -28,7 +28,8 @@
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-json",
-		"SublimeLinter-ruby"
+		"SublimeLinter-ruby",
+		"TypeScript"
 	],
 	"remove_orphaned": true
 }
