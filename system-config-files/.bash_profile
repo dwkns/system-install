@@ -41,7 +41,8 @@ alias cd..="cd .."                                                             #
 alias kd="msg 'Killing the Dock'; killall Dock"                                # reboot Desktop
 alias kf="msg 'Killing the Finder'; killall Finder"                            # reboot Finder
 alias dt="cd ~/Desktop"                                                        # cd to desktop
-alias s="msg 'opening current folder in sublime'; subl ."                      # Opens current folder in sublime
+alias s="msg 'opening current folder in Sublime'; subl ."                      # Opens current folder in sublime
+alias a="msg 'opening current folder in Atom'; atom ."  
 alias sb="msg 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
 
 # Hide and show invisibles
