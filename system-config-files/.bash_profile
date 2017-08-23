@@ -102,6 +102,7 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
+cp -rf $HOME/'.profile' $SYSCD/'.profile';
 cd $HOME/'.system-config/'; 
 ga;
 msg 'Doing git commit';
