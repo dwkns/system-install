@@ -25,4 +25,9 @@ cp -f "$ROOT_DIR/system-config-files/.jsbeautifyrc"  "$HOME/.jsbeautifyrc"
 
 echo "Copying .rspec"
 cp -f  "$ROOT_DIR/system-config-files/.rspec" "$HOME/.rspec"
+
+echo "Copying .profile"
+cp -f  "$ROOT_DIR/system-config-files/.profile" "$HOME/.profile"
+
+
 note "done"
