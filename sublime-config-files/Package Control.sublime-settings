@@ -1,7 +1,23 @@
 {
 	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
 	"installed_packages":
 	[
-		"Package Control"
+		"A File Icon",
+		"All Autocomplete",
+		"Boxy Theme",
+		"BracketHighlighter",
+		"GitGutter",
+		"HTML-CSS-JS Prettify",
+		"Package Control",
+		"PackageResourceViewer",
+		"SideBarEnhancements",
+		"SummitLinter",
+		"SublimeLinter-jshint",
+		"SublimeLinter-json",
+		"SublimeLinter-ruby",
+		"Emmet"
 	]
 }
