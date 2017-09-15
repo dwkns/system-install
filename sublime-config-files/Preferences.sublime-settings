@@ -4,7 +4,7 @@
 	"caret_extra_top": 2,
 	"caret_extra_width": 3,
 	"caret_style": "phase",
-	"color_scheme": "Packages/Theme - Douglas/Douglas.tmTheme",
+	
 	"create_window_at_startup": false,
 	"draw_minimap_border": false,
 	"font_face": "Source Code Pro light",
@@ -30,7 +30,7 @@
 	"save_on_focus_lost": false,
 	"scroll_past_end": true,
 	"tab_size": 2,
-	"theme": "Douglas.sublime-theme",
+	
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
 	"wide_caret": true,
