@@ -12,12 +12,6 @@
                 "args": [],
                 "excludes": []
             },
-            "json": {
-                "@disable": false,
-                "args": [],
-                "excludes": [],
-                "strict": true
-            },
             "ruby": {
                 "@disable": false,
                 "args": [],
@@ -46,13 +40,8 @@
             "html (rails)": "html",
             "html 5": "html",
             "php": "html",
-            "python django": "python",
-            "javascript (babel)": "javascript"
+            "python django": "python"
         },
-        "tooltip_fontsize": "1rem",
-        "tooltip_theme": "Packages/SublimeLinter/tooltip-themes/Default/Default.tooltip-theme",
-        "tooltip_theme_excludes": [],
-        "tooltips": false,
         "warning_color": "DDB700",
         "wrap_find": true
     }
