@@ -20,8 +20,8 @@
   msg "Intalling license"
   cp -f "$ROOT_DIR/sublime-config-files/License.sublime_license" "$SUBLIME_LOCAL_DIR/License.sublime_license"
 
- #  msg "Installing Package Control"
- #  curl -L "http://sublime.wbond.net/Package Control.sublime-package" -o "$SUBLIME_INSTALLED_PACKAGES_DIR/Package Control.sublime-package"
+  msg "Installing Package Control"
+  curl -L "http://sublime.wbond.net/Package Control.sublime-package" -o "$SUBLIME_INSTALLED_PACKAGES_DIR/Package Control.sublime-package"
 
  msg "Installing sublime Package Control Settings"
   cp -f "$ROOT_DIR/sublime-config-files/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
@@ -32,12 +32,12 @@
   # msg "Installing scopehunter preferences"
   # cp -f "$ROOT_DIR/sublime-config-files/scope_hunter.sublime-settings" "$SUBLIME_USER_DIR/scope_hunter.sublime-settings"
 
-  # msg "Installing SublimeLinter preferences"
-  # cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
+  msg "Installing SublimeLinter preferences"
+  cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
   
-  # msg "Cloning in my Macros"
-  # rm -rf "$SUBLIME_USER_DIR/custom_macros"
-  # git clone "https://github.com/dwkns/sublime_macros.git" "$SUBLIME_USER_DIR/custom_macros"
+  msg "Cloning in my Macros"
+  rm -rf "$SUBLIME_USER_DIR/custom_macros"
+  git clone "https://github.com/dwkns/sublime_macros.git" "$SUBLIME_USER_DIR/custom_macros"
  
 
   # msg "Cloning in my Douglas theme"
