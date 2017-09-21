@@ -93,6 +93,7 @@ alias bsys="msg 'Backing up system files';
 CURRENT_DIR=`echo $(pwd)`;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
+cp -rf $SD/Douglas.tmTheme $SUBCD/Douglas.tmTheme; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
 cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
 cp -rf $HOME/'.bash_profile' $SYSCD/'.bash_profile';
@@ -179,4 +180,5 @@ export AUTO_ACCEPT=true                                                  # Auto 
    export PATH="$HOME/.rbenv/bin:$PATH"
     eval "$(rbenv init -)"
    
-# fi
+# fiexport PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
