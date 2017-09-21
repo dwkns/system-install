@@ -9,15 +9,16 @@
 		"All Autocomplete",
 		"Boxy Theme",
 		"BracketHighlighter",
+		"Emmet",
 		"GitGutter",
 		"HTML-CSS-JS Prettify",
 		"Package Control",
 		"PackageResourceViewer",
+		"SCSS",
 		"SideBarEnhancements",
-		"SummitLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-json",
 		"SublimeLinter-ruby",
-		"Emmet"
+		"SummitLinter"
 	]
 }
