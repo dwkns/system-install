@@ -16,6 +16,7 @@
 		"PackageResourceViewer",
 		"SCSS",
 		"SideBarEnhancements",
+		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-json",
 		"SublimeLinter-ruby",
