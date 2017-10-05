@@ -140,7 +140,7 @@ alias kas="msg 'Killing all rails server processes'; kill -9 $(lsof -i tcp:3000 
 
 
 ############### Postgres ################
-alias dpc="msg 'Killing postgres connections'; psql -U dazza -c \"SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'TARGET_DB' AND pid <> pg_backend_pid();\""
+alias rpg="msg 'Restarting postgres connections'; brew services restart postgresql"
 
 
 alias pg-start="msg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
