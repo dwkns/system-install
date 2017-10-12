@@ -25,7 +25,7 @@ $ ~/.bash_profile
 ### Install git python and node etc.
 
 ```` 
-$ brew install  openssl git python node phantomjs heroku postgresql bundler rails powder
+$ brew install  openssl git python node phantomjs heroku postgresql rails powder
 ```` 
 
 #### Tap alternates 
