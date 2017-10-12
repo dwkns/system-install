@@ -25,7 +25,7 @@ $ ~/.bash_profile
 ### Install git python and node etc.
 
 ```` 
-$ brew install  openssl git python node phantomjs heroku postgresql 
+$ brew install  openssl git python node phantomjs heroku postgresql bundler rails powder
 ```` 
 
 #### Tap alternates 
@@ -69,12 +69,6 @@ $ rbenv global  2.2.4 // Set this to be the global ruby version.
 ````bash
 $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile  
 $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
-```` 
-
-### Install Bundler, Rails and Powder
-
-````bash
-$ gem install bundler rails powder
 ```` 
 
 ### Install Pow
