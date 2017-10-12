@@ -41,7 +41,7 @@ $ brew tap homebrew/php
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro things handbrake transmission mpv charles dropbox typora codekit flash-npapi composer
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi
 ````
 
 Install `Things 3`, `Omnigraffle 7`, `Final Cut`, `Motion`, `Soulver`, `Pixelmator`,`1Password`, `Dash 2`, `Transmit`, `Affinity Designer`  from the App Store
