@@ -1,3 +1,4 @@
+source ~/.profile
 ############################### Variables ###############################
 SROOT="$HOME/'Library/Application Support/Sublime Text 3/'"
 SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
@@ -147,6 +148,8 @@ alias rpg="msg 'Restarting postgres connections'; brew services restart postgres
 alias pg-start="msg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
 alias pg-stop="msg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
 
+alias pgstart="msg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pgstop="msg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
 
 
 
