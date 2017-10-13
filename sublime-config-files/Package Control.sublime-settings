@@ -9,18 +9,21 @@
 		"All Autocomplete",
 		"Boxy Theme",
 		"BracketHighlighter",
+		"ColorPicker",
 		"Emmet",
 		"GitGutter",
 		"HTML-CSS-JS Prettify",
 		"jQuery",
 		"Package Control",
 		"PackageResourceViewer",
+		"phpfmt",
 		"SCSS",
 		"SideBarEnhancements",
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"SublimeLinter-json",
 		"SublimeLinter-ruby",
+		"SublimeREPL",
 		"SummitLinter"
 	]
 }
