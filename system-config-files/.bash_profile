@@ -94,6 +94,7 @@ alias bsys="msg 'Backing up system files';
 CURRENT_DIR=`echo $(pwd)`;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
+cp -rf $SD/phpfmt.sublime-settings $SUBCD/phpfmt.sublime-settings; 
 cp -rf $SD/Douglas.tmTheme $SUBCD/Douglas.tmTheme; 
 cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
 cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
