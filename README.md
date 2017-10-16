@@ -10,6 +10,23 @@ Here is what you do...
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```` 
 
+### Tap alternates 
+
+````bash
+$ brew tap caskroom/cask caskroom/versions
+$ brew tap caskroom/versions
+$ brew tap caskroom/fonts
+$ brew tap homebrew/services
+$ brew tap homebrew/php
+````
+
+### Install useful brew apps
+Some of these apps are used in the install script so we install them first.
+
+```` 
+$ brew install  openssl git python node phantomjs heroku postgresql rails powder mas rbenv ruby-build 
+```` 
+
 ### Install system config & dot files
 
 ```` 
@@ -22,46 +39,22 @@ $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/i
 $ ~/.bash_profile 
 ```` 
 
-### Install git python and node etc.
-
-```` 
-$ brew install  openssl git python node phantomjs heroku postgresql rails powder
-```` 
-
-#### Tap alternates 
-
-````bash
-$ brew tap caskroom/cask
-$ brew tap caskroom/versions
-$ brew tap caskroom/fonts
-$ brew tap homebrew/services
-$ brew tap homebrew/php
-````
-
 ### Install apps  
 
 ````bash
 $ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi
 ````
 
-Install `Things 3`, `Omnigraffle 7`, `Final Cut`, `Motion`, `Soulver`, `Pixelmator`,`1Password`, `Dash 2`, `Transmit`, `Affinity Designer`  from the App Store
-
 Install [Sketch](https://www.sketchapp.com), [Chrome](https://www.google.com/chrome/index.html) directly.
 
-### Install rbenv
-
-```` 
-$ brew install rbenv ruby-build 
-$ rbenv init
-```` 
-
-### Install Ruby
+### Initialise rbenv and install a Ruby version
 List all available versions and choose the one you want to install.
 
 ````bash
+$ rbenv init          // Initialise rbenv 
 $ rbenv install -l    // List the ruby version available. 
-$ rbenv install 2.2.4 // Or Whatever ruby version you want. 
-$ rbenv global  2.2.4 // Set this to be the global ruby version.
+$ rbenv install 2.4.2 // Or Whatever ruby version you want. 
+$ rbenv global  2.4.2 // Set this to be the global ruby version.
 ```` 
 
 ### Ensure that rbenv is added to .bash_profile
@@ -71,7 +64,7 @@ $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
 $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
 ```` 
 
-### Install Bundler, Rails and Powder
+### Install some Ruby Gems Bundler, Rails and Powder
 
 ````bash
 $ gem install bundler rails powder
