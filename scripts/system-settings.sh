@@ -328,6 +328,10 @@ echo
 note "done - some settings may require a restart"
 
 
+###############################################################################
+# NOT USED.............................                                       #
+###############################################################################
+
   # # Disable window animations ("new window" scale effect)
   # defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
