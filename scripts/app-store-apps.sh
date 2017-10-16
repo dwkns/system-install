@@ -1,6 +1,3 @@
-#! /usr/bin/env bash
-
-# DESCRIPTION
 # Installs App Store software.
 
 # EXECUTION
