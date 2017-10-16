@@ -63,6 +63,10 @@ source "$ROOT_DIR/scripts/time-machine.sh"
 ############ CONFIGURE System Settings ############
 source "$ROOT_DIR/scripts/system-settings.sh"
 
+
+############ Install App Store Apps ############
+source "$ROOT_DIR/scripts/app-store-apps.sh"
+
 ############ CONFIGURE System Settings that use sudo############
 ## These are in here to allow system-settings.sh not to require sudo and thus get run on `usys`
 echo "Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window"
