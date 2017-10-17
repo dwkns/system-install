@@ -13,18 +13,14 @@ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/maste
 ### Tap alternates 
 
 ````bash
-$ brew tap caskroom/cask caskroom/versions
-$ brew tap caskroom/versions
-$ brew tap caskroom/fonts
-$ brew tap homebrew/services
-$ brew tap homebrew/php
+$ brew tap caskroom/cask && brew tap caskroom/versions && brew tap caskroom/fonts && brew tap homebrew/services && brew tap homebrew/php
 ````
 
 ### Install useful brew apps
 Some of these apps are used in the install script so we install them first.
 
 ```` 
-$ brew install  openssl git python node phantomjs heroku postgresql rails powder mas rbenv ruby-build 
+$ brew install  openssl git python node phantomjs heroku postgresql mas rbenv ruby-build 
 ```` 
 
 ### Install system config & dot files
@@ -42,7 +38,7 @@ $ ~/.bash_profile
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi steam
 ````
 
 Install [Sketch](https://www.sketchapp.com), [Chrome](https://www.google.com/chrome/index.html) directly.
