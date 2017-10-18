@@ -38,10 +38,10 @@ $ ~/.bash_profile
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi steam
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi steam mamp
 ````
 
-Install[Chrome](https://www.google.com/chrome/index.html) directly (the cask version is odd).
+Install[Chrome](https://www.google.com/chrome/index.html) directly (the cask version doesn't play well with 1Password).
 
 ### Initialise rbenv and install a Ruby version
 List all available versions and choose the one you want to install.
