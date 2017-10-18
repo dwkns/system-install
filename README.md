@@ -41,7 +41,7 @@ $ ~/.bash_profile
 $ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission mpv charles dropbox typora codekit flash-npapi steam
 ````
 
-Install [Sketch](https://www.sketchapp.com), [Chrome](https://www.google.com/chrome/index.html) directly.
+Install[Chrome](https://www.google.com/chrome/index.html) directly (the cask version is odd).
 
 ### Initialise rbenv and install a Ruby version
 List all available versions and choose the one you want to install.
@@ -49,8 +49,7 @@ List all available versions and choose the one you want to install.
 ````bash
 $ rbenv init          // Initialise rbenv 
 $ rbenv install -l    // List the ruby version available. 
-$ rbenv install 2.4.2 // Or Whatever ruby version you want. 
-$ rbenv global  2.4.2 // Set this to be the global ruby version.
+$ rbenv install 2.4.2 && rbenv global  2.4.2 // Or Whatever ruby version you want. 
 ```` 
 
 ### Ensure that rbenv is added to .bash_profile
