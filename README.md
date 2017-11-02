@@ -63,7 +63,7 @@ $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 ### Install some Ruby Gems Bundler, Rails and Powder
 
 ````bash
-$ gem install bundler rails powder
+$ gem install bundler rails powder foreman shotgun
 ```` 
  
 ### Install Pow
