@@ -23,7 +23,7 @@
 	"index_files": true,
 	"line_padding_bottom": 0,
 	"line_padding_top": 1,
-	"open_files_in_new_window": false,
+	"open_files_in_new_window": true,
 	"save_on_focus_lost": false,
 	"scroll_past_end": true,
 	"tab_size": 2,
