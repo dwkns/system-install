@@ -61,7 +61,8 @@ alias gp="msg 'Doing git push -- all'; git push --all"                          
 alias gpa="gp"                                                                  # second alias for git push all
 alias gco="msg 'Doing git checkout'; git checkout"                              # git checkout
 alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
-alias gph="msg 'Doing git push heroku master'; git push heroku master"          # git checkout
+alias gph="msg 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
+alias gphm="msg 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
 
 
 ############### Editing config files ################
