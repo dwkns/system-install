@@ -71,6 +71,9 @@ $ gem install bundler rails powder foreman shotgun
 $ curl get.pow.cx | sh
 ```` 
 
+### Printer
+[Download Printer Drivers](http://gdlp01.c-wss.com/gds/8/0100007708/04/mcpd-mac-ts8000-18_10_0_0-ea21_3.dmg) for Canon TS8050
+
 ### Copy Messages from another machine.
 
 1. Open **Message** on both machines and ensure you're signed out of iCloud. `Messages > Preferences > Accounts > <Your Account> > Sign Out`
