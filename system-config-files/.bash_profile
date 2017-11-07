@@ -112,7 +112,9 @@ cd $SD/'custom_macros/'
 ga;
 git commit -m 'Updated Macros';
 gpa
-echo ORIG_DIR
+echo
+echo
+echo $ORIG_DIR
 cd $HOME/'.system-config/'; 
 ga;
 msg 'Doing git commit';
