@@ -38,6 +38,7 @@
 	"theme_tab_separator": false,
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
-	"wide_caret": true,
-	"word_wrap": true
+	"wide_caret": false,
+	"word_wrap": true,
+	"wrap_width": 120
 }
