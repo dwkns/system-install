@@ -16,6 +16,10 @@ note () {
 msg () {
   echo -e "\033[0;32m==============> $1 \033[0m"
 }
+
+smsg () {
+  echo -e "\033[0;32m======> $1 \033[0m"
+}
 warn () {
   echo -e "\033[0;31m====> $1 \033[0m"
 }
@@ -23,7 +27,7 @@ warn () {
 nginxrunning () {
 ps cax | grep nginx > /dev/null
 if [ $? -eq 0 ]; then
-  msg 'nginx is running' 
+  smsg 'nginx is running' 
 else
    warn 'nginx is not running' 
 fi
@@ -33,55 +37,55 @@ fi
 ############################### Alias' ###############################
 
 ############### Random ################
-alias ws="msg 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./run.rb"
+alias ws="smsg 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./run.rb"
 
 
 ############### System ################
 alias ls="ls -l"                                                               # List files in a list
 alias cd..="cd .."                                                             # Because I allways forget the space.
-alias kd="msg 'Killing the Dock'; killall Dock"                                # reboot Desktop
-alias kf="msg 'Killing the Finder'; killall Finder"                            # reboot Finder
+alias kd="smsg 'Killing the Dock'; killall Dock"                                # reboot Desktop
+alias kf="smsg 'Killing the Finder'; killall Finder"                            # reboot Finder
 alias dt="cd ~/Desktop"                                                        # cd to desktop
-alias s="msg 'opening current folder in Sublime'; subl ."                      # Opens current folder in sublime
-alias a="msg 'opening current folder in Atom'; atom ."  
-alias sb="msg 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
+alias s="smsg 'opening current folder in Sublime'; subl ."                      # Opens current folder in sublime
+alias a="smsg 'opening current folder in Atom'; atom ."  
+alias sb="smsg 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
 
 # Hide and show invisibles
-alias sf="msg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
-alias hf="msg 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
+alias sf="smsg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
+alias hf="smsg 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
 
 
 ############### Git ################
-alias gc="msg 'Doing git commit'; git commit"                                   # git commit
-alias gca="msg 'Doing git commit'; git commit -a"                                   # git commit all
-alias ga="msg 'Doing git add -A'; git add -A"                                   # git add all
+alias gc="smsg 'Doing git commit'; git commit"                                   # git commit
+alias gca="smsg 'Doing git commit'; git commit -a"                                   # git commit all
+alias ga="smsg 'Doing git add -A'; git add -A"                                   # git add all
 alias gs="git status"                                                           # git status
-alias gb="msg 'Doing git branch'; git branch"                                   # git branch
-alias gp="msg 'Doing git push -- all'; git push --all"                          # git push all
+alias gb="smsg 'Doing git branch'; git branch"                                   # git branch
+alias gp="smsg 'Doing git push -- all'; git push --all"                          # git push all
 alias gpa="gp"                                                                  # second alias for git push all
-alias gco="msg 'Doing git checkout'; git checkout"                              # git checkout
-alias gac="msg 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
-alias gph="msg 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
-alias gphm="msg 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
+alias gco="smsg 'Doing git checkout'; git checkout"                              # git checkout
+alias gac="smsg 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
+alias gph="smsg 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
+alias gphm="smsg 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
 
 
 ############### Editing config files ################
 
-alias sys="msg 'Chaning to system config'; cd ~/.system-config"                 # cd to system config directory
-alias ep="msg 'Editing bash profile'; subl ~/.bash_profile"                     # edit bash profile
+alias sys="smsg 'Chaning to system config'; cd ~/.system-config"                 # cd to system config directory
+alias ep="smsg 'Editing bash profile'; subl ~/.bash_profile"                     # edit bash profile
 
-alias esys="msg 'editing system files'; cd $HOME/.system-config; subl .;"       # Edit system fields
+alias esys="smsg 'editing system files'; cd $HOME/.system-config; subl .;"       # Edit system fields
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"          # Catch errors
 alias esc="esp"   
 
-alias sd="msg 'Changing to dotfiles directoryt'; cd $HOME/.system-config;" 
+alias sd="smsg 'Changing to dotfiles directoryt'; cd $HOME/.system-config;" 
 
-alias opog="msg 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
+alias opog="smsg 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
 alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"
-alias usys="msg 'updating system config files.'; 
+alias usys="smsg 'updating system config files.'; 
 cd $HOME/.system-config;
 git pull;
 source $HOME/.system-config/scripts/dotfiles.sh
@@ -93,7 +97,7 @@ source $HOME/.bash_profile
 # Backup System Config
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
-alias bsys="msg 'Backing up system files - 1';
+alias bsys="msg 'Backing up system files';
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/phpfmt.sublime-settings $SUBCD/phpfmt.sublime-settings; 
@@ -107,51 +111,51 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
-msg 'Backing up Sublime Custom Macros'; (cd $SD/'custom_macros/'; git status);  
-msg 'Backing up system config files'; (cd $HOME/'.system-config/'; gac -m 'updated sys files');
+smsg 'Backing up Sublime Custom Macros'; (cd $SD/'custom_macros/'; git status);  
+smsg 'Backing up system config files'; (cd $HOME/'.system-config/'; gac -m 'updated sys files');
 "
 
 # (command) runs this command without chaning directory (in a sub process maybe)                                                             
 
 
 ############### Editing sublime files ################
-alias sub="msg ''; cd $SROOT"                               # cd to sublime config directory
-alias subu="msg ''; cd $SD"                                 # cd to sublime user directory
-alias esub="msg ''; cd $SROOT; subl ."                      # Edit the sublime files
+alias sub="smsg ''; cd $SROOT"                               # cd to sublime config directory
+alias subu="smsg ''; cd $SD"                                 # cd to sublime user directory
+alias esub="smsg ''; cd $SROOT; subl ."                      # Edit the sublime files
 
 
 ############### Pow and Nginx ################
-alias po="msg 'launching app...'; powder open"
-alias pl="msg 'linking app to ~/.pow...'; powder link"
-alias pr="msg 'restarting app'; powder restart"
+alias po="smsg 'launching app...'; powder open"
+alias pl="smsg 'linking app to ~/.pow...'; powder link"
+alias pr="smsg 'restarting app'; powder restart"
 
 ############### rbenv ################
-alias rh="msg 'doing rbenv rehash...'; rbenv rehash"
+alias rh="smsg 'doing rbenv rehash...'; rbenv rehash"
 
-alias nstart="msg 'starting nginx...'; sudo nginx"
-alias nstop="msg 'stopping nginx...'; sudo nginx -s stop"
-alias nreload="msg 'reloading nginx config...'; sudo nginx -s reload"
+alias nstart="smsg 'starting nginx...'; sudo nginx"
+alias nstop="smsg 'stopping nginx...'; sudo nginx -s stop"
+alias nreload="smsg 'reloading nginx config...'; sudo nginx -s reload"
 alias nstatus="nginxrunning"
-alias nedit="msg 'edit nginx config...'; subl '/usr/local/etc/nginx/nginx.conf'"
+alias nedit="smsg 'edit nginx config...'; subl '/usr/local/etc/nginx/nginx.conf'"
 
 ############### Brew ################
-alias bu="msg 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
+alias bu="smsg 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
 
 
 ############### Rails ################
 #Sometimes you don't shutdown your rails server process properly. This will sort it out.
-alias kas="msg 'Killing all rails server processes'; kill -9 $(lsof -i tcp:3000 -t)"
+alias kas="smsg 'Killing all rails server processes'; kill -9 $(lsof -i tcp:3000 -t)"
 
 
 ############### Postgres ################
-alias rpg="msg 'Restarting postgres connections'; brew services restart postgresql"
+alias rpg="smsg 'Restarting postgres connections'; brew services restart postgresql"
 
 
-alias pg-start="msg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
-alias pg-stop="msg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pg-start="smsg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pg-stop="smsg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
 
-alias pgstart="msg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
-alias pgstop="msg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pgstart="smsg 'Starting Postgres';launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pgstop="smsg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
 
 
 
