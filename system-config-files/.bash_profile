@@ -112,9 +112,9 @@ cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
 smsg 'Backing up Sublime Custom Macros'; 
-(cd $SD/'custom_macros/'; git add -A; git commit -m 'Updated Macros' ); gpa;
+(cd $SD/'custom_macros/'; git add -A; git commit -m 'Updated Macros'; gpa; ); 
 smsg 'Backing up system config files'; 
-(cd $HOME/'.system-config/'; git add -A; git commit -m 'Updated Config Files');gpa;
+(cd $HOME/'.system-config/'; git add -A; git commit -m 'Updated Config Files'; gpa;);
 "
 
 # (command) runs this command without chaning directory (in a sub process maybe)                                                             
