@@ -93,8 +93,7 @@ source $HOME/.bash_profile
 # Backup System Config
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
-alias bsys="msg 'Backing up system files';
-ORIG_DIR=`echo $(pwd)`;
+alias bsys="msg 'Backing up system files - 1';
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/phpfmt.sublime-settings $SUBCD/phpfmt.sublime-settings; 
@@ -108,16 +107,11 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
-echo "--------"
-(cd $SD/'custom_macros/'; git status);
-echo "--------"
-cd $HOME/'.system-config/'; 
+msg 'Backing up Sublime Custom Macros'; (cd $SD/'custom_macros/'; git status);  
+msg 'Backing up system config files'; (cd $HOME/'.system-config/'; gac -m 'updated sys files');
+"
 
-ga;
-msg 'Doing git commit';
-git commit -m 'update to system files'; 
-gp;
-cd -"                                                              
+# (command) runs this command without chaning directory (in a sub process maybe)                                                             
 
 
 ############### Editing sublime files ################
