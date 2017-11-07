@@ -94,10 +94,7 @@ source $HOME/.bash_profile
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files';
-
-ORIG_DIR=$(pwd);
-echo 'current directory';
-echo $ORIG_DIR;
+ORIG_DIR=`echo $(pwd)`;
 cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
 cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
 cp -rf $SD/phpfmt.sublime-settings $SUBCD/phpfmt.sublime-settings; 
@@ -111,19 +108,13 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
-cd $SD/'custom_macros/'
-ga;
-git commit -m 'Updated Macros';
-gpa
-echo
-echo
-echo $ORIG_DIR
+git commit -m 'message' -- $SD/'custom_macros/'
 cd $HOME/'.system-config/'; 
 ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-cd $ORIG_DIR"                                                              
+cd -"                                                              
 
 
 ############### Editing sublime files ################
