@@ -108,6 +108,7 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
+echo SD/'custom_macros/'
 git commit -m 'message' -- $SD/'custom_macros/'
 cd $HOME/'.system-config/'; 
 ga;
