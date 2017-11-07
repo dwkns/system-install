@@ -120,7 +120,7 @@ ga;
 msg 'Doing git commit';
 git commit -m 'update to system files'; 
 gp;
-cd ORIG_DIR"                                                              
+cd $ORIG_DIR"                                                              
 
 
 ############### Editing sublime files ################
