@@ -76,6 +76,8 @@ alias esc="esp"
 
 alias sd="msg 'Changing to dotfiles directoryt'; cd $HOME/.system-config;" 
 
+alias opog="msg 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
+
 # Update System Config
 # Back up the current config and then downloads the latest files from GIT 
 alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"
@@ -106,6 +108,10 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
+cd $SD/'custom_macros/'
+ga;
+git commit -m 'Updated Macros';
+gpa
 cd $HOME/'.system-config/'; 
 ga;
 msg 'Doing git commit';
