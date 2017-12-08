@@ -21,8 +21,12 @@
     "keys": ["command+t"],
     "command": "new_file"
   },
-  // swap the keybindings for paste and paste_and_indent
-  { "keys": ["super+v"], "command": "paste_and_indentls" },
-  { "keys": ["super+shift+v"], "command": "paste" }
-
+  { 
+    "keys": ["super+v"], 
+    "command": "paste_and_indent" 
+  },
+  { 
+    "keys": ["super+shift+v"], 
+    "command": "paste" 
+  }
 ]
