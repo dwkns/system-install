@@ -81,8 +81,7 @@
                     "excludes": []
                 }
     }, 
-    "mark_style": "squiggly underline", 
-
+    
     // Determines what happens when a linter reports a problem without column.
     // By default, a mark is put in the gutter and the first character is highlighted.
     // If this setting is `true`, the entire line is also highlighted.
