@@ -3,59 +3,74 @@
     "author": "dwkns",
     "variables":
     {
-        "black": "hsl(0, 0%, 0%)",
+        
         "black2": "hsl(60, 17%, 11%)",
-        "black3": "hsl(70, 8%, 15%)",
-        "blue": "hsl(190, 81%, 67%)",
-        "grey": "hsl(55, 8%, 26%)",
-        "orange": "hsl(32, 98%, 56%)",
+        "black3": "hsl(70, 8%, 15%)", 
         "orange2": "hsl(30, 83%, 34%)",
         "orange3": "hsl(47, 100%, 79%)",
-        "purple": "hsl(261, 100%, 75%)",
         "red": "hsl(0, 93%, 59%)",
-        "red2": "hsl(338, 95%, 56%)",
+        "salmon": "hsl(338, 95%, 56%)",
         "white": "hsl(0, 0%, 97%)",
-        "white2": "hsl(60, 36%, 96%)",
+        "off_white": "hsl(60, 36%, 96%)",
         "white3": "hsl(60, 30%, 96%)",
-        "yellow": "hsl(54, 70%, 68%)",
-        "yellow2": "hsl(80, 76%, 53%)",
+        "yellow": "#ffdb00",
+        "lime_green": "hsl(80, 76%, 53%)",
         "yellow3": "hsl(60, 12%, 79%)",
         "yellow4": "hsl(55, 11%, 22%)",
-        "yellow5": "hsl(50, 11%, 41%)",
+
+        "black": "hsl(0, 0%, 0%)",
+        "blue": "hsl(190, 81%, 67%)",
+        "purple": "hsl(261, 100%, 75%)",
+        "grey": "hsl(55, 8%, 26%)",
+        "comment_grey": "hsl(50, 11%, 41%)",
+        "pink": "#fb3fd6",
+        "orange" : "hsl(32, 98%, 56%)",
+        "caret" :"#E18202",
+        "default_text_colour": "#c5c8c6",
         "selection": "#E18202",
-        "line_highlight": "#1d1f98"
+        "line_highlight": "#ffffff10"
     },
     
     "globals":
     {
-        "foreground": "var(white3)",
-        "background": "var(black3)",
-        "caret": "var(white2)",
-        "invisibles": "color(var(white3) alpha(0.35))",
+        "foreground": "var(default_text_colour)",
+        "background": "#1d1f21",
+        "caret": "var(caret)",
+        "invisibles": "#969896",
         "line_highlight": "var(line_highlight)",
         "selection": "var(selection)",
-        "selection_border": "var(black2)",
-        "misspelling": "var(red2)",
-        "active_guide": "color(var(orange2) alpha(0.69))",
+        "selection_foreground": "#ffffff",
+        "selection_border": "var(selection)",
+        "selection_border_width": "",
+        "inactive_selection": "",
+        "inactive_selection_foreground": "",
+        "selection_corner_style": "",
+        "selection_corner_radius": "",
+        "misspelling": "var(salmon)",
+        "active_guide": "#ffffff55",
         "find_highlight_foreground": "var(black)",
         "find_highlight": "var(orange3)",
         "brackets_options": "underline",
-        "brackets_foreground": "color(var(white3) alpha(0.65))",
+        "brackets_foreground": "var(purple)",
         "bracket_contents_options": "underline",
         "bracket_contents_foreground": "color(var(white3) alpha(0.65))",
-        "tags_options": "stippled_underline"
+        "tags_options": "stippled_underline",
+        "fold_marker": "var(caret)",
+        "popup_css": "",
+        "gutter": "",
+        "gutter_foreground": "var(default_text_colour)"
     },
     "rules":
     [
         {
             "name": "Comment",
             "scope": "comment",
-            "foreground": "var(yellow5)"
+            "foreground": "var(comment_grey)"
         },
         {
             "name": "String",
             "scope": "string",
-            "foreground": "var(yellow)"
+            "foreground": "var(default_text_colour)"
         },
         {
             "name": "Number",
@@ -79,22 +94,23 @@
         {
             "name": "Keyword",
             "scope": "keyword - (source.c keyword.operator | source.c++ keyword.operator | source.objc keyword.operator | source.objc++ keyword.operator), keyword.operator.word",
-            "foreground": "var(red2)"
+            "foreground": "var(red)",
+            "font_style": "italic"
         },
         {
             "name": "Annotation Punctuation",
             "scope": "punctuation.definition.annotation",
-            "foreground": "var(red2)"
+            "foreground": "var(salmon)"
         },
         {
             "name": "JavaScript Dollar",
             "scope": "variable.other.dollar.only.js",
-            "foreground": "var(red2)"
+            "foreground": "var(salmon)"
         },
         {
             "name": "Storage",
             "scope": "storage",
-            "foreground": "var(red2)"
+            "foreground": "var(salmon)"
         },
         {
             "name": "Storage type",
@@ -105,12 +121,12 @@
         {
             "name": "Entity name",
             "scope": "entity.name - (entity.name.filename | entity.name.section | entity.name.tag | entity.name.label)",
-            "foreground": "var(yellow2)"
+            "foreground": "var(lime_green)"
         },
         {
             "name": "Inherited class",
             "scope": "entity.other.inherited-class",
-            "foreground": "var(yellow2)",
+            "foreground": "var(lime_green)",
             "font_style": "italic underline"
         },
         {
@@ -128,12 +144,12 @@
         {
             "name": "Tag name",
             "scope": "entity.name.tag",
-            "foreground": "var(red2)"
+            "foreground": "var(salmon)"
         },
         {
             "name": "Tag attribute",
             "scope": "entity.other.attribute-name",
-            "foreground": "var(yellow2)"
+            "foreground": "var(lime_green)"
         },
         {
             "name": "Function call",
@@ -163,13 +179,13 @@
         {
             "name": "Invalid",
             "scope": "invalid",
-            "foreground": "var(white2)",
-            "background": "var(red2)"
+            "foreground": "var(off_white)",
+            "background": "var(salmon)"
         },
         {
             "name": "Invalid deprecated",
             "scope": "invalid.deprecated",
-            "foreground": "var(white2)",
+            "foreground": "var(off_white)",
             "background": "var(purple)"
         },
         {
@@ -200,7 +216,7 @@
         {
             "name": "markup h1",
             "scope": "markup.heading.1 punctuation.definition.heading",
-            "foreground": "var(red2)"
+            "foreground": "var(salmon)"
         },
         {
             "name": "markup links",
@@ -260,12 +276,12 @@
         {
             "name": "diff.deleted",
             "scope": "markup.deleted",
-            "foreground": "var(red2)"
+            "foreground": "var(salmon)"
         },
         {
             "name": "diff.inserted",
             "scope": "markup.inserted",
-            "foreground": "var(yellow2)"
+            "foreground": "var(lime_green)"
         },
         {
             "name": "diff.changed",
@@ -283,6 +299,73 @@
         {
             "scope": "message.error",
             "foreground": "var(red)"
+        },
+        { "language": "----------------- JSON -----------------" },
+        {
+            "name": "JSON dictionary brackets {}",
+            "scope": "meta.structure.dictionary.json",
+            "foreground": "var(red)",
+        },
+        {
+            "name": "punctuation.separator.dictionary.pair.json",
+            "scope": "punctuation.separator.dictionary.pair.json",
+           "foreground": "var(pink)",
+        },
+        {
+            "name": "JSON separator :",
+            "scope": "punctuation.separator.dictionary.key-value.json",
+            "foreground": "var(yellow)"
+        },
+        {
+            "name": "JSON array brackets []",
+            "scope": "meta.structure.array.json",
+            "foreground": "var(red)"
+        },
+        {
+            "name": "JSON key quotes - begin",
+            "scope": "meta.structure.dictionary.key.json punctuation.definition.string.begin.json ",
+            "foreground": "var(pink)"
+        },
+        {
+            "name": "JSON key quotes - end",
+            "scope": "meta.structure.dictionary.key.json punctuation.definition.string.end.json",
+            "foreground": "var(pink)"
+        },
+        {
+            "name": "JSON value quotes - begin",
+            "scope": "meta.structure.dictionary.value.json punctuation.definition.string.begin.json ",
+            "foreground": "var(orange)"
+        },
+        {
+            "name": "JSON value quotes - end",
+            "scope": "meta.structure.dictionary.value.json punctuation.definition.string.end.json",
+            "foreground": "var(orange)"
+        },
+        {
+            "name": "JSON value string text",
+            "scope": "meta.structure.dictionary.value.json string.quoted.double.json",
+            "foreground": "var(yellow)"
+        },
+        {
+            "name": "JSON key string text",
+            "scope": "meta.structure.dictionary.key.json string.quoted.double.json",
+            "foreground": "var(blue)"
+        },
+        {
+            "name": "JSON constant.language.json",
+            "scope": "constant.language.json",
+            "foreground": "var(purple)"
+        },
+        {
+            "name": "JSON constant.numeric.json",
+            "scope": "constant.numeric.json",
+            "foreground": "var(purple)"
+        },
+        {
+            "name": "constant.character.escape.json",
+            "scope": "constant.character.escape.json",
+            "foreground": "var(purple)"
         }
+
     ]
 }
