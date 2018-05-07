@@ -4,7 +4,7 @@
 	"caret_extra_top": 2,
 	"caret_extra_width": 3,
 	"caret_style": "phase",
-	"color_scheme": "Packages/User/Douglas.tmTheme",
+	"color_scheme": "Packages/User/Douglas.sublime-color-scheme",
 	"create_window_at_startup": false,
 	"draw_minimap_border": false,
 	"font_face": "Source Code Pro light",
