@@ -37,7 +37,7 @@ fi
 ############################### Alias' ###############################
 
 ############### Random ################
-alias ws="smsg 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./run.rb"
+alias wrap="smsg 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./run.rb"
 
 
 ############### System ################
