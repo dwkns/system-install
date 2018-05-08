@@ -30,10 +30,9 @@
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
 
     msg "Installing Douglas Colour Theme"
-  cp -f "$ROOT_DIR/sublime-config-files/Douglas.tmTheme" "$SUBLIME_USER_DIR/Douglas.tmTheme"
+  cp -f "$ROOT_DIR/sublime-config-files/Douglas.sublime-color-scheme" "$SUBLIME_USER_DIR/Douglas.sublime-color-scheme"
 
-  # msg "Installing scopehunter preferences"
-  # cp -f "$ROOT_DIR/sublime-config-files/scope_hunter.sublime-settings" "$SUBLIME_USER_DIR/scope_hunter.sublime-settings"
+
 
   msg "Installing SublimeLinter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
