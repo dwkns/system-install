@@ -5,9 +5,10 @@ SD="$HOME/'Library/Application Support/Sublime Text 3/Packages/User'"
 SUBCD="$HOME/'.system-config/sublime-config-files'"
 SYSCD="$HOME/'.system-config/system-config-files'"
 
-COLOR_HOST="\[\033[0;31m\]"
-COLOUR_PATH="\[\033[0;33m\]"
-COLOR_DEFAULT="\[\033[0;37m\]"
+RED="\[\033[0;31m\]"          #red
+YELLOW="\[\033[0;33m\]"       #yellow
+WHITE="\[\033[0;37m\]"        #white
+GREEN="\[\033[32m\]"          #greeen
 
 ############################### Functions ###############################
 note () {
@@ -32,6 +33,11 @@ else
    warn 'nginx is not running' 
 fi
 }
+
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
 
 
 ############################### Alias' ###############################
@@ -163,7 +169,20 @@ alias pgstop="smsg 'Stopping Postgres';launchctl unload ~/Library/LaunchAgents/h
 
 
 ############################### Settings ###############################
-PS1="$COLOR_HOST\u $COLOUR_PATH\w $COLOR_DEFAULT\$"                   # Set the colour prompt
+PS1="$RED\u $YELLOW\w$GREEN\$(parse_git_branch) $WHITE\$"                   # Set the colour prompt
+
+
+
+
+# export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
+# PS1="$GREEN\u $YELLOW\w$WHITE\$(parse_git_branch)\[\033[00m\] $" 
+
+
+
+
+
+
+
 cd ~/Desktop                                                          # Start new windows on the desktop
 
 # Check to see if a secrets file is present. This is not backed up to GITHUB.
