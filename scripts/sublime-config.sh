@@ -29,9 +29,8 @@
   msg "Installing sublime preferences"
   cp -f "$ROOT_DIR/sublime-config-files/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
 
-    msg "Installing Douglas Colour Theme"
+ msg "Installing Douglas Colour Theme"
   cp -f "$ROOT_DIR/sublime-config-files/Douglas.sublime-color-scheme" "$SUBLIME_USER_DIR/Douglas.sublime-color-scheme"
-
 
 
   msg "Installing SublimeLinter preferences"
@@ -52,7 +51,6 @@
   msg "Cloning in my Rails snippets"
   rm -rf "$SUBLIME_PACKAGES_DIR/Rails"
   git clone "https://github.com/dwkns/sublime_rails_snippets.git" "$SUBLIME_PACKAGES_DIR/Rails"
-
 
 
   msg "Installing sublime keymap"
