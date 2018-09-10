@@ -36,6 +36,11 @@
   msg "Installing SublimeLinter preferences"
   cp -f "$ROOT_DIR/sublime-config-files/SublimeLinter.sublime-settings" "$SUBLIME_USER_DIR/SublimeLinter.sublime-settings"
 
+  msg "Installing Emmet preferences"
+  cp -f "$ROOT_DIR/sublime-config-files/Emmet.sublime-settings" "$SUBLIME_USER_DIR/Emmet.sublime-settings"
+
+  
+
   msg "Installing phpfmt preferences"
   cp -f "$ROOT_DIR/sublime-config-files/phpfmt.sublime-settings" "$SUBLIME_USER_DIR/phpfmt.sublime-settings"
   

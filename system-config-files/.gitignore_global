@@ -7,4 +7,9 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+<<<<<<< HEAD
 node_modules
+=======
+.gitignore
+/node_modules
+>>>>>>> f16c552f4510e7dcd056de09718d16930477d78e
