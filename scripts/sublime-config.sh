@@ -47,10 +47,6 @@
   git clone "https://github.com/dwkns/sublime_macros.git" "$SUBLIME_USER_DIR/custom_macros"
  
 
-  # msg "Cloning in my Douglas theme"
-  # rm -rf "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
-  # git clone "https://github.com/dwkns/Douglas.git" "$SUBLIME_PACKAGES_DIR/Theme - Douglas"
-
   msg "Cloning in my Rails snippets"
   rm -rf "$SUBLIME_PACKAGES_DIR/Rails"
   git clone "https://github.com/dwkns/sublime_rails_snippets.git" "$SUBLIME_PACKAGES_DIR/Rails"
@@ -59,10 +55,5 @@
   msg "Installing sublime keymap"
   cp -f "$ROOT_DIR/sublime-config-files/Default (OSX).sublime-keymap" "$SUBLIME_USER_DIR/Default (OSX).sublime-keymap"
 
-  msg "Intalling ruby-terminal build system"
-  rm -rf "$SUBLIME_PACKAGES_DIR/ruby-iTerm2"
-  git clone "https://github.com/dwkns/ruby-iTerm2.git" "$SUBLIME_PACKAGES_DIR/ruby-iTerm2"
-  chmod u+x "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh"
-  ln -s "$SUBLIME_PACKAGES_DIR/ruby-iTerm2/ruby-iterm2.sh" "/usr/local/bin"
 
   note "done"
