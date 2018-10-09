@@ -28,5 +28,15 @@
   { 
     "keys": ["super+shift+v"], 
     "command": "paste" 
-  }
+  },
+    {
+        "keys": ["enter"], "command": "commit_completion", "context": [
+            { "key": "auto_complete_visible" }
+        ]
+    },
+    {
+        "keys": ["tab"], "command": "commit_completion", "context": [
+            { "key": "auto_complete_visible" }
+        ]
+    },
 ]
