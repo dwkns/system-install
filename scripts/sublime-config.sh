@@ -1,7 +1,9 @@
+  #!/usr/bin/env bash
+
   source "$HOME/.system-config/scripts/colours.sh"
 
   ##################### Configure Sublime ######################
-  #!/usr/bin/env bash
+ 
   msg "Configure sublime"
 
   
