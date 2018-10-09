@@ -32,9 +32,7 @@ else
 fi
 }
 
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
+
 
 
 
@@ -61,12 +59,12 @@ alias hf="smsg 'Hiding invisible files in the finder'; defaults write com.apple.
 
 ############### Git ################
 alias gc="smsg 'Doing git commit'; git commit"                                   # git commit
-alias gca="smsg 'Doing git commit'; git commit -a"                                   # git commit all
+alias gca="smsg 'Doing git commit'; git commit -a"                               # git commit all
 alias ga="smsg 'Doing git add -A'; git add -A"                                   # git add all
-alias gs="git status"                                                           # git status
+alias gs="git status"                                                            # git status
 alias gb="smsg 'Doing git branch'; git branch"                                   # git branch
 alias gp="smsg 'Doing git push -- all'; git push --all"                          # git push all
-alias gpa="gp"                                                                  # second alias for git push all
+alias gpa="gp"                                                                   # second alias for git push all
 alias gco="smsg 'Doing git checkout'; git checkout"                              # git checkout
 alias gac="smsg 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
 alias gph="smsg 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
@@ -74,22 +72,21 @@ alias gphm="smsg 'Doing git push heroku master'; git push heroku master"        
 
 
 ############### Editing config files ################
-
-alias sys="smsg 'Chaning to system config'; cd ~/.system-config"                 # cd to system config directory
-alias ep="smsg 'Editing bash profile'; subl ~/.bash_profile"                     # edit bash profile
-alias esys="smsg 'editing system files'; cd $HOME/.system-config; subl .;"       # Edit system fields
-alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"          # Catch errors
-alias esc="esp"   
-
+alias sys="smsg 'Changing to system config'; cd ~/.system-config"                 # cd to system config directory
+alias ep="smsg 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
+alias esys="smsg 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
+alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
+alias esc="esp"                                                                   # Catch errors
 alias sd="smsg 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
-
 alias opog="smsg 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
-# Update System Config
-# Back up the current config and then downloads the latest files from GIT 
-alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"
+############### Backing up / Restoring config files ################
+
+############### Restore System/Sublime Config ################ 
+# Updates latest files from GIT hub then runs install scripts
+
 usys () {
-  smsg 'updating system config files.'; 
+  msg 'updating system config files.'; 
   cd "$HOME/.system-config";
   git pull;
   source "$HOME/.system-config/scripts/dotfiles.sh";
@@ -98,10 +95,14 @@ usys () {
   source "$HOME/.bash_profile";
 }
 
-############### Backup System Config ################ 
+alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"               # Catch errors
+
+
+############### Backup System/Sublime Config ################ 
 # Backs up all sublime and system files to GIT
+
 backUpSublimeConfig () {
-  smsg 'Backing up Sublime config'; 
+  msg 'Backing up Sublime config'; 
   echo $CURDIR
   # (command) runs this command without chaning directory 
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; gpa; );
@@ -112,8 +113,6 @@ backUpSystemConfig () {
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; gpa;);
 }
-
-alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 
 DOTFILES=( 
   ".bash_profile"
@@ -126,7 +125,8 @@ DOTFILES=(
 )
 
 bsys () {
-  msg 'Copying current dotfile files';
+  msg 'Backing up system & sublime config';
+  smsg 'Copying current dotfile files';
   for i in "${DOTFILES[@]}"
   do  
      cp -rf "$HOME/$i" "$SYSCD/$i";
@@ -134,7 +134,8 @@ bsys () {
   backUpSublimeConfig;
   backUpSystemConfig;
 }
-          
+
+alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"        
 
 ############### Editing sublime files ################
 esub () {                                                     # Edit the sublime config files
@@ -153,18 +154,28 @@ bsub () {                                                     # Backup Sublime c
 
 
 ############### Pow and Nginx ################
+nginxrunning () {
+ps cax | grep nginx > /dev/null
+if [ $? -eq 0 ]; then
+  smsg 'nginx is running' 
+else
+   warn 'nginx is not running' 
+fi
+}
+
 alias po="smsg 'launching app...'; powder open"
 alias pl="smsg 'linking app to ~/.pow...'; powder link"
 alias pr="smsg 'restarting app'; powder restart"
 
-
-############### rbenv ################
-alias rh="smsg 'doing rbenv rehash...'; rbenv rehash"
 alias nstart="smsg 'starting nginx...'; sudo nginx"
 alias nstop="smsg 'stopping nginx...'; sudo nginx -s stop"
 alias nreload="smsg 'reloading nginx config...'; sudo nginx -s reload"
 alias nstatus="nginxrunning"
 alias nedit="smsg 'edit nginx config...'; subl '/usr/local/etc/nginx/nginx.conf'"
+
+
+############### rbenv ################
+alias rh="smsg 'doing rbenv rehash...'; rbenv rehash"
 
 
 ############### Brew ################
@@ -185,6 +196,10 @@ alias pgstop=pgstop
 
 
 ############################### General ###############################
+parse_git_branch() {                                                        # Find out which GIT branch we're on
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
 PS1="$RED\u $YELLOW\w$GREEN\$(parse_git_branch) $WHITE\$"                   # Set the colour prompt
 cd ~/Desktop                                                                # Start new windows on the desktop
 
@@ -211,4 +226,3 @@ export PATH=/usr/local/bin:$PATH                         # Set Path Variable
 
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
-
