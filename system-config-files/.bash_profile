@@ -109,7 +109,7 @@ backUpSublimeConfig () {
 }
 
 backUpSystemConfig () {
-  smsg 'Backing up system config files'; 
+  msg 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; gpa;);
 }
@@ -127,6 +127,7 @@ DOTFILES=(
 bsys () {
   msg 'Backing up system & sublime config';
   smsg 'Copying current dotfile files';
+  echo;
   for i in "${DOTFILES[@]}"
   do  
      cp -rf "$HOME/$i" "$SYSCD/$i";
