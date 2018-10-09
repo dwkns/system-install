@@ -104,14 +104,6 @@ source $HOME/.bash_profile
 # Backs up all sublime and system files to GIT
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"
 alias bsys="msg 'Backing up system files';
-cp -rf $SD/SublimeLinter.sublime-settings $SUBCD/SublimeLinter.sublime-settings; 
-cp -rf $SD/Preferences.sublime-settings $SUBCD/Preferences.sublime-settings; 
-cp -rf $SD/phpfmt.sublime-settings $SUBCD/phpfmt.sublime-settings; 
-cp -rf $SD/Emmet.sublime-settings $SUBCD/Emmet.sublime-settings; 
-cp -rf $SD/Douglas.sublime-color-scheme $SUBCD/Douglas.sublime-color-scheme; 
-cp -rf $SD/'Douglas(old).tmTheme' $SUBCD/'Douglas(old).tmTheme'; 
-cp -rf $SD/'Default (OSX).sublime-keymap' $SUBCD/'Default (OSX).sublime-keymap'; 
-cp -rf $SD/'Package Control.sublime-settings' $SUBCD/'Package Control.sublime-settings'; 
 cp -rf $HOME/'.bash_profile' $SYSCD/'.bash_profile';
 cp -rf $HOME/'.gemrc' $SYSCD/'.gemrc';
 cp -rf $HOME/'.gitconfig' $SYSCD/'.gitconfig';
@@ -119,8 +111,8 @@ cp -rf $HOME/'.gitignore_global' $SYSCD/'.gitignore_global';
 cp -rf $HOME/'.irbrc' $SYSCD/'.irbrc';
 cp -rf $HOME/'.jsbeautifyrc' $SYSCD/'.jsbeautifyrc';
 cp -rf $HOME/'.rspec' $SYSCD/'.rspec';
-smsg 'Backing up Sublime Custom Macros'; 
-(cd $SD/'custom_macros/'; git add -A; git commit -m 'Updated Macros'; gpa; ); 
+smsg 'Backing up Sublime config'; 
+(cd $SD/'dwkns-sublime-settings/'; git add -A; git commit -m 'Updated Sublime config'; gpa; ); 
 smsg 'Backing up system config files'; 
 (cd $HOME/'.system-config/'; git add -A; git commit -m 'Updated Config Files'; gpa;);
 "
@@ -132,6 +124,7 @@ smsg 'Backing up system config files';
 alias sub="smsg ''; cd $SROOT"                               # cd to sublime config directory
 alias subu="smsg ''; cd $SD"                                 # cd to sublime user directory
 alias esub="smsg ''; cd $SROOT; subl ."                      # Edit the sublime files
+alias subs="smsg ''; cd $SD/dwkns-sublime-settings"                     # Edit the sublime files
 
 
 ############### Pow and Nginx ################
@@ -174,14 +167,8 @@ PS1="$RED\u $YELLOW\w$GREEN\$(parse_git_branch) $WHITE\$"                   # Se
 
 
 
-
 # export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 # PS1="$GREEN\u $YELLOW\w$WHITE\$(parse_git_branch)\[\033[00m\] $" 
-
-
-
-
-
 
 
 cd ~/Desktop                                                          # Start new windows on the desktop
