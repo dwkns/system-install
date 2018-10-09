@@ -43,6 +43,7 @@
     "SublimeLinter.sublime-settings"
     "scope_hunter.sublime-settings"
     "BeautifyRuby.sublime-settings"
+    "Emmet.sublime-settings"
     "Default (OSX).sublime-keymap"
   )
 
