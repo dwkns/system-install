@@ -4,8 +4,6 @@ msg "Updating system settings"
 
 
 ######################  Random other configurations ######################
-
-
 echo "General : Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
