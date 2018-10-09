@@ -316,13 +316,6 @@ defaults write org.m0k.transmission WarningLegal -bool false
 
 echo
 
-###############################################################################
-# Desktop                                                                     #
-###############################################################################
-
-echo "Desktop : Set the background colour"
-osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Library/Desktop Pictures/Solid Colors/Solid Aqua Dark Blue.png"'
-
 echo
 
 note "done - some settings may require a restart"
