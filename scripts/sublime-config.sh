@@ -45,6 +45,7 @@
     "BeautifyRuby.sublime-settings"
     "Emmet.sublime-settings"
     "Default (OSX).sublime-keymap"
+    "HTMLPrettify.sublime-settings"
   )
 
   for i in "${files[@]}"

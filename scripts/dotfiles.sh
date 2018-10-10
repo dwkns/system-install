@@ -20,8 +20,8 @@ cp -f "$ROOT_DIR/system-config-files/.gitignore_global" "$HOME/.gitignore_global
 echo "Copying .irbrc"
 cp -f  "$ROOT_DIR/system-config-files/.irbrc" "$HOME/.irbrc"
 
-echo "Copying .jsbeautifyrc"
-cp -f "$ROOT_DIR/system-config-files/.jsbeautifyrc"  "$HOME/.jsbeautifyrc"
+# echo "Copying .jsbeautifyrc"
+# cp -f "$ROOT_DIR/system-config-files/.jsbeautifyrc"  "$HOME/.jsbeautifyrc"
 
 echo "Copying .rspec"
 cp -f  "$ROOT_DIR/system-config-files/.rspec" "$HOME/.rspec"
