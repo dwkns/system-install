@@ -52,6 +52,8 @@ alias s="smsg 'opening current folder in Sublime'; subl ."                      
 alias a="smsg 'opening current folder in Atom'; atom ."  
 alias rp="smsg 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
 
+alias hd="cd ~/"               # Reload Bash Profile
+
 # Hide and show invisibles
 alias sf="smsg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
 alias hf="smsg 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
@@ -120,9 +122,9 @@ DOTFILES=(
   ".gitconfig"
   ".gitignore_global"
   ".irbrc"
-  ".jsbeautifyrc"
   ".rspec"
 )
+#   ".jsbeautifyrc"
 
 bsys () {
   msg 'Backing up system & sublime config';
