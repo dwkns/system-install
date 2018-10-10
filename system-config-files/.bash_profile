@@ -33,9 +33,6 @@ fi
 }
 
 
-
-
-
 ############################### Alias' ###############################
 
 ############### Random ################
@@ -124,8 +121,8 @@ DOTFILES=(
   ".irbrc"
   ".rspec"
   ".jsbeautifyrc"
-)
-#   
+  ".eslintrc.yaml"
+)    
 
 bsys () {
   msg 'Backing up system & sublime config';
