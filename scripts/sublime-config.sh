@@ -54,8 +54,8 @@
      ln -s "$DWKNS_SETTINGS/settings/$i" "$SUBLIME_USER/$i"
   done
 
-  msg "Cloning in my Rails snippets"
-  rm -rf "$SUBLIME_PACKAGES/Rails"
-  git clone "https://github.com/dwkns/sublime_rails_snippets.git" "$SUBLIME_PACKAGES/Rails"
+  # msg "Cloning in my Rails snippets"
+  # rm -rf "$SUBLIME_PACKAGES/Rails"
+  # git clone "https://github.com/dwkns/sublime_rails_snippets.git" "$SUBLIME_PACKAGES/Rails"
 
   note "done"

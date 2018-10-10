@@ -123,8 +123,9 @@ DOTFILES=(
   ".gitignore_global"
   ".irbrc"
   ".rspec"
+  ".jsbeautifyrc"
 )
-#   ".jsbeautifyrc"
+#   
 
 bsys () {
   msg 'Backing up system & sublime config';
