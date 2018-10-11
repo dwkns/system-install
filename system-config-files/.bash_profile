@@ -75,7 +75,10 @@ alias sys="smsg 'Changing to system config'; cd ~/.system-config"               
 alias ep="smsg 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
 alias esys="smsg 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
-alias esc="esp"                                                                   # Catch errors
+alias esc="esp"   
+alias elint="smsg 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
+alias ebfy="smsg 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
+                                                                # Catch errors
 alias sd="smsg 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
 alias opog="smsg 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
