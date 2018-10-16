@@ -78,8 +78,9 @@ alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"          
 alias esc="esp"   
 alias elint="smsg 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
 alias ebfy="smsg 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
-                                                                # Catch errors
-alias sd="smsg 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
+alias ebty=ebfy # Catch errors
+alias sysd="smsg 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
+alias subd="smsg 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
 alias opog="smsg 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
 ############### Backing up / Restoring config files ################
@@ -124,7 +125,7 @@ DOTFILES=(
   ".irbrc"
   ".rspec"
   ".jsbeautifyrc"
-  ".eslintrc.yaml"
+  ".eslintrc.yml"
 )    
 
 bsys () {
