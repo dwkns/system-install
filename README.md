@@ -76,7 +76,7 @@ $ curl get.pow.cx | sh
 Required for the Sublime Javascript build system to work.
 
 ```bash
-$ npm install -g @babel/core @babel/node @babel/cli @babel/preset-env local-web-server
+$ npm install -g @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
 ```
 
 ### Printer

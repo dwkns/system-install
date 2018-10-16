@@ -38,7 +38,7 @@ DOTFILES=(
   ".irbrc"
   ".rspec"
   ".jsbeautifyrc"
-  ".eslintrc.yaml"
+  ".eslintrc.yml"
 )  
 
 installDotFiles () {
