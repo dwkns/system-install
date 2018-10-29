@@ -49,7 +49,11 @@ alias s="smsg 'opening current folder in Sublime'; subl ."                      
 alias a="smsg 'opening current folder in Atom'; atom ."  
 alias rp="smsg 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
 
-alias hd="cd ~/"               # Reload Bash Profile
+alias hd="cd ~/"               
+
+
+############### System ################
+alias iws="smsg 'Installing web skeleton project'; $HOME/.system-config/scripts/install-web-skeleton.sh"
 
 # Hide and show invisibles
 alias sf="smsg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
