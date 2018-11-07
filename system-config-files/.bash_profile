@@ -53,7 +53,13 @@ alias hd="cd ~/"
 
 
 ############### System ################
-alias iws="smsg 'Installing web skeleton project'; $HOME/.system-config/scripts/install-web-skeleton.sh"
+iws () {
+  smsg 'Installing web skeleton project';
+  . $HOME/.system-config/scripts/install-web-skeleton.sh $1;
+}
+
+
+
 
 # Hide and show invisibles
 alias sf="smsg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
