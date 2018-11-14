@@ -1,13 +1,39 @@
 #!/usr/bin/env bash
 
-# have we passed in a variable $1
-if [ -z ${1+x} ]; then 
-    echo "Nothing paseed in..."; 
-    echo "you can use 'iws projectName' as a shortcut."; 
+
+############################### Variables ###############################
+RED="\[\033[0;31m\]"          #red
+YELLOW="\[\033[0;33m\]"       #yellow
+WHITE="\[\033[0;37m\]"        #white
+GREEN="\[\033[32m\]"          #greeen
+
+############################### Functions ###############################
+note () {
+  echo -e "\033[0;94m====> $1 \033[0m"
+}
+msg () {
+  echo -e "\033[0;32m==============> $1 \033[0m"
+}
+
+smsg () {
+  echo -e "\033[0;32m====> $1 \033[0m"
+}
+warn () {
+  echo -e "\033[0;31m====> $1 \033[0m"
+}
+
+
+############################### Main Script ###############################
+
+if [ -z ${1+x} ]; then # have we passed in a variable $1
+    note "Nothing passed in..."; 
+    note "You can use 'iws projectName' as a shortcut."; 
+    echo
     read -p "Enter project name (default - demoProject) : " PROJECTNAME
+    echo
     PROJECTNAME=${PROJECTNAME:-demoProject}
 else 
-    echo "Setting project name to '$1'"; 
+    note "Setting project name to '$1'"; 
     PROJECTNAME=$1
 fi
 
@@ -19,12 +45,12 @@ if [ -d "$PROJECTNAME" ]; then
   if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
    rm -rf $PROJECTNAME
   else
-    echo "OK not doing anything & exiting" 
+    warn "OK not doing anything & exiting" 
     exit 0
   fi
 fi
 
-echo "Project $PROJECTNAME will be created!"
+smsg "Project $PROJECTNAME will be created!"
 
 mkdir -p $PROJECTNAME
 
@@ -38,9 +64,9 @@ tmp=$(mktemp)
 JQVAR=".name = \"$PROJECTNAME\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
+echo;
 
 yarn install;
-
 git init
 git add -A
 git commit -m 'Initial commit'
