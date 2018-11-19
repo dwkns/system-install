@@ -70,6 +70,7 @@ yarn install;
 git init
 git add -A
 git commit -m 'Initial commit'
+git remote rm origin
 
 subl .
 
