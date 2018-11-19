@@ -67,21 +67,19 @@ jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 echo;
 
 yarn install;
+
 git init
 git add -A
 git commit -m 'Initial commit'
 git remote rm origin
 
+
 subl .
 
-# echo $PWD
-osascript <<END
+osascript <<END > /dev/null 2>&1
 tell application "CodeKit"
   add project at path "$PWD"
   delay 1
   build project containing path "$PWD"
 end tell
 END
-
-# delay 5
-# preview in browser
