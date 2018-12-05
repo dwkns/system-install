@@ -65,6 +65,11 @@ iws () {
 alias sf="smsg 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
 alias hf="smsg 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
 
+############### Yarn ################
+ya () {
+  smsg 'Doing yarn add --dev';
+  yarn add --dev $1;
+}
 
 ############### Git ################
 alias gc="smsg 'Doing git commit'; git commit"                                   # git commit
