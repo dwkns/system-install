@@ -64,6 +64,8 @@ tmp=$(mktemp)
 JQVAR=".name = \"$PROJECTNAME\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
+sed -i "" -e "s/{{page-title}}/$PROJECTNAME/g" ./source/index.html
+
 echo;
 
 yarn install;
