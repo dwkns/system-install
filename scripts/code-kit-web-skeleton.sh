@@ -27,7 +27,7 @@ warn () {
 
 if [ -z ${1+x} ]; then # have we passed in a variable $1
     note "Nothing passed in..."; 
-    note "You can use 'iws projectName' as a shortcut."; 
+    note "You can use 'cws projectName' as a shortcut."; 
     echo
     read -p "Enter project name (default - demoProject) : " PROJECTNAME
     echo

@@ -53,9 +53,14 @@ alias hd="cd ~/"
 
 
 ############### System ################
-iws () {
-  smsg 'Installing web skeleton project';
-  . $HOME/.system-config/scripts/install-web-skeleton.sh $1;
+cws () {
+  smsg 'Creating CodeKit web skeleton project';
+  . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
+}
+
+pws () {
+  smsg 'Creating Parcel web skeleton project';
+  . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
 }
 
 
