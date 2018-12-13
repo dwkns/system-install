@@ -57,6 +57,7 @@ cd "$PROJECTNAME"
 
 yarn init -y
 yarn add parcel-bundler --dev
+yarn add parcel-plugin-clean-dist --dev
 # yarn add @vaadin/vaadin-select 
 
 # npm init -y
@@ -69,6 +70,16 @@ tmp=$(mktemp)
 
 # change the name property of package.json (need to save temp file first)
 JQVAR=".name = \"$PROJECTNAME\""
+jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
+
+# add some build scripts to package.json
+tmp=$(mktemp) 
+JQVAR='.scripts |= .+ { "serve": "parcel src/index.html --open", "build": "parcel build src/index.html" }'
+jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
+
+# add author
+tmp=$(mktemp) 
+JQVAR='.author |= .+ "dwkns"'
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
 mkdir 'src'
@@ -131,4 +142,6 @@ end tell
 EOL
 
 subl .
-parcel src/index.html --open
+subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}],["focus_group",{"group": 2}]]}'
+
+yarn serve
