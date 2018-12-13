@@ -89,7 +89,7 @@ cat >src/index.html <<'EOL'
 EOL
 
 cat >src/index.js <<'EOL'
-import './main.scss'
+import './main.scss';
 import testModule from './testModule.js';
 testModule();
 EOL
