@@ -116,6 +116,19 @@ h1 {
 }
 EOL
 
+osascript  <<EOL > /dev/null 2>&1
+
+tell application "iTerm"
+  set currentWindow to current window 
+  tell currentWindow
+    create tab with default profile
+    delay 0.5
+    tell current session of currentWindow
+      write text "cd $PROJECTNAME"
+    end tell
+  end tell
+end tell
+EOL
 
 subl .
 parcel src/index.html --open
