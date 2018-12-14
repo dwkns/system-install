@@ -9,7 +9,6 @@ RESET="\033[0m"
 
 ############################### Functions ###############################
 
-
 success () {
   echo -e "$GREEN====> $1 $RESET"
 }
@@ -30,7 +29,7 @@ note () {
 ############################### Main Script ###############################
 
 
-
+######## Ask for a project name or use default 'demoProject'
 if [ -z ${1+x} ]; then # have we passed in a variable $1
     warn "Nothing passed in..."
     warn "You can use 'pws <projectName>' as a shortcut."
@@ -43,7 +42,7 @@ else
     PROJECTNAME=$1
 fi
 
-
+######## Does the folder already exist? Do you want overide it?
 if [ -d "$PROJECTNAME" ]; then
   read -p "Project $PROJECTNAME already exists delete it y/n (default - y) : " DELETEIT
   DELETEIT=${DELETEIT:-Y}
@@ -58,15 +57,18 @@ fi
 
 success "Project $PROJECTNAME will be created!"
 
+######## Create the folder
 mkdir -p $PROJECTNAME
-
 cd "$PROJECTNAME"
 
+######## Init the project with auto-defaults, add Parcel.
 yarn init -y
 yarn add parcel-bundler --dev
 yarn add parcel-plugin-clean-dist --dev
 
 
+
+######## Do some processing of package.json to add build scrips, title author etc.
 # create a temp file
 tmp=$(mktemp) 
 
@@ -84,6 +86,9 @@ tmp=$(mktemp)
 JQVAR='.author |= .+ "dwkns"'
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
+
+
+######## Add source folder and files. 
 mkdir 'src'
 
 cat >src/index.html <<'EOL'
@@ -91,7 +96,7 @@ cat >src/index.html <<'EOL'
 <html lang='en'>
 <head>
   <meta charset='UTF-8'>
-  <title>vaadin demo</title>
+  <title>{{page-title}}</title>
 </head>
 <body>
   <h1>Parcel bootstrap project</h1>
@@ -129,12 +134,19 @@ h1 {
 }
 EOL
 
+######## Put the project name into the HTML Title. 
+sed -i "" -e "s/{{page-title}}/$PROJECTNAME/g" ./src/index.html
+
+######## Initialize git.
 git init
 git add .
 git commit -m "Initial commit"
 
-osascript  <<EOL > /dev/null 2>&1
 
+
+######## Open a new iTerm tab at the project root. 
+######## Required because server will run in current tab.
+osascript  <<EOL > /dev/null 2>&1
 tell application "iTerm"
   set currentWindow to current window 
   tell currentWindow
@@ -147,7 +159,10 @@ tell application "iTerm"
 end tell
 EOL
 
+######## Open project in Sublime
 subl .
-subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}],["focus_group",{"group": 2}]]}'
+######## Format sublimes windows to my favorite layout.
+subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}]]}'
 
+######## Start the server.
 yarn serve
