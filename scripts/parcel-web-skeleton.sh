@@ -133,21 +133,21 @@ git init
 git add .
 git commit -m "Initial commit"
 
-# osascript  <<EOL > /dev/null 2>&1
+osascript  <<EOL > /dev/null 2>&1
 
-# tell application "iTerm"
-#   set currentWindow to current window 
-#   tell currentWindow
-#     create tab with default profile
-#     delay 0.5
-#     tell current session of currentWindow
-#       write text "cd $PROJECTNAME"
-#     end tell
-#   end tell
-# end tell
-# EOL
+tell application "iTerm"
+  set currentWindow to current window 
+  tell currentWindow
+    create tab with default profile
+    delay 0.5
+    tell current session of currentWindow
+      write text "cd $PROJECTNAME"
+    end tell
+  end tell
+end tell
+EOL
 
-# subl .
-# subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}],["focus_group",{"group": 2}]]}'
+subl .
+subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}],["focus_group",{"group": 2}]]}'
 
-# yarn serve
+yarn serve
