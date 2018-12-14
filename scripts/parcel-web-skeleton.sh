@@ -1,38 +1,45 @@
 #!/usr/bin/env bash
 
 ############################### Variables ###############################
-RED="\[\033[0;31m\]"          #red
-YELLOW="\[\033[0;33m\]"       #yellow
-WHITE="\[\033[0;37m\]"        #white
-GREEN="\[\033[32m\]"          #greeen
+RED="\033[0;31m"          
+YELLOW="\033[0;33m"       
+GREEN="\033[0;32m"          
+BLUE="\033[0;94m"
+RESET="\033[0m"
 
 ############################### Functions ###############################
-note () {
-  echo -e "\033[0;94m====> $1 \033[0m"
-}
-msg () {
-  echo -e "\033[0;32m==============> $1 \033[0m"
+
+
+success () {
+  echo -e "$GREEN====> $1 $RESET"
 }
 
-smsg () {
-  echo -e "\033[0;32m====> $1 \033[0m"
-}
 warn () {
-  echo -e "\033[0;31m====> $1 \033[0m"
+ echo -e "$YELLOW====> $1 $RESET"
+}
+
+error () {  
+ echo -e "$RED====> $1 $RESET"
+}
+
+note () {
+  echo -e "$RESET====> $1 $RESET"
 }
 
 
 ############################### Main Script ###############################
 
+
+
 if [ -z ${1+x} ]; then # have we passed in a variable $1
-    note "Nothing passed in..."; 
-    note "You can use 'cws projectName' as a shortcut."; 
+    warn "Nothing passed in..."
+    warn "You can use 'pws <projectName>' as a shortcut."
     echo
-    read -p "Enter project name (default - demoProject) : " PROJECTNAME
+    read -p "Enter project name (default -> demoProject) : " PROJECTNAME
     echo
     PROJECTNAME=${PROJECTNAME:-demoProject}
 else 
-    note "Setting project name to '$1'"; 
+    echo -e "$GREEN====> Setting project name to $BLUE'$1'$RESET"
     PROJECTNAME=$1
 fi
 
@@ -49,7 +56,7 @@ if [ -d "$PROJECTNAME" ]; then
   fi
 fi
 
-smsg "Project $PROJECTNAME will be created!"
+success "Project $PROJECTNAME will be created!"
 
 mkdir -p $PROJECTNAME
 
@@ -58,11 +65,6 @@ cd "$PROJECTNAME"
 yarn init -y
 yarn add parcel-bundler --dev
 yarn add parcel-plugin-clean-dist --dev
-# yarn add @vaadin/vaadin-select 
-
-# npm init -y
-# npm install parcel-bundler --save-dev
-# npm install @vaadin/vaadin-select  --save
 
 
 # create a temp file
@@ -127,21 +129,25 @@ h1 {
 }
 EOL
 
-osascript  <<EOL > /dev/null 2>&1
+git init
+git add .
+git commit -m "Initial commit"
 
-tell application "iTerm"
-  set currentWindow to current window 
-  tell currentWindow
-    create tab with default profile
-    delay 0.5
-    tell current session of currentWindow
-      write text "cd $PROJECTNAME"
-    end tell
-  end tell
-end tell
-EOL
+# osascript  <<EOL > /dev/null 2>&1
 
-subl .
-subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}],["focus_group",{"group": 2}]]}'
+# tell application "iTerm"
+#   set currentWindow to current window 
+#   tell currentWindow
+#     create tab with default profile
+#     delay 0.5
+#     tell current session of currentWindow
+#       write text "cd $PROJECTNAME"
+#     end tell
+#   end tell
+# end tell
+# EOL
 
-yarn serve
+# subl .
+# subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}],["focus_group",{"group": 2}]]}'
+
+# yarn serve
