@@ -42,6 +42,7 @@ fi
 
 ############### Random ################
 alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./run.rb"
+alias sketchtool="/Applications/Sketch.app/Contents/Resources/sketchtool/bin/sketchtool"
 
 
 ############### System ################
