@@ -10,35 +10,32 @@ RESET="\033[0m"
 ############################### Functions ###############################
 
 success () {
-  echo -e "$GREEN====> $1 $RESET"
+  echo -e $GREEN"Success ====>$RESET $1"
 }
 
 warn () {
- echo -e "$YELLOW====> $1 $RESET"
+ echo -e $YELLOW"Warning ====>$RESET $1"
 }
 
 error () {  
- echo -e "$RED====> $1 $RESET"
+ echo -e $RED"Error ====>$RESET $1"
 }
 
 note () {
-  echo -e "$RESET====> $1 $RESET"
+  echo -e $RESET"====>$RESET $1"
 }
-
-
-############################### Main Script ###############################
 
 
 ######## Ask for a project name or use default 'demoProject'
 if [ -z ${1+x} ]; then # have we passed in a variable $1
     warn "Nothing passed in..."
-    warn "You can use 'pws <projectName>' as a shortcut."
+    warn "You can use '${0##*/} <projectName>' as a shortcut."
     echo
     read -p "Enter project name (default -> demoProject) : " PROJECTNAME
     echo
     PROJECTNAME=${PROJECTNAME:-demoProject}
-else 
-    echo -e "$GREEN====> Setting project name to $BLUE'$1'$RESET"
+else   
+    success  "Setting project name to '$1'"
     PROJECTNAME=$1
 fi
 
@@ -50,7 +47,7 @@ if [ -d "$PROJECTNAME" ]; then
   if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
    rm -rf $PROJECTNAME
   else
-    warn "OK not doing anything & exiting" 
+    error "OK not doing anything & exiting" 
     exit 0
   fi
 fi
@@ -67,12 +64,10 @@ yarn add parcel-bundler --dev
 yarn add parcel-plugin-clean-dist --dev
 
 
-
-######## Do some processing of package.json to add build scrips, title author etc.
-# create a temp file
-tmp=$(mktemp) 
+######## Do some processing of package.json to add build scrips & title.
 
 # change the name property of package.json (need to save temp file first)
+tmp=$(mktemp) 
 JQVAR=".name = \"$PROJECTNAME\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
@@ -87,7 +82,6 @@ JQVAR='.author |= .+ "dwkns"'
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
 
-
 ######## Add source folder and files. 
 mkdir 'src'
 
@@ -99,7 +93,7 @@ cat >src/index.html <<'EOL'
   <title>{{page-title}}</title>
 </head>
 <body>
-  <h1>Parcel bootstrap project</h1>
+  <h1>Parcel bootstrap project : {{page-title}}</h1>
   <p>Make it into something cool</p>
   <script src="./index.js"></script>
 </body>
@@ -108,15 +102,9 @@ EOL
 
 cat >src/index.js <<'EOL'
 import './main.scss';
-import testModule from './testModule.js';
-testModule();
-EOL
-
-cat >src/testModule.js <<'EOL'
-export function testModule() {
-    let testVar = 'Bootstrap Project';
-    console.log(`Parcel ${testVar}`);
-}
+const paragraph = document.createElement('p');
+paragraph.innerText = 'This is a paragraph added from JS which shows bundling is working.';
+document.body.appendChild(paragraph); 
 EOL
 
 cat >src/main.scss <<'EOL'
@@ -143,7 +131,6 @@ git add .
 git commit -m "Initial commit"
 
 
-
 ######## Open a new iTerm tab at the project root. 
 ######## Required because server will run in current tab.
 osascript  <<EOL > /dev/null 2>&1
@@ -159,10 +146,14 @@ tell application "iTerm"
 end tell
 EOL
 
+
+
 ######## Open project in Sublime
 subl .
+
 ######## Format sublimes windows to my favorite layout.
 subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}]]}'
+
 
 ######## Start the server.
 yarn serve
