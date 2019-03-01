@@ -13,7 +13,7 @@ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/maste
 ### Tap alternates 
 
 ````bash
-$ brew tap caskroom/cask && brew tap caskroom/versions && brew tap caskroom/fonts && brew tap homebrew/services
+$ brew tap caskroom/cask && brew tap caskroom/versions && brew tap caskroom/fonts && brew tap homebrew/services && brew tap heroku/brew
 ````
 
 ### Install useful brew apps
