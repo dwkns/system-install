@@ -53,7 +53,7 @@ alias kf="success 'Killing the Finder'; killall Finder"                         
 alias dt="cd ~/Desktop"                                                        # cd to desktop
 alias s="success 'opening current folder in Sublime'; subl ."                      # Opens current folder in sublime
 alias a="success 'opening current folder in Atom'; atom ."  
-alias rp="success 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
+alias sp="success 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
 
 alias hd="cd ~/"               
 
