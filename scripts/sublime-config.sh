@@ -28,6 +28,11 @@
   msg "Cloning in dwkns settings"
   rm -rf "$SUBLIME_USER/dwkns-sublime-settings"
   git clone "https://github.com/dwkns/dwkns-sublime-settings.git" "$SUBLIME_USER/dwkns-sublime-settings"
+
+  msg "Cloning in A2 Theme"
+  rm -rf "$SUBLIME_PACKAGES/A2-Theme"
+  git clone "https://github.com/dwkns/A2-Theme.git" "$SUBLIME_PACKAGES/A2-Theme"
+
   
   msg "Intalling license"
   cp -f "$DWKNS_SETTINGS/License.sublime_license" "$SUBLIME_LOCAL/License.sublime_license"

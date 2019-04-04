@@ -177,6 +177,7 @@ backUpSublimeConfig () {
   echo $CURDIR
   # (command) runs this command without chaning directory 
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; gpa; );
+  (cd "$SROOT/Packages/User/A2-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
 }
 
 backUpSystemConfig () {
