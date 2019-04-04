@@ -179,7 +179,7 @@ backUpSublimeConfig () {
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; gpa; );
   echo "settings done"
   echo "starting theme"
-  (cd "$SROOT/Packages/User/A2-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
+  (cd "$SROOT/Packages/A2-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
   echo "theme done"
 }
 
