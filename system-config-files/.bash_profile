@@ -4,11 +4,11 @@ SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
 
 ############################### Variables ###############################
-RED="\033[0;31m"          
-YELLOW="\033[0;33m"       
-GREEN="\033[0;32m"          
-BLUE="\033[0;94m"
-RESET="\033[0m"
+RED="\[\e[31m\]"
+GREEN="\[\e[32m\]"
+YELLOW="\[\e[33m\]"
+BLUE="\[\e[33m\]"
+RESET="\[\e[m\]"
 
 ############################### Functions ###############################
 
@@ -278,9 +278,9 @@ alias pgstop=pgstop
 parse_git_branch() {                                                        # Find out which GIT branch we're on
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-
-PS1="$RED\u $YELLOW\w$GREEN\$(parse_git_branch) $RESET\$"                   # Set the colour prompt
-cd ~/Desktop                                                                # Start new windows on the desktop
+export PS1="$RED\u $YELLOW\w$GREEN\`parse_git_branch\` $RESET$"
+# PS1="$RED\u $YELLOW\w$GREEN\$(parse_git_branch) $RESET\$"                   # Set the colour prompt
+cd ~/Desktop                                                                  # Start new windows on the desktop
 
 # Check to see if a secrets file is present. This is not backed up to GITHUB.
 # It's a useful place to store ENV variable used for usernames / passwords.
