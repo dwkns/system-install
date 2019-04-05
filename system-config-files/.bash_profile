@@ -226,6 +226,12 @@ bsub () {                                                     # Backup Sublime c
 }
 
 
+esubt () {
+  success 'Editing Sublime A3-Theme';
+  cd "$SROOT/Packages/A3-Theme";
+  subl .;
+}
+
 ############### Pow and Nginx ################
 nginxrunning () {
 ps cax | grep nginx > /dev/null
