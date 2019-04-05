@@ -4,11 +4,16 @@ SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
 
 ############################### Variables ###############################
-RED="\[\e[31m\]"
-GREEN="\[\e[32m\]"
-YELLOW="\[\e[33m\]"
-BLUE="\[\e[33m\]"
-RESET="\[\e[m\]"
+PROMPT_RED="\[\e[31m\]"
+PROMPT_GREEN="\[\e[32m\]"
+PROMPT_YELLOW="\[\e[33m\]"
+PROMPT_BLUE="\[\e[34m\]"
+PROMPT_RESET="\[\e[m\]"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+RESET="\033[0m"
 
 ############################### Functions ###############################
 
