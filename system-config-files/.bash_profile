@@ -175,12 +175,8 @@ alias usc="warn 'Did you mean to update system files'; echo 'Use usys'"         
 backUpSublimeConfig () {
   success 'Backing up Sublime config'; 
   # (command) runs this command without chaning directory 
-  echo "starting settings"
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; gpa; );
-  echo "settings done"
-  echo "starting theme"
-  (cd "$SROOT/Packages/A2-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
-  echo "theme done"
+  (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
 }
 
 backUpSystemConfig () {
