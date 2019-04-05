@@ -31,7 +31,7 @@
 
   msg "Cloning in A3 Theme"
   rm -rf "$SUBLIME_PACKAGES/A3-Theme"
-  git clone "https://github.com/dwkns/A2-Theme.git" "$SUBLIME_PACKAGES/A2-Theme"
+  git clone "https://github.com/dwkns/A3-Theme.git" "$SUBLIME_PACKAGES/A3-Theme"
 
   
   msg "Intalling license"
