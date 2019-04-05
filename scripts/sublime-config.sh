@@ -29,8 +29,8 @@
   rm -rf "$SUBLIME_USER/dwkns-sublime-settings"
   git clone "https://github.com/dwkns/dwkns-sublime-settings.git" "$SUBLIME_USER/dwkns-sublime-settings"
 
-  msg "Cloning in A2 Theme"
-  rm -rf "$SUBLIME_PACKAGES/A2-Theme"
+  msg "Cloning in A3 Theme"
+  rm -rf "$SUBLIME_PACKAGES/A3-Theme"
   git clone "https://github.com/dwkns/A2-Theme.git" "$SUBLIME_PACKAGES/A2-Theme"
 
   
