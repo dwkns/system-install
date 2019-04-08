@@ -181,9 +181,10 @@ backUpSublimeConfig () {
   success 'Backing up Sublime config'; 
   # (command) runs this command without chaning directory 
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; gpa; );
-  
+  echo;
   success 'Backing up A3 theme'; 
   (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
+  echo;
 }
 
 backUpSystemConfig () {
