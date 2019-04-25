@@ -28,7 +28,7 @@
         "indent_char": " ",
 
         // Indentation size
-        "indent_size": 4,
+        "indent_size": 2,
 
         // Indent with tabs, overrides `indent_size` and `indent_char`
         "indent_with_tabs": false,
@@ -52,13 +52,13 @@
         // You can add other .jsbeautifyrc rules in this section too.
 
         // e.g. {{#foo}}, {{/foo}}
-        "indent_handlebars": false,
+        "indent_handlebars": true,
 
         // Indent <head> and <body> sections
-        "indent_inner_html": false,
+        "indent_inner_html": true,
 
         // [keep|separate|normal]
-        "indent_scripts": "keep",
+        "indent_scripts": "normal",
 
         // List of tags that should not be reformatted
         "unformatted": ["a", "span", "img", "code", "pre", "sub", "sup", "em", "strong", "b", "i", "u", "strike", "big", "small", "pre", "h1", "h2", "h3", "h4", "h5", "h6"]
