@@ -108,10 +108,10 @@ cat >spec/run_spec.rb <<'EOL'
 require './src/run.rb'
 
 describe 'Say Something > ' do  
-    it "Should be all Kubrick" do
+    it "Should be Here's Johnny" do
       expect(say_something).to eq("Here's Johnny")
     end
-    it "Shouldn't be all not real Kubrick" do
+    it "Shouldn't be There's Johnny" do
       expect(say_something).not_to eq("There's Johnny")
     end 
 end
