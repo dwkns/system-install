@@ -74,6 +74,11 @@ pws () {
   . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
 }
 
+rps () {
+  success 'Creating Ruby skeleton project';
+  . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
+}
+
 
 mnx () {
   success 'making new executable bash file'; 
