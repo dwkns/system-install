@@ -303,6 +303,8 @@ then
  source $SECRETS_FILE
 fi
 
+alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
+
 
 chflags hidden ~/Applications                            # keep the local ~/Applicaiton file hidden.
 
