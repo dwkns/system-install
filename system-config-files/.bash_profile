@@ -4,33 +4,47 @@ SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
 
 ############################### Variables ###############################
-PROMPT_RED="\[\e[31m\]"
-PROMPT_GREEN="\[\e[32m\]"
-PROMPT_YELLOW="\[\e[33m\]"
-PROMPT_BLUE="\[\e[34m\]"
-PROMPT_RESET="\[\e[m\]"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[33m"
-BLUE="\033[34m"
-RESET="\033[0m"
+RED="$(tput setaf 1)"
+GREEN="$(tput setaf 2)"
+YELLOW="$(tput setaf 3)"
+BLUE="$(tput setaf 20)"
+BROWN="$(tput setaf 94)"
+GREY="$(tput setaf 243)"
+RESET="$(tput sgr0)"
+
+PROMPT_RED="\[$(tput setaf 1)\]"
+PROMPT_GREEN="\[$(tput setaf 2)\]"
+PROMPT_YELLOW="\[$(tput setaf 3)\]"
+PROMPT_BLUE="\[$(tput setaf 20)\]"
+PROMPT_BROWN="\[$(tput setaf 94)\]"
+PROMPT_GREY="\[$(tput setaf 243)\]"
+PROMPT_RESET="\[$(tput sgr0)\]"
+
 
 ############################### Functions ###############################
+showallcolours () {
+  for C in {0..255}; do
+      tput setab $C
+      echo -n "$C "
+  done
+  tput sgr0
+  echo
+}
 
 success () {
   echo -e "$GREEN====> $1 $RESET"
 }
 
 warn () {
- echo -e "$YELLOW====> $1 $RESET"
+ echo -e "${YELLOW}====> $1 ${RESET}"
 }
 
 error () {  
- echo -e "$RED====> $1 $RESET"
+ echo -e "${RED}====> $1 ${RESET}"
 }
 
 note () {
-  echo -e "$RESET====> $1 $RESET"
+  echo -e "${RESET}====> $1 ${RESET}"
 }
 
 nginxrunning () {
@@ -41,7 +55,6 @@ else
    warn 'nginx is not running' 
 fi
 }
-
 
 ############################### Alias' ###############################
 
@@ -97,11 +110,11 @@ mnx () {
       PROJECTNAME=$PROJECTNAME.sh
   fi
 
-  echo -e "$GREEN====> Setting project name to $BLUE'$PROJECTNAME'$RESET"
+  echo -e "${GREEN}====> Setting project name to $BLUE'$PROJECTNAME'$RESET"
 
 
   if [ -f "$PROJECTNAME" ]; then
-    read -p "$(echo -e $RED"WARNING "$BLUE"'$PROJECTNAME'"$RED" already exists Delete it y/n (default - y) : "$RESET)" DELETEIT
+    read -p "$(echo -e ${RED}"WARNING "$BLUE"'$PROJECTNAME'"${RED}" already exists Delete it y/n (default - y) : "$RESET)" DELETEIT
 
     DELETEIT=${DELETEIT:-Y}
 
@@ -117,11 +130,9 @@ mnx () {
   #!/usr/bin/env bash
 EOL
 chmod +x $PROJECTNAME
-echo -e $GREEN"====> "$BLUE"'$PROJECTNAME'"$GREEN" Created and set to be Executable"$RESET
+echo -e ${GREEN}"====> "$BLUE"'$PROJECTNAME'"${GREEN}" Created and set to be Executable"$RESET
 subl $PROJECTNAME
 }
-
-
 
 
 # Hide and show invisibles
@@ -238,7 +249,6 @@ bsub () {                                                     # Backup Sublime c
   backUpSublimeConfig;
 }
 
-
 esubt () {
   success 'Editing Sublime A3-Theme';
   cd "$SROOT/Packages/A3-Theme";
@@ -288,12 +298,16 @@ alias pgstop=pgstop
 
 
 ############################### General ###############################
+alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
+
+
 parse_git_branch() {                                                        # Find out which GIT branch we're on
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
 }
-export PS1="$RED\u $YELLOW\w$GREEN\`parse_git_branch\` $RESET$"
-# PS1="$RED\u $YELLOW\w$GREEN\$(parse_git_branch) $RESET\$"                   # Set the colour prompt
-cd ~/Desktop                                                                  # Start new windows on the desktop
+
+
+export PS1="${PROMPT_RED}\u@\h: ${PROMPT_YELLOW}\w\n${PROMPT_GREEN}\$(parse_git_branch)${PROMPT_RESET}$ "        # Set the colour prompt
+cd ~/Desktop                                                                # Start new windows on the desktop
 
 # Check to see if a secrets file is present. This is not backed up to GITHUB.
 # It's a useful place to store ENV variable used for usernames / passwords.
@@ -319,5 +333,3 @@ export PATH=/usr/local/bin:$PATH                         # Set Path Variable
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH=$PATH:~/bin
 eval "$(rbenv init -)"
-
-
