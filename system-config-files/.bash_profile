@@ -1,4 +1,5 @@
 source ~/.profile
+export TERM=xterm-256color
 ############################### Variables ###############################
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
