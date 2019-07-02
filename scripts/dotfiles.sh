@@ -32,6 +32,7 @@ ROOT_DIR="$HOME/.system-config"
 
 DOTFILES=( 
   ".bash_profile"
+  ".profile"
   ".gemrc"
   ".gitconfig"
   ".gitignore_global"
