@@ -65,7 +65,7 @@ source "$ROOT_DIR/scripts/system-settings.sh"
 
 
 ############ Install App Store Apps ############
-source "$ROOT_DIR/scripts/app-store-apps.sh"
+# source "$ROOT_DIR/scripts/app-store-apps.sh"
 
 ############ CONFIGURE System Settings that use sudo############
 ## These are in here to allow system-settings.sh not to require sudo and thus get run on `usys`
