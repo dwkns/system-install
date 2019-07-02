@@ -38,7 +38,7 @@ $ ~/.bash_profile
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina mamp-pro sequel-pro phantomjs
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro phantomjs
 ````
 
 Install [Chrome](https://www.google.com/chrome/index.html) directly (the cask version doesn't play well with 1Password).
@@ -76,7 +76,7 @@ $ gem install bundler rails powder foreman launchy
 Required for the Sublime Javascript build system to work.
 
 ```bash
-$ npm install -g @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
+$ npm install -g yarn @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
 ```
 
 ### Install App Store Apps
