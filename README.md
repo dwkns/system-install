@@ -59,16 +59,16 @@ $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
 $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
 ````
 
+### Reload the bash profile
+
+```` 
+$ ~/.bash_profile 
+````
+
 ### Install some Ruby Gems
 
 ````bash
-$ gem install bundler rails powder foreman
-````
-
-### Install Pow
-
-````bash
-$ curl get.pow.cx | sh
+$ gem install bundler rails powder foreman launchy 
 ````
 
 ### Install some Global Node Modules
@@ -78,6 +78,17 @@ Required for the Sublime Javascript build system to work.
 ```bash
 $ npm install -g @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
 ```
+
+### Install App Store Apps
+```bash
+$ source ~/.system-config/scripts/app-store-apps.sh
+```
+
+### Install Pow
+
+````bash
+$ curl get.pow.cx | sh
+````
 
 ### Printer
 
