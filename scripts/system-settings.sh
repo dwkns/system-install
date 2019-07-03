@@ -38,18 +38,8 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 
 # Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 1 
-defaults write NSGlobalDomain InitialKeyRepeat -int 12
-
-# defaults write -g KeyRepeat -float 0.000000000001 # normal minimum is 2 (30 ms)
-# defaults write -g InitialKeyRepeat -int 12 # normal minimum is 15 (225 ms)
-
-
-#KeyRepeat : normal minimum is 2 (30 ms)
-# #InitialKeyRepeat : normal minimum is 15 (225 ms)
-# defaults write -g KeyRepeat  -int 1
-# defaults write -g InitialKeyRepeat -int 10 
-
+defaults write NSGlobalDomain KeyRepeat -int 1 # normal minimum is 2 (30 ms)
+defaults write NSGlobalDomain InitialKeyRepeat -int 15 # normal minimum is 15 (225 ms)
 
 echo                        
 
