@@ -38,7 +38,7 @@ $ ~/.bash_profile
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro phantomjs
+$ brew cask install mattermost sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro phantomjs google-chrome
 ````
 
 Install [Chrome](https://www.google.com/chrome/index.html) directly (the cask version doesn't play well with 1Password).

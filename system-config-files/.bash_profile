@@ -57,6 +57,11 @@ else
 fi
 }
 
+
+############### Install Ruby, set to global, install bundler ################
+# RBV=2.6.3
+# rbenv install $RBV && rbenv global $RBV && gem install bundler
+
 ############################### Alias' ###############################
 
 ############### Random ################
