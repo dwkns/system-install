@@ -20,7 +20,7 @@ $ brew tap caskroom/cask && brew tap caskroom/versions && brew tap caskroom/font
 Some of these apps are used in the install script so we install them first.
 
 ```` 
-$ brew install  openssl git python node heroku postgresql mas rbenv ruby-build 
+$ brew install openssl git python node heroku postgresql mas rbenv ruby-build jq
 ````
 
 ### Install system config & dot files
