@@ -57,11 +57,6 @@ else
 fi
 }
 
-
-############### Install Ruby, set to global, install bundler ################
-# RBV=2.6.3
-# rbenv install $RBV && rbenv global $RBV && gem install bundler
-
 ############################### Alias' ###############################
 
 ############### Random ################
@@ -336,6 +331,6 @@ export EDITOR='subl -w'                                  # Set default editor
 export PGDATA=/usr/local/var/postgres                    # Set Postgres path
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"       # Default install location for cask apps
 export PATH=/usr/local/bin:$PATH                         # Set Path Variable
-export PATH=$PATH:~/bin
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH=$PATH:~/bin
 eval "$(rbenv init -)"
