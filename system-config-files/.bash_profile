@@ -94,45 +94,9 @@ rps () {
 }
 
 
-mnx () {
+mbx () {
   success 'making new executable bash file'; 
-  if [ -z ${1+x} ]; then # have we passed in a variable $1
-      warn "Nothing passed in..."
-      warn "You can use 'mnx <fileName>' as a shortcut."
-      echo
-      read -p "Enter filename name (default -> run.sh) : " PROJECTNAME
-      echo
-      PROJECTNAME=${PROJECTNAME:-run.sh}
-  else 
-      PROJECTNAME=$1
-  fi
-
-  if [[  ${PROJECTNAME: -3} != ".sh" ]]; then
-      PROJECTNAME=$PROJECTNAME.sh
-  fi
-
-  echo -e "${GREEN}====> Setting project name to $BLUE'$PROJECTNAME'$RESET"
-
-
-  if [ -f "$PROJECTNAME" ]; then
-    read -p "$(echo -e ${RED}"WARNING "$BLUE"'$PROJECTNAME'"${RED}" already exists Delete it y/n (default - y) : "$RESET)" DELETEIT
-
-    DELETEIT=${DELETEIT:-Y}
-
-    if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
-     rm -rf $PROJECTNAME
-    else
-      warn "OK not doing anything & exiting" 
-      return
-    fi
-  fi
-
-  cat >$PROJECTNAME<<'EOL'
-  #!/usr/bin/env bash
-EOL
-chmod +x $PROJECTNAME
-echo -e ${GREEN}"====> "$BLUE"'$PROJECTNAME'"${GREEN}" Created and set to be Executable"$RESET
-subl $PROJECTNAME
+  . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
 

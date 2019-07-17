@@ -38,7 +38,7 @@ $ ~/.bash_profile
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina mamp-pro sequel-pro phantomjs
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro chromedriver
 ````
 
 Install [Chrome](https://www.google.com/chrome/index.html) directly (the cask version doesn't play well with 1Password).
@@ -53,6 +53,7 @@ $ rbenv install 2.4.2 && rbenv global  2.4.2 // Or Whatever ruby version you wan
 ````
 
 ### Ensure that rbenv is added to .bash_profile
+Not req if using the install script
 
 ````bash
 $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile  
@@ -68,7 +69,7 @@ $ ~/.bash_profile
 ### Install some Ruby Gems
 
 ````bash
-$ gem install bundler rails powder foreman launchy 
+$ gem install bundler rails powder foreman launchy htmlbeautifier 
 ````
 
 ### Install some Global Node Modules
