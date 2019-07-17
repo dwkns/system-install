@@ -20,7 +20,7 @@ $ brew tap caskroom/cask && brew tap caskroom/versions && brew tap caskroom/font
 Some of these apps are used in the install script so we install them first.
 
 ```` 
-$ brew install  openssl git python node heroku postgresql mas rbenv ruby-build 
+$ brew install openssl git python node heroku postgresql mas rbenv ruby-build jq
 ````
 
 ### Install system config & dot files
@@ -38,7 +38,7 @@ $ ~/.bash_profile
 ### Install apps  
 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro chromedriver
+$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro chromedriver google-chrome
 ````
 
 Install [Chrome](https://www.google.com/chrome/index.html) directly (the cask version doesn't play well with 1Password).
@@ -77,7 +77,7 @@ $ gem install bundler rails powder foreman launchy htmlbeautifier
 Required for the Sublime Javascript build system to work.
 
 ```bash
-$ npm install -g @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
+$ npm install -g yarn @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
 ```
 
 ### Install App Store Apps
