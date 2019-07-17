@@ -80,7 +80,9 @@ cd "$PROJECTNAME"
 # tmp=$(mktemp) 
 # JQVAR='.author |= .+ "dwkns"'
 # jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
-
+cat >README.md <<'EOL'
+##Read Me File
+EOL
 cat >Gemfile <<'EOL'
 source 'https://rubygems.org'
 gem 'rspec'
