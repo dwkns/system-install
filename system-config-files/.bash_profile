@@ -93,6 +93,11 @@ rps () {
   . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
 }
 
+nps () {
+  success 'making new node project skeleton'; 
+  . $HOME/.system-config/scripts/node-project-skeleton.sh $1;
+}
+
 
 mbx () {
   success 'making new executable bash file'; 
