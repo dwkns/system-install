@@ -69,7 +69,7 @@ alias ls="ls -l"                                                               #
 alias cd..="cd .."                                                             # Because I allways forget the space.
 alias kd="success 'Killing the Dock'; killall Dock"                                # reboot Desktop
 alias kf="success 'Killing the Finder'; killall Finder"                            # reboot Finder
-alias dt="cd ~/Desktop"                                                        # cd to desktop
+alias dt="success 'changing to Desktop'; cd ~/Desktop"                                                        # cd to desktop
 alias s="success 'opening current folder in Sublime'; subl ."                      # Opens current folder in sublime
 alias a="success 'opening current folder in Atom'; atom ."  
 alias sp="success 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
@@ -276,7 +276,13 @@ parse_git_branch() {                                                        # Fi
 }
 
 
-export PS1="${PROMPT_RED}\u@\h: ${PROMPT_YELLOW}\w\n${PROMPT_GREEN}\$(parse_git_branch)${PROMPT_RESET}$ "        # Set the colour prompt
+export PS1="${PROMPT_RED}\u@\h: ${PROMPT_YELLOW}\w\n${PROMPT_GREEN}\$(parse_git_branch)${PROMPT_RESET}$ " 
+export PS1="${PROMPT_YELLOW}\w\n${PROMPT_RESET}$ " 
+
+
+# export PS1="$ "    
+
+              # Set the colour prompt
 cd ~/Desktop                                                                # Start new windows on the desktop
 
 # Check to see if a secrets file is present. This is not backed up to GITHUB.
