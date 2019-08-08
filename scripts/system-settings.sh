@@ -312,6 +312,9 @@ defaults write org.m0k.transmission WarningDonate -bool false
 echo "Transmission.app : Hide the legal disclaimer"
 defaults write org.m0k.transmission WarningLegal -bool false
 
+echo
+
+echo
 echo "iTerm2.app : ~/.system-config/system-config-files/ for preferences"
 # Specify the preferences directory
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.system-config/system-config-files/"
