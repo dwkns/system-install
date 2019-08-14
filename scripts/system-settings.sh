@@ -37,7 +37,7 @@ echo "General : Set a blazingly fast keyboard repeat rate"
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 1 # normal minimum is 2 (30 ms)
+defaults write NSGlobalDomain KeyRepeat -int 2 # normal minimum is 2 (30 ms)
 defaults write NSGlobalDomain InitialKeyRepeat -int 15 # normal minimum is 15 (225 ms)
 
 echo                        
