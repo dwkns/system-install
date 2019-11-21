@@ -3,17 +3,17 @@ source ~/.profile
 
 export TERM=xterm-256color
 ############################### Variables ###############################
-SROOT="$HOME/Library/Application Support/Sublime Text 3/"
-SYSCD="$HOME/.system-config/system-config-files"
+# SROOT="$HOME/Library/Application Support/Sublime Text 3/"
+# SYSCD="$HOME/.system-config/system-config-files"
 
 ############################### Variables ###############################
-RED="$(tput setaf 1)"
-GREEN="$(tput setaf 2)"
-YELLOW="$(tput setaf 3)"
-BLUE="$(tput setaf 20)"
-BROWN="$(tput setaf 94)"
-GREY="$(tput setaf 243)"
-RESET="$(tput sgr0)"
+# RED="$(tput setaf 1)"
+# GREEN="$(tput setaf 2)"
+# YELLOW="$(tput setaf 3)"
+# BLUE="$(tput setaf 20)"
+# BROWN="$(tput setaf 94)"
+# GREY="$(tput setaf 243)"
+# RESET="$(tput sgr0)"
 
 PROMPT_RED="\[$(tput setaf 1)\]"
 PROMPT_GREEN="\[$(tput setaf 2)\]"
@@ -78,42 +78,7 @@ alias rp="success 'Reloading .bash_profile'; source ~/.bash_profile"            
 
 alias hd="cd ~/"               
 
-alias cmds="success 'listing projects'; projects;"
 
-############### System ################
-projects () {
-  note "$YELLOW ckps :$RESET CodeKit project skeleton $RESET";
-  note "$YELLOW pps  :$RESET Parcel project skeleton  $RESET";
-  note "$YELLOW rps  :$RESET Ruby project skeleton $RESET";
-  note "$YELLOW nps  :$RESET node project skeleton $RESET";
-  note "$YELLOW mbx  :$RESET executable bash file $RESET";
-}
-
-ckps () {
-  success 'Creating CodeKit web skeleton project';
-  . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
-}
-
-pps () {
-  success 'Creating Parcel web skeleton project';
-  . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
-}
-
-rps () {
-  success 'Creating Ruby skeleton project';
-  . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
-}
-
-nps () {
-  success 'making new node project skeleton'; 
-  . $HOME/.system-config/scripts/node-project-skeleton.sh $1;
-}
-
-
-mbx () {
-  success 'making new executable bash file'; 
-  . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
-}
 
 
 # Hide and show invisibles
@@ -215,26 +180,7 @@ bsys () {
 
 alias bsc="warn 'Did you mean to to back up system files'; echo 'Use bsys'"        
 
-############### Editing sublime files ################
-esub () {                                                     # Edit the sublime config files
-  success 'Opening the Sublime config files folder'
-  cd "$SROOT/Packages/User";
-  subl .;
-}
-subu () {                                                     # Open sublime config files
-  success 'Opening the Sublime config files folder'
-  cd "$SROOT/Packages/User";
-  subl .;
-}
-bsub () {                                                     # Backup Sublime config files                           
-  backUpSublimeConfig;
-}
 
-esubt () {
-  success 'Editing Sublime A3-Theme';
-  cd "$SROOT/Packages/A3-Theme";
-  subl .;
-}
 
 ############### Pow and Nginx ################
 nginxrunning () {
@@ -294,17 +240,17 @@ export PS1="${PROMPT_YELLOW}\w\n${PROMPT_RESET}$ "
 # export PS1="$ "    
 
               # Set the colour prompt
-cd ~/Desktop                                                                # Start new windows on the desktop
+# cd ~/Desktop                                                                # Start new windows on the desktop
 
-# Check to see if a secrets file is present. This is not backed up to GITHUB.
-# It's a useful place to store ENV variable used for usernames / passwords.
-SECRETS_FILE="$HOME/.secrets.sh"
-if [ -f $SECRETS_FILE ];
-then
- source $SECRETS_FILE
-fi
+# # Check to see if a secrets file is present. This is not backed up to GITHUB.
+# # It's a useful place to store ENV variable used for usernames / passwords.
+# SECRETS_FILE="$HOME/.secrets.sh"
+# if [ -f $SECRETS_FILE ];
+# then
+#  source $SECRETS_FILE
+# fi
 
-alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
+
 
 
 chflags hidden ~/Applications                            # keep the local ~/Applicaiton file hidden.
@@ -313,9 +259,9 @@ chflags hidden ~/Applications                            # keep the local ~/Appl
 export LSCOLORS=ExFxCxDxBxegedabagacad                   # Colours
 export CLICOLOR=1                                        # Colours
 export TERM=xterm-256color                               # Colours
-export EDITOR='subl -w'                                  # Set default editor
+                            # Set default editor
 export PGDATA=/usr/local/var/postgres                    # Set Postgres path
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"       # Default install location for cask apps
+     # Default install location for cask apps
 export PATH=/usr/local/bin:$PATH                         # Set Path Variable
 export PATH=$PATH:~/bin
 export PATH="$HOME/.rbenv/bin:$PATH"
