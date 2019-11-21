@@ -9,7 +9,18 @@ DOTFILES=(
   ".eslintrc.yml"
   ".zshrc"
   ".backup-profile"
+  ".projects-profile"
 )  
+
+usys () {
+  success 'updating system config files.'; 
+  cd "$HOME/.system-config";
+  git pull;
+  source "$HOME/.system-config/scripts/dotfiles.sh";
+  source "$HOME/.system-config/scripts/sublime-config.sh";
+  source "$HOME/.system-config/scripts/system-settings.sh";
+  source "$HOME/.zshrc";
+}
 
 backUpSublimeConfig () {
   success 'Backing up Sublime config'; 
@@ -27,6 +38,7 @@ backUpSystemConfig () {
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
 }
+
 
 bsys () {
   success 'Backing up system & sublime config';

@@ -1,14 +1,133 @@
+export ZSH="/Users/dazza/.oh-my-zsh"
+# ZSH_THEME="avit"
+plugins=(bundler)
+source $ZSH/oh-my-zsh.sh
+
+SROOT="$HOME/Library/Application Support/Sublime Text 3/"
+SYSCD="$HOME/.system-config/system-config-files"
+
+NEWLINE=$'\n'
+PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
+
+
+source ~/.backup-profile
+source ~/.projects-profile
+
+success () {
+  echo -e "$fg[green]====> $1 $reset_color"
+}
+
+warn () {
+ echo -e "$fg[yellow]====> $1 $reset_color"
+}
+
+error () {  
+ echo -e "$fg[red]====> $1 $reset_color"
+}
+
+note () {
+  echo -e "$reset_color====> $1 $reset_color"
+}
+
+## terminal commands
+alias ls="ls -l"            # because the normal way is dumb                                                             
+alias cd..="cd .."          # because I always miss the space. 
+alias h="success 'changing to Home'; cd ~/"
+alias dt="success 'changing to Desktop'; cd ~/Desktop"         
+alias kd="success 'Killing the Dock'; killall Dock"                                
+alias kf="success 'Killing the Finder'; killall Finder"                            
+                                                     
+alias s="success 'opening current folder in Sublime'; subl ."                      
+alias a="success 'opening current folder in Atom'; atom ."  
+alias rp="success 'Reloading .zshrc'; source ~/.zshrc"  
+
+
+## editing things
+alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
+
+############### Git ################
+alias gc="success 'Doing git commit'; git commit"                                   # git commit
+alias gca="success 'Doing git commit'; git commit -a"                               # git commit all
+alias ga="success 'Doing git add -A'; git add -A"                                   # git add all
+alias gs="git status"                                                            # git status
+alias gb="success 'Doing git branch'; git branch"                                   # git branch
+alias gp="success 'Doing git push -- all'; git push --all"                          # git push all
+alias gpa="gp"                                                                   # second alias for git push all
+alias gco="success 'Doing git checkout'; git checkout"                              # git checkout
+alias gac="success 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
+alias gph="success 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
+alias gphm="success 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
+
+
+############### Editing sublime files ################
+esub () {     # Edit the sublime config files
+  success 'Opening the Sublime config files folder'
+  cd "$SROOT/Packages/User";
+  subl .;
+}
+subu () {     # Open sublime config files
+  success 'Opening the Sublime config files folder'
+  cd "$SROOT/Packages/User";
+  subl .;
+}
+bsub () {      # Backup Sublime config files                           
+  backUpSublimeConfig;
+}
+
+esubt () {
+  success 'Editing Sublime A3-Theme';
+  cd "$SROOT/Packages/A3-Theme";
+  subl .;
+}
+
+
+# Hide and show invisibles
+alias sf="success 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
+alias hf="success 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
+
+
+## my apps
+alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./bin/start"
+alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
+
+############### rbenv ################
+alias rh="success 'doing rbenv rehash...'; rbenv rehash"
+
+
+############### Brew ################
+alias bu="success 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
+
+
+############### Yarn ################
+ya () {
+  success 'Doing yarn add --dev';
+  yarn add --dev $1;
+}
+
+
+export EDITOR='subl -w'
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
+export PATH=$PATH:~/bin
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+cd ~/Desktop  
+
+
+
+# =========================================================
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/dazza/.oh-my-zsh"
+# export ZSH="/Users/dazza/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="avit"
+# ZSH_THEME="avit"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -68,9 +187,9 @@ ZSH_THEME="avit"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+# plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -97,23 +216,3 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-SROOT="$HOME/Library/Application Support/Sublime Text 3/"
-SYSCD="$HOME/.system-config/system-config-files"
-
-RED="$(tput setaf 1)"
-GREEN="$(tput setaf 2)"
-YELLOW="$(tput setaf 3)"
-BLUE="$(tput setaf 20)"
-BROWN="$(tput setaf 94)"
-GREY="$(tput setaf 243)"
-RESET="$(tput sgr0)"
-
-source ~/.backup-profile
-
-success () {
-  echo -e "$GREEN====> $1 $RESET"
-}
-
-alias ls="ls -l"   
-alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
