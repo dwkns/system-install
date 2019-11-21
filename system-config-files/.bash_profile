@@ -1,4 +1,6 @@
 source ~/.profile
+#export BASH_SILENCE_DEPRECATION_WARNING=1
+
 export TERM=xterm-256color
 ############################### Variables ###############################
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
@@ -72,18 +74,27 @@ alias kf="success 'Killing the Finder'; killall Finder"                         
 alias dt="success 'changing to Desktop'; cd ~/Desktop"                                                        # cd to desktop
 alias s="success 'opening current folder in Sublime'; subl ."                      # Opens current folder in sublime
 alias a="success 'opening current folder in Atom'; atom ."  
-alias sp="success 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
+alias rp="success 'Reloading .bash_profile'; source ~/.bash_profile"               # Reload Bash Profile
 
 alias hd="cd ~/"               
 
+alias cmds="success 'listing projects'; projects;"
 
 ############### System ################
-cws () {
+projects () {
+  note "$YELLOW ckps :$RESET CodeKit project skeleton $RESET";
+  note "$YELLOW pps  :$RESET Parcel project skeleton  $RESET";
+  note "$YELLOW rps  :$RESET Ruby project skeleton $RESET";
+  note "$YELLOW nps  :$RESET node project skeleton $RESET";
+  note "$YELLOW mbx  :$RESET executable bash file $RESET";
+}
+
+ckps () {
   success 'Creating CodeKit web skeleton project';
   . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
 }
 
-pws () {
+pps () {
   success 'Creating Parcel web skeleton project';
   . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
 }
