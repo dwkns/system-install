@@ -45,6 +45,22 @@ alias rp="success 'Reloading .zshrc'; source ~/.zshrc"
 ## editing things
 alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
 
+############### Editing config files ################
+alias sys="success 'Changing to system config'; cd ~/.system-config"                 # cd to system config directory
+alias ep="success 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
+alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
+alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
+alias esc="esp"   
+alias elint="success 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
+alias ebfy="success 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
+alias ebty=ebfy # Catch errors
+alias sysd="success 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
+alias subd="success 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
+alias opog="success 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
+
+
+
+
 ############### Git ################
 alias gc="success 'Doing git commit'; git commit"                                   # git commit
 alias gca="success 'Doing git commit'; git commit -a"                               # git commit all
