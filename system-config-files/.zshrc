@@ -1,7 +1,14 @@
 export ZSH="/Users/dazza/.oh-my-zsh"
 # ZSH_THEME="avit"
 plugins=(bundler)
-source $ZSH/oh-my-zsh.sh
+
+if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
+    echo "File not found!" >&2
+    exit 1
+else
+    source $ZSH/oh-my-zsh.sh
+fi
+
 
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
