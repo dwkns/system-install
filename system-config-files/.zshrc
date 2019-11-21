@@ -98,36 +98,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-DOTFILES=( 
-  ".bash_profile"
-  ".gemrc"
-  ".gitconfig"
-  ".gitignore_global"
-  ".irbrc"
-  ".rspec"
-  ".jsbeautifyrc"
-  ".eslintrc.yml"
-  ".zshrc"
-)  
-
 SYSCD="$HOME/.system-config/system-config-files"
-backUpSystemConfig () {
-  echo 'Backing up system config files'; 
-  # (command) runs this command without chaning directory 
-  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-}
 
-bsys () {
-  echo 'Backing up system & sublime config';
-  echo 'Copying current dotfile files';
-  echo;
-  for i in "${DOTFILES[@]}"
-  do  
-     cp -rf "$HOME/$i" "$SYSCD/$i";
-  done
-  # backUpSublimeConfig;
-  backUpSystemConfig;
-}
+source ~/.backup-profile
 
 alias ls="ls -l"   
 alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
