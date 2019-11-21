@@ -1,0 +1,41 @@
+DOTFILES=( 
+  ".bash_profile"
+  ".gemrc"
+  ".gitconfig"
+  ".gitignore_global"
+  ".irbrc"
+  ".rspec"
+  ".jsbeautifyrc"
+  ".eslintrc.yml"
+  ".zshrc"
+  ".backup-profile"
+)  
+
+backUpSublimeConfig () {
+  success 'Backing up Sublime config'; 
+  # (command) runs this command without chaning directory 
+  (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; gpa; );
+  echo;
+  success 'Backing up A3 theme'; 
+  (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; gpa; );
+  echo;
+}
+
+
+backUpSystemConfig () {
+  echo 'Backing up system config files'; 
+  # (command) runs this command without chaning directory 
+  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+}
+
+bsys () {
+  echo 'Backing up system & sublime config';
+  echo 'Copying current dotfile files';
+  echo;
+  for i in "${DOTFILES[@]}"
+  do  
+     cp -rf "$HOME/$i" "$SYSCD/$i";
+  done
+  backUpSublimeConfig;
+  backUpSystemConfig;
+}
