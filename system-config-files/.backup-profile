@@ -29,8 +29,8 @@ backUpSystemConfig () {
 }
 
 bsys () {
-  echo 'Backing up system & sublime config';
-  echo 'Copying current dotfile files';
+  success 'Backing up system & sublime config';
+  success 'Copying current dotfile files';
   echo;
   for i in "${DOTFILES[@]}"
   do  
