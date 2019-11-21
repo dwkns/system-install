@@ -114,7 +114,7 @@ SYSCD="$HOME/.system-config/system-config-files"
 backUpSystemConfig () {
   echo 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
-  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; gpa;);
+  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
 }
 
 bsys () {
