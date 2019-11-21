@@ -2,14 +2,11 @@ export ZSH="/Users/dazza/.oh-my-zsh"
 plugins=(bundler)
 
 if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
-    echo "File not found!" >&2
-    echo "Oh my zsh was not found"
-    GONOW="sh -c \"\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
-    echo "You might want to run $GONOW"
-else
-    source $ZSH/oh-my-zsh.sh
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)";
+    mv -f $HOME/.zshrc.pre-oh-my-zsh $HOME/.zshrc
 fi
-
+source $ZSH/oh-my-zsh.sh
+source $HOME/.zshrc
 
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
