@@ -1,9 +1,11 @@
 export ZSH="/Users/dazza/.oh-my-zsh"
-# ZSH_THEME="avit"
 plugins=(bundler)
 
 if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
     echo "File not found!" >&2
+    echo "Oh my zsh was not found"
+    GONOW="sh -c \"\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+    echo "You might want to run $GONOW"
 else
     source $ZSH/oh-my-zsh.sh
 fi
@@ -158,7 +160,7 @@ alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"
 
 ############### Editing config files ################
 alias sys="success 'Changing to system config'; cd ~/.system-config"                 # cd to system config directory
-alias ep="success 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
+# alias ep="success 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
 alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
 alias esc="esp"   
