@@ -101,7 +101,19 @@ source $ZSH/oh-my-zsh.sh
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config/system-config-files"
 
+RED="$(tput setaf 1)"
+GREEN="$(tput setaf 2)"
+YELLOW="$(tput setaf 3)"
+BLUE="$(tput setaf 20)"
+BROWN="$(tput setaf 94)"
+GREY="$(tput setaf 243)"
+RESET="$(tput sgr0)"
+
 source ~/.backup-profile
+
+success () {
+  echo -e "$GREEN====> $1 $RESET"
+}
 
 alias ls="ls -l"   
 alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
