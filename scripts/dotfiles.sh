@@ -40,8 +40,6 @@ DOTFILES=(
   ".jsbeautifyrc"
   ".eslintrc.yml"
   ".zshrc"
-  ".backup-profile"
-  ".projects-profile"
 )  
 
 installDotFiles () {

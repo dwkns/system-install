@@ -10,8 +10,6 @@ NEWLINE=$'\n'
 PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
 
 
-source ~/.backup-profile
-source ~/.projects-profile
 
 success () {
   echo -e "$fg[green]====> $1 $reset_color"
@@ -28,6 +26,113 @@ error () {
 note () {
   echo -e "$reset_color====> $1 $reset_color"
 }
+
+
+
+DOTFILES=( 
+  ".bash_profile"
+  ".gemrc"
+  ".gitconfig"
+  ".gitignore_global"
+  ".irbrc"
+  ".rspec"
+  ".jsbeautifyrc"
+  ".eslintrc.yml"
+  ".zshrc"
+)  
+
+usys () {
+  success 'updating system config files.'; 
+  cd "$HOME/.system-config";
+  git pull;
+  source "$HOME/.system-config/scripts/dotfiles.sh";
+  source "$HOME/.system-config/scripts/sublime-config.sh";
+  source "$HOME/.system-config/scripts/system-settings.sh";
+  source "$HOME/.zshrc";
+}
+
+backUpSublimeConfig () {
+  success 'Backing up Sublime config'; 
+  # (command) runs this command without chaning directory 
+  (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; git push --all; );
+  echo;
+  success 'Backing up A3 theme'; 
+  (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
+  echo;
+}
+
+
+backUpSystemConfig () {
+  echo 'Backing up system config files'; 
+  # (command) runs this command without chaning directory 
+  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+}
+
+
+bsys () {
+  success 'Backing up system & sublime config';
+  success 'Copying current dotfile files';
+  echo;
+  for i in "${DOTFILES[@]}"
+  do  
+     cp -rf "$HOME/$i" "$SYSCD/$i";
+  done
+  backUpSublimeConfig;
+  backUpSystemConfig;
+}
+
+
+
+
+alias cmds="success 'listing projects'; projects;"
+
+############### System ################
+projects () {
+  note "$YELLOW ckps :$RESET CodeKit project skeleton $RESET";
+  note "$YELLOW pps  :$RESET Parcel project skeleton  $RESET";
+  note "$YELLOW rps  :$RESET Ruby project skeleton $RESET";
+  note "$YELLOW nps  :$RESET node project skeleton $RESET";
+  note "$YELLOW mbx  :$RESET executable bash file $RESET";
+}
+
+ckps () {
+  success 'Creating CodeKit web skeleton project';
+  . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
+}
+
+pps () {
+  success 'Creating Parcel web skeleton project';
+  . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
+}
+
+rps () {
+  success 'Creating Ruby skeleton project';
+  . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
+}
+
+nps () {
+  success 'making new node project skeleton'; 
+  . $HOME/.system-config/scripts/node-project-skeleton.sh $1;
+}
+
+
+mbx () {
+  success 'making new executable bash file'; 
+  . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## terminal commands
 alias ls="ls -l"            # because the normal way is dumb                                                             
