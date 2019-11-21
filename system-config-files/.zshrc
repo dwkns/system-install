@@ -1,21 +1,6 @@
 export ZSH="/Users/dazza/.oh-my-zsh"
+# ZSH_THEME="avit"
 plugins=(bundler)
-
-if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)";
-    mv -f $HOME/.zshrc.pre-oh-my-zsh $HOME/.zshrc
-fi
-source $ZSH/oh-my-zsh.sh
-source $HOME/.zshrc
-
-SROOT="$HOME/Library/Application Support/Sublime Text 3/"
-SYSCD="$HOME/.system-config/system-config-files"
-
-NEWLINE=$'\n'
-PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
-
-
-
 success () {
   echo -e "$fg[green]====> $1 $reset_color"
 }
@@ -31,6 +16,29 @@ error () {
 note () {
   echo -e "$reset_color====> $1 $reset_color"
 }
+
+
+if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
+    echo "$(tput setaf 1)Oh my zsh was not found$(tput sgr0)"
+    GONOW="sh -c \"\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+    echo "$(tput setaf 14)You might want to run : $(tput sgr0)$GONOW"
+    echo "$(tput setaf 14)And then : $(tput sgr0)mv -f $HOME/.zshrc.pre-oh-my-zsh $HOME/.zshrc"
+    echo "$(tput setaf 14)And then : $(tput sgr0)source $HOME/.zshrc"
+else
+    source $ZSH/oh-my-zsh.sh
+fi
+
+
+
+SROOT="$HOME/Library/Application Support/Sublime Text 3/"
+SYSCD="$HOME/.system-config/system-config-files"
+
+NEWLINE=$'\n'
+PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
+
+
+
+
 
 
 
@@ -157,7 +165,7 @@ alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"
 
 ############### Editing config files ################
 alias sys="success 'Changing to system config'; cd ~/.system-config"                 # cd to system config directory
-# alias ep="success 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
+alias ep="success 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
 alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
 alias esc="esp"   
