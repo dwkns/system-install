@@ -1,8 +1,12 @@
 # System Install
-Highly opinionated config files for Sublime Text 3 and my OS X Bash terminal.
+Highly opinionated config files for Sublime Text 3 and my OS ZSH terminal.
 As with all bash scripts **read it** before you run it. And if you don't understand it. **DON'T RUN IT**.
 
 Here is what you do...
+### Install Oh My Zsh
+```` 
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```` 
 
 ### Install homebrew
 
