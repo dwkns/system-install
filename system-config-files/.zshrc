@@ -1,6 +1,38 @@
 export ZSH="/Users/dazza/.oh-my-zsh"
-# ZSH_THEME="avit"
+
+###### Check if oh-my-zsh is installed and warn if it is not. 
+if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
+    echo "$(tput setaf 1)Oh my zsh was not found$(tput sgr0)"
+    GONOW="sh -c \"\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+    echo "$(tput setaf 14)You might want to run : $(tput sgr0)$GONOW"
+    echo "$(tput setaf 14)And then : $(tput sgr0)mv -f $HOME/.zshrc.pre-oh-my-zsh $HOME/.zshrc"
+    echo "$(tput setaf 14)And then : $(tput sgr0)source $HOME/.zshrc"
+else
+    source $ZSH/oh-my-zsh.sh
+fi
+
+##### Defile some variables 
 plugins=(bundler)
+SROOT="$HOME/Library/Application Support/Sublime Text 3/"
+SYSCD="$HOME/.system-config/system-config-files"
+
+DOTFILES=( 
+  ".bash_profile"
+  ".gemrc"
+  ".gitconfig"
+  ".gitignore_global"
+  ".irbrc"
+  ".rspec"
+  ".jsbeautifyrc"
+  ".eslintrc.yml"
+  ".zshrc"
+)  
+
+###### style the prompt.
+NEWLINE=$'\n'
+PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
+
+##### Fucitons to style shell output
 success () {
   echo -e "$fg[green]====> $1 $reset_color"
 }
@@ -18,41 +50,9 @@ note () {
 }
 
 
-if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
-    echo "$(tput setaf 1)Oh my zsh was not found$(tput sgr0)"
-    GONOW="sh -c \"\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
-    echo "$(tput setaf 14)You might want to run : $(tput sgr0)$GONOW"
-    echo "$(tput setaf 14)And then : $(tput sgr0)mv -f $HOME/.zshrc.pre-oh-my-zsh $HOME/.zshrc"
-    echo "$(tput setaf 14)And then : $(tput sgr0)source $HOME/.zshrc"
-else
-    source $ZSH/oh-my-zsh.sh
-fi
 
 
-
-SROOT="$HOME/Library/Application Support/Sublime Text 3/"
-SYSCD="$HOME/.system-config/system-config-files"
-
-NEWLINE=$'\n'
-PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
-
-
-
-
-
-
-
-DOTFILES=( 
-  ".bash_profile"
-  ".gemrc"
-  ".gitconfig"
-  ".gitignore_global"
-  ".irbrc"
-  ".rspec"
-  ".jsbeautifyrc"
-  ".eslintrc.yml"
-  ".zshrc"
-)  
+##### functions to backup and update dotfiles & sublime-config
 
 usys () {
   success 'updating system config files.'; 
@@ -95,17 +95,13 @@ bsys () {
 }
 
 
-
-
-alias cmds="success 'listing projects'; projects;"
-
-############### System ################
+##### functions to create skeleton projects 
 projects () {
-  note "$YELLOW ckps :$RESET CodeKit project skeleton $RESET";
-  note "$YELLOW pps  :$RESET Parcel project skeleton  $RESET";
-  note "$YELLOW rps  :$RESET Ruby project skeleton $RESET";
-  note "$YELLOW nps  :$RESET node project skeleton $RESET";
-  note "$YELLOW mbx  :$RESET executable bash file $RESET";
+  note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
+  note "$fg[yellow] pps  :$reset_color Parcel project skeleton  $reset_color";
+  note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
+  note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
+  note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
 }
 
 ckps () {
@@ -147,49 +143,34 @@ mbx () {
 
 
 
-## terminal commands
+##### Common commands
 alias ls="ls -l"            # because the normal way is dumb                                                             
 alias cd..="cd .."          # because I always miss the space. 
 alias h="success 'changing to Home'; cd ~/"
-alias dt="success 'changing to Desktop'; cd ~/Desktop"         
+alias dt="success 'changing to Desktop'; cd ~/Desktop"    
+
 alias kd="success 'Killing the Dock'; killall Dock"                                
 alias kf="success 'Killing the Finder'; killall Finder"                            
                                                      
 alias s="success 'opening current folder in Sublime'; subl ."                      
 alias a="success 'opening current folder in Atom'; atom ."  
-alias rp="success 'Reloading .zshrc'; source ~/.zshrc"  
+ 
+alias cmds="success 'listing project skeletons'; projects;"
 
+alias rp="success 'Reloading .zshrc'; source ~/.zshrc" 
 
-## editing things
-alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
+alias ep="success 'Editing zsh profile'; subl ~/.zshrc"  
+  
 
 ############### Editing config files ################
-alias sys="success 'Changing to system config'; cd ~/.system-config"                          # edit bash profile
-alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
-alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
-alias esc="esp"   
+                   alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"         
 alias elint="success 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
 alias ebfy="success 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
-alias ebty=ebfy # Catch errors
-alias sysd="success 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
-alias subd="success 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
-alias opog="success 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
+alias cdsys="success 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
+alias cdsub="success 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
+alias esysgh="success 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
-
-
-############### Git ################
-alias gc="success 'Doing git commit'; git commit"                                   # git commit
-alias gca="success 'Doing git commit'; git commit -a"                               # git commit all
-alias ga="success 'Doing git add -A'; git add -A"                                   # git add all
-alias gs="git status"                                                            # git status
-alias gb="success 'Doing git branch'; git branch"                                   # git branch
-alias gp="success 'Doing git push -- all'; git push --all"                          # git push all
-alias gpa="gp"                                                                   # second alias for git push all
-alias gco="success 'Doing git checkout'; git checkout"                              # git checkout
-alias gac="success 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
-alias gph="success 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
-alias gphm="success 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
 
 
 ############### Editing sublime files ################
@@ -212,6 +193,21 @@ esubt () {
   cd "$SROOT/Packages/A3-Theme";
   subl .;
 }
+
+############### Git ################
+alias gc="success 'Doing git commit'; git commit"                                   # git commit
+alias gca="success 'Doing git commit'; git commit -a"                               # git commit all
+alias ga="success 'Doing git add -A'; git add -A"                                   # git add all
+alias gs="git status"                                                               # git status
+alias gb="success 'Doing git branch'; git branch"                                   # git branch
+alias gp="success 'Doing git push -- all'; git push --all"                          # git push all
+alias gpa="gp"                                                                      # second alias for git push all
+alias gco="success 'Doing git checkout'; git checkout"                              # git checkout
+alias gac="success 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
+alias gph="success 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
+alias gphm="success 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
+
+
 
 
 # Hide and show invisibles
@@ -238,13 +234,25 @@ ya () {
 }
 
 
+
 export EDITOR='subl -w'
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
 export PATH=$PATH:~/bin
-
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 cd ~/Desktop  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
