@@ -1,56 +1,5 @@
-#!/usr/bin/env bash
-
-############################### Variables ###############################
-RED="\033[0;31m"          
-YELLOW="\033[0;33m"       
-GREEN="\033[0;32m"          
-BLUE="\033[0;94m"
-RESET="\033[0m"
-
-############################### Functions ###############################
-
-success () {
-  echo -e $GREEN"Success ====>$RESET $1"
-}
-
-warn () {
- echo -e $YELLOW"Warning ====>$RESET $1"
-}
-
-error () {  
- echo -e $RED"Error ====>$RESET $1"
-}
-
-note () {
-  echo -e $RESET"====>$RESET $1"
-}
-
-
-######## Ask for a project name or use default 'demo_project'
-if [ -z ${1+x} ]; then # have we passed in a variable $1
-    warn "Nothing passed in..."
-    warn "You can use '${0##*/} <projectName>' as a shortcut."
-    echo
-    read -p "Enter project name (default -> demo_project) : " PROJECTNAME
-    echo
-    PROJECTNAME=${PROJECTNAME:-demo_project}
-else   
-    success  "Setting project name to '$1'"
-    PROJECTNAME=$1
-fi
-
-######## Does the folder already exist? Do you want overide it?
-if [ -d "$PROJECTNAME" ]; then
-  read -p "Project $PROJECTNAME already exists delete it y/n (default - y) : " DELETEIT
-  DELETEIT=${DELETEIT:-Y}
-
-  if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
-   rm -rf $PROJECTNAME
-  else
-    error "OK not doing anything & exiting" 
-    exit 0
-  fi
-fi
+#!/usr/bin/env zsh
+. $HOME/.system-config/scripts/utils/set-up-projects.sh $1;
 
 success "Project $PROJECTNAME will be created!"
 
