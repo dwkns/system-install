@@ -1,60 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin#!/usr/bin/env zsh
+. $HOME/.system-config/scripts/utils/set-up-projects.sh $1;
 
+success "Project $PROJECTNAME will be created!"
 
-############################### Variables ###############################
-RED="\[\033[0;31m\]"          #red
-YELLOW="\[\033[0;33m\]"       #yellow
-WHITE="\[\033[0;37m\]"        #white
-GREEN="\[\033[32m\]"          #greeen
-
-############################### Functions ###############################
-note () {
-  echo -e "\033[0;94m====> $1 \033[0m"
-}
-msg () {
-  echo -e "\033[0;32m==============> $1 \033[0m"
-}
-
-smsg () {
-  echo -e "\033[0;32m====> $1 \033[0m"
-}
-warn () {
-  echo -e "\033[0;31m====> $1 \033[0m"
-}
-
-
-############################### Main Script ###############################
-
-if [ -z ${1+x} ]; then # have we passed in a variable $1
-    note "Nothing passed in..."; 
-    note "You can use 'cws projectName' as a shortcut."; 
-    echo
-    read -p "Enter project name (default - demoProject) : " PROJECTNAME
-    echo
-    PROJECTNAME=${PROJECTNAME:-demoProject}
-else 
-    note "Setting project name to '$1'"; 
-    PROJECTNAME=$1
-fi
-
-
-if [ -d "$PROJECTNAME" ]; then
-  read -p "Project $PROJECTNAME already exists delete it y/n (default - y) : " DELETEIT
-  DELETEIT=${DELETEIT:-Y}
-
-  if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
-   rm -rf $PROJECTNAME
-  else
-    warn "OK not doing anything & exiting" 
-    exit 0
-  fi
-fi
-
-smsg "Project $PROJECTNAME will be created!"
-
+######## Create the folder
 mkdir -p $PROJECTNAME
-
 cd "$PROJECTNAME"
+
 git clone https://github.com/dwkns/web-project-skeleton.git .
 
 # create a temp file
