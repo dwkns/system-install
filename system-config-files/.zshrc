@@ -164,8 +164,7 @@ alias rp="success 'Reloading .zshrc'; source ~/.zshrc"
 alias ep="echo 'Editing zsh profile'; subl ~/.zshrc"     
 
 ############### Editing config files ################
-alias sys="success 'Changing to system config'; cd ~/.system-config"                 # cd to system config directory
-alias ep="success 'Editing bash profile'; subl ~/.bash_profile"                      # edit bash profile
+alias sys="success 'Changing to system config'; cd ~/.system-config"                          # edit bash profile
 alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"        # Edit system fields
 alias esp="warn 'Did you mean to edit system config'; echo 'Use esys'"            # Catch errors
 alias esc="esp"   
