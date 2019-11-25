@@ -11,6 +11,11 @@ cd "$PROJECTNAME"
 yarn init -y
 yarn add parcel-bundler --dev
 yarn add parcel-plugin-clean-dist --dev
+yarn add tailwindcss --dev
+yarn add cssnano --dev
+yarn add @fullhuman/postcss-purgecss --dev
+yarn add postcss-purgecss --dev
+npx tailwind init --full
 
 
 ######## Do some processing of package.json to add build scrips & title.
@@ -31,6 +36,22 @@ JQVAR='.author |= .+ "dwkns"'
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
 
+cat >postcss.config.js <<'EOL'
+module.exports = { 
+    theme: {}, 
+    variants: {}, 
+    plugins: [ 
+        require('tailwindcss'),
+        cssnano({
+              preset: 'default'
+            }),
+        purgecss({
+          content: ['./layouts/**/*.html', './src/**/*.vue', './src/**/*.jsx'],
+          defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+        })
+    ] 
+}
+EOL
 ######## Add source folder and files. 
 mkdir 'src'
 
@@ -56,28 +77,19 @@ paragraph.innerText = 'This is a paragraph added from JS which shows bundling is
 document.body.appendChild(paragraph); 
 EOL
 
-cat >src/main.scss <<'EOL'
-$brand: #4A90E2;
-$brand-alternate: #F5A623;
-
-body {
-    font-family: -apple-system, Sans-Serif;
-    color: $brand;
-}
-
-h1 {
-    font-size: 24pt;
-    color: $brand-alternate;
-}
+cat >src/main.css <<'EOL'
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 EOL
 
 ######## Put the project name into the HTML Title. 
 sed -i "" -e "s/{{page-title}}/$PROJECTNAME/g" ./src/index.html
 
-######## Initialize git.
-git init
-git add .
-git commit -m "Initial commit"
+# ######## Initialize git.
+# git init
+# git add .
+# git commit -m "Initial commit"
 
 
 ######## Open a new iTerm tab at the project root. 
@@ -100,8 +112,8 @@ EOL
 ######## Open project in Sublime
 subl .
 
-######## Format sublimes windows to my favorite layout.
-subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}]]}'
+# ######## Format sublimes windows to my favorite layout.
+# subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}]]}'
 
 
 ######## Start the server.
