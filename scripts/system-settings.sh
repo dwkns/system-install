@@ -4,35 +4,35 @@ success "Updating system settings"
 
 
 ######################  Random other configurations ######################
-echo "$CYAN General :$RESET Turn off keyboard illumination when computer is not used for 5 minutes"
+echo "$CYANGeneral :$RESET Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
-echo "$CYAN General :$RESET Scrollbars to WhenScrolling"
+echo "$CYANGeneral :$RESET Scrollbars to WhenScrolling"
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 # Possible values: `WhenScrolling`, `Automatic` and `Always`
 
-echo "$CYAN General :$RESET Increase window resize speed for Cocoa applications"
+echo "$CYANGeneral :$RESET Increase window resize speed for Cocoa applications"
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
-echo "$CYAN General :$RESET Automatically quit printer app once the print jobs complete"
+echo "$CYANGeneral :$RESET Automatically quit printer app once the print jobs complete"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
 # echo "Restart automatically if the computer freezes"
 # sudo systemsetup -setrestartfreeze on
 
-echo "$CYAN General :$RESET Check for software updates daily, not just once per week"
+echo "$CYANGeneral :$RESET Check for software updates daily, not just once per week"
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 
-echo "$CYAN General :$RESET Disable smart quotes as they're annoying when typing code"
+echo "$CYANGeneral :$RESET Disable smart quotes as they're annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
-echo "$CYAN General :$RESET Disable smart dashes as they’re annoying when typing code"
+echo "$CYANGeneral :$RESET Disable smart dashes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
-echo "$CYAN General :$RESET Increase sound quality for Bluetooth headphones/headsets"
+echo "$CYANGeneral :$RESET Increase sound quality for Bluetooth headphones/headsets"
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
-echo "$CYAN General :$RESET Set a blazingly fast keyboard repeat rate"
+echo "$CYANGeneral :$RESET Set a blazingly fast keyboard repeat rate"
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
