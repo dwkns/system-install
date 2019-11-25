@@ -12,18 +12,17 @@ CYAN="\033[0;36m"
 ############################### Functions ###############################
 
 success () {
-  echo -e $GREEN"Success ====>$RESET $1"
+  echo -e $GREEN"Success ====>$CYAN $1 $RESET"
 }
 
 warn () {
- echo -e $YELLOW"Warning ====>$RESET $1"
+ echo -e $YELLOW"Warning ====>$CYAN $1 $RESET"
 }
 
 error () {  
- echo -e $RED"Error ====>$RESET $1"
+ echo -e $RED"Error ====>$CYAN $1 $RESET"
 }
 
 note () {
   echo -e $RESET"====>$1 $RESET"
 }
-

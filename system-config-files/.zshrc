@@ -32,21 +32,25 @@ DOTFILES=(
 NEWLINE=$'\n'
 PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
 
-##### Fucitons to style shell output
-success () {
-  echo -e "$fg[green]====> $1 $reset_color"
-}
 
-warn () {
- echo -e "$fg[yellow]====> $1 $reset_color"
-}
+source "$SYSCD/scripts/utils/colours.sh"
 
-error () {  
- echo -e "$fg[red]====> $1 $reset_color"
-}
-note () {
-   echo -e "$reset_color====>$reset_color $1 "
- }
+# ##### Fucitons to style shell output
+# success () {
+#   echo -e "$fg[green]Success ====>fg[cyan] $1 $reset_color"
+# }
+
+# warn () {
+#  echo -e "$fg[yellow]Warning ====>fg[cyan] $1 $reset_color"
+# }
+
+# error () {  
+#  echo -e "$fg[red]====> ====>fg[cyan] $1 $reset_color"
+# }
+# note () {
+#    echo -e "====>$1 $reset_color "
+#  }
+
 
 
 
