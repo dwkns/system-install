@@ -2,7 +2,7 @@
 source "$HOME/.system-config/scripts/utils/colours.sh"
 
 ######################## Time Machine ########################
-msg "Adding Time Machine Exclusions"
+success "Adding Time Machine Exclusions"
 
 TIME_MACHINE_EXCLUSION_LIST=(
   "$HOME/Downloads/"
@@ -35,7 +35,7 @@ if $TM_DEBUG; then
 fi
 note "done"
 
-msg "Prevent Time Machine from prompting to use new hard drives as backup volume"
+success "Prevent Time Machine from prompting to use new hard drives as backup volume"
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 ######################## SYSTEM Settings ########################
-msg "Updating system settings"
+success "Updating system settings"
 
 
 ######################  Random other configurations ######################
