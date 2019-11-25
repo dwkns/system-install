@@ -2,7 +2,7 @@
 source "$HOME/.system-config/scripts/utils/colours.sh"
 ##################### Configure Sublime ######################
 
-msg "Copying dotfiles"
+success "Copying dotfiles"
 
 # echo "Copying .bash_profile"
 # cp -f "$ROOT_DIR/system-config-files/.bash_profile"  "$HOME/.bash_profile"
@@ -44,7 +44,7 @@ DOTFILES=(
 )  
 
 installDotFiles () {
-  smsg 'Copying dotfiles...';
+  success 'Copying dotfiles...';
   for THISFILE in "${DOTFILES[@]}"
   do  
     echo "Installing : $THISFILE"
