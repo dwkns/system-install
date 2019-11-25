@@ -27,6 +27,3 @@ note () {
   echo -e $RESET"====>$RESET $1"
 }
 
-msg () {
-  echo -e $CYAN"Warning ====>$RESET $1"
-}

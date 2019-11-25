@@ -3,7 +3,7 @@
 
   ##################### Configure Sublime ######################
  
-  msg "Configure sublime"
+  success "Configure sublime"
 
   
   # Set up some defaults
@@ -16,7 +16,7 @@
   DWKNS_SETTINGS="$SUBLIME_USER/dwkns-sublime-settings"
 
 
-  msg "Removing the existing Sublime User folder"
+  success "Removing the existing Sublime User folder"
   rm -rf "$SUBLIME_USER" # clean the Sublime user folder
 
   mkdir -p "$SUBLIME_LOCAL"
@@ -24,22 +24,22 @@
   mkdir -p "$SUBLIME_INSTALLED_PACKAGES"
 
   ### first clone in the settings folder
-  msg "Cloning in dwkns settings"
+  success "Cloning in dwkns settings"
   rm -rf "$SUBLIME_USER/dwkns-sublime-settings"
   git clone "https://github.com/dwkns/dwkns-sublime-settings.git" "$SUBLIME_USER/dwkns-sublime-settings"
 
-  msg "Cloning in A3 Theme"
+  success "Cloning in A3 Theme"
   rm -rf "$SUBLIME_PACKAGES/A3-Theme"
   git clone "https://github.com/dwkns/A3-Theme.git" "$SUBLIME_PACKAGES/A3-Theme"
 
   
-  msg "Intalling license"
+  success "Intalling license"
   cp -f "$DWKNS_SETTINGS/License.sublime_license" "$SUBLIME_LOCAL/License.sublime_license"
 
-  msg "Installing Package Control"
+  success "Installing Package Control"
   curl -L "http://sublime.wbond.net/Package Control.sublime-package" -o "$SUBLIME_INSTALLED_PACKAGES/Package Control.sublime-package"
 
-  msg "Creating Symbolic links for various files"
+  success "Creating Symbolic links for various files"
   DWKNS_SETTINGS="dwkns-sublime-settings"
   files=( 
     "Preferences.sublime-settings"
@@ -59,7 +59,7 @@
      ln -s "$DWKNS_SETTINGS/settings/$i" "$SUBLIME_USER/$i"
   done
 
-  # msg "Cloning in my Rails snippets"
+  # success "Cloning in my Rails snippets"
   # rm -rf "$SUBLIME_PACKAGES/Rails"
   # git clone "https://github.com/dwkns/sublime_rails_snippets.git" "$SUBLIME_PACKAGES/Rails"
 
