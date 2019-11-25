@@ -44,10 +44,9 @@ warn () {
 error () {  
  echo -e "$fg[red]====> $1 $reset_color"
 }
-
 note () {
-  echo -e "$reset_color====> $1 $reset_color"
-}
+   echo -e "$reset_color====>$reset_color $1 "
+ }
 
 
 
