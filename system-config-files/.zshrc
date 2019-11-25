@@ -14,7 +14,7 @@ fi
 ##### Defile some variables 
 plugins=(bundler)
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
-SYSCD="$HOME/.system-config/system-config-files"
+SYSCD="$HOME/.system-config"
 
 DOTFILES=( 
   ".bash_profile"
@@ -91,7 +91,7 @@ bsys () {
   echo;
   for i in "${DOTFILES[@]}"
   do  
-     cp -rf "$HOME/$i" "$SYSCD/$i";
+     cp -rf "$HOME/$i" "$SYSCD/system-config-files/$i";
   done
   backUpSublimeConfig;
   backUpSystemConfig;
