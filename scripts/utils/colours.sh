@@ -24,6 +24,6 @@ error () {
 }
 
 note () {
-  echo -e $RESET"====>$RESET $1"
+  echo -e $RESET"====>$1 $RESET"
 }
 

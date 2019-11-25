@@ -325,7 +325,7 @@ echo
 
 echo
 
-note "done - some settings may require a restart"
+success "done - some settings may require a restart"
 
 
 ###############################################################################
