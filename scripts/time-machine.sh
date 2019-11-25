@@ -1,5 +1,5 @@
-#!/bin/bash 
-source "$HOME/.system-config/scripts/colours.sh"
+#!/usr/bin/env zsh
+source "$HOME/.system-config/scripts/utils/colours.sh"
 
 ######################## Time Machine ########################
 msg "Adding Time Machine Exclusions"

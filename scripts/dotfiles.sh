@@ -1,4 +1,5 @@
-source "$HOME/.system-config/scripts/colours.sh"
+#!/usr/bin/env zsh
+source "$HOME/.system-config/scripts/utils/colours.sh"
 ##################### Configure Sublime ######################
 
 msg "Copying dotfiles"
