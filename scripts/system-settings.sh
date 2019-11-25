@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 ######################## SYSTEM Settings ########################
 msg "Updating system settings"
 
