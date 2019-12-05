@@ -1,30 +1,5 @@
 #!/usr/bin/env zsh
-
-######## Ask for a project name or use default 'demoProject'
-if [ -z ${1+x} ]; then # have we passed in a variable $1
-    warn "Nothing passed in..."
-    warn "You can use '${0##*/} <projectName>' as a shortcut."
-    echo
-    read -p "Enter project name (default -> demoProject) : " PROJECTNAME
-    echo
-    PROJECTNAME=${PROJECTNAME:-demoProject}
-else   
-    success  "Setting project name to '$1'"
-    PROJECTNAME=$1
-fi
-
-######## Does the folder already exist? Do you want overide it?
-if [ -d "$PROJECTNAME" ]; then
-  read -p "Project $PROJECTNAME already exists delete it y/n (default - y) : " DELETEIT
-  DELETEIT=${DELETEIT:-Y}
-
-  if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
-   rm -rf $PROJECTNAME
-  else
-    error "OK not doing anything & exiting" 
-    exit 0
-  fi
-fi
+. $HOME/.system-config/scripts/utils/set-up-projects.sh $1;
 
 success "Project $PROJECTNAME will be created!"
 
@@ -36,7 +11,7 @@ cd "$PROJECTNAME"
 yarn init -y
 yarn add parcel-bundler --dev
 yarn add parcel-plugin-clean-dist --dev
-
+yarn add fsevents
 
 ######## Do some processing of package.json to add build scrips & title.
 
@@ -54,6 +29,12 @@ jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 tmp=$(mktemp) 
 JQVAR='.author |= .+ "dwkns"'
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
+
+
+# # add some build dependencies to package.json
+# tmp=$(mktemp) 
+# JQVAR='.dependencies |= .+ {  "fsevents": "2.1.2" }'
+# jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
 
 ######## Add source folder and files. 
