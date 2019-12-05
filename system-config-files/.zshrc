@@ -138,7 +138,18 @@ twps () {
     . $HOME/.system-config/scripts/tailwind-parcel-web-skeleton.sh $1;
 }
 
-alias tws="twps"
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##### Common commands
 alias ls="ls -l"            # because the normal way is dumb                                                             
