@@ -6,7 +6,7 @@ if [ -z ${1+x} ]; then # have we passed in a variable $1
     echo -n "Enter project name (default -> demoProject) : "
     read PROJECTNAME
     echo
-    PROJECTNAME=${PROJECTNAME:-demo_project}
+    PROJECTNAME=${PROJECTNAME:-demoProject}
 else   
     success  "Setting project name to '$1'"
     PROJECTNAME=$1
