@@ -1,6 +1,10 @@
 #!/usr/bin/env zsh
 . $HOME/.system-config/scripts/utils/set-up-projects.sh $1;
 
+echo -n "Enable ESLint? ( y/n > default - n) : "
+read -t 3 ESLINT
+ESLINT=${ESLINT:-N}
+
 success "Project $PROJECTNAME will be created!"
 
 ######## Create the folder
@@ -54,10 +58,19 @@ mkdir 'bin'
 
 
 cat >src/index.js <<'EOL'
-/*eslint-disable */
 const answer = require( 'the-answer' );
 console.log( 'the answer is ' + answer );
 EOL
+
+
+cat >.eslintignore <<'EOL'
+**/*
+EOL
+
+if [  "$ESLINT" = "Y" ] || [  "$ESLINT" = "y" ] ; then
+ rm -rf .eslintignore
+fi
+
 
 
 

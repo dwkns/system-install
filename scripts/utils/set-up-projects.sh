@@ -5,7 +5,6 @@ if [ -z ${1+x} ]; then # have we passed in a variable $1
     warn "You can use '${0##*/} <projectName>' as a shortcut."
     echo -n "Enter project name (default -> demoProject) : "
     read PROJECTNAME
-    echo
     PROJECTNAME=${PROJECTNAME:-demoProject}
 else   
     success  "Setting project name to '$1'"
