@@ -2398,7 +2398,6 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
-<<<<<<< HEAD
 		<string>3.3.6</string>
 		<string>3.3.8</string>
 		<string>3.3.1</string>
@@ -2408,14 +2407,6 @@
 		<string>3.3.0</string>
 		<string>3.3.2</string>
 		<string>3.3.4</string>
-=======
-		<string>3.2.9</string>
-		<string>3.3.1</string>
-		<string>3.3.4</string>
-		<string>3.3.0</string>
-		<string>3.3.8</string>
-		<string>3.3.6</string>
->>>>>>> a7dc33fe33e25ce0481324b3101bbf160cb3529e
 	</array>
 	<key>NoSyncConfirmRunOpenFile</key>
 	<true/>
@@ -2426,22 +2417,14 @@
 		<key>screenFrame</key>
 		<string>{{0, 0}, {1440, 900}}</string>
 		<key>topLeft</key>
-<<<<<<< HEAD
 		<string>{897, 1182}</string>
-=======
-		<string>{230, 595}</string>
->>>>>>> a7dc33fe33e25ce0481324b3101bbf160cb3529e
 	</dict>
 	<key>NoSyncHaveWarnedAboutPasteConfirmationChange</key>
 	<true/>
 	<key>NoSyncInstallationId</key>
 	<string>89072A54-7767-4298-8EAF-9F3CF5ED019B</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-<<<<<<< HEAD
 	<integer>50</integer>
-=======
-	<integer>59</integer>
->>>>>>> a7dc33fe33e25ce0481324b3101bbf160cb3529e
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -3202,11 +3185,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-<<<<<<< HEAD
 	<date>2020-02-05T11:58:41Z</date>
-=======
-	<date>2020-02-09T22:20:59Z</date>
->>>>>>> a7dc33fe33e25ce0481324b3101bbf160cb3529e
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
