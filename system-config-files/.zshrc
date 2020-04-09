@@ -133,21 +133,11 @@ mbx () {
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
-twps () {
-    success 'making new parcel/tailwind skeleton project'; 
-    . $HOME/.system-config/scripts/tailwind-parcel-web-skeleton.sh $1;
+
+ptw () {
+    success 'making new parcel/tailwind project'; 
+    . $HOME/.system-config/scripts/parcel-tailwind-skeleton.sh $1;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
