@@ -17,14 +17,14 @@ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/maste
 ### Tap alternates 
 
 ````bash
-$ brew tap caskroom/cask && brew tap caskroom/versions && brew tap caskroom/fonts && brew tap homebrew/services && brew tap heroku/brew
+$ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew/cask-fonts && brew tap homebrew/services && brew tap heroku/brew
 ````
 
 ### Install useful brew apps
 Some of these apps are used in the install script so we install them first.
 
 ```` 
-$ brew install openssl git python node heroku postgresql mas rbenv ruby-build jq redis
+$ brew install openssl git python node heroku postgresql mas rbenv ruby-build jq redis hivemind yarn
 ````
 
 ### Install system config & dot files
@@ -33,19 +33,12 @@ $ brew install openssl git python node heroku postgresql mas rbenv ruby-build jq
 $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 ````
 
-### Reload the bash profile
-
-```` 
-$ ~/.bash_profile 
-````
 
 ### Install apps  
 
 ````bash
 $ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro chromedriver google-chrome
 ````
-
-Install [Chrome](https://www.google.com/chrome/index.html) directly (the cask version doesn't play well with 1Password).
 
 ### Initialise rbenv and install a Ruby version
 List all available versions and choose the one you want to install.
@@ -64,16 +57,10 @@ $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
 $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
 ````
 
-### Reload the bash profile
-
-```` 
-$ ~/.bash_profile 
-````
-
 ### Install some Ruby Gems
 
 ````bash
-$ gem install bundler rails powder foreman launchy htmlbeautifier 
+$ gem install bundler rails htmlbeautifier 
 ````
 
 ### Install some Global Node Modules
@@ -81,19 +68,13 @@ $ gem install bundler rails powder foreman launchy htmlbeautifier
 Required for the Sublime Javascript build system to work.
 
 ```bash
-$ npm install -g yarn @babel/core @babel/node @babel/cli @babel/preset-env local-web-server rollup eslint eslint-plugin-jest prettier
+$ npm install -g yarn local-web-server
 ```
 
 ### Install App Store Apps
 ```bash
 $ source ~/.system-config/scripts/app-store-apps.sh
 ```
-
-### Install Pow
-
-````bash
-$ curl get.pow.cx | sh
-````
 
 ### Printer
 
