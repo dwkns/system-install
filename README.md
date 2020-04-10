@@ -63,14 +63,6 @@ $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 $ gem install bundler rails htmlbeautifier 
 ````
 
-### Install some Global Node Modules
-
-Required for the Sublime Javascript build system to work.
-
-```bash
-$ npm install -g yarn local-web-server
-```
-
 ### Install App Store Apps
 ```bash
 $ source ~/.system-config/scripts/app-store-apps.sh
