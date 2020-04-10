@@ -190,7 +190,7 @@ alias hf="success 'Hiding invisible files in the finder'; defaults write com.app
 
 
 ## my apps
-alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./bin/start"
+alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./bin/s"
 alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
 
 ############### rbenv ################
@@ -206,8 +206,6 @@ ya () {
   success 'Doing yarn add --dev';
   yarn add --dev $1;
 }
-
-
 
 export EDITOR='subl -w'
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
