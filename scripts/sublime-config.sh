@@ -34,7 +34,7 @@
 
   success "TailwindCSSAutocomplete"
   rm -rf "$SUBLIME_PACKAGES/TailwindCSSAutocomplete"
-  git clone "clone https://github.com/bradlc/sublime-tailwindcss.git " "$SUBLIME_PACKAGES/TailwindCSSAutocomplete"
+  git clone "https://github.com/bradlc/sublime-tailwindcss.git " "$SUBLIME_PACKAGES/TailwindCSSAutocomplete"
   
   success "Intalling license"
   cp -f "$DWKNS_SETTINGS/License.sublime_license" "$SUBLIME_LOCAL/License.sublime_license"
