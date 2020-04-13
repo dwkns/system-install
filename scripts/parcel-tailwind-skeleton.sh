@@ -22,6 +22,16 @@ JQVAR=".author = \"$USER\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
 
+
+
+mkdir -p bin
+cat >bin/s <<'EOL'
+#!/usr/bin/env zsh
+yarn start
+EOL
+chmod +x bin/s
+
+
 ######## Put the project name into the HTML Title. 
 sed -i "" -e "s/---page-title---/$PROJECTNAME/g" ./src/index.html
 
