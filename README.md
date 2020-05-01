@@ -22,9 +22,13 @@ $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew
 
 ### Install useful brew apps
 Some of these apps are used in the install script so we install them first.
-
+Definately need these:
 ```` 
-$ brew install openssl git python node heroku postgresql mas rbenv ruby-build jq redis hivemind yarn
+$ brew install openssl git node mas rbenv ruby-build jq yarn
+````
+Probably need these:
+```` 
+$ brew install  python heroku postgresql redis yarn
 ````
 
 ### Install system config & dot files
@@ -35,9 +39,13 @@ $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/i
 
 
 ### Install apps  
-
+Definately 
 ````bash
-$ brew cask install sketch sublime-text iterm2 font-source-code-pro handbrake transmission charles dropbox typora codekit flash-npapi iina sequel-pro chromedriver google-chrome
+$ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina google-chrome typora
+````
+Probably
+````bash
+$ brew cask install sketch handbrake transmission charles codekit flash-npapi sequel-pro
 ````
 
 ### Initialise rbenv and install a Ruby version
