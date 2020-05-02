@@ -41,7 +41,7 @@ $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/i
 ### Install apps  
 Definately 
 ````bash
-$ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina google-chrome typora
+$ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina google-chrome typora 1password
 ````
 Probably
 ````bash
