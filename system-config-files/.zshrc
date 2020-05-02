@@ -190,7 +190,7 @@ alias hf="success 'Hiding invisible files in the finder'; defaults write com.app
 
 
 ## my apps
-alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Desktop/dev/wrap-scraper; ./bin/s"
+alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Dropbox/dev/wrap-scraper; ./bin/s"
 alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
 
 ############### rbenv ################
