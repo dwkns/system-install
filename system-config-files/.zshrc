@@ -1,5 +1,5 @@
 export ZSH="/Users/dazza/.oh-my-zsh"
-
+ZSH_DISABLE_COMPFIX=true
 ##### Check if oh-my-zsh is installed and warn if it is not. 
 if [ ! -f "$ZSH/oh-my-zsh.sh" ]; then
     echo "$(tput setaf 1)Oh my zsh was not found$(tput sgr0)"
