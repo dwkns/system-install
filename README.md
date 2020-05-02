@@ -45,7 +45,11 @@ $ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina
 ````
 Probably
 ````bash
-$ brew cask install sketch handbrake transmission charles codekit flash-npapi sequel-pro
+$ brew cask install sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox notion
+````
+Maybe
+````bash
+$ brew cask install flash-npapi codekit
 ````
 
 ### Initialise rbenv and install a Ruby version
@@ -75,6 +79,9 @@ $ gem install bundler rails htmlbeautifier
 ```bash
 $ source ~/.system-config/scripts/app-store-apps.sh
 ```
+### Syncing problems with iCloud
+https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
+
 
 ### Printer
 
