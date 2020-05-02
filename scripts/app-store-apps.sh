@@ -17,9 +17,7 @@ mas install 1289583905 # Pixelmator Pro (1.3.4)
 mas install 904280696  # Things (3.9.1)
 mas install 409183694  # Keynote (9.1)
 mas install 918858936  # Airmail (3.6.60)
-mas install 682658836  # GarageBand (10.3.2)
-mas install 584653203  # Paw (2.3.4)
-mas install 1016288391 # Controller 4 Bose SoundTouch (1.9.1)
+
 mas install 434290957  # Motion (5.4.3)
 mas install 443987910  # 1Password (6.8.9)
 mas install 403388562  # Transmit (4.4.13)
@@ -34,3 +32,6 @@ mas install 803453959  # Slack (3.4.2)
 mas install 1298450641 # monday (0.1.54)
 mas install 824171161  # Affinity Designer (1.7.1)
 mas install 414209656  # Better Rename 9 (9.52)
+# mas install 682658836  # GarageBand (10.3.2)
+
+# spark
