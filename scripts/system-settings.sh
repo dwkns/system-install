@@ -323,7 +323,7 @@ echo $CYAN"iTerm2.app :$RESET ~/.system-config/system-config-files/ for preferen
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.system-config/system-config-files/"
 # Tell iTerm2 to use the custom preferences in the directory
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
-
+echo
 echo $CYAN"Github :$RESET use osxkeychain to store password"
 git config --global credential.helper osxkeychain
 
