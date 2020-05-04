@@ -54,9 +54,6 @@ echo $CYAN"General :$RESET Enable full keyboard access for all controls"
 # (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
-echo $CYAN"General :$RESET Use scroll gesture with the Ctrl (^) modifier key to zoom"
-defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
 
 
 echo    
@@ -72,7 +69,7 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 # # Disable local Time Machine backups
 # hash tmutil &> /dev/null && sudo tmutil disablelocal
 
-
+echo
 
 ###############################################################################
 # Screen                                                                    #
@@ -117,7 +114,7 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 echo $CYAN"Finder :$RESET Showing Library & ~/Library"
 chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
-chflags nohidden /Library && xattr -d com.apple.FinderInfo /Library
+chflags nohidden /Library
 
 echo $CYAN"Finder :$RESET Hiding ~/Applications"
 chflags hidden ~/Applications
@@ -419,7 +416,6 @@ defaults write org.m0k.transmission WarningLegal -bool false
 
 echo
 
-echo
 echo $CYAN"iTerm2.app :$RESET ~/.system-config/system-config-files/ for preferences"
 # Specify the preferences directory
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.system-config/system-config-files/"
