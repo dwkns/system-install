@@ -117,6 +117,45 @@ ptw () {
     . $HOME/.system-config/scripts/parcel-tailwind-skeleton.sh $1;
 }
 
+
+
+rebootbird () {
+  # ask for sudo upfront
+  sudo -v 
+
+  # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
+  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+  echo "touching ~/Desktop & ~/Documents"
+  touch ~/Desktop
+  touch ~/Documents
+
+
+
+
+
+
+      echo "Killing bird."
+      killall bird
+      echo "Removing CloudDocs"
+      cd ~/Library/Application\ Support
+      rm -rf CloudDocs
+      echo "Deleting preferences"
+      rm -rf "~/Library/Caches/com.apple.cloudd"
+      rm -rf "~/Library/Caches/com.apple.bird"
+     
+     echo -n "Do you want to reboot right now — y/n (defaults to y in 10 secs) : "
+     read -t 10 REBOOTNOW
+     REBOOTNOW=${REBOOTNOW:-Y}
+
+     if [  "$REBOOTNOW" = "Y" ] || [  "$REBOOTNOW" = "y" ] ; then
+      echo "Immediately rebooting!"
+       shutdown -r now
+     else
+       echo "OK not rebooting & exiting" 
+     fi
+}
+
 ##### Common commands
 alias ls="ls -l"            # because the normal way is dumb                                                             
 alias cd..="cd .."          # because I always miss the space. 
