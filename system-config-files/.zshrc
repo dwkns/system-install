@@ -136,13 +136,13 @@ rebootbird () {
 
 
       echo "Killing bird."
-      killall bird
+      sudo killall bird
       echo "Removing CloudDocs"
       cd ~/Library/Application\ Support
-      rm -rf CloudDocs
+     sudo rm -rf CloudDocs
       echo "Deleting preferences"
-      rm -rf "~/Library/Caches/com.apple.cloudd"
-      rm -rf "~/Library/Caches/com.apple.bird"
+     sudo rm -rf "~/Library/Caches/com.apple.cloudd"
+     sudo rm -rf "~/Library/Caches/com.apple.bird"
      
      echo -n "Do you want to reboot right now — y/n (defaults to y in 10 secs) : "
      read -t 10 REBOOTNOW
@@ -150,7 +150,7 @@ rebootbird () {
 
      if [  "$REBOOTNOW" = "Y" ] || [  "$REBOOTNOW" = "y" ] ; then
       echo "Immediately rebooting!"
-       shutdown -r now
+       sudo shutdown -r now
      else
        echo "OK not rebooting & exiting" 
      fi
