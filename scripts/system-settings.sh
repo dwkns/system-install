@@ -37,7 +37,7 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Set a blazingly fast keyboard repeat rate
 defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
-defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
+defaults write -g InitialKeyRepeat -int 15 # normal minimum is 15 (225 ms)
 
 echo $CYAN"General :$RESET Set highlight color to green"
 # defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
@@ -113,7 +113,7 @@ echo $CYAN"Finder :$RESET Showing all filename extensions in Finder by default"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 echo $CYAN"Finder :$RESET Showing Library & ~/Library"
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+chflags nohidden ~/Library 
 chflags nohidden /Library
 
 echo $CYAN"Finder :$RESET Hiding ~/Applications"
