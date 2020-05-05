@@ -34,6 +34,8 @@
 	<true/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
+	<key>IRMemory</key>
+	<integer>8</integer>
 	<key>LoadPrefsFromCustomFolder</key>
 	<true/>
 	<key>MinimumTabDragDistance</key>
@@ -62,7 +64,7 @@
 	dWxs0g0ODxJaTlMub2JqZWN0c1YkY2xhc3OiEBGAAoAKgA3TFA0OFRkdV05TLmtleXOj
 	FhcYgAOABIAFoxobHIAGgAeACIAJWklkZW50aWZpZXJVV2lkdGhWSGlkZGVuUTAjQGjA
 	AAAAAAAI0iUmJyhaJGNsYXNzbmFtZVgkY2xhc3Nlc1xOU0RpY3Rpb25hcnmiJylYTlNP
-	YmplY3TTFA0OKy8doxYXGIADgASABaMwMRyAC4AMgAiACVExI0B0oZ2yLQ5W0iUmNzhe
+	YmplY3TTFA0OKy8doxYXGIADgASABaMwMRyAC4AMgAiACVExI0B0oAAAAAAA0iUmNzhe
 	TlNNdXRhYmxlQXJyYXmjNzkpV05TQXJyYXkACAARABoAJAApADIANwBJAEwAUgBUAGMA
 	aQBuAHkAgACDAIUAhwCJAJAAmACcAJ4AoACiAKYAqACqAKwArgC5AL8AxgDIANEA0gDX
 	AOIA6wD4APsBBAELAQ8BEQETARUBGQEbAR0BHwEhASMBLAExAUABRAAAAAAAAAIBAAAA
@@ -83,20 +85,16 @@
 		<key>TB Is Shown</key>
 		<integer>1</integer>
 	</dict>
-
-	<key>NSWindow Frame NSColorPanel</key>
-	<string>0 130 224 275 0 0 2560 1417 </string>
+	<key>NSWindow Frame Preferences</key>
+	<string>269 174 937 512 0 0 1280 777 </string>
 	<key>NSWindow Frame SUStatusFrame</key>
-	<string>330 530 400 129 0 0 2560 1417 </string>
+	<string>980 640 400 129 0 0 1440 877 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>970 780 620 392 0 0 2560 1417 </string>
-	<key>NSWindow Frame UKCrashReporter</key>
-	<string>230 833 592 584 0 0 2560 1417 </string>
+	<string>410 375 620 392 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>405 839 850 488 0 0 2560 1417 </string>
+	<string>56 389 850 488 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>264 890 850 488 0 0 2560 1417 </string>
-
+	<string>463 389 850 488 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
 	<string>197 389 850 488 0 0 1440 877 </string>
 	<key>New Bookmarks</key>
@@ -644,7 +642,7 @@
 			<key>Screen</key>
 			<integer>-1</integer>
 			<key>Scrollback Lines</key>
-			<integer>1000</integer>
+			<integer>3000</integer>
 			<key>Selected Text Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -2401,11 +2399,9 @@
 		<string>3.3.6</string>
 		<string>3.3.8</string>
 		<string>3.3.1</string>
-		<string>3.3.3</string>
-		<string>3.3.5</string>
-		<string>3.3.7</string>
+		<string>3.3.9</string>
+		<string>3.2.9</string>
 		<string>3.3.0</string>
-		<string>3.3.2</string>
 		<string>3.3.4</string>
 	</array>
 	<key>NoSyncConfirmRunOpenFile</key>
@@ -2417,14 +2413,14 @@
 		<key>screenFrame</key>
 		<string>{{0, 0}, {1440, 900}}</string>
 		<key>topLeft</key>
-		<string>{897, 1182}</string>
+		<string>{267, 877}</string>
 	</dict>
 	<key>NoSyncHaveWarnedAboutPasteConfirmationChange</key>
 	<true/>
 	<key>NoSyncInstallationId</key>
 	<string>89072A54-7767-4298-8EAF-9F3CF5ED019B</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>50</integer>
+	<integer>67</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -3185,7 +3181,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-02-05T11:58:41Z</date>
+	<date>2020-05-01T10:41:21Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
@@ -3208,8 +3204,6 @@
 	<integer>5</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
-	<key>UKCrashReporterLastCrashReportDate</key>
-	<real>1576763008</real>
 	<key>UseBorder</key>
 	<false/>
 	<key>VisualIndicatorForEsc</key>
@@ -3219,7 +3213,7 @@
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
 	<key>iTerm Version</key>
-	<string>3.3.8</string>
+	<string>3.3.9</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
