@@ -123,38 +123,33 @@ rebootbird () {
   # ask for sudo upfront
   sudo -v 
 
-  # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
-  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
   echo "touching ~/Desktop & ~/Documents"
   touch ~/Desktop
   touch ~/Documents
+  echo "Killing bird."
+  sudo killall bird
+  echo "Removing CloudDocs"
+  cd ~/Library/Application\ Support
+  sudo rm -rf CloudDocs
+  echo "Deleting preferences"
+  sudo rm -rf "~/Library/Caches/com.apple.cloudd"
+  sudo rm -rf "~/Library/Caches/com.apple.bird"
 
+  echo -n "Do you want to reboot right now — y/n (defaults to y in 10 secs) : "
+  read -t 10 REBOOTNOW
+  REBOOTNOW=${REBOOTNOW:-Y}
 
-
-
-
-
-      echo "Killing bird."
-      sudo killall bird
-      echo "Removing CloudDocs"
-      cd ~/Library/Application\ Support
-     sudo rm -rf CloudDocs
-      echo "Deleting preferences"
-     sudo rm -rf "~/Library/Caches/com.apple.cloudd"
-     sudo rm -rf "~/Library/Caches/com.apple.bird"
-     
-     echo -n "Do you want to reboot right now — y/n (defaults to y in 10 secs) : "
-     read -t 10 REBOOTNOW
-     REBOOTNOW=${REBOOTNOW:-Y}
-
-     if [  "$REBOOTNOW" = "Y" ] || [  "$REBOOTNOW" = "y" ] ; then
-      echo "Immediately rebooting!"
-       sudo shutdown -r now
-     else
-       echo "OK not rebooting & exiting" 
-     fi
+  if [  "$REBOOTNOW" = "Y" ] || [  "$REBOOTNOW" = "y" ] ; then
+  echo "Immediately rebooting!"
+  sudo shutdown -r now
+  else
+  echo "OK not rebooting & exiting" 
+  fi
 }
+
+viewlog () {
+  brctl log -w --shorten
+  }
 
 ##### Common commands
 alias ls="ls -l"            # because the normal way is dumb                                                             
