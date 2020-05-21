@@ -41,11 +41,11 @@ $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/i
 ### Install apps  
 Definately 
 ````bash
-$ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina google-chrome typora google-drive-file-stream
+$ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina google-chrome google-drive-file-stream notion
 ````
 Probably
 ````bash
-$ brew cask install sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox notion
+$ brew cask install sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
 ````
 Maybe
 ````bash
