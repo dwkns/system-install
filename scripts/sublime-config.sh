@@ -53,6 +53,7 @@
     "Emmet.sublime-settings"
     "Default (OSX).sublime-keymap"
     "HTMLPrettify.sublime-settings"
+    "JavaScript (Babel).sublime-settings"
     "test.py"
   )
 
