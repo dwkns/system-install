@@ -32,9 +32,10 @@
   rm -rf "$SUBLIME_PACKAGES/A3-Theme"
   git clone "https://github.com/dwkns/A3-Theme.git" "$SUBLIME_PACKAGES/A3-Theme"
 
-  success "TailwindCSSAutocomplete"
-  rm -rf "$SUBLIME_PACKAGES/TailwindCSSAutocomplete"
-  git clone "https://github.com/bradlc/sublime-tailwindcss.git" "$SUBLIME_PACKAGES/TailwindCSSAutocomplete"
+
+  success "Cloning in the dwkns fork of tailwind-sublime-autocomplete"
+  rm -rf "$SUBLIME_PACKAGES/tailwind-sublime-autocomplete"
+  git clone "https://github.com/dwkns/tailwind-sublime-autocomplete.git" "$SUBLIME_PACKAGES/tailwind-sublime-autocomplete"
   
   success "Intalling license"
   cp -f "$DWKNS_SETTINGS/License.sublime_license" "$SUBLIME_LOCAL/License.sublime_license"
