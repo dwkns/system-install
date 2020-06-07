@@ -78,13 +78,11 @@ bsys () {
 
 ##### functions to create skeleton projects 
 projects () {
-  note "$fg[yellow] ptw  :$reset_color parcel/tailwind project skeleton $reset_color";
   note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
   note "$fg[yellow] pps  :$reset_color Parcel project skeleton  $reset_color";
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
-  
 }
 
 ckps () {
