@@ -6,6 +6,9 @@ note () {
 success () {
   echo -e "\n\033[0;32m==============> $1 \033[0m"
 }
+doing () {
+  echo -e "\n\033[0;32m==============> $1 \033[0m"
+}
 warn () {
   echo -e "\n\033[0;31m====> $1 \033[0m"
 }
@@ -19,10 +22,10 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 
-success "Starting install"
+doing "Starting install"
 
 ############ Download config files  ############
-success "$PG Downloading config files"
+doing "$PG Downloading config files"
 
 if [ -d "$ROOT_DIR" ]; then
   echo "'.system-config' folder is already there. Updating..."
@@ -43,7 +46,7 @@ source "$ROOT_DIR/scripts/dotfiles.sh"
 
 
 ############ CONFIGURE ITERM ############
-success "Configure iTerm"
+doing "Configure iTerm"
 
 echo "Downloading preference file and copy into place"
 cp -f "$ROOT_DIR/system-config-files/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
@@ -92,7 +95,7 @@ else
     MACHINE_NAME=$DEFAULT_NAME
 fi
 
-success "Setting Machine name to : $MACHINE_NAME"
+doing "Setting Machine name to : $MACHINE_NAME"
 sudo scutil --set ComputerName $MACHINE_NAME
 sudo scutil --set HostName $MACHINE_NAME
 sudo scutil --set LocalHostName $MACHINE_NAME
@@ -100,10 +103,10 @@ sudo scutil --set LocalHostName $MACHINE_NAME
 note "done"
 
 ###################### configure git ######################
-success "Configuring git"
+doing "Configuring git"
 
 git config --global core.excludesfile $HOME/.gitignore_global
 note "Done" 
 
 
-success "And that's it. All done." 
+doing "And that's it. All done." 

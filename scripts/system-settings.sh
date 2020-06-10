@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 ######################## SYSTEM Settings ########################
-success "Updating system settings"
+doing "Updating system settings"
 
 ######################  Random other configurations ######################
 echo $CYAN"General :$RESET Turn off keyboard illumination when computer is not used for 5 minutes"
@@ -431,7 +431,7 @@ echo
 echo $CYAN"Desktop :$RESET Adding Symlink to ~/Dropbox/dev"
 ln -s ~/Dropbox/dev ~/Desktop
 
-success "done - some settings may require a restart"
+doing "done - some settings may require a restart"
 
 
 
