@@ -428,6 +428,8 @@ git config --global credential.helper osxkeychain
 echo
 
 echo
+echo $CYAN"Desktop :$RESET Adding Symlink to ~/Dropbox/dev"
+ln -s ~/Dropbox/dev ~/Desktop
 
 success "done - some settings may require a restart"
 
