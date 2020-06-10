@@ -36,7 +36,7 @@ source "$SYSCD/scripts/utils/colours.sh"
 
 ##### functions to backup and update dotfiles & sublime-config
 usys () {
-  success 'updating system config files.'; 
+  doing 'updating system config files.'; 
   cd "$HOME/.system-config";
   git pull;
   source "$HOME/.system-config/scripts/dotfiles.sh";
@@ -46,7 +46,7 @@ usys () {
 }
 
 backUpSublimeConfig () {
-  success 'Backing up Sublime config'; 
+  doing 'Backing up Sublime config'; 
   # (command) runs this command without chaning directory 
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; git push --all; );
   echo;
@@ -57,15 +57,14 @@ backUpSublimeConfig () {
 
 
 backUpSystemConfig () {
-  echo 'Backing up system config files'; 
+  doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
 }
 
 
 bsys () {
-  success 'Backing up system & sublime config';
-  success 'Copying current dotfile files';
+  doing 'Copying current dotfile files';
   echo;
   for i in "${DOTFILES[@]}"
   do  
