@@ -50,7 +50,7 @@ backUpSublimeConfig () {
   # (command) runs this command without chaning directory 
   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; git push --all; );
   echo;
-  success 'Backing up A3 theme'; 
+  doing 'Backing up A3 theme'; 
   (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
   echo;
 }
@@ -85,34 +85,34 @@ projects () {
 }
 
 ckps () {
-  success 'Creating CodeKit web skeleton project';
+  doing 'Creating CodeKit web skeleton project';
   . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
 }
 
 pps () {
-  success 'Creating Parcel web skeleton project';
+  doing 'Creating Parcel web skeleton project';
   . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
 }
 
 rps () {
-  success 'Creating Ruby skeleton project';
+  doing 'Creating Ruby skeleton project';
   . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
 }
 
 nps () {
-  success 'making new node project skeleton'; 
+  doing 'making new node project skeleton'; 
   . $HOME/.system-config/scripts/node-project-skeleton.sh $1;
 }
 
 
 mbx () {
-  success 'making new executable bash file'; 
+  doing 'making new executable bash file'; 
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
 
 ptw () {
-    success 'making new parcel/tailwind project'; 
+    doing 'making new parcel/tailwind project'; 
     . $HOME/.system-config/scripts/parcel-tailwind-skeleton.sh $1;
 }
 
@@ -153,41 +153,41 @@ viewlog () {
 ##### Common commands
 alias ls="ls -l"            # because the normal way is dumb                                                             
 alias cd..="cd .."          # because I always miss the space. 
-alias h="success 'changing to Home'; cd ~/"
-alias dt="success 'changing to Desktop'; cd ~/Desktop"    
+alias h="doing 'changing to Home'; cd ~/"
+alias dt="doing 'changing to Desktop'; cd ~/Desktop"    
 
-alias kd="success 'Killing the Dock'; killall Dock"                                
-alias kf="success 'Killing the Finder'; killall Finder"                            
+alias kd="doing 'Killing the Dock'; killall Dock"                                
+alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
-alias s="success 'opening current folder in Sublime'; subl ."                      
-alias a="success 'opening current folder in Atom'; atom ."  
+alias s="doing 'opening current folder in Sublime'; subl ."                      
+alias a="doing 'opening current folder in Atom'; atom ."  
  
-alias cmds="success 'listing project skeletons'; projects;"
+alias cmds="doing 'listing project skeletons'; projects;"
 
-alias rp="success 'Reloading .zshrc'; source ~/.zshrc" 
+alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 
-alias ep="success 'Editing zsh profile'; subl ~/.zshrc"  
+alias ep="doing 'Editing zsh profile'; subl ~/.zshrc"  
   
 
 ############### Editing config files ################
-alias esys="success 'Editing system files'; cd $HOME/.system-config; subl .;"         
-alias elint="success 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
-alias ebfy="success 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
+alias esys="doing 'Editing system files'; cd $HOME/.system-config; subl .;"         
+alias elint="doing 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
+alias ebfy="doing 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
 
-alias cdsys="success 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
-alias cdsub="success 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
-alias esysgh="success 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
+alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
+alias cdsub="doing 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
+alias esysgh="doing 'Opening system install respoitory on Github'; open -a Safari 'https://github.com/dwkns/system-install'" 
 
 
 
 ############### Editing sublime files ################
 esub () {     # Edit the sublime config files
-  success 'Opening the Sublime config files folder'
+  doing 'Opening the Sublime config files folder'
   cd "$SROOT/Packages/User";
   subl .;
 }
 subu () {     # Open sublime config files
-  success 'Opening the Sublime config files folder'
+  doing 'Opening the Sublime config files folder'
   cd "$SROOT/Packages/User";
   subl .;
 }
@@ -196,23 +196,23 @@ bsub () {      # Backup Sublime config files
 }
 
 esubt () {
-  success 'Editing Sublime A3-Theme';
+  doing 'Editing Sublime A3-Theme';
   cd "$SROOT/Packages/A3-Theme";
   subl .;
 }
 
 ############### Git ################
-alias gc="success 'Doing git commit'; git commit"                                   # git commit
-alias gca="success 'Doing git commit'; git commit -a"                               # git commit all
-alias ga="success 'Doing git add -A'; git add -A"                                   # git add all
+alias gc="doing 'Doing git commit'; git commit"                                   # git commit
+alias gca="doing 'Doing git commit'; git commit -a"                               # git commit all
+alias ga="doing 'Doing git add -A'; git add -A"                                   # git add all
 alias gs="git status"                                                               # git status
-alias gb="success 'Doing git branch'; git branch"                                   # git branch
-alias gp="success 'Doing git push -- all'; git push --all"                          # git push all
+alias gb="doing 'Doing git branch'; git branch"                                   # git branch
+alias gp="doing 'Doing git push -- all'; git push --all"                          # git push all
 alias gpa="gp"                                                                      # second alias for git push all
-alias gco="success 'Doing git checkout'; git checkout"                              # git checkout
-alias gac="success 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
-alias gph="success 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
-alias gphm="success 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
+alias gco="doing 'Doing git checkout'; git checkout"                              # git checkout
+alias gac="doing 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
+alias gph="doing 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
+alias gphm="doing 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
 
 
 # Merge PDF files, preserving hyperlinks
@@ -222,26 +222,26 @@ alias mergepdf='gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=_merged.p
 
 
 # Hide and show invisibles
-alias hide="success 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
-alias show="success 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
+alias hide="doing 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
+alias show="doing 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
 
 
 
 ## my apps
-alias wrap="success 'Opening Wrap Scraper'; cd $HOME/Dropbox/dev/wrap-scraper; ./bin/s"
-alias icr="success 'Running iCalReader';dev/iCalReader/bin/s"
+alias wrap="doing 'Opening Wrap Scraper'; cd $HOME/Dropbox/dev/wrap-scraper; ./bin/s"
+alias icr="doing 'Running iCalReader';dev/iCalReader/bin/s"
 
 ############### rbenv ################
-alias rh="success 'doing rbenv rehash...'; rbenv rehash"
+alias rh="doing 'doing rbenv rehash...'; rbenv rehash"
 
 
 ############### Brew ################
-alias bu="success 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
+alias bu="doing 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
 
 
 ############### Yarn ################
 ya () {
-  success 'Doing yarn add --dev';
+  doing 'Doing yarn add --dev';
   yarn add --dev $1;
 }
 
