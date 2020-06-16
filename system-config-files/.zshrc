@@ -28,9 +28,23 @@ DOTFILES=(
   ".zshrc"
 )  
 
-##### style the prompt.
+# ##### style the prompt.
 NEWLINE=$'\n'
-PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
+# PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
+
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats 'on branch %b'
+ 
+# Set up the prompt (with git branch name)
+setopt PROMPT_SUBST
+PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~} %{$fg[cyan]%}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE$ '
+
+
+
+
 source "$SYSCD/scripts/utils/colours.sh"
 
 
@@ -147,7 +161,7 @@ rebootbird () {
 }
 
 viewlog () {
-  brctl log -w --shorten
+   brctl log -w --shorten
   }
 
 ##### Common commands
@@ -252,4 +266,4 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 
 
 eval "$(rbenv init -)"
-cd ~/Desktop  
+cd ~/Desktop
