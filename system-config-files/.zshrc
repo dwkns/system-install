@@ -36,11 +36,22 @@ autoload -Uz vcs_info
 precmd() { vcs_info }
 
 # Format the vcs_info_msg_0_ variable
-zstyle ':vcs_info:git:*' formats 'on branch %b'
+# zstyle ':vcs_info:git:*' formats 'on branch %b'
+# zstyle ':vcs_info:git:*' formats "--[%b]--"
+# zstyle ':vcs_info:git:*' formats "$reset_color on $fg[green]%b"
+ 
+# # Set up the prompt (with git branch name)
+# setopt PROMPT_SUBST
+# PROMPT="$fg[yellow]${PWD/#$HOME/~}$fg[green]${vcs_info_msg_0_}$reset_color $NEWLINE$ "
+
+# Format the vcs_info_msg_0_ variable
+# zstyle ':vcs_info:git:*' formats '%b'
+
+zstyle ':vcs_info:git:*' formats "$reset_color on $fg[green]%b"
  
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
-PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~} %{$fg[cyan]%}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE$ '
+PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE$ '
 
 
 
