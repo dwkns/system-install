@@ -107,6 +107,7 @@ projects () {
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
+  note "$fg[yellow] ptw  :$reset_color making new parcel/tailwind project $reset_color";
 }
 
 ckps () {
