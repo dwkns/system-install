@@ -426,12 +426,11 @@ echo $CYAN"Github :$RESET use osxkeychain to store password"
 git config --global credential.helper osxkeychain
 
 echo
-
-echo
 echo $CYAN"Desktop :$RESET Adding Symlink to ~/Dropbox/dev"
 ln -s ~/Dropbox/dev ~/Desktop
-
-doing "done - some settings may require a restart"
+echo
+echo
+success "done - some settings may require a restart"
 
 
 

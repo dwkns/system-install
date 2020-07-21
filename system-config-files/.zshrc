@@ -66,6 +66,7 @@ usys () {
   git pull;
   source "$HOME/.system-config/scripts/dotfiles.sh";
   source "$HOME/.system-config/scripts/sublime-config.sh";
+  source "$HOME/.system-config/scripts/vscode-config.sh";
   source "$HOME/.system-config/scripts/system-settings.sh";
   source "$HOME/.zshrc";
 }
@@ -77,6 +78,10 @@ backUpSublimeConfig () {
   echo;
   doing 'Backing up A3 theme'; 
   (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
+  echo;
+
+  doing 'Backing up VSCode theme'; 
+  (cd "$HOME/.vscode/extensions/dwkns-vs"; git add -A; git commit -m 'Updated Theme'; git push --all; );
   echo;
 }
 
