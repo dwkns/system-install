@@ -80,9 +80,9 @@ backUpSublimeConfig () {
   (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
   echo;
 
-  doing 'Backing up VSCode theme'; 
-  (cd "$HOME/.vscode/extensions/dwkns-vs"; git add -A; git commit -m 'Updated Theme'; git push --all; );
-  echo;
+  # doing 'Backing up VSCode theme'; 
+  # (cd "$HOME/.vscode/extensions/dwkns-vs"; git add -A; git commit -m 'Updated Theme'; git push --all; );
+  # echo;
 }
 
 
@@ -232,11 +232,11 @@ esubt () {
   subl .;
 }
 
-ecode () {     # Edit the sublime config files
-  doing 'Opening the VSCode extensions folder'
-  cd "$HOME/.vscode/extensions";
-  code .;
-}
+# ecode () {     # Edit the sublime config files
+#   doing 'Opening the VSCode extensions folder'
+#   cd "$HOME/.vscode/extensions";
+#   code .;
+# }
 
 ############### Git ################
 alias gc="doing 'Doing git commit'; git commit"                                   # git commit
