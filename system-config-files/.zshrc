@@ -232,6 +232,12 @@ esubt () {
   subl .;
 }
 
+ecode () {     # Edit the sublime config files
+  doing 'Opening the VSCode extensions folder'
+  cd "$HOME/.vscode/extensions";
+  code .;
+}
+
 ############### Git ################
 alias gc="doing 'Doing git commit'; git commit"                                   # git commit
 alias gca="doing 'Doing git commit'; git commit -a"                               # git commit all
