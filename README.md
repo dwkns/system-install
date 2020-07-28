@@ -20,15 +20,9 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew/cask-fonts && brew tap homebrew/services && brew tap heroku/brew
 ````
 
-### Install useful brew apps
-Some of these apps are used in the install script so we install them first.
-Definately need these:
-```` 
-$ brew install openssl git node mas rbenv ruby-build jq yarn
-````
-Probably need these:
-```` 
-$ brew install  python heroku postgresql redis yarn
+### Because iTerm is better...
+````bash
+$ brew cask install iterm2
 ````
 
 ### Install system config & dot files
@@ -37,20 +31,19 @@ $ brew install  python heroku postgresql redis yarn
 $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 ````
 
+### Install useful brew apps
+Some of these apps are used in the install script so we install them first.
+Definately need these:
+```` 
+$ brew install openssl git node mas rbenv ruby-build jq yarn
+````
 
 ### Install apps  
 Definately 
 ````bash
-$ brew cask install sublime-text iterm2 font-source-code-pro dropbox typora iina google-chrome google-drive-file-stream notion
+$ brew cask install sublime-text font-source-code-pro dropbox typora iina google-chrome google-drive-file-stream notion visual-studio-code 
 ````
-Probably
-````bash
-$ brew cask install sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
-````
-Maybe
-````bash
-$ brew cask install flash-npapi codekit
-````
+
 
 ### Initialise rbenv and install a Ruby version
 List all available versions and choose the one you want to install.
@@ -86,3 +79,17 @@ https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
 ### Printer
 
 [Download Printer Drivers](http://gdlp01.c-wss.com/gds/8/0100007708/04/mcpd-mac-ts8000-18_10_0_0-ea21_3.dmg) for Canon TS8050
+
+### Probably need these
+```` 
+$ brew install  python heroku postgresql redis 
+````
+And these
+````bash
+$ brew cask install sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
+````
+And maybe these
+````bash
+$ brew cask install flash-npapi codekit
+````
+
