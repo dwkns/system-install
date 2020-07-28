@@ -41,7 +41,7 @@ $ brew install openssl git node mas rbenv ruby-build jq yarn
 ### Install apps  
 Definately 
 ````bash
-$ brew cask install sublime-text font-source-code-pro dropbox typora iina google-chrome google-drive-file-stream notion visual-studio-code 
+$ brew cask install sublime-text font-source-code-pro dropbox typora iina google-chrome firefox sizzy google-drive-file-stream notion visual-studio-code 1Password omnigraffle zoomus
 ````
 
 
@@ -51,7 +51,7 @@ List all available versions and choose the one you want to install.
 ````bash
 $ rbenv init          // Initialise rbenv 
 $ rbenv install -l    // List the ruby version available. 
-$ rbenv install 2.4.2 && rbenv global  2.4.2 // Or Whatever ruby version you want. 
+$ rbenv install 2.7.1 && rbenv global  2.7.1 // Or Whatever ruby version you want. 
 ````
 
 ### Ensure that rbenv is added to .bash_profile
