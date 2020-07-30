@@ -38,6 +38,16 @@ Definately need these:
 $ brew install openssl git node mas rbenv ruby-build jq yarn
 ````
 
+### Install useful global node apps
+Some of these apps are used in the install script so we install them first.
+Definately need these:
+```` 
+$ npm install -g local-web-server 
+````
+
+
+
+
 ### Install apps  
 Definately 
 ````bash
@@ -67,6 +77,7 @@ $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 ````bash
 $ gem install bundler rails htmlbeautifier 
 ````
+
 
 ### Install App Store Apps
 ```bash
