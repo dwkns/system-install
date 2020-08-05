@@ -191,6 +191,7 @@ alias kd="doing 'Killing the Dock'; killall Dock"
 alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
 alias s="doing 'opening current folder in Sublime'; subl ."                      
+alias c="doing 'opening current folder in VSCode'; code ."                      
 alias a="doing 'opening current folder in Atom'; atom ."  
  
 alias cmds="doing 'listing project skeletons'; projects;"
