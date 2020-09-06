@@ -9,15 +9,15 @@ if ! command -v mas > /dev/null; then
   exit 1
 fi
 
+mas install 1508732804 # Soulver 3 (3.4.7)
 mas install 1176895641 # Spark (2.6.0)
 mas install 1289583905 # Pixelmator Pro (1.3.4)
 mas install 409183694  # Keynote (9.1)
 mas install 414209656  # Better Rename 9 (9.52)
-mas install 803453959  # Slack (3.4.2)
+# mas install 803453959  # Slack (3.4.2)
 mas install 1298450641 # monday (0.1.54)
 mas install 904280696  # Things (3.9.1)
 mas install 918858936  # Airmail (3.6.60)
-
 mas install 424389933  # Final Cut Pro (10.4.6)
 mas install 424390742  # Compressor (4.4.6)
 mas install 434290957  # Motion (5.4.3)
@@ -35,3 +35,4 @@ mas install 1055273043 #PDF Expert (2.5.4)
 mas install 506189836 #Harvest (2.2.1)
 mas install 1298486723 #FileZilla Pro (3.48.0)
 # # mas install 497799835  # Xcode (10.2.1)
+
