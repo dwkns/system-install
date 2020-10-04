@@ -3,7 +3,7 @@
 	email = dwkns@me.com
 [core]
 	autocrlf = false
-	safecrlf = true
+	safecrlf = false
 	excludesfile = /Users/dazza/.gitignore_global
 [credential]
 	helper = osxkeychain
