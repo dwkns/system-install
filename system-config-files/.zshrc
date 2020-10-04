@@ -216,7 +216,7 @@ alias cmds="doing 'listing project skeletons'; projects;"
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 
 alias ep="doing 'Editing zsh profile'; subl ~/.zshrc"  
-  
+alias sd="doing 'changing to .system-config/';cd  ~/.system-config"    
 
 ############### Editing config files ################
 alias esys="doing 'Editing system files'; cd $HOME/.system-config; subl .;"         
