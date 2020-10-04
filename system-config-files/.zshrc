@@ -113,6 +113,7 @@ projects () {
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
   note "$fg[yellow] ptw  :$reset_color making new parcel/tailwind project $reset_color";
+  note "$fg[yellow] gtw  :$reset_color making new gatsby/tailwind project $reset_color";
 }
 
 ckps () {
@@ -146,6 +147,12 @@ ptw () {
     doing 'making new parcel/tailwind project'; 
     . $HOME/.system-config/scripts/parcel-tailwind-skeleton.sh $1;
 }
+
+gtw () {
+    doing 'making new gatsby/tailwind project'; 
+    . $HOME/.system-config/scripts/gatsby-tailwind-starter.sh $1;
+}
+
 
 
 
@@ -181,7 +188,17 @@ viewlog () {
    brctl log -w --shorten
   }
 
+  node_sync () {
+    rm -rf node_modules.nosync
+    doing 'removing existing node_modules folder'; rm -rf node_modules
+    doing 'creating node_modules.nosync'; mkdir node_modules.nosync
+    doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
+    doing 'running yarn'; yarn
+  }
+
 ##### Common commands
+alias ns="doing 'stopping node_modules backing up to iCloud to Home'; node_sync"   
+
 alias ls="ls -l"            # because the normal way is dumb                                                             
 alias cd..="cd .."          # because I always miss the space. 
 alias h="doing 'changing to Home'; cd ~/"
