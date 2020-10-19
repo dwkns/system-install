@@ -113,8 +113,9 @@ echo $CYAN"Finder :$RESET Showing all filename extensions in Finder by default"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 echo $CYAN"Finder :$RESET Showing Library & ~/Library"
-chflags nohidden ~/Library 
-chflags nohidden /Library
+
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo  ~/Library
+chflags nohidden /Library && xattr -d com.apple.FinderInfo  /Library
 
 echo $CYAN"Finder :$RESET Hiding ~/Applications"
 chflags hidden ~/Applications

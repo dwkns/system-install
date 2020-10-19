@@ -30,23 +30,8 @@ DOTFILES=(
 
 # ##### style the prompt.
 NEWLINE=$'\n'
-# PROMPT="%{$fg[yellow]%}%~%{$reset_color%}$NEWLINE$ "
-
 autoload -Uz vcs_info
 precmd() { vcs_info }
-
-# Format the vcs_info_msg_0_ variable
-# zstyle ':vcs_info:git:*' formats 'on branch %b'
-# zstyle ':vcs_info:git:*' formats "--[%b]--"
-# zstyle ':vcs_info:git:*' formats "$reset_color on $fg[green]%b"
- 
-# # Set up the prompt (with git branch name)
-# setopt PROMPT_SUBST
-# PROMPT="$fg[yellow]${PWD/#$HOME/~}$fg[green]${vcs_info_msg_0_}$reset_color $NEWLINE$ "
-
-# Format the vcs_info_msg_0_ variable
-# zstyle ':vcs_info:git:*' formats '%b'
-
 zstyle ':vcs_info:git:*' formats "$reset_color on $fg[green]%b"
  
 # Set up the prompt (with git branch name)
@@ -114,6 +99,7 @@ projects () {
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
   note "$fg[yellow] ptw  :$reset_color making new parcel/tailwind project $reset_color";
   note "$fg[yellow] gtw  :$reset_color making new gatsby/tailwind project $reset_color";
+  note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/snowpack project $reset_color";
 }
 
 ckps () {
@@ -153,7 +139,10 @@ gtw () {
     . $HOME/.system-config/scripts/gatsby-tailwind-starter.sh $1;
 }
 
-
+etw () {
+    doing 'making new 11ty/tailwind/snowpack project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
+}
 
 
 rebootbird () {
