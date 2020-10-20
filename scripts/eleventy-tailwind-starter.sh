@@ -36,9 +36,6 @@ chmod +x bin/s
 ######## Put the project name into the HTML Title. 
 sed -i "" -e "s/---page-title---/$PROJECTNAME/g" ./src/index.njk
 
-# Install any dependencies
-yarn
-
 ######## Initialize git.
 rm -rf .git #  remove the previous git files.
 git init
