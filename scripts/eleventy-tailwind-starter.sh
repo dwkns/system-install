@@ -51,4 +51,4 @@ doing 'creating node_modules.nosync'; mkdir node_modules.nosync
 doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
 doing 'running yarn'; yarn
 
-code .
+code -r .

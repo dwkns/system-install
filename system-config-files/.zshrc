@@ -1,3 +1,6 @@
+
+
+
 export ZSH="/Users/dazza/.oh-my-zsh"
 ZSH_DISABLE_COMPFIX=true
 ##### Check if oh-my-zsh is installed and warn if it is not. 
@@ -296,4 +299,11 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 
 
 eval "$(rbenv init -)"
-cd ~/Desktop
+
+### test to see what opened the shell
+### We don't want to cd to Desktop if Visual Studio opens the Shell
+ARSE=`ps -o comm= -p $PPID`
+if [[ $ARSE != *"Visual Studio Code.app"* ]]; then
+  #echo "It's not there!"
+  cd ~/Desktop
+fi
