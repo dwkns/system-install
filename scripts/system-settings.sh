@@ -258,7 +258,7 @@ defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool fals
 # Disable AutoFill
 defaults write com.apple.Safari AutoFillFromAddressBook -bool false
 defaults write com.apple.Safari AutoFillPasswords -bool true
-defaults write com.apple.Safari AutoFillCreditCardData -bool false
+defaults write com.apple.Safari AutoFillCreditCardData -bool true
 defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
 
 # Enable “Do Not Track”
