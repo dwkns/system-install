@@ -199,7 +199,7 @@ alias dt="doing 'changing to Desktop'; cd ~/Desktop"
 alias kd="doing 'Killing the Dock'; killall Dock"                                
 alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
-alias s="doing 'opening current folder in Sublime'; subl ."                      
+alias s="doing 'opening current folder in Sublime'; code ."                      
 alias c="doing 'opening current folder in VSCode'; code ."                      
 alias a="doing 'opening current folder in Atom'; atom ."  
  
@@ -207,13 +207,13 @@ alias cmds="doing 'listing project skeletons'; projects;"
 
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 
-alias ep="doing 'Editing zsh profile'; subl ~/.zshrc"  
+alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
 alias sd="doing 'changing to .system-config/';cd  ~/.system-config"    
 
 ############### Editing config files ################
-alias esys="doing 'Editing system files'; cd $HOME/.system-config; subl .;"         
-alias elint="doing 'Editing .eslintrc.yaml'; subl ~/..eslintrc.yaml"
-alias ebfy="doing 'Editing .jsbeautifyrc'; subl ~/.jsbeautifyrc"
+alias esys="doing 'Editing system files'; cd $HOME/.system-config; code .;"         
+alias elint="doing 'Editing .eslintrc.yaml'; code ~/..eslintrc.yaml"
+alias ebfy="doing 'Editing .jsbeautifyrc'; code ~/.jsbeautifyrc"
 
 alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
 alias cdsub="doing 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
@@ -225,12 +225,12 @@ alias esysgh="doing 'Opening system install respoitory on Github'; open -a Safar
 esub () {     # Edit the sublime config files
   doing 'Opening the Sublime config files folder'
   cd "$SROOT/Packages/User";
-  subl .;
+  code .;
 }
 subu () {     # Open sublime config files
   doing 'Opening the Sublime config files folder'
   cd "$SROOT/Packages/User";
-  subl .;
+  code .;
 }
 bsub () {      # Backup Sublime config files                           
   backUpSublimeConfig;
@@ -239,7 +239,7 @@ bsub () {      # Backup Sublime config files
 esubt () {
   doing 'Editing Sublime A3-Theme';
   cd "$SROOT/Packages/A3-Theme";
-  subl .;
+  code .;
 }
 
 ecode () {     # Edit the sublime config files
@@ -292,7 +292,7 @@ ya () {
   yarn add --dev $1;
 }
 
-export EDITOR='subl -w'
+export EDITOR='code -w'
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
 export PATH=$PATH:~/bin
 export PATH="$HOME/.rbenv/bin:$PATH"

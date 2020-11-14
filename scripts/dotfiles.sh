@@ -41,6 +41,7 @@ DOTFILES=(
   ".jsbeautifyrc"
   ".eslintrc.yml"
   ".zshrc"
+  ".macos"
 )  
 
 installDotFiles () {
