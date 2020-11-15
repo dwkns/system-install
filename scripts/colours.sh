@@ -24,7 +24,7 @@ error () {
 }
 
 note () {
-  echo -e $CYAN"========>$RESET $1 $RESET"
+  echo -e $YELLOW"========>$RESET $1 $RESET"
 }
 
 doing () {
