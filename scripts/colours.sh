@@ -34,3 +34,7 @@ doing () {
 complete () {
   echo -e $GREEN"Done ========>$CYAN $1 $RESET"
 }
+
+setting () {
+  echo -e $GREEN"Setting ====>$RESET $1"
+}
