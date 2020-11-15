@@ -376,7 +376,7 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 	OpenWith -bool true \
 	Privileges -bool true
 
-# Finder :$RESET Hiding ~/Applications"
+# Finder : Hiding ~/Applications"
 chflags hidden ~/Applications
 
 
@@ -901,7 +901,7 @@ defaults write org.m0k.transmission RandomPort -bool true
 # GIT                                                                         #
 ###############################################################################
 
-# Github :$RESET use osxkeychain to store password"
+# Github : use osxkeychain to store password"
 git config --global credential.helper osxkeychain
 
 git config --global core.excludesfile $HOME/.gitignore_global
@@ -911,12 +911,18 @@ git config --global core.excludesfile $HOME/.gitignore_global
 # Random other configurations                                                   #
 ###############################################################################
 
-# General :$RESET Turn off keyboard illumination when computer is not used for 5 minutes"
+# General : Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
 
-# Desktop :$RESET Adding Symlink to ~/Dropbox/dev"
-ln -s ~/Dropbox/dev ~/Desktop
+# Desktop : Adding Symlink to ~/Dropbox/dev"
+FILE="$HOME/Desktop/dev"
+if [ -L "$FILE" ]; then
+    # echo "$FILE exists"
+else 
+		ln -s ~/Dropbox/dev ~/Desktop
+fi
+
 
 
 ###############################################################################
