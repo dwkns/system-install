@@ -126,7 +126,11 @@ source "$HOME/.macos"
 
 # source "$ROOT_DIR/scripts/app-store-apps.sh"
 
-
+echo -e $GREEN"################################################"
+echo;
+echo -e $CYAN"To install App Store apps run..."
+echo -e $RESET"./ ~/.system-config/scripts/app-store-apps.sh"
+echo;
 
 ###############################################################################
 # Things that require sudo                                                    #
