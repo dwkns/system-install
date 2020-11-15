@@ -126,4 +126,21 @@ source "$HOME/.macos"
 
 # source "$ROOT_DIR/scripts/app-store-apps.sh"
 
+
+
+###############################################################################
+# Things that require sudo                                                    #
+###############################################################################
+# Means .macos can run without sudo
+
+# Show the /Volumes folder
+sudo chflags nohidden /Volumes
+# Reveal IP address, hostname, OS version, etc. when clicking the clock
+# in the login window
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+
+
+
+
 doing "And that's it. All done." 
