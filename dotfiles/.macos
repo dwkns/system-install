@@ -2,15 +2,22 @@
 
 # ~/.macos — https://mths.be/macos
 
+
+source "$HOME/.system-config/scripts/colours.sh"
+
+
+success "Configuring system"
+
+
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
 
 # Ask for the administrator password upfront
-sudo -v
+# sudo -v
 
-# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+# # Keep-alive: update existing `sudo` time stamp until `.macos` has finished
+# while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ###############################################################################
 # General UI/UX                                                               #
@@ -150,10 +157,10 @@ defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
 # Use scroll gesture with the Ctrl (^) modifier key to zoom
-defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
-# Follow the keyboard focus while zoomed in
-defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
+# defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+# defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+# # Follow the keyboard focus while zoomed in
+# defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
 
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
@@ -353,7 +360,7 @@ defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
 
 # Show the ~/Library folder
 chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
-chflags nohidden /Library && xattr -d com.apple.FinderInfo  /Library
+# chflags nohidden /Library && xattr -d com.apple.FinderInfo  /Library
 
 # Show the /Volumes folder
 sudo chflags nohidden /Volumes
@@ -901,7 +908,7 @@ git config --global core.excludesfile $HOME/.gitignore_global
 
 
 ###############################################################################
-Random other configurations                                                   #
+# Random other configurations                                                   #
 ###############################################################################
 
 # General :$RESET Turn off keyboard illumination when computer is not used for 5 minutes"
@@ -942,4 +949,4 @@ for app in "Activity Monitor" \
 done
 
 
-echo "Done. Note that some of these changes require a logout/restart to take effect."
+success "Done. Note that some of these changes require a logout/restart to take effect."

@@ -35,9 +35,8 @@ fi
 
 
 ###############################################################################
-#  Import useful scripts                                                   
+#  Import useful scripts                                                      #
 ###############################################################################
-
 
 source "$ROOT_DIR/scripts/colours.sh"
 source "$ROOT_DIR/scripts/dotfiles.sh"

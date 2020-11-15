@@ -10,7 +10,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 ### Install homebrew
 
-```` 
+````bash
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 ````
 
@@ -20,23 +20,19 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew/cask-fonts && brew tap homebrew/services && brew tap heroku/brew
 ````
 
-### Because iTerm is better...
+### Install useful brew apps
+Some of these apps are used in the install script so we install them first.
+Definately need these:
 ````bash
-$ brew cask install iterm2
+$ brew install iterm2 openssl git node mas rbenv ruby-build jq yarn
 ````
 
 ### Install system config & dot files
 
-```` 
+````bash
 $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 ````
 
-### Install useful brew apps
-Some of these apps are used in the install script so we install them first.
-Definately need these:
-```` 
-$ brew install openssl git node mas rbenv ruby-build jq yarn
-````
 
 ### Install useful global node apps
 Some of these apps are used in the install script so we install them first.
