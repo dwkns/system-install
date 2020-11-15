@@ -1,6 +1,3 @@
-
-
-
 export ZSH="/Users/dazza/.oh-my-zsh"
 ZSH_DISABLE_COMPFIX=true
 ##### Check if oh-my-zsh is installed and warn if it is not. 
@@ -14,24 +11,28 @@ else
     source $ZSH/oh-my-zsh.sh
 fi
 
-##### Defile some variables 
+
+
+###############################################################################
+#  Deine variables                                                  #
+###############################################################################
+
+
 plugins=(bundler)
 SROOT="$HOME/Library/Application Support/Sublime Text 3/"
 SYSCD="$HOME/.system-config"
+SYS_FILES_ROOT="$HOME/.system-config"
 
-DOTFILES=( 
-  ".bash_profile"
-  ".gemrc"
-  ".gitconfig"
-  ".gitignore_global"
-  ".irbrc"
-  ".rspec"
-  ".jsbeautifyrc"
-  ".eslintrc.yml"
-  ".zshrc"
-)  
+###############################################################################
+#  Import useful scripts                                                      #
+###############################################################################
 
-# ##### style the prompt.
+source "$SYS_FILES_ROOT/scripts/colours.sh"
+source "$SYS_FILES_ROOT/scripts/dotfiles.sh"
+
+###############################################################################
+#  Style the prompt                                                           #
+###############################################################################
 NEWLINE=$'\n'
 autoload -Uz vcs_info
 precmd() { vcs_info }
@@ -43,30 +44,32 @@ PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE
 
 
 
-
-source "$SYSCD/scripts/utils/colours.sh"
-
+###############################################################################
+#  DOTFILES UPDATE FUCNTIONS                                                         #
+###############################################################################
 
 ##### functions to backup and update dotfiles & sublime-config
 usys () {
   doing 'updating system config files.'; 
   cd "$HOME/.system-config";
   git pull;
-  source "$HOME/.system-config/scripts/dotfiles.sh";
-  source "$HOME/.system-config/scripts/sublime-config.sh";
-  # source "$HOME/.system-config/scripts/vscode-config.sh";
-  source "$HOME/.system-config/scripts/system-settings.sh";
+
+  source "$HOME/.system-config//scripts/dotfiles.sh"
+  installDotFiles
+  source source "$HOME/.macos"
+  # source "$HOME/.system-config/scripts/sublime-config.sh";
+  # source "$HOME/.system-config/scripts/system-settings.sh";
   source "$HOME/.zshrc";
 }
 
-backUpSublimeConfig () {
-  doing 'Backing up Sublime config'; 
-  # (command) runs this command without chaning directory 
-  (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; git push --all; );
-  echo;
-  doing 'Backing up A3 theme'; 
-  (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
-  echo;
+# backUpSublimeConfig () {
+#   doing 'Backing up Sublime config'; 
+#   # (command) runs this command without chaning directory 
+#   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; git push --all; );
+#   echo;
+#   doing 'Backing up A3 theme'; 
+#   (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
+#   echo;
 
   # doing 'Backing up VSCode theme'; 
   # (cd "$HOME/.vscode/extensions/dwkns-vs"; git add -A; git commit -m 'Updated Theme'; git push --all; );
@@ -75,21 +78,16 @@ backUpSublimeConfig () {
 
 
 backUpSystemConfig () {
-  doing 'Backing up system config files'; 
-  # (command) runs this command without chaning directory 
-  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  
 }
 
 
 bsys () {
-  doing 'Copying current dotfile files';
-  echo;
-  for i in "${DOTFILES[@]}"
-  do  
-     cp -rf "$HOME/$i" "$SYSCD/system-config-files/$i";
-  done
-  backUpSublimeConfig;
-  backUpSystemConfig;
+  backupDotFiles
+  # backUpSublimeConfig;
+  doing 'Backing up system config files'; 
+  # (command) runs this command without chaning directory 
+  (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
 }
 
 
@@ -180,13 +178,13 @@ viewlog () {
    brctl log -w --shorten
   }
 
-  node_sync () {
-    rm -rf node_modules.nosync
-    doing 'removing existing node_modules folder'; rm -rf node_modules
-    doing 'creating node_modules.nosync'; mkdir node_modules.nosync
-    doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
-    doing 'running yarn'; yarn
-  }
+node_sync () {
+  rm -rf node_modules.nosync
+  doing 'removing existing node_modules folder'; rm -rf node_modules
+  doing 'creating node_modules.nosync'; mkdir node_modules.nosync
+  doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
+  doing 'running yarn'; yarn
+}
 
 ##### Common commands
 alias ns="doing 'stopping node_modules backing up to iCloud to Home'; node_sync"   
