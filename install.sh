@@ -1,12 +1,4 @@
 #!/bin/bash
-# Colours and functions
-RED="\033[0;31m"          
-YELLOW="\033[0;33m"       
-GREEN="\033[0;32m"          
-BLUE="\033[0;94m"
-RESET="\033[0m"
-CYAN="\033[0;36m"
-
 sudo -v 
 
 # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
@@ -15,19 +7,18 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 
-echo $GREEN"Doing ========>$CYAN Starting install $RESET" 
+echo "Doing ========> Starting install " 
 
 ############ Download config files  ############
 # doing "$PG Downloading config files"
-echo $GREEN"Doing ========>$CYAN Downloading config files $RESET" 
+echo "Doing ========> Downloading config files " 
 
 if [ -d "$ROOT_DIR" ]; then
-  echo $YELLOW"Warning ========>$CYAN '.system-config' folder is already there. Updating... $RESET"
+  echo $YELLOW"Warning ========> '.system-config' folder is already there. Updating... "
   cd $ROOT_DIR
   git pull
 else
-echo $GREEN"Doing ========>$CYAN Cloning 'https://github.com/dwkns/system-install.git' into '~/.system-config' $RESET" 
-# echo $YELLOW"Doing ========>$CYAN '.system-config' folder is already there. Updating... $RESET"
+  echo "Doing ========> Cloning 'https://github.com/dwkns/system-install.git' into '~/.system-config' " 
   echo ""
   git clone https://github.com/dwkns/system-install.git ~/.system-config
   cd $ROOT_DIR
@@ -86,43 +77,42 @@ note "done"
 # source "$ROOT_DIR/scripts/sublime-config.sh"
 
 
-
 ###############################################################################
 # CONFIGURE Time Machine                                                      #
 ###############################################################################
 
-success "Adding Time Machine Exclusions"
+# success "Adding Time Machine Exclusions"
 
-TIME_MACHINE_EXCLUSION_LIST=(
-  "$HOME/Downloads/"
-  "$HOME/Library/Caches/"
-  "$HOME/Documents/Torrents/"
-  "$HOME/Documents/Parallels/"
-  "$HOME/Library/Application Support/Google/"
-)
+# TIME_MACHINE_EXCLUSION_LIST=(
+#   "$HOME/Downloads/"
+#   "$HOME/Library/Caches/"
+#   "$HOME/Documents/Torrents/"
+#   "$HOME/Documents/Parallels/"
+#   "$HOME/Library/Application Support/Google/"
+# )
 
-for LOCATION in "${TIME_MACHINE_EXCLUSION_LIST[@]}"
-do
-  # ensure that the directories exist.
-  mkdir -p "$LOCATION"
-  sudo tmutil addexclusion "$LOCATION"
-done
+# for LOCATION in "${TIME_MACHINE_EXCLUSION_LIST[@]}"
+# do
+#   # ensure that the directories exist.
+#   mkdir -p "$LOCATION"
+#   sudo tmutil addexclusion "$LOCATION"
+# done
 
-if $TM_DEBUG; then
-  warn "These locations are being excluded :"
-  sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
-fi
-note "done"
+# if $TM_DEBUG; then
+#   warn "These locations are being excluded :"
+#   sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+# fi
+# note "done"
 
-success "Prevent Time Machine from prompting to use new hard drives as backup volume"
-defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+# success "Prevent Time Machine from prompting to use new hard drives as backup volume"
+# defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 
-warn "~/Dropbox has NOT been added to the time machine exclusion list"
-echo "If you want to add the exclusion run :"
-echo "sudo tmutil addexclusion '~/Dropbox/'"
+# warn "~/Dropbox has NOT been added to the time machine exclusion list"
+# echo "If you want to add the exclusion run :"
+# echo "sudo tmutil addexclusion '~/Dropbox/'"
 
-note "done"
+# note "done"
 
 ###############################################################################
 # CONFIGURE System Settings                                                   #
