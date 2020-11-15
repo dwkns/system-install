@@ -30,3 +30,7 @@ note () {
 doing () {
   echo -e $GREEN"Doing ========>$CYAN $1 $RESET"
 }
+
+done () {
+  echo -e $CYAN"Done ========> $1 $RESET"
+}
