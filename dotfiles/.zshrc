@@ -226,6 +226,9 @@ alias esysgh="doing 'Opening system install respoitory on Github'; open -a Safar
 
 
 
+
+
+
 ############### Editing sublime files ################
 esub () {     # Edit the sublime config files
   doing 'Opening the Sublime config files folder'
@@ -253,6 +256,10 @@ ecode () {     # Edit the sublime config files
   code .;
 }
 
+emos () {
+  doing 'Editing .macos';
+  code ~/.macos
+}
 ############### Git ################
 alias gc="doing 'Doing git commit'; git commit"                                   # git commit
 alias gca="doing 'Doing git commit'; git commit -a"                               # git commit all

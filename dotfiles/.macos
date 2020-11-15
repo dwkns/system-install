@@ -6,7 +6,7 @@
 source "$HOME/.system-config/scripts/colours.sh"
 
 
-success "Configuring system"
+doing "Configuring system"
 
 
 # Close any open System Preferences panes, to prevent them from overriding
@@ -953,4 +953,4 @@ for app in "Activity Monitor" \
 done
 
 
-success "Done. Note that some of these changes require a logout/restart to take effect."
+complete "Done. Note that some of these changes require a logout/restart to take effect."
