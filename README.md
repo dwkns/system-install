@@ -9,8 +9,6 @@ As with all bash scripts **read it** before you run it. And if you don't underst
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 ````
 
-
-Here is what you do...
 ### Install Oh My Zsh
 ```` 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
