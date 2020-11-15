@@ -32,5 +32,5 @@ doing () {
 }
 
 complete () {
-  echo -e $CYAN"Done ========> $1 $RESET"
+  echo -e $GREEN"Done ========>$CYAN $1 $RESET"
 }

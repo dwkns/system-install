@@ -953,4 +953,4 @@ for app in "Activity Monitor" \
 done
 
 
-complete "Done. Note that some of these changes require a logout/restart to take effect."
+complete "Note that some of these changes require a logout/restart to take effect."
