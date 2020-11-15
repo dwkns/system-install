@@ -79,13 +79,11 @@ $ gem install bundler rails htmlbeautifier
 ```bash
 $ source ~/.system-config/scripts/app-store-apps.sh
 ```
+
+
 ### Syncing problems with iCloud
 https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
 
-
-### Printer
-
-[Download Printer Drivers](http://gdlp01.c-wss.com/gds/8/0100007708/04/mcpd-mac-ts8000-18_10_0_0-ea21_3.dmg) for Canon TS8050
 
 ### Probably need these
 ```` 
