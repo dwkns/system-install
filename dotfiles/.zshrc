@@ -50,15 +50,22 @@ PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE
 
 ##### functions to backup and update dotfiles & sublime-config
 usys () {
-  doing 'updating system config files.'; 
+  doing 'Getting lastest system config files.'; 
   cd "$HOME/.system-config";
   git pull;
+  echo;
 
-  source "$HOME/.system-config//scripts/dotfiles.sh"
+  source "$HOME/.system-config/scripts/dotfiles.sh"
   installDotFiles
-  source source "$HOME/.macos"
+  echo;
+
+  source "$HOME/.macos"
+  echo;
+
   # source "$HOME/.system-config/scripts/sublime-config.sh";
   # source "$HOME/.system-config/scripts/system-settings.sh";
+
+   doing 'Reloading .zshrc profile'; 
   source "$HOME/.zshrc";
 }
 
@@ -74,12 +81,12 @@ usys () {
   # doing 'Backing up VSCode theme'; 
   # (cd "$HOME/.vscode/extensions/dwkns-vs"; git add -A; git commit -m 'Updated Theme'; git push --all; );
   # echo;
-}
+# }
 
 
-backUpSystemConfig () {
+# backUpSystemConfig () {
   
-}
+# }
 
 
 bsys () {

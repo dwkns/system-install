@@ -18,7 +18,7 @@ installDotFiles () {
   for THISFILE in "${DOTFILES[@]}"
   do  
     echo "Installing : $THISFILE"
-    cp -f "$ROOT_DIR/config-files/$THISFILE"  "$HOME/$THISFILE"
+    cp -f "$ROOT_DIR/dotfiles/$THISFILE"  "$HOME/$THISFILE"
   done
 }
 
@@ -27,6 +27,6 @@ backupDotFiles () {
   echo;
   for i in "${DOTFILES[@]}"
   do  
-     cp -rf "$HOME/$i" "$SYSCD/config-files/$i";
+     cp -rf "$HOME/$i" "$SYSCD/dotfiles/$i";
   done
 }
