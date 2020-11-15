@@ -952,5 +952,7 @@ for app in "Activity Monitor" \
 	killall "${app}" &> /dev/null
 done
 
-note "Some of these changes require a logout/restart to take effect."
+warn "Some of these changes require a logout/restart to take effect."
+echo;
+
 complete "System config complete."
