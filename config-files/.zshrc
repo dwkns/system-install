@@ -54,9 +54,10 @@ usys () {
   cd "$HOME/.system-config";
   git pull;
 
-  source "$HOME/.system-config//scripts/dotfiles.sh"
+  source "$HOME/.system-config/scripts/dotfiles.sh"
   installDotFiles
-  source source "$HOME/.macos"
+
+  source "$HOME/.macos"
   # source "$HOME/.system-config/scripts/sublime-config.sh";
   # source "$HOME/.system-config/scripts/system-settings.sh";
   source "$HOME/.zshrc";
@@ -77,9 +78,9 @@ usys () {
 # }
 
 
-backUpSystemConfig () {
+# backUpSystemConfig () {
   
-}
+# }
 
 
 bsys () {
