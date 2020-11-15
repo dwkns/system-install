@@ -31,6 +31,6 @@ doing () {
   echo -e $GREEN"Doing ========>$CYAN $1 $RESET"
 }
 
-done () {
+complete () {
   echo -e $CYAN"Done ========> $1 $RESET"
 }
