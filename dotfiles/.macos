@@ -16,7 +16,7 @@ osascript -e 'tell application "System Preferences" to quit'
 # Ask for the administrator password upfront
 # sudo -v
 
-# # Keep-alive: update existing `sudo` time stamp until `.macos` has finished
+# # Keep-alive: update existing 'sudo' time stamp until '.macos' has finished
 # while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ###############################################################################
@@ -43,7 +43,7 @@ defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
 
 echo "Always show scrollbars"
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
-# Possible values: `WhenScrolling`, `Automatic` and `Always`
+# Possible values: 'WhenScrolling', 'Automatic' and 'Always'
 
 echo "Disable the over-the-top focus ring animation"
 defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
@@ -75,11 +75,11 @@ defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 echo "Disable the “Are you sure you want to open this application?” dialog"
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-echo "Remove duplicates in the “Open With” menu (also see `lscleanup` alias)"
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+# echo "Remove duplicates in the “Open With” menu (also see 'lscleanup' alias)"
+# /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 echo "Display ASCII control characters using caret notation in standard text views"
-# Try e.g. `cd /tmp; unidecode "\x{0000}" > cc.txt; open -e cc.txt`
+# Try e.g. 'cd /tmp; unidecode "\x{0000}" > cc.txt; open -e cc.txt'
 defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 
 echo "Disable Resume system-wide"
@@ -122,8 +122,8 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 
 
-# Set a custom wallpaper image. `DefaultDesktop.jpg` is already a symlink, and
-# all wallpapers are in `/Library/Desktop Pictures/`. The default is `Wave.jpg`.
+# Set a custom wallpaper image. 'DefaultDesktop.jpg' is already a symlink, and
+# all wallpapers are in '/Library/Desktop Pictures/'. The default is 'Wave.jpg'.
 #rm -rf ~/Library/Application Support/Dock/desktoppicture.db
 #sudo rm -rf /System/Library/CoreServices/DefaultDesktop.jpg
 #sudo ln -s /path/to/your/image /System/Library/CoreServices/DefaultDesktop.jpg
@@ -168,8 +168,8 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 10 # normal minimum is 15 (2
 
 
 echo "Set language and text formats"
-# Note: if you’re in the US, replace `EUR` with `USD`, `Centimeters` with
-# `Inches`, `en_GB` with `en_US`, and `true` with `false`.
+# Note: if you’re in the US, replace 'EUR' with 'USD', 'Centimeters' with
+# 'Inches', 'en_GB' with 'en_US', and 'true' with 'false'.
 defaults write NSGlobalDomain AppleLanguages -array "en" 
 defaults write NSGlobalDomain AppleLocale -string "en_GB@currency=GBP"
 defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
@@ -178,7 +178,7 @@ defaults write NSGlobalDomain AppleMetricUnits -bool true
 # Show language menu in the top right corner of the boot screen
 # sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool false
 
-# Set the timezone; see `sudo systemsetup -listtimezones` for other values
+# Set the timezone; see 'sudo systemsetup -listtimezones' for other values
 # sudo systemsetup -settimezone "Europe/London" > /dev/null
 
 # Stop iTunes from responding to the keyboard media keys
@@ -264,7 +264,7 @@ defaults write NSGlobalDomain AppleInterfaceStyle Dark
 # defaults write com.apple.finder DisableAllAnimations -bool true
 
 echo "Set Desktop as the default location for new Finder windows"
-# For other paths, use `PfLo` and `file:///full/path/here/`
+# For other paths, use 'PfLo' and 'file:///full/path/here/'
 defaults write com.apple.finder NewWindowTarget -string "PfDe"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
 
@@ -495,7 +495,7 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 echo "Show the full URL in the address bar (note: this still hides the scheme)"
 defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 
-echo "Set Safari’s home page to `about:blank` for faster loading"
+echo "Set Safari’s home page to about:blank' for faster loading"
 defaults write com.apple.Safari HomePage -string "about:blank"
 
 echo "Prevent Safari from opening ‘safe’ files automatically after downloading"
@@ -578,7 +578,7 @@ echo "Disable send and reply animations in Mail.app"
 defaults write com.apple.mail DisableReplyAnimations -bool true
 defaults write com.apple.mail DisableSendAnimations -bool true
 
-echo "Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app"
+echo "Copy email addresses as 'foo@example.com' instead of 'Foo Bar <foo@example.com>' in Mail.app"
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 
 echo "Add the keyboard shortcut ⌘ + Enter to send an email in Mail.app"
@@ -604,7 +604,7 @@ defaults write com.apple.mail DisableInlineAttachmentViewing -bool false
 
 # # Disable Spotlight indexing for any volume that gets mounted and has not yet
 # # been indexed before.
-# # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
+# # Use 'sudo mdutil -i off "/Volumes/foo"' to stop indexing any volume.
 
 # sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
 # # Change indexing order and disable some search results
@@ -865,11 +865,11 @@ defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool t
 # Transmission.app                                                            #
 ###############################################################################
 
-echo "Use `~/Documents/Torrents` to store incomplete downloads"
+echo "Use '~/Documents/Torrents' to store incomplete downloads"
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Torrents"
 
-echo "Use `~/Downloads` to store completed downloads"
+echo "Use '~/Downloads' to store completed downloads"
 defaults write org.m0k.transmission DownloadLocationConstant -bool true
 
 echo "Don’t prompt for confirmation before downloading"
@@ -914,7 +914,7 @@ echo "General : Turn off keyboard illumination when computer is not used for 5 m
 defaults write com.apple.BezelServices kDimTime -int 300
 
 
-echo " Desktop : Adding Symlink to ~/Dropbox/dev""
+echo " Desktop : Adding Symlink to ~/Dropbox/dev"
 FILE="$HOME/Desktop/dev"
 if [ -L "$FILE" ]; then
     # echo "$FILE exists"
