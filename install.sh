@@ -1,19 +1,4 @@
 #!/bin/bash
-# set up some colours
-note () {
-  echo -e "\n\033[0;94m====> $1 \033[0m"
-}
-success () {
-  echo -e "\n\033[0;32m==============> $1 \033[0m"
-}
-doing () {
-  echo -e "\n\033[0;32m==============> $1 \033[0m"
-}
-warn () {
-  echo -e "\n\033[0;31m====> $1 \033[0m"
-}
-
-# ask for sudo upfront
 sudo -v 
 
 # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
@@ -22,72 +7,55 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ROOT_DIR="$HOME/.system-config"
 REMOTE_URL="https://raw.githubusercontent.com/dwkns/system-install/master/"
 
-doing "Starting install"
+echo "Doing ========> Starting install " 
 
 ############ Download config files  ############
-doing "$PG Downloading config files"
+# doing "$PG Downloading config files"
+echo "Doing ========> Downloading config files " 
 
 if [ -d "$ROOT_DIR" ]; then
-  echo "'.system-config' folder is already there. Updating..."
+  echo $YELLOW"Warning ========> '.system-config' folder is already there. Updating... "
   cd $ROOT_DIR
   git pull
 else
-  echo "Cloning 'https://github.com/dwkns/system-install.git' into '~/.system-config'"
+  echo "Doing ========> Cloning 'https://github.com/dwkns/system-install.git' into '~/.system-config' " 
+  echo ""
   git clone https://github.com/dwkns/system-install.git ~/.system-config
   cd $ROOT_DIR
 fi
 
 
+###############################################################################
+#  Import useful scripts                                                      #
+###############################################################################
 
-######################## DOTFILES ########################
+source "$ROOT_DIR/scripts/colours.sh"
 source "$ROOT_DIR/scripts/dotfiles.sh"
 
 
+###############################################################################
+#  Install DotFiles                                                 
+###############################################################################
+installDotFiles
 
 
-############ CONFIGURE ITERM ############
-doing "Configure iTerm"
 
-echo "Downloading preference file and copy into place"
-cp -f "$ROOT_DIR/system-config-files/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-killall cfprefsd
-note "done"
-
+###############################################################################
+#  Make ~/Applications folder                                                   
+###############################################################################
+doing "Making ~/Applications folder"
 mkdir -p ~/Applications
 
-############ CONFIGURE Sublime ############
-source "$ROOT_DIR/scripts/sublime-config.sh"
 
 
-############ CONFIGURE Time Machine ############
-source "$ROOT_DIR/scripts/time-machine.sh"
+###############################################################################
+# set machine name                                                      
+###############################################################################
+DEFAULT_NAME="dwkns-mac"
 
+echo "Enter a machine name within 60 seconds (or press Enter to default to $DEFAULT_NAME)"
 
-############ CONFIGURE System Settings ############
-source "$ROOT_DIR/scripts/system-settings.sh"
-
-
-############ Install App Store Apps ############
-# source "$ROOT_DIR/scripts/app-store-apps.sh"
-
-############ CONFIGURE System Settings that use sudo############
-## These are in here to allow system-settings.sh not to require sudo and thus get run on `usys`
-echo "Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window"
-sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
-
-echo "Disabling OS X Gate Keeper so no more annoying 'you can't open this app messages'"
-sudo spctl --master-disable
-sudo  defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-
-
-
-# ###################### set machine name ######################
-DEFAULT_NAME="dwkns-mbp"
-
-echo "Enter a machine name within 30 seconds (or press Enter to default to $DEFAULT_NAME)"
-
-read -t 30 MACHINE_NAME
+read -t 60 MACHINE_NAME
 if [ $? -eq 0 ]; then
     : #do nothing
 else
@@ -102,11 +70,81 @@ sudo scutil --set LocalHostName $MACHINE_NAME
 # sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
 note "done"
 
-###################### configure git ######################
-doing "Configuring git"
+###############################################################################
+# CONFIGURE Sublime                                                      
+###############################################################################
 
-git config --global core.excludesfile $HOME/.gitignore_global
-note "Done" 
+# source "$ROOT_DIR/scripts/sublime-config.sh"
+
+
+###############################################################################
+# CONFIGURE Time Machine                                                      #
+###############################################################################
+
+# success "Adding Time Machine Exclusions"
+
+# TIME_MACHINE_EXCLUSION_LIST=(
+#   "$HOME/Downloads/"
+#   "$HOME/Library/Caches/"
+#   "$HOME/Documents/Torrents/"
+#   "$HOME/Documents/Parallels/"
+#   "$HOME/Library/Application Support/Google/"
+# )
+
+# for LOCATION in "${TIME_MACHINE_EXCLUSION_LIST[@]}"
+# do
+#   # ensure that the directories exist.
+#   mkdir -p "$LOCATION"
+#   sudo tmutil addexclusion "$LOCATION"
+# done
+
+# if $TM_DEBUG; then
+#   warn "These locations are being excluded :"
+#   sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
+# fi
+# note "done"
+
+# success "Prevent Time Machine from prompting to use new hard drives as backup volume"
+# defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+
+# warn "~/Dropbox has NOT been added to the time machine exclusion list"
+# echo "If you want to add the exclusion run :"
+# echo "sudo tmutil addexclusion '~/Dropbox/'"
+
+# note "done"
+
+###############################################################################
+# CONFIGURE System Settings                                                   #
+###############################################################################
+
+source "$HOME/.macos"
+
+###############################################################################
+# Install App Store Apps                                                      #
+###############################################################################
+
+# source "$ROOT_DIR/scripts/app-store-apps.sh"
+
+echo -e $GREEN"################################################"
+echo;
+echo -e $CYAN"To install App Store apps run..."
+echo -e $RESET"./ ~/.system-config/scripts/app-store-apps.sh"
+echo;
+
+###############################################################################
+# Things that require sudo                                                    #
+###############################################################################
+# Means .macos can run without sudo
+
+# Show the /Volumes folder
+sudo chflags nohidden /Volumes
+# Reveal IP address, hostname, OS version, etc. when clicking the clock
+# in the login window
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+
+
 
 
 doing "And that's it. All done." 

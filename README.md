@@ -2,17 +2,17 @@
 Highly opinionated config files for Sublime Text 3 and my OS ZSH terminal.
 As with all bash scripts **read it** before you run it. And if you don't understand it. **DON'T RUN IT**.
 
-Here is what you do...
+
+### Install homebrew
+
+````bash
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+````
+
 ### Install Oh My Zsh
 ```` 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```` 
-
-### Install homebrew
-
-```` 
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-````
 
 ### Tap alternates 
 
@@ -20,23 +20,19 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew/cask-fonts && brew tap homebrew/services && brew tap heroku/brew
 ````
 
-### Because iTerm is better...
+### Install useful brew apps
+Some of these apps are used in the install script so we install them first.
+Definately need these:
 ````bash
-$ brew cask install iterm2
+$ brew install iterm2 openssl git node mas rbenv ruby-build jq yarn
 ````
 
 ### Install system config & dot files
 
-```` 
+````bash
 $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 ````
 
-### Install useful brew apps
-Some of these apps are used in the install script so we install them first.
-Definately need these:
-```` 
-$ brew install openssl git node mas rbenv ruby-build jq yarn
-````
 
 ### Install useful global node apps
 Some of these apps are used in the install script so we install them first.
@@ -83,13 +79,11 @@ $ gem install bundler rails htmlbeautifier
 ```bash
 $ source ~/.system-config/scripts/app-store-apps.sh
 ```
+
+
 ### Syncing problems with iCloud
 https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
 
-
-### Printer
-
-[Download Printer Drivers](http://gdlp01.c-wss.com/gds/8/0100007708/04/mcpd-mac-ts8000-18_10_0_0-ea21_3.dmg) for Canon TS8050
 
 ### Probably need these
 ```` 
