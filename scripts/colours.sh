@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-############################### Variables ###############################
+############################### colours ###############################
 RED="\033[0;31m"          
 YELLOW="\033[0;33m"       
 GREEN="\033[0;32m"          
@@ -24,9 +24,17 @@ error () {
 }
 
 note () {
-  echo -e $CYAN"========>$RESET $1 $RESET"
+  echo -e $YELLOW"Note ========>$RESET $1 $RESET"
 }
 
 doing () {
   echo -e $GREEN"Doing ========>$CYAN $1 $RESET"
+}
+
+complete () {
+  echo -e $GREEN"Done ========>$CYAN $1 $RESET"
+}
+
+setting () {
+  echo -e $GREEN"Setting ====>$RESET $1"
 }
