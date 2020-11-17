@@ -6,7 +6,7 @@
 source "$HOME/.system-config/scripts/colours.sh"
 
 
-doing "Configuring system"
+setting "Configuring system"
 echo;
 
 # Close any open System Preferences panes, to prevent them from overriding
