@@ -57,16 +57,13 @@ List all available versions and choose the one you want to install.
 ````bash
 $ rbenv init          // Initialise rbenv 
 $ rbenv install -l    // List the ruby version available. 
-$ rbenv install 2.7.1 && rbenv global  2.7.1 // Or Whatever ruby version you want. 
+$ rbenv install 2.7.2 && rbenv global  2.7.2 // Or Whatever ruby version you want
 ````
-
-### Ensure that rbenv is added to .bash_profile
-Not req if using the install script
-
+So shortcutting...
 ````bash
-$ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile  
-$ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile  
+$ rbenv init && rbenv install 2.7.2 && rbenv global  2.7.2 
 ````
+
 
 ### Install some Ruby Gems
 
@@ -79,6 +76,11 @@ $ gem install bundler rails htmlbeautifier
 ```bash
 $ source ~/.system-config/scripts/app-store-apps.sh
 ```
+
+### Things you'll have to download
+(Elgato Control)[https://www.elgato.com/en/gaming/downloads]
+(Snap Scan)[http://scansnap.fujitsu.com/global/dl/mac-1100-s1300i.html]
+
 
 
 ### Syncing problems with iCloud
@@ -93,8 +95,5 @@ And these
 ````bash
 $ brew cask install sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
 ````
-And maybe these
-````bash
-$ brew cask install flash-npapi codekit
-````
+
 

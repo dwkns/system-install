@@ -33,5 +33,6 @@ mas install 409201541  # Pages (8.1)
 mas install 424389933  # Final Cut Pro (10.4.6)
 mas install 424390742  # Compressor (4.4.6)
 mas install 434290957  # Motion (5.4.3)
+mas install 1474276998 # HP Smart (5.5.6)
 # mas install 497799835  # Xcode (10.2.1)
 
