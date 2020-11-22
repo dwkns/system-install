@@ -79,7 +79,6 @@ $ source ~/.system-config/scripts/app-store-apps.sh
 
 ### Things you'll have to download
 [Elgato Control](https://www.elgato.com/en/gaming/downloads)
-
 [Snap Scan](http://scansnap.fujitsu.com/global/dl/mac-1100-s1300i.html)
 
 
