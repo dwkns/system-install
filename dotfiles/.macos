@@ -913,13 +913,13 @@ setting "General : Turn off keyboard illumination when computer is not used for 
 defaults write com.apple.BezelServices kDimTime -int 300
 
 
-setting "Desktop : Adding Symlink to ~/Dropbox/dev"
-FILE="$HOME/Desktop/dev"
-if [ -L "$FILE" ]; then
-    # setting "$FILE exists"
-else 
-		ln -s ~/Dropbox/dev ~/Desktop
-fi
+# setting "Desktop : Adding Symlink to ~/Dropbox/dev"
+# FILE="$HOME/Desktop/dev"
+# if [ -L "$FILE" ]; then
+#     # setting "$FILE exists"
+# else 
+# 		ln -s ~/Dropbox/dev ~/Desktop
+# fi
 
 
 
