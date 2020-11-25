@@ -138,12 +138,18 @@ echo;
 # Means .macos can run without sudo
 
 # Show the /Volumes folder
+echo -e $CYAN"General : Show the /Volumes folder"
 sudo chflags nohidden /Volumes
+
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
 # in the login window
+echo -e $CYAN"Reveal IP address, hostname, OS version in the login window"
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 
+echo -e $CYAN"General : Enable Screen Sharing"
+sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
+sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
 
 
 
