@@ -51,8 +51,8 @@ mkdir -p ~/Applications
 ###############################################################################
 # set machine name                                                      
 ###############################################################################
-DEFAULT_NAME="dwkns-mac"
-
+# DEFAULT_NAME="dwkns-mac"
+DEFAULT_NAME=`scutil --get LocalHostName`
 echo "Enter a machine name within 60 seconds (or press Enter to default to $DEFAULT_NAME)"
 
 read -t 60 MACHINE_NAME
