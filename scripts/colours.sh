@@ -32,7 +32,7 @@ doing () {
 }
 
 complete () {
-  echo -e $GREEN"Done ========>$CYAN $1 $RESET"
+  echo -e $GREEN"Done ========>$RESET $1 $RESET"
 }
 
 setting () {
