@@ -140,6 +140,8 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 
 setting "General : Enable Screen Sharing"
 sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
+
+# need a test around this to see if it's running
 sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
 
 doing "Making ~/Applications folder"
