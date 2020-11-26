@@ -1,6 +1,6 @@
 
 #!/usr/bin/env zsh
-. $HOME/.system-config/scripts/utils/set-up-projects.sh $1;
+. $HOME/.system-config/scripts/set-up-projects.sh $1;
 
 success "Project $PROJECTNAME will be created!"
 
