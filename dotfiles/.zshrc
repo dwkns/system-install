@@ -100,13 +100,13 @@ bsys () {
 
 ##### functions to create skeleton projects 
 projects () {
-  note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
-  note "$fg[yellow] pps  :$reset_color Parcel project skeleton  $reset_color";
+  # note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
+  # note "$fg[yellow] pps  :$reset_color Parcel project skeleton  $reset_color";
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] ptw  :$reset_color making new parcel/tailwind project $reset_color";
-  note "$fg[yellow] gtw  :$reset_color making new gatsby/tailwind project $reset_color";
+  # note "$fg[yellow] ptw  :$reset_color making new parcel/tailwind project $reset_color";
+  # note "$fg[yellow] gtw  :$reset_color making new gatsby/tailwind project $reset_color";
   note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/snowpack project $reset_color";
 }
 
@@ -287,7 +287,7 @@ alias show="doing 'Hiding invisible files in the finder'; defaults write com.app
 
 
 ## my apps
-alias wrap="doing 'Opening Wrap Scraper'; cd $HOME/Dropbox/dev/wrap-scraper; ./bin/s"
+# alias wrap="doing 'Opening Wrap Scraper'; cd $HOME/Dropbox/dev/wrap-scraper; ./bin/s"
 alias icr="doing 'Running iCalReader';dev/iCalReader/bin/s"
 
 ############### rbenv ################
