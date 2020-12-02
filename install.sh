@@ -70,6 +70,8 @@ doing "Setting Machine name to : $MACHINE_NAME"
 sudo scutil --set ComputerName $MACHINE_NAME
 sudo scutil --set HostName $MACHINE_NAME
 sudo scutil --set LocalHostName $MACHINE_NAME
+
+# MACHINE_NAME="dwkns-mini-sur"; sudo scutil --set ComputerName $MACHINE_NAME && sudo scutil --set HostName $MACHINE_NAME && sudo scutil --set LocalHostName $MACHINE_NAME
 # sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
 note "done"
 
