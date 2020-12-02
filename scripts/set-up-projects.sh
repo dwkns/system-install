@@ -11,8 +11,10 @@ else
     PROJECTNAME=$1
 fi
 
+
+# True if the FILE exists and is a file, regardless of type (node, directory, socket, etc.).
 ######## Does the folder already exist? Do you want overide it?
-if [ -d "$PROJECTNAME" ]; then
+if [ -e "$PROJECTNAME" ]; then
   echo -n "Project $PROJECTNAME already exists delete it y/n (default - y) : "
   read DELETEIT
   DELETEIT=${DELETEIT:-Y}
