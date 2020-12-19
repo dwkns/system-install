@@ -100,7 +100,7 @@ bsys () {
 
 ##### functions to create skeleton projects 
 projects () {
-  note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
+  # note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
   note "$fg[yellow] pps  :$reset_color Parcel project skeleton  $reset_color";
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
@@ -110,10 +110,10 @@ projects () {
   note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/snowpack project $reset_color";
 }
 
-ckps () {
-  doing 'Creating CodeKit web skeleton project';
-  . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
-}
+# ckps () {
+#   doing 'Creating CodeKit web skeleton project';
+#   . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
+# }
 
 pps () {
   doing 'Creating Parcel web skeleton project';
@@ -205,7 +205,8 @@ alias kd="doing 'Killing the Dock'; killall Dock"
 alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
 alias s="doing 'opening current folder in Sublime'; code-insiders ."                      
-alias c="doing 'opening current folder in VSCode'; code-insiders ."                      
+alias code="doing 'opening current folder in VSCode insiders'; code-insiders ."    
+alias c="doing 'opening current folder in VSCode insiders'; code-insiders ."                      
 alias a="doing 'opening current folder in Atom'; atom ."  
  
 alias cmds="doing 'listing project skeletons'; projects;"
