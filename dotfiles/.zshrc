@@ -61,33 +61,9 @@ usys () {
 
   source "$HOME/.macos"
   echo;
-
-  # source "$HOME/.system-config/scripts/sublime-config.sh";
-  # source "$HOME/.system-config/scripts/system-settings.sh";
-
-   doing 'Reloading .zshrc profile'; 
+  doing 'Reloading .zshrc profile'; 
   source "$HOME/.zshrc";
 }
-
-# backUpSublimeConfig () {
-#   doing 'Backing up Sublime config'; 
-#   # (command) runs this command without chaning directory 
-#   (cd "$SROOT/Packages/User/dwkns-sublime-settings/"; git add -A; git commit -m 'Updated Sublime config'; git push --all; );
-#   echo;
-#   doing 'Backing up A3 theme'; 
-#   (cd "$SROOT/Packages/A3-Theme/"; git add -A; git commit -m 'Updated Theme'; git push --all; );
-#   echo;
-
-  # doing 'Backing up VSCode theme'; 
-  # (cd "$HOME/.vscode/extensions/dwkns-vs"; git add -A; git commit -m 'Updated Theme'; git push --all; );
-  # echo;
-# }
-
-
-# backUpSystemConfig () {
-  
-# }
-
 
 bsys () {
   backupDotFiles
@@ -100,25 +76,12 @@ bsys () {
 
 ##### functions to create skeleton projects 
 projects () {
-  # note "$fg[yellow] ckps :$reset_color CodeKit project skeleton $reset_color";
-  note "$fg[yellow] pps  :$reset_color Parcel project skeleton  $reset_color";
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] ptw  :$reset_color making new parcel/tailwind project $reset_color";
-  note "$fg[yellow] gtw  :$reset_color making new gatsby/tailwind project $reset_color";
   note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/snowpack project $reset_color";
 }
 
-# ckps () {
-#   doing 'Creating CodeKit web skeleton project';
-#   . $HOME/.system-config/scripts/code-kit-web-skeleton.sh $1;
-# }
-
-pps () {
-  doing 'Creating Parcel web skeleton project';
-  . $HOME/.system-config/scripts/parcel-web-skeleton.sh $1;
-}
 
 rps () {
   doing 'Creating Ruby skeleton project';
@@ -136,17 +99,6 @@ mbx () {
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
-
-ptw () {
-    doing 'making new parcel/tailwind project'; 
-    . $HOME/.system-config/scripts/parcel-tailwind-skeleton.sh $1;
-}
-
-gtw () {
-    doing 'making new gatsby/tailwind project'; 
-    . $HOME/.system-config/scripts/gatsby-tailwind-starter.sh $1;
-}
-
 etw () {
     doing 'making new 11ty/tailwind/snowpack project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
@@ -156,7 +108,6 @@ etw () {
 rebootbird () {
   # ask for sudo upfront
   sudo -v 
-
   echo "touching ~/Desktop & ~/Documents"
   touch ~/Desktop
   touch ~/Documents
@@ -195,7 +146,6 @@ node_sync () {
 
 ##### Common commands
 alias ns="doing 'stopping node_modules backing up to iCloud to Home'; node_sync"   
-
 alias ls="ls -l"            # because the normal way is dumb                                                             
 alias cd..="cd .."          # because I always miss the space. 
 alias h="doing 'changing to Home'; cd ~/"
@@ -227,36 +177,34 @@ alias esysgh="doing 'Opening system install respoitory on Github'; open -a Safar
 
 
 
-
-
-
 ############### Editing sublime files ################
-esub () {     # Edit the sublime config files
-  doing 'Opening the Sublime config files folder'
-  cd "$SROOT/Packages/User";
-  code-insiders .;
-}
-subu () {     # Open sublime config files
-  doing 'Opening the Sublime config files folder'
-  cd "$SROOT/Packages/User";
-  code-insiders .;
-}
-bsub () {      # Backup Sublime config files                           
-  backUpSublimeConfig;
-}
+# esub () {     # Edit the sublime config files
+#   doing 'Opening the Sublime config files folder'
+#   cd "$SROOT/Packages/User";
+#   code-insiders .;
+# }
+# subu () {     # Open sublime config files
+#   doing 'Opening the Sublime config files folder'
+#   cd "$SROOT/Packages/User";
+#   code-insiders .;
+# }
+# bsub () {      # Backup Sublime config files                           
+#   backUpSublimeConfig;
+# }
 
-esubt () {
-  doing 'Editing Sublime A3-Theme';
-  cd "$SROOT/Packages/A3-Theme";
-  code-insiders .;
-}
+# esubt () {
+#   doing 'Editing Sublime A3-Theme';
+#   cd "$SROOT/Packages/A3-Theme";
+#   code-insiders .;
+# }
 
-ecode () {     # Edit the sublime config files
-  doing 'Opening the VSCode extensions folder'
-  cd "$HOME/.vscode/extensions";
-  code-insiders .;
-}
+# ecode () {     # Edit the sublime config files
+#   doing 'Opening the VSCode extensions folder'
+#   cd "$HOME/.vscode/extensions";
+#   code-insiders .;
+# }
 
+# Edit the defaults file
 emos () {
   doing 'Editing .macos';
   code ~/.macos
@@ -317,13 +265,14 @@ ya () {
   yarn add --dev $1;
 }
 
+
+# set system wide editor
 export EDITOR='code-insiders -w'
+
+# brew installs casks in /Applicaitons
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
-export PATH=$PATH:~/bin
 
-
-
-export PATH="$HOME/.rbenv/bin:$PATH"
+# Install Rubies with existing SSL — don't need to rebuild each time.
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 
@@ -339,8 +288,6 @@ if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
   fi
 fi
 
-
-export PATH=/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin
-export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
 eval "$(rbenv init -)"
