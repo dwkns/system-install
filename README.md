@@ -47,7 +47,7 @@ $ npm install -g local-web-server
 ### Install apps  
 Definately 
 ````bash
-$ brew cask install sublime-text font-source-code-pro dropbox typora iina google-chrome firefox sizzy google-drive-file-stream notion visual-studio-code 1Password omnigraffle zoomus slack soulver
+$ brew cask install sublime-text font-source-code-pro dropbox typora iina google-chrome firefox-developer-edition firefox sizzy google-drive-file-stream notion visual-studio-code 1Password omnigraffle zoomus slack soulver
 ````
 
 

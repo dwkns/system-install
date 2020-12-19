@@ -204,21 +204,21 @@ alias dt="doing 'changing to Desktop'; cd ~/Desktop"
 alias kd="doing 'Killing the Dock'; killall Dock"                                
 alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
-alias s="doing 'opening current folder in Sublime'; code ."                      
-alias c="doing 'opening current folder in VSCode'; code ."                      
+alias s="doing 'opening current folder in Sublime'; code-insiders ."                      
+alias c="doing 'opening current folder in VSCode'; code-insiders ."                      
 alias a="doing 'opening current folder in Atom'; atom ."  
  
 alias cmds="doing 'listing project skeletons'; projects;"
 
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 
-alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
+alias ep="doing 'Editing zsh profile'; code-insiders ~/.zshrc"  
 alias sd="doing 'changing to .system-config/';cd  ~/.system-config"    
 
 ############### Editing config files ################
-alias esys="doing 'Editing system files'; cd $HOME/.system-config; code .;"         
-alias elint="doing 'Editing .eslintrc.yaml'; code ~/..eslintrc.yaml"
-alias ebfy="doing 'Editing .jsbeautifyrc'; code ~/.jsbeautifyrc"
+alias esys="doing 'Editing system files'; cd $HOME/.system-config; code-insiders .;"         
+alias elint="doing 'Editing .eslintrc.yaml'; ccode-insidersode ~/..eslintrc.yaml"
+alias ebfy="doing 'Editing .jsbeautifyrc'; code-insiders ~/.jsbeautifyrc"
 
 alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
 alias cdsub="doing 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
@@ -233,12 +233,12 @@ alias esysgh="doing 'Opening system install respoitory on Github'; open -a Safar
 esub () {     # Edit the sublime config files
   doing 'Opening the Sublime config files folder'
   cd "$SROOT/Packages/User";
-  code .;
+  code-insiders .;
 }
 subu () {     # Open sublime config files
   doing 'Opening the Sublime config files folder'
   cd "$SROOT/Packages/User";
-  code .;
+  code-insiders .;
 }
 bsub () {      # Backup Sublime config files                           
   backUpSublimeConfig;
@@ -247,13 +247,13 @@ bsub () {      # Backup Sublime config files
 esubt () {
   doing 'Editing Sublime A3-Theme';
   cd "$SROOT/Packages/A3-Theme";
-  code .;
+  code-insiders .;
 }
 
 ecode () {     # Edit the sublime config files
   doing 'Opening the VSCode extensions folder'
   cd "$HOME/.vscode/extensions";
-  code .;
+  code-insiders .;
 }
 
 emos () {
@@ -280,7 +280,7 @@ alias gphm="doing 'Doing git push heroku master'; git push heroku master"       
 eu2 () {
   doing 'Edit the Under2 sitey';
   cd "$HOME/Desktop/under2-site-v2/under2-site";
-  code .;
+  code-insiders .;
 }
 
 
@@ -316,18 +316,30 @@ ya () {
   yarn add --dev $1;
 }
 
-export EDITOR='code -w'
+export EDITOR='code-insiders -w'
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
 export PATH=$PATH:~/bin
+
+
+
 export PATH="$HOME/.rbenv/bin:$PATH"
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 
-eval "$(rbenv init -)"
+
 
 ### test to see what opened the shell
 ### We don't want to cd to Desktop if Visual Studio opens the Shell
 ARSE=`ps -o comm= -p $PPID`
-if [[ $ARSE != *"Visual Studio Code.app"* ]]; then
-  #echo "It's not there!"
-  cd ~/Desktop
+if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
+ if [[ $ARSE != *"Visual Studio Code.app"*  ]]; then
+    #echo "It's not there!"
+    cd ~/Desktop
+  fi
 fi
+
+
+export PATH=/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+alias ibrew='arch -x86_64 /usr/local/bin/brew'
+eval "$(rbenv init -)"
