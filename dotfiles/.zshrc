@@ -96,7 +96,8 @@ bsys () {
   doing 'Backing up Douglas Theme'; 
   (cd "$HOME/.vscode/extensions/douglas"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   (cd "$HOME/.vscode-insiders/extensions/douglas/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-
+  echo ""
+  doing 'Done Backing up'; 
 }
 
 
