@@ -61,7 +61,7 @@ usys () {
 
   source "$HOME/.macos"
   echo;
-  doing 'Reloading .zshrc profile'; 
+  doing 'Reloading .zshrc profile'; rp
   source "$HOME/.zshrc";
 
   doing 'Installing Douglas theme'; 
@@ -94,8 +94,8 @@ bsys () {
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   doing 'Backing up Douglas Theme'; 
-  (cd "$HOME/.vscode/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode-insiders/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode/extensions/douglas"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode-insiders/extensions/douglas/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
 
 }
 
