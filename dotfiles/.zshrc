@@ -66,23 +66,28 @@ usys () {
 
   doing 'Installing Douglas theme'; 
 
-  if [ -d "$HOME/.vscode/douglas" ]; then
+  VSCODE_EXTENSIONS ="$HOME/.vscode/extensions"
+
+  if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
   echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
-   (cd "$HOME/.vscode/douglas"; git pull;);
+   (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode/extensions/douglas' " 
-    (cd "$HOME/.vscode/"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    (cd "VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
     echo ""
   fi
 
-  if [ -d "$HOME/.vscode-insiders/douglas" ]; then
+   VSCODE_EXTENSIONS ="$HOME/.vscode-insiders/extensions"
+
+  if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
   echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
-   (cd "$HOME/.vscode-insiders/douglas"; git pull;);
+   (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode-insiders/extensions/douglas' " 
-    (cd "$HOME/.vscode-insiders/"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    (cd "VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
     echo ""
   fi
+
 
 
 }
