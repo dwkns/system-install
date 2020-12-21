@@ -73,7 +73,7 @@ usys () {
    (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode/extensions/douglas' " 
-    (cd "VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
     echo ""
   fi
 
@@ -84,7 +84,7 @@ usys () {
    (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode-insiders/extensions/douglas' " 
-    (cd "VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
     echo ""
   fi
 
@@ -98,6 +98,7 @@ bsys () {
   doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  echo ""
   doing 'Backing up Douglas Theme'; 
   (cd "$HOME/.vscode/extensions/douglas"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   (cd "$HOME/.vscode-insiders/extensions/douglas/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
