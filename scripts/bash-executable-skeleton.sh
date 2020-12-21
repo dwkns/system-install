@@ -39,4 +39,4 @@
 EOL
 chmod +x $PROJECTNAME
 echo -e ${GREEN}"====> "$BLUE"'$PROJECTNAME'"${GREEN}" Created and set to be Executable"$RESET
-subl $PROJECTNAME
+code $PROJECTNAME
