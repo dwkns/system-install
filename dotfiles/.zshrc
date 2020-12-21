@@ -66,7 +66,24 @@ usys () {
 
   doing 'Installing Douglas theme'; 
 
-  VSCODE_EXTENSIONS ="$HOME/.vscode/extensions"
+ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
+
+  echo ""
+
+  if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
+  echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
+
+
+   (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
+  else
+    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode/extensions/douglas' " 
+    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    echo ""
+  fi
+
+  VSCODE_EXTENSIONS="$HOME/.vscode-insiders/extensions"
+
+  echo ""
 
   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
   echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
