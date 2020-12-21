@@ -63,6 +63,28 @@ usys () {
   echo;
   doing 'Reloading .zshrc profile'; 
   source "$HOME/.zshrc";
+
+  doing 'Installing Douglas theme'; 
+
+  if [ -d "$HOME/.vscode/douglas" ]; then
+  echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
+   (cd "$HOME/.vscode/douglas"; git pull;);
+  else
+    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode/extensions/douglas' " 
+    (cd "$HOME/.vscode/"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    echo ""
+  fi
+
+  if [ -d "$HOME/.vscode-insiders/douglas" ]; then
+  echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
+   (cd "$HOME/.vscode-insiders/douglas"; git pull;);
+  else
+    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode-insiders/extensions/douglas' " 
+    (cd "$HOME/.vscode-insiders/"; git clone https://github.com/dwkns/system-install.git douglas;);  
+    echo ""
+  fi
+
+
 }
 
 bsys () {
@@ -71,6 +93,10 @@ bsys () {
   doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  doing 'Backing up Douglas Theme'; 
+  (cd "$HOME/.vscode/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode-insiders/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+
 }
 
 
@@ -139,6 +165,7 @@ viewlog () {
 node_sync () {
   rm -rf node_modules.nosync
   doing 'removing existing node_modules folder'; rm -rf node_modules
+  doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
   doing 'creating node_modules.nosync'; mkdir node_modules.nosync
   doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
   doing 'running yarn'; yarn
@@ -228,7 +255,7 @@ alias gphm="doing 'Doing git push heroku master'; git push heroku master"       
 ############### EDIT UNDER2 SITE ################
 eu2 () {
   doing 'Edit the Under2 sitey';
-  cd "$HOME/Desktop/under2-site-v2/under2-site";
+  cd "$HOME/Desktop/under2-site-v2/u2s";
   code-insiders .;
 }
 
