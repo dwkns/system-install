@@ -74,7 +74,7 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
     echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
     (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
-    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '~/.vscode/extensions/douglas' " 
+    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
     (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git douglas;);  
     echo ""
   fi
@@ -89,7 +89,7 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
 
    (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
-    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '~/.vscode/extensions/douglas' " 
+    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
     (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
     echo ""
   fi
