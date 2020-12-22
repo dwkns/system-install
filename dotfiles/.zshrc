@@ -61,7 +61,7 @@ usys () {
 
   source "$HOME/.macos"
   echo;
-  doing 'Reloading .zshrc profile'; rp
+  doing 'Reloading .zshrc profile'; 
   source "$HOME/.zshrc";
 
   doing 'Installing Douglas theme'; 
@@ -71,7 +71,7 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
   echo ""
 
   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-    echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
+    echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
     (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
@@ -84,7 +84,7 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
   echo ""
 
   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
+  echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
 
 
    (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
