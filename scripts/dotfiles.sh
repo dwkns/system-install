@@ -11,6 +11,7 @@
   ".eslintrc.yml"
   ".zshrc"
   ".macos"
+  ".background_colour.png"
 )  
 
 installDotFiles () {
