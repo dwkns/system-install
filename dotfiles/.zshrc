@@ -182,6 +182,12 @@ rebootbird () {
   fi
 }
 
+dnode () {
+  echo "recursively deleting 'node_modules' and 'node_modules.no_sync'  folders from current directory"
+  find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
+  find . -name 'node_modules.nosync' -type d -prune -exec rm -rf '{}' +
+}
+
 viewlog () {
    brctl log -w --shorten
   }
