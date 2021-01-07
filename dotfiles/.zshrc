@@ -285,7 +285,7 @@ alias gphm="doing 'Doing git push heroku master'; git push heroku master"       
 ############### EDIT UNDER2 SITE ################
 eu2 () {
   doing 'Edit the Under2 sitey';
-  cd "$HOME/Desktop/under2-site-v2/u2s";
+  cd "$HOME/Desktop/u2s/u2s-dev";
   code-insiders .;
 }
 
