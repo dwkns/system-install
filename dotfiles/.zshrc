@@ -129,7 +129,7 @@ projects () {
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/snowpack project $reset_color";
+  note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/rollup project $reset_color";
 }
 
 
@@ -150,7 +150,7 @@ mbx () {
 }
 
 etw () {
-    doing 'making new 11ty/tailwind/snowpack project'; 
+    doing 'making new 11ty/tailwind/rollup project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
 }
 
@@ -194,6 +194,7 @@ viewlog () {
 
 node_sync () {
   rm -rf node_modules.nosync
+  rm -rf yarn.lock
   doing 'removing existing node_modules folder'; rm -rf node_modules
   doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
   doing 'creating node_modules.nosync'; mkdir node_modules.nosync
@@ -344,7 +345,7 @@ if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
     cd ~/Desktop
   fi
 fi
-osascript -e "set volume input volume 35"
+osascript -e "set volume input volume 40"
 
 export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
