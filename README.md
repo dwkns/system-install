@@ -24,7 +24,7 @@ $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew
 Some of these apps are used in the install script so we install them first.
 Definately need these:
 ````bash
-$ brew install iterm2 openssl git node mas rbenv ruby-build jq yarn
+$ brew install iterm2 openssl git node mas rbenv pyenv ruby-build jq yarn coreutils
 ````
 
 ### Install system config & dot files
@@ -64,6 +64,13 @@ So shortcutting...
 $ rbenv init && rbenv install 2.7.2 && rbenv global  2.7.2 
 ````
 
+### Initialise pyenv and install a Python version
+Shortcutting...
+````bash
+$ pyenv init && pyenv install 3.7.3 && pyenv global  3.7.3
+````
+
+pyenv install 3.7.3
 
 ### Install some Ruby Gems
 
@@ -91,7 +98,7 @@ https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
 
 ### Probably need these
 ```` 
-$ brew install  python heroku postgresql redis 
+$ brew install  python heroku postgresql redis  
 ````
 And these
 ````bash
