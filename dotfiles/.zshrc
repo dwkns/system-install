@@ -345,7 +345,7 @@ if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
     cd ~/Desktop
   fi
 fi
-osascript -e "set volume input volume 40"
+# osascript -e "set volume input volume 40"
 
 export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
