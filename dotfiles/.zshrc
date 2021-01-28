@@ -1,3 +1,9 @@
+#Timing script.
+# start_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
+
+
+
+
 export ZSH="/Users/dazza/.oh-my-zsh"
 ZSH_DISABLE_COMPFIX=true
 ##### Check if oh-my-zsh is installed and warn if it is not. 
@@ -11,7 +17,9 @@ else
     source $ZSH/oh-my-zsh.sh
 fi
 
-
+# end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
+# elapsed_ms=$((end_ms - start_ms))
+# echo "$elapsed_ms ms to do ZSH"
 
 ###############################################################################
 #  Deine variables                                                  #
@@ -202,6 +210,32 @@ node_sync () {
   doing 'running yarn'; yarn
 }
 
+############### EDIT UNDER2 SITE ################
+eu2 () {
+  doing 'Edit the Under2 sitey';
+  cd "$HOME/Desktop/u2s/u2s-dev";
+  code-insiders .;
+}
+
+# Edit the defaults file
+emos () {
+  doing 'Editing .macos';
+  code ~/.macos
+}
+
+############### Yarn ################
+ya () {
+  doing 'Doing yarn add --dev';
+  yarn add --dev $1;
+}
+
+
+
+# end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
+# elapsed_ms=$((end_ms - start_ms))
+# echo "$elapsed_ms ms functions"
+
+
 ##### Common commands
 alias ns="doing 'stopping node_modules backing up to iCloud to Home'; node_sync"   
 alias ls="ls -l"            # because the normal way is dumb                                                             
@@ -235,38 +269,7 @@ alias esysgh="doing 'Opening system install respoitory on Github'; open -a Safar
 
 
 
-############### Editing sublime files ################
-# esub () {     # Edit the sublime config files
-#   doing 'Opening the Sublime config files folder'
-#   cd "$SROOT/Packages/User";
-#   code-insiders .;
-# }
-# subu () {     # Open sublime config files
-#   doing 'Opening the Sublime config files folder'
-#   cd "$SROOT/Packages/User";
-#   code-insiders .;
-# }
-# bsub () {      # Backup Sublime config files                           
-#   backUpSublimeConfig;
-# }
 
-# esubt () {
-#   doing 'Editing Sublime A3-Theme';
-#   cd "$SROOT/Packages/A3-Theme";
-#   code-insiders .;
-# }
-
-# ecode () {     # Edit the sublime config files
-#   doing 'Opening the VSCode extensions folder'
-#   cd "$HOME/.vscode/extensions";
-#   code-insiders .;
-# }
-
-# Edit the defaults file
-emos () {
-  doing 'Editing .macos';
-  code ~/.macos
-}
 ############### Git ################
 alias gc="doing 'Doing git commit'; git commit"                                   # git commit
 alias gca="doing 'Doing git commit'; git commit -a"                               # git commit all
@@ -280,15 +283,6 @@ alias gac="doing 'Doing git add -all, then git commit'; git add -A; git commit" 
 alias gph="doing 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
 alias gphm="doing 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
 
-
-
-
-############### EDIT UNDER2 SITE ################
-eu2 () {
-  doing 'Edit the Under2 sitey';
-  cd "$HOME/Desktop/u2s/u2s-dev";
-  code-insiders .;
-}
 
 
 
@@ -317,11 +311,13 @@ alias rh="doing 'doing rbenv rehash...'; rbenv rehash"
 alias bu="doing 'doing a brew update && brew upgrade'; brew update && brew upgrade"     # update and upgrade brew
 
 
-############### Yarn ################
-ya () {
-  doing 'Doing yarn add --dev';
-  yarn add --dev $1;
-}
+
+# end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
+# elapsed_ms=$((end_ms - start_ms))
+# echo "$elapsed_ms ms alias"
+
+
+
 
 
 # set system wide editor
@@ -330,11 +326,14 @@ export EDITOR='code-insiders -w'
 # brew installs casks in /Applicaitons
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
 
-# Install Rubies with existing SSL — don't need to rebuild each time.
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+# # Install Rubies with existing SSL — don't need to rebuild each time.
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl@1.1" # might not even need this. 
+# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)" # this is slow to run. 
 
 
-
+# end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
+# elapsed_ms=$((end_ms - start_ms))
+# echo "$elapsed_ms ms exports"
 
 ### test to see what opened the shell
 ### We don't want to cd to Desktop if Visual Studio opens the Shell
@@ -350,3 +349,7 @@ fi
 export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
 eval "$(rbenv init -)"
+
+# end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
+# elapsed_ms=$((end_ms - start_ms))
+# echo "$elapsed_ms ms passed"
