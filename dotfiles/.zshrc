@@ -1,7 +1,7 @@
 #Timing script.
 # start_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
 
-
+VS_CODE_VERSION="code-insiders"
 
 
 export ZSH="/Users/dazza/.oh-my-zsh"
@@ -122,11 +122,11 @@ bsys () {
   # backUpSublimeConfig;
   doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
-  cd "$HOME/.system-config/"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;
+  (cd "$HOME/.system-config/"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
   # doing 'Backing up Douglas Theme'; 
-  # (cd "$HOME/.vscode/extensions/douglas"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  # (cd "$HOME/.vscode-insiders/extensions/douglas/"; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode-insiders/extensions/douglas/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
 }
@@ -220,7 +220,7 @@ eu2 () {
 # Edit the defaults file
 emos () {
   doing 'Editing .macos';
-  code ~/.macos
+  code-insiders ~/.macos
 }
 
 ############### Yarn ################
@@ -259,8 +259,8 @@ alias ep="doing 'Editing zsh profile'; code-insiders ~/.zshrc"
 alias sd="doing 'changing to .system-config/';cd  ~/.system-config"    
 
 ############### Editing config files ################
-alias esys="doing 'Editing system files'; cd $HOME/.system-config; code-insiders .;"         
-alias elint="doing 'Editing .eslintrc.yaml'; ccode-insidersode ~/..eslintrc.yaml"
+alias esys="warn 'dotfiles edited in .system-config are overidden when you do a bsys'; doing 'Editing system files'; cd $HOME/.system-config; code-insiders .;"         
+alias elint="doing 'Editing .eslintrc.yaml'; code-insiders ~/..eslintrc.yaml"
 alias ebfy="doing 'Editing .jsbeautifyrc'; code-insiders ~/.jsbeautifyrc"
 
 alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
