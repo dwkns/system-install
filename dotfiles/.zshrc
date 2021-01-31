@@ -102,6 +102,19 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
     echo ""
   fi
 
+  echo ""
+
+  if [ -d "$VSCODE_EXTENSIONS/njk" ]; then
+  echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
+
+
+   (cd "$VSCODE_EXTENSIONS/njk"; git pull;);
+  else
+    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/vscode-njk-extension.git' into '$VSCODE_EXTENSIONS' " 
+    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/vscode-njk-extension.git njk;);  
+    echo ""
+  fi
+
   #  VSCODE_EXTENSIONS ="$HOME/.vscode-insiders/extensions"
 
   # if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
@@ -127,6 +140,7 @@ bsys () {
   # doing 'Backing up Douglas Theme'; 
   (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   (cd "$HOME/.vscode-insiders/extensions/douglas/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode-insiders/extensions/njk/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
 }

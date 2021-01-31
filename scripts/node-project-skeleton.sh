@@ -21,23 +21,29 @@ yarn add the-answer --dev
 ######## Do some processing of package.json to add build scrips & title.
 
 # change the name property of package.json (need to save temp file first)
+
+# change the name property of package.json (need to save temp file first)
 tmp=$(mktemp) 
-JQVAR='.name = \"$PROJECTNAME\"'
+JQVAR=".name = \"$PROJECTNAME\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
+
+# add author  to package.json
 tmp=$(mktemp) 
-JQVAR='.main = "src/index.js'
+JQVAR=".author = \"$USER\""
+jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
+
+
+tmp=$(mktemp) 
+JQVAR=".main = \"src/index.js\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
 # add some build scripts to package.json
 tmp=$(mktemp) 
-JQVAR='.scripts |= .+ { "run": "node src/index.js" }'
+JQVAR=".scripts |= .+ { \"start\": \"node src/index.js\" }"
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
-# # add author
-tmp=$(mktemp) 
-JQVAR='.author |= .+ "dwkns"'
-jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
+
 
 
 
@@ -84,43 +90,18 @@ EOL
 chmod +x bin/s
 
 
-
-
 ######## Initialize git.
+rm -rf .git #  remove the previous git files.
 git init
 git add .
 git commit -m "Initial commit"
 
+  rm -rf node_modules.nosync
+  rm -rf yarn.lock
+  doing 'removing existing node_modules folder'; rm -rf node_modules
+  doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
+  doing 'creating node_modules.nosync'; mkdir node_modules.nosync
+  doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
+  doing 'running yarn'; yarn
 
-
-
-# ######## Open a new iTerm tab at the project root. 
-# ######## Required because server will run in current tab.
-# osascript  <<EOL > /dev/null 2>&1
-# tell application "iTerm"
-#   set currentWindow to current window 
-#   tell currentWindow
-#     create tab with default profile
-#     delay 0.5
-#     tell current session of currentWindow
-#       write text "cd $PROJECTNAME"
-#     end tell
-#   end tell
-# end tell
-# EOL
-
-
-
-######## Open project in Sublime
-subl .
-
-success "Project created"
-note "Use : "
-note "bin/s to run"
-
-# ######## Format sublimes windows to my favorite layout.
-# subl --command  'terminus_open {"config_name": "Default","cwd": "${file_path:${folder}}","pre_window_hooks": [["set_layout",{"cols": [0.0, 0.5, 1.0],"rows": [0.0, 0.5, 1.0],"cells": [[0, 0, 1, 2],[1, 0, 2, 1],[1, 1, 2, 2]]}]]}'
-
-
-# ######## Start the server.
-# yarn serve
+code -r .
