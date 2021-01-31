@@ -91,16 +91,16 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
 
   echo ""
 
-  if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
+  # if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
+  # echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
 
 
-   (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
-  else
-    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
-    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
-    echo ""
-  fi
+  #  (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
+  # else
+  #   echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
+  #   (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
+  #   echo ""
+  # fi
 
   echo ""
 
@@ -136,9 +136,9 @@ bsys () {
   doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
-  # doing 'Backing up Douglas Theme'; 
-  (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  # doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
+  doing 'Backing up Douglas Theme'; 
+  # (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   (cd "$HOME/.vscode-insiders/extensions/douglas/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   (cd "$HOME/.vscode-insiders/extensions/njk/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
