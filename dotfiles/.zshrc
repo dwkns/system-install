@@ -135,12 +135,12 @@ bsys () {
   # backUpSublimeConfig;
   doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
-  (cd "$HOME/.system-config/"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.system-config/"; doing 'Backing up system'; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   # doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
-  doing 'Backing up Douglas Theme'; 
+  doing 'Backing up VS code extensions'; 
   # (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode-insiders/extensions/douglas/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode-insiders/extensions/njk/";git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode-insiders/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode-insiders/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
 }
