@@ -227,7 +227,14 @@ node_sync () {
 ############### EDIT UNDER2 SITE ################
 eu2 () {
   doing 'Edit the Under2 sitey';
-  cd "$HOME/Desktop/u2s/u2s-dev";
+  cd "$HOME/Desktop/u2s/";
+  code-insiders .;
+}
+
+############### EDIT UNDER2 SITE ################
+ech () {
+  doing 'Edit the Under2 sitey';
+  cd "$HOME/Desktop/ech/edgecott-house-netlify/";
   code-insiders .;
 }
 
