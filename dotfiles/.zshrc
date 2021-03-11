@@ -1,7 +1,7 @@
 #Timing script.
 # start_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
 
-VS_CODE_VERSION="code-insiders"
+VS_CODE_VERSION="code"
 
 
 export ZSH="/Users/dazza/.oh-my-zsh"
@@ -74,33 +74,33 @@ usys () {
 
   doing 'Installing Douglas theme'; 
 
-VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
+# VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
+
+#   echo ""
+
+#   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
+#     echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
+#     (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
+#   else
+#     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
+#     (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git douglas;);  
+#     echo ""
+#   fi
+
+  VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
 
   echo ""
 
   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-    echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
-    (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
+  echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
+
+
+   (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
   else
     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
-    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git douglas;);  
+    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
     echo ""
   fi
-
-  VSCODE_EXTENSIONS="$HOME/.vscode-insiders/extensions"
-
-  echo ""
-
-  # if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  # echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
-
-
-  #  (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
-  # else
-  #   echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
-  #   (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
-  #   echo ""
-  # fi
 
   echo ""
 
@@ -115,18 +115,6 @@ VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
     echo ""
   fi
 
-  #  VSCODE_EXTENSIONS ="$HOME/.vscode-insiders/extensions"
-
-  # if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  # echo -e $YELLOW"Warning ========>$RESET 'Theme already there' folder is already there. Updating... "
-  #  (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
-  # else
-  #   echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/system-install.git' into '~/.vscode-insiders/extensions/douglas' " 
-  #   (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/system-install.git douglas;);  
-  #   echo ""
-  # fi
-
-
 
 }
 
@@ -139,8 +127,8 @@ bsys () {
   # doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
   doing 'Backing up VS code extensions'; 
   # (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode-insiders/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode-insiders/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  (cd "$HOME/.vscode/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
 }
@@ -228,20 +216,20 @@ node_sync () {
 eu2 () {
   doing 'Edit the Under2 sitey';
   cd "$HOME/Desktop/u2s/";
-  code-insiders .;
+  code .;
 }
 
 ############### EDIT UNDER2 SITE ################
 ech () {
   doing 'Edit the Under2 sitey';
   cd "$HOME/Desktop/ech/edgecott-house-netlify/";
-  code-insiders .;
+  code .;
 }
 
 # Edit the defaults file
 emos () {
   doing 'Editing .macos';
-  code-insiders ~/.macos
+  code ~/.macos
 }
 
 ############### Yarn ################
@@ -267,22 +255,22 @@ alias dt="doing 'changing to Desktop'; cd ~/Desktop"
 alias kd="doing 'Killing the Dock'; killall Dock"                                
 alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
-alias s="doing 'opening current folder in Sublime'; code-insiders ."                      
-alias code="doing 'opening current folder in VSCode insiders'; code-insiders ."    
-alias c="doing 'opening current folder in VSCode insiders'; code-insiders ."                      
+alias s="doing 'opening current folder in Sublime'; code ."                      
+alias code="doing 'opening current folder in VSCode insiders'; code ."    
+alias c="doing 'opening current folder in VSCode insiders'; code ."                      
 alias a="doing 'opening current folder in Atom'; atom ."  
  
 alias cmds="doing 'listing project skeletons'; projects;"
 
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 
-alias ep="doing 'Editing zsh profile'; code-insiders ~/.zshrc"  
+alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
 alias sd="doing 'changing to .system-config/';cd  ~/.system-config"    
 
 ############### Editing config files ################
-alias esys="warn 'dotfiles edited in .system-config are overidden when you do a bsys'; doing 'Editing system files'; cd $HOME/.system-config; code-insiders .;"         
-alias elint="doing 'Editing .eslintrc.yaml'; code-insiders ~/..eslintrc.yaml"
-alias ebfy="doing 'Editing .jsbeautifyrc'; code-insiders ~/.jsbeautifyrc"
+alias esys="warn 'dotfiles edited in .system-config are overidden when you do a bsys'; doing 'Editing system files'; cd $HOME/.system-config; code .;"         
+alias elint="doing 'Editing .eslintrc.yaml'; code ~/..eslintrc.yaml"
+alias ebfy="doing 'Editing .jsbeautifyrc'; code ~/.jsbeautifyrc"
 
 alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;" 
 alias cdsub="doing 'Changing to sublime directory'; cd '$SROOT/Packages/User';" 
@@ -339,10 +327,10 @@ alias bu="doing 'doing a brew update && brew upgrade'; brew update && brew upgra
 
 
 
-
+export PATH="/opt/homebrew/opt/node@12/bin:$PATH"
 
 # set system wide editor
-export EDITOR='code-insiders -w'
+export EDITOR='code -w'
 
 # brew installs casks in /Applicaitons
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
@@ -356,6 +344,10 @@ export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl@1.1" # 
 # elapsed_ms=$((end_ms - start_ms))
 # echo "$elapsed_ms ms exports"
 
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
 ### test to see what opened the shell
 ### We don't want to cd to Desktop if Visual Studio opens the Shell
 ARSE=`ps -o comm= -p $PPID`
@@ -367,9 +359,25 @@ if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
 fi
 # osascript -e "set volume input volume 40"
 
-export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
-alias ibrew='arch -x86_64 /usr/local/bin/brew'
-eval "$(rbenv init -)"
+# export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
+# alias ibrew='arch -x86_64 /usr/local/bin/brew'
+# eval "$(rbenv init -)"
+
+# export NVM_DIR="$HOME/.nvm"
+#   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+#   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# autoload -U add-zsh-hook
+# load-nvmrc() {
+#   if [[ -f .nvmrc && -r .nvmrc ]]; then
+#     nvm use
+#   elif [[ $(nvm version) != $(nvm version default)  ]]; then
+#     echo "Reverting to nvm default version"
+#     nvm use default
+#   fi
+# }
+# add-zsh-hook chpwd load-nvmrc
+# load-nvmrc
 
 # end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
 # elapsed_ms=$((end_ms - start_ms))
