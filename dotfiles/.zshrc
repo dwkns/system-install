@@ -72,21 +72,9 @@ usys () {
   doing 'Reloading .zshrc profile'; 
   source "$HOME/.zshrc";
 
+  mkdir -p "$HOME/.vscode/"
+
   doing 'Installing Douglas theme'; 
-
-# VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
-
-#   echo ""
-
-#   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-#     echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
-#     (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
-#   else
-#     echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
-#     (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git douglas;);  
-#     echo ""
-#   fi
-
   VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
 
   echo ""
