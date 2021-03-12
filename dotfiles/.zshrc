@@ -21,6 +21,15 @@ fi
 # elapsed_ms=$((end_ms - start_ms))
 # echo "$elapsed_ms ms to do ZSH"
 
+PLATFORM="unknown"
+arch_name="$(uname -m)"
+if [ "${arch_name}" = "x86_64" ]; then
+  PLATFORM="x86_64"
+elif [ "${arch_name}" = "arm64" ]; then
+  PLATFORM="arm64"
+fi
+
+
 ###############################################################################
 #  Deine variables                                                  #
 ###############################################################################
@@ -348,10 +357,13 @@ fi
 
 export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
 
-export PATH="/opt/homebrew/opt/node@14/bin:$PATH"
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
+if [ "$PLATFORM" = "arm64" ]; then
+  export PATH="/opt/homebrew/opt/node@14/bin:$PATH"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  # echo "we're on $PLATFORM do your brew thing here"
+fi
 # alias ibrew='arch -x86_64 /usr/local/bin/brew'
 # eval "$(rbenv init -)"
 
