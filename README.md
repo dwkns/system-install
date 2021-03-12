@@ -24,7 +24,7 @@ $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew
 Some of these apps are used in the install script so we install them first.
 Definately need these:
 ````bash
-$ brew install iterm2 openssl git node mas rbenv pyenv ruby-build jq yarn coreutils
+$ brew install iterm2 openssl git node@14 mas rbenv pyenv ruby-build jq yarn netlify-cli coreutils
 ````
 
 ### Install system config & dot files
@@ -47,7 +47,7 @@ $ npm install -g local-web-server
 ### Install apps  
 Definately 
 ````bash
-$ brew cask install sublime-text font-source-code-pro dropbox typora iina google-chrome firefox-developer-edition firefox sizzy google-drive-file-stream notion visual-studio-code 1Password omnigraffle zoomus slack soulver
+$ brew  install --cask sublime-text font-source-code-pro dropbox typora iina google-chrome firefox-developer-edition firefox sizzy google-drive-file-stream notion visual-studio-code 1Password omnigraffle zoomus slack soulver
 ````
 
 

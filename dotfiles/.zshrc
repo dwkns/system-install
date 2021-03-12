@@ -244,8 +244,8 @@ alias kd="doing 'Killing the Dock'; killall Dock"
 alias kf="doing 'Killing the Finder'; killall Finder"                            
                                                      
 alias s="doing 'opening current folder in Sublime'; code ."                      
-alias code="doing 'opening current folder in VSCode insiders'; code ."    
-alias c="doing 'opening current folder in VSCode insiders'; code ."                      
+alias code="doing 'opening current folder in VSCode'; code ."    
+alias c="code ."                      
 alias a="doing 'opening current folder in Atom'; atom ."  
  
 alias cmds="doing 'listing project skeletons'; projects;"
@@ -315,7 +315,7 @@ alias bu="doing 'doing a brew update && brew upgrade'; brew update && brew upgra
 
 
 
-export PATH="/opt/homebrew/opt/node@12/bin:$PATH"
+
 
 # set system wide editor
 export EDITOR='code -w'
@@ -333,7 +333,6 @@ export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl@1.1" # 
 # echo "$elapsed_ms ms exports"
 
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 
 ### test to see what opened the shell
@@ -347,26 +346,18 @@ if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
 fi
 # osascript -e "set volume input volume 40"
 
-# export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
+export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
+
+export PATH="/opt/homebrew/opt/node@14/bin:$PATH"
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # alias ibrew='arch -x86_64 /usr/local/bin/brew'
 # eval "$(rbenv init -)"
 
-# export NVM_DIR="$HOME/.nvm"
-#   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-#   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-# autoload -U add-zsh-hook
-# load-nvmrc() {
-#   if [[ -f .nvmrc && -r .nvmrc ]]; then
-#     nvm use
-#   elif [[ $(nvm version) != $(nvm version default)  ]]; then
-#     echo "Reverting to nvm default version"
-#     nvm use default
-#   fi
-# }
-# add-zsh-hook chpwd load-nvmrc
-# load-nvmrc
 
 # end_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
 # elapsed_ms=$((end_ms - start_ms))
 # echo "$elapsed_ms ms passed"
+
