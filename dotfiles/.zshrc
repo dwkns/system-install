@@ -89,7 +89,7 @@ usys () {
   echo ""
 
   if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
+  echo -e $YELLOW"Warning ========>$RESET 'douglas theme already in '$VSCODE_EXTENSIONS'. Updating... "
 
 
    (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
@@ -102,7 +102,7 @@ usys () {
   echo ""
 
   if [ -d "$VSCODE_EXTENSIONS/njk" ]; then
-  echo -e $YELLOW"Warning ========>$RESET 'Theme already in '$VSCODE_EXTENSIONS'. Updating... "
+  echo -e $YELLOW"Warning ========>$RESET 'njk already in '$VSCODE_EXTENSIONS'. Updating... "
 
 
    (cd "$VSCODE_EXTENSIONS/njk"; git pull;);
@@ -362,10 +362,10 @@ if [ "$PLATFORM" = "arm64" ]; then
   export PATH="/opt/homebrew/opt/node@14/bin:$PATH"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 else
+  export PATH="/usr/local/opt/node@14/bin:$PATH"
   # echo "we're on $PLATFORM do your brew thing here"
 fi
-# alias ibrew='arch -x86_64 /usr/local/bin/brew'
-# eval "$(rbenv init -)"
+# export PATH="\$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 
 
