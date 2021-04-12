@@ -101,16 +101,16 @@ usys () {
 
   echo ""
 
-  if [ -d "$VSCODE_EXTENSIONS/njk" ]; then
-  echo -e $YELLOW"Warning ========>$RESET 'njk already in '$VSCODE_EXTENSIONS'. Updating... "
+  # if [ -d "$VSCODE_EXTENSIONS/njk" ]; then
+  # echo -e $YELLOW"Warning ========>$RESET 'njk already in '$VSCODE_EXTENSIONS'. Updating... "
 
 
-   (cd "$VSCODE_EXTENSIONS/njk"; git pull;);
-  else
-    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/vscode-njk-extension.git' into '$VSCODE_EXTENSIONS' " 
-    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/vscode-njk-extension.git njk;);  
-    echo ""
-  fi
+  #  (cd "$VSCODE_EXTENSIONS/njk"; git pull;);
+  # else
+  #   echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/vscode-njk-extension.git' into '$VSCODE_EXTENSIONS' " 
+  #   (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/vscode-njk-extension.git njk;);  
+  #   echo ""
+  # fi
 
 
 }
@@ -125,7 +125,7 @@ bsys () {
   doing 'Backing up VS code extensions'; 
   # (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
   (cd "$HOME/.vscode/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  # (cd "$HOME/.vscode/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
 }
@@ -234,6 +234,14 @@ ya () {
   doing 'Doing yarn add --dev';
   yarn add --dev $1;
 }
+
+############### EDIT UNDER2 SITE ################
+ed () {
+  doing 'Edit the Douglas extension';
+  cd "$HOME/.vscode/extensions/douglas";
+  code .;
+}
+
 
 
 
