@@ -136,7 +136,8 @@ projects () {
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] etw  :$reset_color making new 11ty/tailwind/rollup project $reset_color";
+  note "$fg[yellow] etw  :$reset_color barebones 11ty/tailwind-jit/esbuild project $reset_color";
+  note "$fg[yellow] etwru  :$reset_color 11ty/tailwind/rollup project $reset_color";
 }
 
 
@@ -156,9 +157,22 @@ mbx () {
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
-etw () {
+etwru () {
     doing 'making new 11ty/tailwind/rollup project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-ru-starter.sh $1;
+}
+etw () {
+    doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
+}
+
+rbic () {
+    sudo rm -rfv /Library/Caches/com.apple.iconservices.store;
+    sudo find /private/var/folders/ \( -name com.apple.dock.iconcache -or -name com.apple.iconservices \) -exec rm -rfv {} \; ;
+    sleep 3;
+    sudo touch /Applications/* ;
+    killall Dock; 
+    killall Finder
 }
 
 
