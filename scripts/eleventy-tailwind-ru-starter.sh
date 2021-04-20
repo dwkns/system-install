@@ -5,7 +5,7 @@
 success "Project $PROJECTNAME will be created!"
 
 # git clone https://github.com/dwkns/snowpack-tailwind-11ty-barebones.git $PROJECTNAME
-git clone https://github.com/dwkns/11ty-tailwind-jit-esbuild.git $PROJECTNAME
+git clone https://github.com/dwkns/11ty-tailwind-rollup-starter.git $PROJECTNAME
 
 
 ######## Create the folder
@@ -27,7 +27,7 @@ jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 mkdir -p bin
 cat >bin/s <<'EOL'
 #!/usr/bin/env zsh
-yarn dev
+yarn start
 EOL
 chmod +x bin/s
 
