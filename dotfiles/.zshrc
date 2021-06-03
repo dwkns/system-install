@@ -271,6 +271,7 @@ alias ls="ls -l"            # because the normal way is dumb
 alias cd..="cd .."          # because I always miss the space. 
 alias h="doing 'changing to Home'; cd ~/"
 alias dt="doing 'changing to Desktop'; cd ~/Desktop"    
+alias dev="doing 'changing to Dev folder'; cd ~/dev"    
 
 alias kd="doing 'Killing the Dock'; killall Dock"                                
 alias kf="doing 'Killing the Finder'; killall Finder"                            
