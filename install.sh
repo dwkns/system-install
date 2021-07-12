@@ -148,6 +148,7 @@ sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.pli
 
 doing "Making ~/Applications folder"
 mkdir -p ~/Applications
+mkdir -p ~/dev
 
 ###############################################################################
 # Install App Store Apps                                                      #
