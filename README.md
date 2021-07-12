@@ -24,7 +24,7 @@ $ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew
 Some of these apps are used in the install script so we install them first.
 Definately need these:
 ````bash
-$ brew install iterm2 openssl git node@14 mas rbenv pyenv ruby-build jq yarn netlify-cli coreutils
+$ brew install iterm2 openssl git node@14 mas rbenv pyenv ruby-build jq svn yarn netlify-cli coreutils
 ````
 
 ### Install system config & dot files
