@@ -47,9 +47,10 @@ $ npm install -g local-web-server
 ### Install apps  
 Definately 
 ````bash
-$ brew  install --cask sublime-text font-source-code-pro dropbox typora iina google-chrome firefox-developer-edition firefox sizzy google-drive-file-stream notion visual-studio-code 1Password omnigraffle zoomus slack soulver
+$ brew  install --cask sublime-text dropbox typora iina google-chrome firefox-developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch grammarly postman
 ````
-
+<!-- Loom? -->
+<!-- sizzy google-drive-file-stream omnigraffle -->
 
 ### Initialise rbenv and install a Ruby version
 List all available versions and choose the one you want to install.
