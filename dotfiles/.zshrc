@@ -267,8 +267,8 @@ ed () {
 
 ##### Common commands
 alias ns="doing 'stopping node_modules backing up to iCloud to Home'; node_sync"   
-alias ls="ls -l"            # because the normal way is dumb                                                             
-alias cd..="cd .."          # because I always miss the space. 
+alias ls="ls -lha"    # because the normal way is dumb   h- human readable sizes.                                                         
+alias cd..="cd .."    # because I always miss the space. 
 alias h="doing 'changing to Home'; cd ~/"
 alias dt="doing 'changing to Desktop'; cd ~/Desktop"    
 alias dev="doing 'listing dev projects'; cd ~/dev; ls -l"    
@@ -378,7 +378,7 @@ if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
   fi
 fi
 # osascript -e "set volume input volume 40"
-
+eval "$(rbenv init -)"
 export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
 
 
