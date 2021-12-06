@@ -24,12 +24,17 @@ tmp=$(mktemp)
 JQVAR=".author = \"$USER\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
+# make bin/s executable.
 mkdir -p bin
 cat >bin/s <<'EOL'
 #!/usr/bin/env zsh
-yarn dev
+yarn start
 EOL
 chmod +x bin/s
+
+# create .env file
+cp .env-template .env
+
 
 
 ######## Put the project name into the HTML Title. 
