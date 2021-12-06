@@ -227,7 +227,7 @@ node_sync () {
 ############### EDIT UNDER2 SITE ################
 eu2 () {
   doing 'Edit the Under2 sitey';
-  cd "$HOME/Desktop/u2s/";
+  cd "$HOME/dev/under2.global/";
   code .;
 }
 
