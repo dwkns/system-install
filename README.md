@@ -103,7 +103,7 @@ $ brew install  python heroku postgresql redis
 ````
 And these
 ````bash
-$ brew install --cask sketch handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
+$ brew install --cask handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
 ````
 
 
