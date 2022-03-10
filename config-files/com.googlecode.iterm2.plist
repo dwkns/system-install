@@ -10,6 +10,8 @@
 	<string>39656A75-0E0B-45CA-B7A7-39DA1968D7AA</string>
 	<key>DisableFullscreenTransparency</key>
 	<false/>
+	<key>EnableAPIServer</key>
+	<true/>
 	<key>EnableDivisionView</key>
 	<true/>
 	<key>FocusFollowsMouse</key>
@@ -2506,8 +2508,6 @@
 		</dict>
 	</dict>
 	<key>PreserveWindowSizeWhenTabBarVisibilityChanges</key>
-	<false/>
-	<key>PreventEscapeSequenceFromClearingHistory</key>
 	<false/>
 	<key>PromptOnQuit</key>
 	<false/>
