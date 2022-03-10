@@ -5,7 +5,7 @@
 success "Project $PROJECTNAME will be created!"
 
 # git clone https://github.com/dwkns/snowpack-tailwind-11ty-barebones.git $PROJECTNAME
-git clone https://github.com/dwkns/full-start.git $PROJECTNAME
+git clone https://github.com/dwkns/tiny-start.git $PROJECTNAME
 
 
 ######## Create the folder

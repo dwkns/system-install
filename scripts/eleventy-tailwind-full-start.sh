@@ -5,7 +5,7 @@
 success "Project $PROJECTNAME will be created!"
 
 # git clone https://github.com/dwkns/snowpack-tailwind-11ty-barebones.git $PROJECTNAME
-git clone https://github.com/dwkns/11ty-tailwind-rollup-starter.git $PROJECTNAME
+git clone https://github.com/dwkns/full-start.git $PROJECTNAME
 
 
 ######## Create the folder
@@ -24,12 +24,17 @@ tmp=$(mktemp)
 JQVAR=".author = \"$USER\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
+# make bin/s executable.
 mkdir -p bin
 cat >bin/s <<'EOL'
 #!/usr/bin/env zsh
 yarn start
 EOL
 chmod +x bin/s
+
+# create .env file
+cp .env-template .env
+
 
 
 ######## Put the project name into the HTML Title. 

@@ -1,3 +1,9 @@
+# Fig pre block. Keep at the top of this file.
+export PATH="${PATH}:${HOME}/.local/bin"
+eval "$(fig init zsh pre)"
+
+
+
 #Timing script.
 # start_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
 
@@ -137,7 +143,7 @@ projects () {
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] mbx  :$reset_color executable bash file $reset_color";
   note "$fg[yellow] etw  :$reset_color barebones 11ty/tailwind-jit/esbuild project $reset_color";
-  note "$fg[yellow] etwru  :$reset_color 11ty/tailwind/rollup project $reset_color";
+  note "$fg[yellow] etwfs  :$reset_color full start 11ty/tailwind-jit/esbuild project $reset_color";
 }
 
 
@@ -157,9 +163,9 @@ mbx () {
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
-etwru () {
-    doing 'making new 11ty/tailwind/rollup project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-ru-starter.sh $1;
+etwfs () {
+    doing 'making full start 11ty/tailwind-jit/esbuild project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-full-start.sh $1;
 }
 etw () {
     doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
@@ -374,12 +380,12 @@ ARSE=`ps -o comm= -p $PPID`
 if [[ $ARSE != *"Visual Studio Code - Insiders.app"*  ]]; then
  if [[ $ARSE != *"Visual Studio Code.app"*  ]]; then
     #echo "It's not there!"
-    cd ~/Desktop
+    # cd ~/Desktop
   fi
 fi
 # osascript -e "set volume input volume 40"
-eval "$(rbenv init -)"
 export PATH=/opt/homebrew/bin:/usr/local/bin:/Users/dazza/.rbenv/shims:/Users/dazza/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dazza/bin$PATH
+eval "$(rbenv init -)"
 
 
 if [ "$PLATFORM" = "arm64" ]; then
@@ -397,3 +403,8 @@ fi
 # elapsed_ms=$((end_ms - start_ms))
 # echo "$elapsed_ms ms passed"
 
+
+
+
+# Fig post block. Keep at the bottom of this file.
+eval "$(fig init zsh post)"
