@@ -1,9 +1,5 @@
 # Fig pre block. Keep at the top of this file.
-export PATH="${PATH}:${HOME}/.local/bin"
-eval "$(fig init zsh pre)"
-
-
-
+. "$HOME/.fig/shell/zshrc.pre.zsh"
 #Timing script.
 # start_ms=$(ruby -e 'puts (Time.now.to_f * 1000).to_i')
 
@@ -315,7 +311,7 @@ alias gb="doing 'Doing git branch'; git branch"                                 
 alias gp="doing 'Doing git push -- all'; git push --all"                          # git push all
 alias gpa="gp"                                                                      # second alias for git push all
 alias gco="doing 'Doing git checkout'; git checkout"                              # git checkout
-alias gac="doing 'Doing git add -all, then git commit'; git add -A; git commit"   # git add all then commit
+alias gac="doing 'Doing git add -all, then git commit'; git add -A; git commit -m 'updated something'"   # git add all then commit
 alias gph="doing 'Doing git push heroku master'; git push heroku master"          # git push to heroku.
 alias gphm="doing 'Doing git push heroku master'; git push heroku master"         # git push to heroku.
 
@@ -403,8 +399,5 @@ fi
 # elapsed_ms=$((end_ms - start_ms))
 # echo "$elapsed_ms ms passed"
 
-
-
-
 # Fig post block. Keep at the bottom of this file.
-eval "$(fig init zsh post)"
+. "$HOME/.fig/shell/zshrc.post.zsh"
