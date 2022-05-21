@@ -24,13 +24,13 @@ tmp=$(mktemp)
 JQVAR=".author = \"$USER\""
 jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 
-# make bin/s executable.
-mkdir -p bin
-cat >bin/s <<'EOL'
-#!/usr/bin/env zsh
-yarn start
-EOL
-chmod +x bin/s
+# # make bin/s executable.
+# mkdir -p bin
+# cat >bin/s <<'EOL'
+# #!/usr/bin/env zsh
+# yarn start
+# EOL
+# chmod +x bin/s
 
 # create .env file
 cp .env-template .env
@@ -46,12 +46,12 @@ git init
 git add .
 git commit -m "Initial commit"
 
-  rm -rf node_modules.nosync
-  rm -rf yarn.lock
-  doing 'removing existing node_modules folder'; rm -rf node_modules
-  doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
-  doing 'creating node_modules.nosync'; mkdir node_modules.nosync
-  doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
-  doing 'running yarn'; yarn
+  # rm -rf node_modules.nosync
+  # rm -rf yarn.lock
+  # doing 'removing existing node_modules folder'; rm -rf node_modules
+  # doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
+  # doing 'creating node_modules.nosync'; mkdir node_modules.nosync
+  # doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
+  doing 'running yarn'; yarn install
 
 code -r .
