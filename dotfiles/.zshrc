@@ -224,12 +224,16 @@ PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE
 #                                                                             #
 #  Ensure we only CD to Desktop if it is not VS Code                          #
 ###############################################################################
-WHAT_OPENED_SHELL=`ps -o comm= -p $PPID`
-if [[ $WHAT_OPENED_SHELL != *"Visual Studio Code - Insiders.app"*  ]]; then
- if [[ $ARSE != *"Visual Studio Code.app"*  ]]; then
-    cd ~/Desktop
-  fi
+
+WHAT_OPENED_SHELL==`ps -o comm= -p $PPID`
+THIS='Visual Studio Code.app'
+if [[ "$WHAT_OPENED_SHELL" != *"$THIS"* ]];
+ then
+  # echo "VS Code did not open shell. CD to Desktop"
+  cd ~/Desktop
 fi
+
+
 
 ###############################################################################
 #  exports                                                                       #
