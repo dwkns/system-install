@@ -1,38 +1,7 @@
+# This is Git's per-user configuration file.
 [user]
-	name = dwkns
-	email = dwkns@me.com
-[core]
-	autocrlf = false
-	safecrlf = false
-	excludesfile = /Users/dazza/.gitignore_global
-[credential]
-	helper = osxkeychain
-[alias]
-	co = checkout
- 	ci = commit
- 	st = status
- 	br = branch
- 	hist = log --pretty=format:'%h %Cgreen %ad | %Cblue %s%C(yellow)%d %Creset [%an] ' --graph --date=short
- 	type = cat-file -t
- 	dump = cat-file -p
-[color]
-	ui = auto
-	branch = auto
-	diff = auto
-	status = auto
-	
-[pull]
-	rebase = false
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+# Please adapt and uncomment the following lines:
+name = dwkns
+email = dwkns@me.com
 [init]
 	defaultBranch = main
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
