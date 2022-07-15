@@ -1,8 +1,3 @@
-#!/usr/bin/env bash
-
-# ~/.macos — https://mths.be/macos
-
-
 source "$HOME/.system-config/scripts/colours.sh"
 
 
