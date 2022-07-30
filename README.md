@@ -49,6 +49,10 @@ Definately
 ````bash
 $ brew  install --cask sublime-text dropbox typora iina google-chrome firefox-developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch grammarly postman font-fira-code
 ````
+````bash
+$ brew install chromium --no-quarantine
+````
+
 <!-- Loom? -->
 <!-- sizzy google-drive-file-stream omnigraffle -->
 
