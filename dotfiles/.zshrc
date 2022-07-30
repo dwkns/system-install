@@ -103,6 +103,17 @@ projects () {
   note "$fg[yellow] etwfs  :$reset_color full start 11ty/tailwind-jit/esbuild project $reset_color";
 }
 
+
+commands () {gp$reset_color
+  doing 'Listing common git commands:'
+  note "$fg[cyan] Rename branch:$reset_color git branch -m <old> <new> $reset_color";
+  note "$fg[cyan] Delete Branch:$reset_color $reset_color git branch -d <old-branch> $reset_color";
+  note "$fg[cyan] Push current branch:$reset_color $fg[yellow]gp $fg[red]→$reset_color git push -u origin HEAD $reset_color";
+}
+
+
+ 
+
 rps () {
   doing 'Creating Ruby skeleton project';
   . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
@@ -196,8 +207,8 @@ alias ga="doing 'Doing git add -A'; git add -A"                                 
 alias gc="doing 'Doing git commit'; git commit"                                   # git commit
 
 alias gs="git status"                                                             # git status
-alias gb="doing 'Doing git branch'; git branch"                                   # git branch
-alias gpa="doing 'Doing git push -- all'; git push --all"                         # git push all
+alias gb="doing 'Doing git branch'; git branch"                                   # git branch                     # git push all
+alias gp="doing 'Pushing current branch'; git push -u origin HEAD"                         # git push all
 alias gco="doing 'Doing git checkout'; git checkout"                          
 
 
@@ -234,12 +245,11 @@ if [[ "$WHAT_OPENED_SHELL" != *"$THIS"* ]];
 fi
 
 
-
 ###############################################################################
 #  exports                                                                       #
 ###############################################################################
 
-############### Gystem wide editor ################ 
+############### System wide editor ################ 
 export EDITOR='code -w'
 
 
@@ -256,8 +266,12 @@ export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 
 
 
-# export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-# export PUPPETEER_EXECUTABLE_PATH=`which chromium
+# Sometimes we need to skip the npm/yarn version of chromium
+# And force using the system one. 
+# Install chromium 
 
+# brew install chromium --no-quarantine
 
-
+# skip the download and use the local one instead. 
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+export PUPPETEER_EXECUTABLE_PATH=`which chromium`
