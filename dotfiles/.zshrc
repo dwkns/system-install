@@ -101,6 +101,7 @@ projects () {
   note "$fg[yellow] nps  :$reset_color executable bash file $reset_color";
   note "$fg[yellow] etw  :$reset_color barebones 11ty/tailwind-jit/esbuild project $reset_color";
   note "$fg[yellow] etwfs  :$reset_color full start 11ty/tailwind-jit/esbuild project $reset_color";
+  note "$fg[yellow] etws  :$reset_color f11ty/tailwind/sanity project $reset_color";
 }
 
 
@@ -138,6 +139,10 @@ etw () {
 etwfs () {
     doing 'making full start 11ty/tailwind-jit/esbuild project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-full-start.sh $1;
+}
+etwfs () {
+    doing 'making eleventy-tailwind-sanity-starter project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-sanity-starter.sh $1;
 }
 
 
