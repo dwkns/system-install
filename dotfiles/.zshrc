@@ -140,7 +140,7 @@ etwfs () {
     doing 'making full start 11ty/tailwind-jit/esbuild project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-full-start.sh $1;
 }
-etwfs () {
+etws () {
     doing 'making eleventy-tailwind-sanity-starter project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-sanity-starter.sh $1;
 }
