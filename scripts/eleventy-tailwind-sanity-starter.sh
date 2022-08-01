@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 . $HOME/.system-config/scripts/set-up-projects.sh $1
 
-echo "Project $PROJECTNAME will be created!"
+echo "Project $CYAN$PROJECTNAME will be created!"$RESET
 
 # make the project folder
 mkdir $PROJECTNAME
@@ -20,7 +20,7 @@ jo -p '$schema'="node_modules/lerna/schemas/lerna-schema.json" \
 # create the monorepo package.json file.
 jo -p name=root \
   private=true \
-  workspaces=$(jo -a "site", "studio") \
+  workspaces=$(jo -a "site" "studio") \
   devDependencies=$(jo lerna="^5.3.0") \
   scripts=$(jo start=hivemind) >package.json
 
@@ -114,8 +114,8 @@ git commit -m "Initial commit"
 git branch -M main
 
 
-
-echo "Do you want to create a Github repo? y/N:"
+echo
+echo $CYAN"Do you want to create a Github repo? y/N:"$RESET
 read CREATE_REPO
 CREATE_REPO=${CREATE_REPO:-N}
 
@@ -127,13 +127,28 @@ else
   echo "OK not createing a github repo"
 fi
 
-yarn install
+echo
+echo $CYAN"Install Dependencies? Y/n:"$RESET
+read INSTALL_DEPENDENCIES
+INSTALL_DEPENDENCIES=${INSTALL_DEPENDENCIES:-Y}
 
-echo "Sanity & Site installed"
-echo "Run with '$ yarn start' from project root"
+if [ "$INSTALL_DEPENDENCIES" = "Y" ] || [ "$INSTALL_DEPENDENCIES" = "y" ]; then
+  echo "Installing dependencies"
+  yarn install
+else
+  echo " You should do a 'yarn install' at some point."
+fi
+
+echo
+
+echo
+echo $GREEN_TICK" Sanity & Site installed"
+echo
+echo "Run project with$CYAN yarn start$RESET from project root"
 echo "You might want to set up Netlify too"
 echo "  $ cd site"
 echo "  $ netlify init && netlify env:set CURRENT_ENV=production"
 echo "  $ cd .."
 echo "  $ cd studio"
 echo "  $ netlify init"
+echo $RED"IMPORTANT$RESET Change the projectId in $CYAN./studio/sanity.config.ts$RESET"
