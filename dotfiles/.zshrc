@@ -105,15 +105,24 @@ projects () {
 }
 
 
-commands () {gp$reset_color
-  doing 'Listing common git commands:'
-  note "$fg[cyan] Rename branch:$reset_color git branch -m <old> <new> $reset_color";
-  note "$fg[cyan] Delete Branch:$reset_color $reset_color git branch -d <old-branch> $reset_color";
-  note "$fg[cyan] Push current branch:$reset_color $fg[yellow]gp $fg[red]→$reset_color git push -u origin HEAD $reset_color";
+commands () {
+  doing 'Common commands:';
+  note "Kill process on port:$fg[yellow] kp <port>$reset_color";
+  note "List starter projects:$fg[yellow] projects $reset_color";
+  echo
+  doing 'Common git commands:';
+  note "Rename branch:$fg[yellow] git branch -m <old> <new> $reset_color";
+  note "Delete Branch:$fg[yellow] git branch -d <old-branch> $reset_color";
+  note "Push current branch:$fg[yellow] git push -u origin HEAD —>  $fg[red]gp $reset_color";
+
+}
+
+kp () { 
+  doing "Kill port $1";
+  lsof -t -i tcp:$1 | xargs kill -9;
 }
 
 
- 
 
 rps () {
   doing 'Creating Ruby skeleton project';
@@ -153,11 +162,14 @@ eu2 () {
   code .;
 }
 
+emambu () {
+  doing 'Edit the Mambu';
+  cd "$HOME/dev/mambu/";
+  code .;
+}
 
-lg () {
-  doing 'Listing common git commands'
-  note "$fg[yellow] command  :$reset_color instrcutions $reset_color";
-}    # git checkout
+
+
 
 ############### EDIT edgecott-house SITE ################
 ech () {
@@ -280,3 +292,5 @@ export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 # skip the download and use the local one instead. 
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+
+
