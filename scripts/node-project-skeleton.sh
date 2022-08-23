@@ -96,12 +96,12 @@ git init
 git add .
 git commit -m "Initial commit"
 
-  rm -rf node_modules.nosync
-  rm -rf yarn.lock
-  doing 'removing existing node_modules folder'; rm -rf node_modules
-  doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
-  doing 'creating node_modules.nosync'; mkdir node_modules.nosync
-  doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
+  # rm -rf node_modules.nosync
+  # rm -rf yarn.lock
+  # doing 'removing existing node_modules folder'; rm -rf node_modules
+  # doing 'removing existing node_modules folder'; rm -rf 'node_modules 2'
+  # doing 'creating node_modules.nosync'; mkdir node_modules.nosync
+  # doing 'creating symlink '; ln -s node_modules.nosync/ node_modules
   doing 'running yarn'; yarn
 
 code -r .

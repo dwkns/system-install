@@ -114,7 +114,9 @@ commands () {
   note "Rename branch:$fg[yellow] git branch -m <old> <new> $reset_color";
   note "Delete Branch:$fg[yellow] git branch -d <old-branch> $reset_color";
   note "Push current branch:$fg[yellow] git push -u origin HEAD —>  $fg[red]gp $reset_color";
-
+  note "Reset branch to remote/origin:"
+  echo "$fg[yellow] git checkout <branch>$reset_color"
+  echo "$fg[yellow] git reset --hard origin/<branch>$reset_color"
 }
 
 kp () { 
@@ -281,6 +283,9 @@ export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
 # make sure we use the Homebrew Python
 export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 
+# make sure we use the Homebrew rbenv (and Ruby)
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - zsh)"
 
 
 # Sometimes we need to skip the npm/yarn version of chromium
