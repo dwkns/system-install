@@ -117,6 +117,8 @@ commands () {
   note "Reset branch to remote/origin:"
   echo "$fg[yellow] git checkout <branch>$reset_color"
   echo "$fg[yellow] git reset --hard origin/<branch>$reset_color"
+  note "List remotes:$fg[yellow] git remote -v $reset_color";
+  echo
 }
 
 kp () { 
