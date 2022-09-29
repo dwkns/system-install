@@ -118,6 +118,7 @@ commands () {
   echo "$fg[yellow] git checkout <branch>$reset_color"
   echo "$fg[yellow] git reset --hard origin/<branch>$reset_color"
   note "List remotes:$fg[yellow] git remote -v $reset_color";
+  note "Show recent branches:$fg[yellow] git branch --sort=-committerdate $reset_color";
   echo
 }
 
@@ -197,6 +198,9 @@ ed () {
 ###############################################################################
 
 ############### General ################
+alias nd="doing 'Doing netlify dev'; netlify dev"  
+
+
 alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 alias dev="doing 'listing dev projects'; cd ~/dev; ls -l"
