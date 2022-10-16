@@ -21,6 +21,15 @@ tmp=$(mktemp)
 JQVAR=".author = \"$USER\""
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
+
+# tmp=$(mktemp)
+# JQVAR=".devDependencies = \"$USER\""
+# jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
+
+
+
+
+
 # # make bin/s executable.
 # mkdir -p bin
 # cat >bin/s <<'EOL'
@@ -50,6 +59,19 @@ git commit -m "Initial commit"
 
 doing 'running yarn'
 yarn install
-npx install-peerdeps --dev eslint-config-wesbos && echo '{"extends": ["wesbos"]}' >>.eslintrc
+
+# echo $CYAN"Do you want linting? Y/n: "$RESET
+#   read LINTING
+#   LINTING=${LINTING:-Y}
+#   if [  "$LINTING" = "Y" ] || [  "$LINTING" = "y" ] ; then
+#    npx install-peerdeps --dev eslint-config-wesbos
+#     echo '{"extends": ["wesbos"]}' >>.eslintrc
+#     yarn add --dev prettier-plugin-tailwindcss
+#   else
+#     success "OK not not adding linting" 
+#     exit 0
+#   fi
+
+
 
 code -r .
