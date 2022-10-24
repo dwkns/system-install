@@ -7,7 +7,6 @@ BLUE="\033[0;94m"
 RESET="\033[0m"
 CYAN="\033[0;36m"
 
-
 sudo -v 
 
 # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
@@ -48,9 +47,6 @@ source "$ROOT_DIR/scripts/dotfiles.sh"
 installDotFiles
 
 
-
-
-
 ###############################################################################
 # set machine name                                                      
 ###############################################################################
@@ -74,50 +70,6 @@ sudo scutil --set LocalHostName $MACHINE_NAME
 # MACHINE_NAME="dwkns-mini-sur"; sudo scutil --set ComputerName $MACHINE_NAME && sudo scutil --set HostName $MACHINE_NAME && sudo scutil --set LocalHostName $MACHINE_NAME
 # sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $MACHINE_NAME
 note "done"
-
-###############################################################################
-# CONFIGURE Sublime                                                      
-###############################################################################
-
-# source "$ROOT_DIR/scripts/sublime-config.sh"
-
-
-###############################################################################
-# CONFIGURE Time Machine                                                      #
-###############################################################################
-
-# success "Adding Time Machine Exclusions"
-
-# TIME_MACHINE_EXCLUSION_LIST=(
-#   "$HOME/Downloads/"
-#   "$HOME/Library/Caches/"
-#   "$HOME/Documents/Torrents/"
-#   "$HOME/Documents/Parallels/"
-#   "$HOME/Library/Application Support/Google/"
-# )
-
-# for LOCATION in "${TIME_MACHINE_EXCLUSION_LIST[@]}"
-# do
-#   # ensure that the directories exist.
-#   mkdir -p "$LOCATION"
-#   sudo tmutil addexclusion "$LOCATION"
-# done
-
-# if $TM_DEBUG; then
-#   warn "These locations are being excluded :"
-#   sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'"
-# fi
-# note "done"
-
-# success "Prevent Time Machine from prompting to use new hard drives as backup volume"
-# defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-
-
-# warn "~/Dropbox has NOT been added to the time machine exclusion list"
-# echo "If you want to add the exclusion run :"
-# echo "sudo tmutil addexclusion '~/Dropbox/'"
-
-# note "done"
 
 ###############################################################################
 # CONFIGURE System Settings                                                   #
@@ -146,7 +98,7 @@ sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.app
 # need a test around this to see if it's running
 sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
 
-doing "Making ~/Applications folder"
+doing "Making ~/Applications & ~/dev folders"
 mkdir -p ~/Applications
 mkdir -p ~/dev
 

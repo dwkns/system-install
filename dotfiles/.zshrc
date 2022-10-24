@@ -303,5 +303,3 @@ eval "$(rbenv init - zsh)"
 # skip the download and use the local one instead. 
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=`which chromium`
-
-

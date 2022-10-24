@@ -8,12 +8,9 @@
   ".irbrc"
   ".rspec"
   ".jsbeautifyrc"
-  ".eslintrc.yml"
   ".zshrc"
   ".macos"
   ".background_colour.png"
-  ".profile"
-
 )  
 
 installDotFiles () {

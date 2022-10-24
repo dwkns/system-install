@@ -2,8 +2,6 @@
 ######################## SYSTEM Settings ########################
 # doing "Updating system settings"
 
-
-
 # echo $CYAN"General :$RESET Scrollbars to WhenScrolling"
 # defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 # Possible values: `WhenScrolling`, `Automatic` and `Always`
@@ -53,9 +51,6 @@
 # defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
 
-
-echo    
-
 # ###############################################################################
 # # Time Machine                                                                #
 # ###############################################################################
@@ -93,8 +88,8 @@ echo
 # Finder                                                                      #
 ###############################################################################
 
-echo $CYAN"Finder :$RESET Setting interface style to Dark"
-defaults write NSGlobalDomain AppleInterfaceStyle Dark
+# echo $CYAN"Finder :$RESET Setting interface style to Dark"
+# defaults write NSGlobalDomain AppleInterfaceStyle Dark
 
 # echo $CYAN"Finder :$RESET Expand save panel by default"
 # defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
@@ -113,9 +108,6 @@ defaults write NSGlobalDomain AppleInterfaceStyle Dark
 # echo $CYAN"Finder :$RESET Showing Library & ~/Library"
 # chflags nohidden ~/Library && xattr -d com.apple.FinderInfo  ~/Library
 # chflags nohidden /Library && xattr -d com.apple.FinderInfo  /Library
-
-
-
 
 # echo $CYAN"Finder :$RESET Set sidebar icon size to small"
 # defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
@@ -233,8 +225,6 @@ defaults write NSGlobalDomain AppleInterfaceStyle Dark
 
 # echo $CYAN"Finder :$RESET Make Dock icons of hidden applications translucent"
 # defaults write com.apple.dock showhidden -bool false
-
-echo
 
 ###############################################################################
 # Safari & WebKit                                                             #
@@ -414,13 +404,4 @@ echo
 
 # echo
 
-
-
-
-success "done - some settings may require a restart"
-
-
-
-
-
-
+# success "done - some settings may require a restart"
