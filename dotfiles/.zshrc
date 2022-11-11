@@ -199,6 +199,8 @@ ed () {
 
 ############### General ################
 alias nd="doing 'Doing netlify dev'; netlify dev"  
+alias upkg="doing 'Update package.json dependencies'; npx npm-check-updates -u"  
+alias lpkg="doing 'List package.json updates'; npx npm-check-updates "  
 
 
 alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
