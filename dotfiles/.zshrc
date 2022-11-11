@@ -75,7 +75,7 @@ bsys () {
   # doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
   doing 'Backing up VS code extensions'; 
   # (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  (cd "$HOME/.vscode/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
+  # (cd "$HOME/.vscode/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   # (cd "$HOME/.vscode/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
