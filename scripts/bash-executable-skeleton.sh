@@ -1,42 +1,31 @@
 #!/usr/bin/env zsh
 
+. $HOME/.system-config/scripts/set-up-projects.sh $1
 
-############################## Script ###############################
-  if [ -z ${1+x} ]; then # have we passed in a variable $1
-      warn "Nothing passed in..."
-      warn "You can use 'mnx <fileName>' as a shortcut."
-      echo -n "Enter filename name (default -> run.sh) : "
-      read PROJECTNAME
-      echo
-      PROJECTNAME=${PROJECTNAME:-run.sh}
-  else 
-      PROJECTNAME=$1
-  fi
+success "Project $PROJECTNAME will be created!"
 
-  if [[  ${PROJECTNAME: -3} != ".sh" ]]; then
-      PROJECTNAME=$PROJECTNAME.sh
-  fi
+######## Create the folder
+mkdir -p $PROJECTNAME
+cd "$PROJECTNAME"
 
-  echo -e "${GREEN}====> Setting project name to $BLUE'$PROJECTNAME'$RESET"
+if [[ ${PROJECTNAME: -3} != ".sh" ]]; then
+  FILENAME=$PROJECTNAME.sh
+fi
 
-
-  if [ -f "$PROJECTNAME" ]; then
-    echo -n "$(echo -e ${RED}"WARNING "$BLUE"'$PROJECTNAME'"${RED}" already exists Delete it y/n (default - y) : "$RESET)" 
-    read DELETEIT 
-
-    DELETEIT=${DELETEIT:-Y}
-
-    if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
-     rm -rf $PROJECTNAME
-    else
-      warn "OK not doing anything & exiting" 
-      return
-    fi
-  fi
-
-  cat >$PROJECTNAME<<'EOL'
+cat >$FILENAME <<'EOL'
   #!/usr/bin/env bash
 EOL
-chmod +x $PROJECTNAME
-echo -e ${GREEN}"====> "$BLUE"'$PROJECTNAME'"${GREEN}" Created and set to be Executable"$RESET
-code $PROJECTNAME
+chmod +x $FILENAME
+echo -e ${GREEN}"====> "$BLUE"'$FILENAME'"${GREEN}" Created and set to be Executable"$RESET
+
+cat >.gitignore <<'EOL'
+.DS_Store
+EOL
+
+######## Initialize git.
+rm -rf .git #  remove the previous git files.
+git init
+git add .
+git commit -m "Initial commit"
+
+code -r .

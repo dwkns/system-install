@@ -28,14 +28,19 @@ jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
 
 
+# we make a .gitignore file here because we don't want to commit yarn.lock
+# In the tiny-start repo, but we do want it in the new project.
+cat >.gitignore <<'EOL'
+dist
+node_modules
+yarn-error.log
 
+.DS_Store
+.env
 
-# # make bin/s executable.
-# mkdir -p bin
-# cat >bin/s <<'EOL'
-# #!/usr/bin/env zsh
-# yarn start
-# EOL
+# Local Netlify folder if it exists
+.netlify
+EOL
 # chmod +x bin/s
 
 # create .env file
