@@ -69,21 +69,22 @@ yarn-error.log
 .netlify
 EOL
 
-# clone in our Sanity Studio starter
-git clone https://github.com/dwkns/dwkns-sanity-start.git studio
 
-# change the name property of package.json
-tmp=$(mktemp)
-JQVAR=".name = \"$PROJECTNAME-studio\""
-jq "$JQVAR" ./studio/package.json >"$tmp" && mv "$tmp" ./studio/package.json
+# # clone in our Sanity Studio starter
+# git clone https://github.com/dwkns/dwkns-sanity-start.git studio
 
-# add author  to package.json
-tmp=$(mktemp)
-JQVAR=".author = \"$USER\""
-jq "$JQVAR" ./studio/package.json >"$tmp" && mv "$tmp" ./studio/package.json
+# # change the name property of package.json
+# tmp=$(mktemp)
+# JQVAR=".name = \"$PROJECTNAME-studio\""
+# jq "$JQVAR" ./studio/package.json >"$tmp" && mv "$tmp" ./studio/package.json
 
-# clone on the eleventy starter
-git clone https://github.com/dwkns/tiny-start.git site
+# # add author  to package.json
+# tmp=$(mktemp)
+# JQVAR=".author = \"$USER\""
+# jq "$JQVAR" ./studio/package.json >"$tmp" && mv "$tmp" ./studio/package.json
+
+# # clone on the eleventy starter
+# git clone https://github.com/dwkns/tiny-start.git site
 
 # change the name property of package.json (need to save temp file first)
 tmp=$(mktemp)

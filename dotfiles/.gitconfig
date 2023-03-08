@@ -13,3 +13,5 @@ email = dwkns@me.com
 	trustExitCode = true
 [pull]
 	rebase = false
+[http]
+	postBuffer = 157286400

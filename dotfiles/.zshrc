@@ -21,8 +21,6 @@ SYSCD="$HOME/.system-config"
 source "$SYS_FILES_ROOT/scripts/colours.sh"  # imports colours & functions for printing to terminal
 source "$SYS_FILES_ROOT/scripts/dotfiles.sh" # backup/restore dotFiles
 
-
-
 ###############################################################################
 #  DOTFILES UPDATE FUCNTIONS                                                  #
 #  Backup and update dotfiles & sublime-config                                #
@@ -98,11 +96,12 @@ projects () {
   doing 'Listing current project skeletons:'
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
-  note "$fg[yellow] nps  :$reset_color executable bash file $reset_color";
+  note "$fg[yellow] bps  :$reset_color executable bash file $reset_color";
   note "$fg[yellow] etw  :$reset_color barebones 11ty/tailwind-jit/esbuild project $reset_color";
   note "$fg[yellow] etwfs  :$reset_color full start 11ty/tailwind-jit/esbuild project $reset_color";
   note "$fg[yellow] etws  :$reset_color f11ty/tailwind/sanity project $reset_color";
 }
+
 
 
 commands () {
@@ -236,7 +235,11 @@ alias gc="doing 'Doing git commit'; git commit"                                 
 alias gs="git status"                                                             # git status
 alias gb="doing 'Doing git branch'; git branch"                                   # git branch                     # git push all
 alias gp="doing 'Pushing current branch'; git push -u origin HEAD"                         # git push all
-alias gco="doing 'Doing git checkout'; git checkout"                          
+alias gco="doing 'Doing git checkout'; git checkout"     
+
+alias vgh="doing 'View repo on Github'; gh repo view --web"     
+
+
 
 
 
