@@ -320,8 +320,7 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 ############### path ################ 
 # add node to path
-export PATH="/opt/homebrew/opt/node@16/bin:$PATH" 
-
+export PATH="/opt/homebrew/opt/node@18/bin:$PATH" 
 # make sure we use the Homebrew Python
 export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 
