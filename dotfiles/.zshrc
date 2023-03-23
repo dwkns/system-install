@@ -148,10 +148,14 @@ etw () {
     doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
 }
+etw () {
+    doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
+}
 
-etwfs () {
-    doing 'making full start 11ty/tailwind-jit/esbuild project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-full-start.sh $1;
+em () {
+    doing 'making minimal eleventy project'; 
+    . $HOME/.system-config/scripts/eleventy-minimal-starter.sh $1;
 }
 etws () {
     doing 'making eleventy-tailwind-sanity-starter project'; 
