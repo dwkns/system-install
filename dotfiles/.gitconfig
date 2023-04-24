@@ -15,3 +15,7 @@ email = dwkns@me.com
 	rebase = false
 [http]
 	postBuffer = 157286400
+[credential]
+	helper = osxkeychain
+[core]
+	excludesfile = /Users/dazza/.gitignore_global
