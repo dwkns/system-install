@@ -11,6 +11,7 @@
   ".zshrc"
   ".macos"
   ".background_colour.png"
+  ".rubucop.yml"
 )  
 
 installDotFiles () {

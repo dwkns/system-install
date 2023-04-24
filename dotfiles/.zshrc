@@ -98,7 +98,7 @@ projects () {
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] bps  :$reset_color executable bash file $reset_color";
   note "$fg[yellow] etw  :$reset_color barebones 11ty/tailwind-jit/esbuild project $reset_color";
-  note "$fg[yellow] etwfs  :$reset_color full start 11ty/tailwind-jit/esbuild project $reset_color";
+  note "$fg[yellow] em  :$reset_color making minimal eleventy project $reset_color";
   note "$fg[yellow] etws  :$reset_color f11ty/tailwind/sanity project $reset_color";
 }
 
@@ -342,3 +342,10 @@ eval "$(rbenv init - zsh)"
 # skip the download and use the local one instead. 
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+
+# bun completions
+[ -s "/Users/dazza/.bun/_bun" ] && source "/Users/dazza/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
