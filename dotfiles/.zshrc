@@ -97,12 +97,11 @@ projects () {
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] bps  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] etw  :$reset_color barebones 11ty/tailwind-jit/esbuild project $reset_color";
+  note "$fg[yellow] etwj  :$reset_color 11ty/tailwind-jit/esbuild project $reset_color";
+  note "$fg[yellow] etw  :$reset_color 11ty/tailwind minimal starter$reset_color";
   note "$fg[yellow] em  :$reset_color making minimal eleventy project $reset_color";
   note "$fg[yellow] etws  :$reset_color f11ty/tailwind/sanity project $reset_color";
 }
-
-
 
 commands () {
   doing 'Common commands:';
@@ -126,8 +125,6 @@ kp () {
   lsof -t -i tcp:$1 | xargs kill -9;
 }
 
-
-
 rps () {
   doing 'Creating Ruby skeleton project';
   . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
@@ -144,13 +141,13 @@ bps () {
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
-etw () {
+etwj () {
     doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
 }
 etw () {
-    doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
+    doing 'making new minimal 11ty/tailwind project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-minimal.sh $1;
 }
 
 em () {
@@ -201,6 +198,9 @@ ed () {
 ###############################################################################
 
 ############### General ################
+alias sr="doing 'Doing .bin/dev'; ./bin/dev"  
+alias nd="doing 'Doing netlify dev'; netlify dev"  
+
 alias nd="doing 'Doing netlify dev'; netlify dev"  
 alias upkg="doing 'Update package.json dependencies'; npx npm-check-updates -u"  
 alias lpkg="doing 'List package.json updates'; npx npm-check-updates "  
