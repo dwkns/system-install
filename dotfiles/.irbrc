@@ -1,2 +1,2 @@
-require "awesome_print"
-AwesomePrint.irb!
+# gemrequire "awesome_print"
+# AwesomePrint.irb!
