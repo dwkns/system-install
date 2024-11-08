@@ -4,7 +4,7 @@
 success "Project $PROJECTNAME will be created!"
 
 # git clone https://github.com/dwkns/snowpack-tailwind-11ty-barebones.git $PROJECTNAME
-git clone https://github.com/dwkns/tiny-start.git $PROJECTNAME
+git clone https://github.com/dwkns/11ty-tailwind-minimal.git $PROJECTNAME
 
 ######## Create the folder
 cd "$PROJECTNAME"
@@ -43,8 +43,6 @@ yarn-error.log
 EOL
 # chmod +x bin/s
 
-# create .env file
-cp .env-template .env
 
 ######## Put the project name into the HTML Title.
 sed -i "" -e "s/---project-name---/$PROJECTNAME/g" ./src/index.njk

@@ -221,6 +221,7 @@ alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;"
 alias hide="doing 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
 alias show="doing 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
 
+alias apply-gitignore="doing 'applying gitignore'; !git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached"
 
 ############### Code editors ################
 alias code="doing 'opening current folder in VSCode'; code ." 
@@ -324,7 +325,7 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 ############### path ################ 
 # add node to path
-export PATH="/opt/homebrew/opt/node@18/bin:$PATH" 
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 # make sure we use the Homebrew Python
 export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 
@@ -349,3 +350,4 @@ export PUPPETEER_EXECUTABLE_PATH=`which chromium`
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
