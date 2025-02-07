@@ -136,7 +136,7 @@ bundle install
 
 
 ######## Open project in Sublime
-subl .
+code .
 
 success "Project created"
 note "Use : "

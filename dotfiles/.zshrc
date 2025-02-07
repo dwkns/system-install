@@ -97,8 +97,8 @@ projects () {
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] bps  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] etwj  :$reset_color 11ty/tailwind-jit/esbuild project $reset_color";
-  note "$fg[yellow] etw  :$reset_color 11ty/tailwind minimal starter$reset_color";
+  note "$fg[yellow] etw  :$reset_color 11ty/tailwind basics  starter$reset_color";
+  note "$fg[yellow] etwm  :$reset_color 11ty/tailwind minimal starter$reset_color";
   note "$fg[yellow] em  :$reset_color making minimal eleventy project $reset_color";
   note "$fg[yellow] etws  :$reset_color f11ty/tailwind/sanity project $reset_color";
 }
@@ -141,13 +141,15 @@ bps () {
   . $HOME/.system-config/scripts/bash-executable-skeleton.sh $1;
 }
 
-etwj () {
-    doing 'making new barebones 11ty/tailwind-jit/esbuild project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-starter.sh $1;
-}
-etw () {
+
+etwm () {
     doing 'making new minimal 11ty/tailwind project'; 
     . $HOME/.system-config/scripts/eleventy-tailwind-minimal.sh $1;
+}
+
+etw () {
+    doing 'making new 11ty/tailwind project'; 
+    . $HOME/.system-config/scripts/eleventy-tailwind-basics.sh $1;
 }
 
 em () {
