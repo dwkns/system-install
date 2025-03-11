@@ -307,6 +307,8 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 
 
+export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+
 # Sometimes we need to skip the npm/yarn version of chromium
 # And force using the system one. 
 # Install chromium 
