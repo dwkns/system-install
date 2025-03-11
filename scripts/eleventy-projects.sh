@@ -50,6 +50,11 @@ tmp=$(mktemp)
 JQVAR=".author  = \"dwkns\""
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
+cat >.env <<'EOL'
+# This file will not be commited to github
+CURRENT_ENV=development # < development | staging | production > 
+EOL
+
 
 # ######## Initialize git.
 rm -rf .git #  remove the previous git files.
