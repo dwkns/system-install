@@ -154,7 +154,6 @@ etwm () {
     . $HOME/.system-config/scripts/eleventy-projects.sh $REPO_NAME $PROJECT_NAME;
 }
 
-N_AME=""
 
 etw () {
     doing 'Making new 11ty/tailwind basics project (etw-basics)'; 
