@@ -6,14 +6,10 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 
-
 ###############################################################################
 #  Deine variables                                                            #
 ###############################################################################
 SYS_FILES_ROOT="$HOME/.system-config"
-SYSCD="$HOME/.system-config"
-
-
 
 ###############################################################################
 #  Import useful scripts                                                      #
@@ -44,23 +40,23 @@ usys () {
 
   mkdir -p "$HOME/.vscode/"
 
-  doing 'Installing Douglas theme'; 
-  VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
+  # doing 'Installing Douglas theme'; 
+  # VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
 
-  echo ""
+  # echo ""
 
-  if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  echo -e $YELLOW"Warning ========>$RESET 'douglas theme already in '$VSCODE_EXTENSIONS'. Updating... "
+  # if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
+  # echo -e $YELLOW"Warning ========>$RESET 'douglas theme already in '$VSCODE_EXTENSIONS'. Updating... "
 
 
-   (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
-  else
-    echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
-    (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
-    echo ""
-  fi
+  #  (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
+  # else
+  #   echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
+  #   (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
+  #   echo ""
+  # fi
 
-  echo ""
+  # echo ""
 }
 
 # backup current system files
@@ -97,10 +93,10 @@ projects () {
   note "$fg[yellow] rps  :$reset_color Ruby project skeleton $reset_color";
   note "$fg[yellow] nps  :$reset_color node project skeleton $reset_color";
   note "$fg[yellow] bps  :$reset_color executable bash file $reset_color";
-  note "$fg[yellow] etw  :$reset_color 11ty/tailwind basics  starter$reset_color";
-  note "$fg[yellow] etwm  :$reset_color 11ty/tailwind minimal starter$reset_color";
-  note "$fg[yellow] em  :$reset_color making minimal eleventy project $reset_color";
-  note "$fg[yellow] etws  :$reset_color f11ty/tailwind/sanity project $reset_color";
+
+  note "$fg[yellow] em  :$reset_color 11ty minimal project (11ty-minimal)$reset_color";
+  note "$fg[yellow] etwm  :$reset_color 11ty/tailwind minimal project (etw-minimal)$reset_color";
+  note "$fg[yellow] etw  :$reset_color 11ty/tailwind basics project (etw-basics)$reset_color";
 }
 
 commands () {
@@ -125,6 +121,8 @@ kp () {
   lsof -t -i tcp:$1 | xargs kill -9;
 }
 
+
+
 rps () {
   doing 'Creating Ruby skeleton project';
   . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
@@ -142,54 +140,27 @@ bps () {
 }
 
 
-etwm () {
-    doing 'making new minimal 11ty/tailwind project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-minimal.sh $1;
+em () {
+   doing 'Making new 11ty minimal project (11ty-minimal)'; 
+    REPO_NAME=https://github.com/dwkns/11ty-minimal.git
+    PROJECT_NAME=$1
+    . $HOME/.system-config/scripts/eleventy-projects.sh $REPO_NAME $PROJECT_NAME;
 }
+
+etwm () {
+    doing 'Making new 11ty/tailwind minimal project (etw-minimal)'; 
+    REPO_NAME=https://github.com/dwkns/etw-minimal.git
+    PROJECT_NAME=$1
+    . $HOME/.system-config/scripts/eleventy-projects.sh $REPO_NAME $PROJECT_NAME;
+}
+
+N_AME=""
 
 etw () {
-    doing 'making new 11ty/tailwind project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-basics.sh $1;
-}
-
-em () {
-    doing 'making minimal eleventy project'; 
-    . $HOME/.system-config/scripts/eleventy-minimal-starter.sh $1;
-}
-etws () {
-    doing 'making eleventy-tailwind-sanity-starter project'; 
-    . $HOME/.system-config/scripts/eleventy-tailwind-sanity-starter.sh $1;
-}
-
-
-############### EDIT UNDER2 SITE ################
-eu2 () {
-  doing 'Edit the Under2 site';
-  cd "$HOME/dev/under2.global/";
-  code .;
-}
-
-emambu () {
-  doing 'Edit the Mambu';
-  cd "$HOME/dev/mambu/";
-  code .;
-}
-
-
-
-
-############### EDIT edgecott-house SITE ################
-ech () {
-  doing 'Edit the Under2 sitey';
-  cd "$HOME/Desktop/ech/edgecott-house-netlify/";
-  code .;
-}
-
-############### EDIT Dougals VS code extension SITE ################
-ed () {
-  doing 'Edit the Douglas extension';
-  cd "$HOME/.vscode/extensions/douglas";
-  code .;
+    doing 'Making new 11ty/tailwind basics project (etw-basics)'; 
+    REPO_NAME="https://github.com/dwkns/etw-basics.git"
+    PROJECT_NAME=$1
+    . $HOME/.system-config/scripts/eleventy-projects.sh $REPO_NAME $PROJECT_NAME;
 }
 
 
@@ -328,6 +299,7 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 ############### path ################ 
 # add node to path
 export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+
 # make sure we use the Homebrew Python
 export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 
@@ -345,11 +317,3 @@ eval "$(rbenv init - zsh)"
 # skip the download and use the local one instead. 
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=`which chromium`
-
-# bun completions
-[ -s "/Users/dazza/.bun/_bun" ] && source "/Users/dazza/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
