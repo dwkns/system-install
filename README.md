@@ -19,7 +19,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 Some of these apps are used in the install script so we install them first.
 Definately need these:
 ````bash
-$ brew install iterm2 openssl git mas rbenv pyenv ruby-build gh jq jo svn yarn netlify-cli coreutils
+$ brew install node iterm2 openssl git mas rbenv pyenv ruby-build gh jq jo svn yarn netlify-cli coreutils
 ````
 
 ### Install system config & dot files
