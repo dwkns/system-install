@@ -34,27 +34,27 @@ WARNING='\U26A0'
 ############################### Functions ###############################
 
 success () {
-  echo -e $GREEN"Success ========>$CYAN $1 $RESET"
+  echo -e $GREEN"Success ====>$CYAN $1 $RESET"
 }
 
 warn () {
- echo -e $YELLOW"Warning ========>$CYAN $1 $RESET"
+ echo -e $YELLOW"Warning ====>$CYAN $1 $RESET"
 }
 
 error () {  
- echo -e $RED"Error ========>$CYAN $1 $RESET"
+ echo -e $RED"Error ====>$CYAN $1 $RESET"
 }
 
 note () {
-  echo -e $CYAN"Note —>$RESET $1 $RESET"
+  echo -e $CYAN"Note ====>$RESET $1 $RESET"
 }
 
 doing () {
-  echo -e $GREEN"Doing ————> $1 $RESET"
+  echo -e $GREEN"====> $1 $RESET"
 }
 
 complete () {
-  echo -e $GREEN"Done ========>$RESET $1 $RESET"
+  echo -e $GREEN"====>$RESET $1 $RESET"
 }
 
 setting () {
