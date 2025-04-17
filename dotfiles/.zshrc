@@ -5,7 +5,6 @@ export ZSH="$HOME/.oh-my-zsh"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-
 ###############################################################################
 #  Deine variables                                                            #
 ###############################################################################
@@ -40,23 +39,7 @@ usys () {
 
   mkdir -p "$HOME/.vscode/"
 
-  # doing 'Installing Douglas theme'; 
-  # VSCODE_EXTENSIONS="$HOME/.vscode/extensions"
-
-  # echo ""
-
-  # if [ -d "$VSCODE_EXTENSIONS/douglas" ]; then
-  # echo -e $YELLOW"Warning ========>$RESET 'douglas theme already in '$VSCODE_EXTENSIONS'. Updating... "
-
-
-  #  (cd "$VSCODE_EXTENSIONS/douglas"; git pull;);
-  # else
-  #   echo -e $GREEN"Doing ========>$RESET Cloning 'https://github.com/dwkns/douglas.git' into '$VSCODE_EXTENSIONS' " 
-  #   (cd "$VSCODE_EXTENSIONS"; git clone https://github.com/dwkns/douglas.git;);  
-  #   echo ""
-  # fi
-
-  # echo ""
+  
 }
 
 # backup current system files
@@ -66,11 +49,6 @@ bsys () {
   doing 'Backing up system config files'; 
   # (command) runs this command without chaning directory 
   (cd "$HOME/.system-config/"; doing 'Backing up system'; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  # doing "THis slkdfhskdlhfskdjhfdsjkhfkdjs"
-  doing 'Backing up VS code extensions'; 
-  # (cd "$HOME/.vscode/extensions/douglas"; git status; git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  # (cd "$HOME/.vscode/extensions/douglas/";doing 'Backing up Douglas'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
-  # (cd "$HOME/.vscode/extensions/njk/";doing 'Backing up njk'; git status;  git add -A; git commit -m 'Updated Config Files'; git push --all;);
   echo ""
   doing 'Done Backing up'; 
 }
@@ -121,8 +99,6 @@ kp () {
   lsof -t -i tcp:$1 | xargs kill -9;
 }
 
-
-
 rps () {
   doing 'Creating Ruby skeleton project';
   . $HOME/.system-config/scripts/ruby-project-skeleton.sh $1;
@@ -170,21 +146,20 @@ etw () {
 ###############################################################################
 
 ############### General ################
-alias sr="doing 'Doing .bin/dev'; ./bin/dev"  
-alias nd="doing 'Doing netlify dev'; netlify dev"  
+# alias sr="doing 'Running .bin/dev'; ./bin/dev"  
+# alias nd="doing 'Running netlify dev'; netlify dev"  
 
-alias nd="doing 'Doing netlify dev'; netlify dev"  
+# alias nd="doing 'Running netlify dev'; netlify dev"  
 alias upkg="doing 'Update package.json dependencies'; npx npm-check-updates -u"  
 alias lpkg="doing 'List package.json updates'; npx npm-check-updates "  
 
-
 alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
-alias dev="doing 'listing dev projects'; cd ~/dev; ls -l"
+alias dev="doing 'Listing dev projects'; cd ~/dev; ls -l"
 alias kd="doing 'Killing the Dock'; killall Dock"                                
 alias kf="doing 'Killing the Finder'; killall Finder"  
-alias dt="doing 'changing to Desktop'; cd ~/Desktop"    
-alias dev="doing 'listing dev projects'; cd ~/dev; ls -l" 
+alias dt="doing 'Changing to Desktop'; cd ~/Desktop"    
+alias dev="doing 'Listing dev projects'; cd ~/dev; ls -l" 
 alias cd..="cd .."    # because I always miss the space. 
 alias ls="ls -lha"    # because the normal way is dumb   h- human readable sizes. 
 alias esys="warn 'dotfiles edited in .system-config are overidden when you do a bsys'; doing 'Editing system files'; cd $HOME/.system-config; code .;"  
@@ -193,32 +168,23 @@ alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;"
 alias hide="doing 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
 alias show="doing 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
 
-alias apply-gitignore="doing 'applying gitignore'; !git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached"
+alias apply-gitignore="doing 'Applying gitignore'; !git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached"
 
 ############### Code editors ################
-alias code="doing 'opening current folder in VSCode'; code ." 
-alias c="code ."  
-
+alias code="doing 'Opening current folder in VSCode'; code ." 
 
 
 ############### Brew ################
-alias bu="doing 'doing a brew update && brew upgrade'; brew update && brew upgrade"   
-
+alias bu="doing 'Doing a brew update && brew upgrade'; brew update && brew upgrade"   
 
 ############### Git ################
-alias ga="doing 'Doing git add -A'; git add -A"                                   # git add all
-alias gc="doing 'Doing git commit'; git commit"                                   # git commit
+alias ga="doing 'Running git add -A'; git add -A"                   # git add all
+alias gc="doing 'Running git commit'; git commit"                   # git commit
+alias gs="git status"                                               # git status
+alias gp="doing 'Pushing current branch'; git push -u origin HEAD"  # git push all
+ 
 
-alias gs="git status"                                                             # git status
-alias gb="doing 'Doing git branch'; git branch"                                   # git branch                     # git push all
-alias gp="doing 'Pushing current branch'; git push -u origin HEAD"                         # git push all
-alias gco="doing 'Doing git checkout'; git checkout"     
-
-alias vgh="doing 'View repo on Github'; gh repo view --web"     
-
-
-
-
+  
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
 alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
@@ -228,31 +194,6 @@ alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup
 # Also, clear Apple’s System Logs to improve shell startup speed.
 # Finally, clear download history from quarantine. https://mths.be/bum
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
-
-
-
-
-
-# # Detect which `ls` flavor is in use
-# if ls --color > /dev/null 2>&1; then # GNU `ls`
-# 	colorflag="--color"
-# 	export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
-# else # macOS `ls`
-# 	colorflag="-G"
-# 	export LSCOLORS='BxBxhxDxfxhxhxhxhxcxcx'
-# fi
-
-# # List all files colorized in long format
-# alias l="ls -lF ${colorflag}"
-
-# # List all files colorized in long format, excluding . and ..
-# alias la="ls -lAF ${colorflag}"
-
-# # List only directories
-# alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
-
-# # Always use color output for `ls`
-# alias ls="command ls ${colorflag}"
 
 
 ###############################################################################
@@ -268,18 +209,22 @@ setopt PROMPT_SUBST
 PROMPT='%{$fg[yellow]%}${PWD/#$HOME/~}${vcs_info_msg_0_}%{$reset_color%}$NEWLINE$ '
 
 
-
 ###############################################################################
-#                                                                             #
 #  Ensure we only CD to Desktop if it is not VS Code                          #
 ###############################################################################
+# echo "Checking if VS Code opened shell"
+# echo `ps -o comm= -p $PPID`
+WHAT_OPENED_SHELL=`ps -o comm= -p $PPID`
+# echo $WHAT_OPENED_SHELL
 
-WHAT_OPENED_SHELL==`ps -o comm= -p $PPID`
-THIS='Visual Studio Code.app'
-if [[ "$WHAT_OPENED_SHELL" != *"$THIS"* ]];
- then
-  # echo "VS Code did not open shell. CD to Desktop"
-  cd ~/Desktop
+
+if [[ "$WHAT_OPENED_SHELL" == *"Visual Studio Code.app"* ]]; then
+  #  echo "Visual Studio Code.app opened the shell"
+elif [[ "$WHAT_OPENED_SHELL" == *"Cursor Helper: terminal pty-host"* ]]; then
+  #  echo "Cursor Helper: terminal pty-host opened the shell"
+else
+  #  echo "Normal shell"
+   cd ~/Desktop
 fi
 
 
@@ -308,13 +253,3 @@ eval "$(rbenv init - zsh)"
 
 
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
-
-# Sometimes we need to skip the npm/yarn version of chromium
-# And force using the system one. 
-# Install chromium 
-
-# brew install chromium --no-quarantine
-
-# skip the download and use the local one instead. 
-export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-export PUPPETEER_EXECUTABLE_PATH=`which chromium`
