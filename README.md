@@ -14,17 +14,12 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```` 
 
-### Tap alternates 
-
-````bash
-$ brew tap homebrew/cask && brew tap homebrew/cask-versions && brew tap homebrew/cask-fonts && brew tap homebrew/services && brew tap heroku/brew
-````
 
 ### Install useful brew apps
 Some of these apps are used in the install script so we install them first.
 Definately need these:
 ````bash
-$ brew install iterm2 openssl git node@14 mas rbenv pyenv ruby-build gh jq jo svn yarn netlify-cli coreutils
+$ brew install node iterm2 openssl git mas rbenv pyenv ruby-build gh jq jo svn yarn netlify-cli coreutils
 ````
 
 ### Install system config & dot files
