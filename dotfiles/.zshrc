@@ -248,8 +248,8 @@ export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 export PATH="/opt/homebrew/opt/python@3.9:$PATH"
 
 # # make sure we use the Homebrew rbenv (and Ruby)
-# export PATH="$HOME/.rbenv/bin:$PATH"
-# eval "$(rbenv init - zsh)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - zsh)"
 
 
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
