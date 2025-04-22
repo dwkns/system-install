@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 . $HOME/.system-config/scripts/set-up-projects.sh $1
 
-echo -n "Enable ESLint? ( y/n > default - y) : "
-read -t 3 ESLINT
-ESLINT=${ESLINT:-Y}
+# echo -n "Enable ESLint? ( y/n > default - y) : "
+# read -t 3 ESLINT
+# ESLINT=${ESLINT:-Y}
 
-echo -n "Enable Jest? ( y/n > default - y) : "
-read -t 3 TESTING
-TESTING=${TESTING:-Y}
+# echo -n "Enable Jest? ( y/n > default - n) : "
+# read -t 3 TESTING
+# TESTING=${TESTING:-Y}
 
 # echo -n "Use Typescript? ( y/n > default - n) : "
 # read -t 3 TYPESCRIPT
@@ -73,31 +73,31 @@ EOL
 
 
 
-if [ "$TESTING" = "Y" ] || [ "$TESTING" = "y" ]; then
+# if [ "$TESTING" = "Y" ] || [ "$TESTING" = "y" ]; then
    yarn add jest --dev
 
   tmp=$(mktemp)
   JQVAR=".scripts |= .+ { \"test\": \"NODE_OPTIONS='--experimental-vm-modules --no-warnings' npx jest --verbose\" }"
   jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
-fi
+# fi
 
 
 
 
-if [ "$ESLINT" = "Y" ] || [ "$ESLINT" = "y" ]; then
-  yarn add @babel/core @babel/eslint-parser @babel/preset-react @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-airbnb eslint-config-airbnb-typescript eslint-config-prettier eslint-config-wesbos eslint-plugin-html eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-prettier eslint-plugin-react eslint-plugin-react-hooks prettier typescript --dev
+# if [ "$ESLINT" = "Y" ] || [ "$ESLINT" = "y" ]; then
+#   yarn add @babel/core @babel/eslint-parser @babel/preset-react @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-airbnb eslint-config-airbnb-typescript eslint-config-prettier eslint-config-wesbos eslint-plugin-html eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-prettier eslint-plugin-react eslint-plugin-react-hooks prettier typescript --dev
 
-  # Add lint config to package.json
-  tmp=$(mktemp)
-  JQVAR=".eslintConfig |= .+ { \"extends\": [ \"wesbos\" ] }"
-  jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
+#   # Add lint config to package.json
+#   tmp=$(mktemp)
+#   JQVAR=".eslintConfig |= .+ { \"extends\": [ \"wesbos\" ] }"
+#   jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
-else
-  cat >.eslintignore <<'EOL'
-**/*
-EOL
-fi
+# else
+#   cat >.eslintignore <<'EOL'
+# **/*
+# EOL
+# fi
 
 
 cat >.gitignore <<'EOL'
