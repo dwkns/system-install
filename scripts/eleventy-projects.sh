@@ -63,6 +63,6 @@ git add .
 git commit -m "Initial commit"
 
 # doing 'running yarn'
-yarn install
+npm i
 
 code .
