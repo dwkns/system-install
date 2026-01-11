@@ -152,7 +152,7 @@ etw () {
 # alias nd="doing 'Running netlify dev'; netlify dev"  
 alias upkg="doing 'Update package.json dependencies'; npx npm-check-updates -u"  
 alias lpkg="doing 'List package.json updates'; npx npm-check-updates "  
-
+alias nd="doing 'netlify dev'; netlify dev"  
 alias ep="doing 'Editing zsh profile'; code ~/.zshrc"  
 alias rp="doing 'Reloading .zshrc'; source ~/.zshrc" 
 alias dev="doing 'Listing dev projects'; cd ~/dev; ls -l"
@@ -181,6 +181,7 @@ alias bu="doing 'Doing a brew update && brew upgrade'; brew update && brew upgra
 alias ga="doing 'Running git add -A'; git add -A"                   # git add all
 alias gc="doing 'Running git commit'; git commit"                   # git commit
 alias gs="git status"                                               # git status
+alias gl="git log --oneline"                                               # git status
 alias gp="doing 'Pushing current branch'; git push -u origin HEAD"  # git push all
  
 
@@ -241,15 +242,23 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 
 ############### path ################ 
-# add node to path
-export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 
-# make sure we use the Homebrew Python
-export PATH="/opt/homebrew/opt/python@3.9:$PATH"
+
+n() {
+  doing "Running npm script: $1";
+  npm run "$1" || {
+    echo "Failed to run npm script: $1";
+    return 1;
+  }
+}
+
+alias python=python3
+alias pip=pip3
 
 # # make sure we use the Homebrew rbenv (and Ruby)
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"

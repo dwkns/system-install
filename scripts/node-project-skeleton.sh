@@ -19,13 +19,12 @@ success "Project $PROJECTNAME will be created!"
 mkdir -p $PROJECTNAME
 cd "$PROJECTNAME"
 
-# ######## Init the project with auto-defaults, add Parcel.
+# ######## Init the project with auto-defaults
+
 yarn init -y
+yarn add -D vitest
 
 ######## Do some processing of package.json to add build scrips & title.
-
-# change the name property of package.json (need to save temp file first)
-
 # change the name property of package.json (need to save temp file first)
 tmp=$(mktemp)
 JQVAR=".name = \"$PROJECTNAME\""
@@ -37,7 +36,7 @@ JQVAR=".author = \"$USER\""
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
 tmp=$(mktemp)
-JQVAR=".main = \"src/index.js\""
+JQVAR=".main = \"app/index.js\""
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
 tmp=$(mktemp)
@@ -46,58 +45,41 @@ jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
 # add some build scripts to package.json
 tmp=$(mktemp)
-JQVAR=".scripts |= .+ { \"start\": \"node src/index.js\" }"
+JQVAR=".scripts |= .+ { \"start\": \"node app/index.js\" }"
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
+
+
+tmp=$(mktemp)
+JQVAR=".scripts |= .+ { \"dev\": \"npm run start\" }"
+jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
+
+
+tmp=$(mktemp)
+JQVAR=".scripts |= .+ { \"test\": \"vitest run\" }"
+jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
+
 
 cat >README.md <<'EOL'
 ##Read Me for $PROJECTNAME
 EOL
 
 ######## Add source folder and files.
-mkdir 'src'
+mkdir 'app'
 
-cat >src/index.js <<'EOL'
+cat >app/index.js <<'EOL'
 export const sum = (a, b) => a + b;
 console.log(`1 + 2 is: ${sum(1, 2)}`);
-
 EOL
 
-cat >src/index.test.js <<'EOL'
-import { sum } from './index';
+cat >app/index.test.js <<'EOL'
+import { expect, test } from 'vitest'
+import { sum } from './index.js'
 
 test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3);
-});
-
+  expect(sum(1, 2)).toBe(3)
+})
 EOL
 
-
-
-# if [ "$TESTING" = "Y" ] || [ "$TESTING" = "y" ]; then
-   yarn add jest --dev
-
-  tmp=$(mktemp)
-  JQVAR=".scripts |= .+ { \"test\": \"NODE_OPTIONS='--experimental-vm-modules --no-warnings' npx jest --verbose\" }"
-  jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-# fi
-
-
-
-
-# if [ "$ESLINT" = "Y" ] || [ "$ESLINT" = "y" ]; then
-#   yarn add @babel/core @babel/eslint-parser @babel/preset-react @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-airbnb eslint-config-airbnb-typescript eslint-config-prettier eslint-config-wesbos eslint-plugin-html eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-prettier eslint-plugin-react eslint-plugin-react-hooks prettier typescript --dev
-
-#   # Add lint config to package.json
-#   tmp=$(mktemp)
-#   JQVAR=".eslintConfig |= .+ { \"extends\": [ \"wesbos\" ] }"
-#   jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-# else
-#   cat >.eslintignore <<'EOL'
-# **/*
-# EOL
-# fi
 
 
 cat >.gitignore <<'EOL'
