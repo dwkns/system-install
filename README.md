@@ -33,7 +33,7 @@ $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/i
 ### Install apps  
 Definately 
 ````bash
-$ brew  install --cask sublime-text dropbox typora iina google-chrome firefox-developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle
+$ brew  install --cask sublime-text dropbox typora iina google-chrome firefox-developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle soulver authy cursor discord zoom
 ````
 ````bash
 $ brew install chromium --no-quarantine
@@ -81,7 +81,7 @@ $ source ~/.system-config/scripts/app-store-apps.sh
 [Snap Scan](http://scansnap.fujitsu.com/global/dl/mac-1100-s1300i.html)
 
 
-
+Parallels
 
 ### Syncing problems with iCloud
 https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
