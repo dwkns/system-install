@@ -19,7 +19,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 Some of these apps are used in the install script so we install them first.
 Definately need these:
 ````bash
-$ brew install node iterm2 openssl git mas rbenv pyenv ruby-build gh jq jo svn yarn netlify-cli coreutils
+$ brew install iterm2 openssl git mas rbenv gh jq jo node netlify-cli coreutils
 ````
 
 ### Install system config & dot files
@@ -29,20 +29,11 @@ $ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/i
 ````
 
 
-### Install useful global node apps
-Some of these apps are used in the install script so we install them first.
-Definately need these:
-```` 
-$ npm install -g local-web-server 
-````
-
-
-
 
 ### Install apps  
 Definately 
 ````bash
-$ brew  install --cask sublime-text dropbox typora iina google-chrome firefox-developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch grammarly postman font-fira-code
+$ brew  install --cask sublime-text dropbox typora iina google-chrome firefox-developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle
 ````
 ````bash
 $ brew install chromium --no-quarantine
@@ -75,7 +66,7 @@ pyenv install 3.7.3
 ### Install some Ruby Gems
 
 ````bash
-$ gem install bundler rails htmlbeautifier 
+$ gem install bundler rails  
 ````
 
 
@@ -102,7 +93,7 @@ $ brew install  python heroku postgresql redis
 ````
 And these
 ````bash
-$ brew install --cask handbrake transmission charles sequel-pro microsoft-office grammarly postbox loom
+$ brew install --cask handbrake transmission charles sequel-pro microsoft-office loom
 ````
 
 
