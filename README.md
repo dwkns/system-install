@@ -33,7 +33,7 @@ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/ins
 ### Install apps  
 Definately 
 ````bash
-brew  install --cask sublime-text dropbox typora iina google-chrome firefox@developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle soulver cursor discord zoom
+brew  install --cask sublime-text dropbox typora iina google-chrome firefox@developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle soulver cursor discord zoom whatsapp handbrake transmission charles  microsoft-office loom
 ````
 ````bash
 brew install chromium --no-quarantine
@@ -48,11 +48,11 @@ List all available versions and choose the one you want to install.
 ````bash
 $ rbenv init          // Initialise rbenv 
 $ rbenv install -l    // List the ruby version available. 
-$ rbenv install 2.7.2 && rbenv global  2.7.2 // Or Whatever ruby version you want
+$ rbenv install 3.4.8 && rbenv global  3.4.8 // Or Whatever ruby version you want
 ````
 So shortcutting...
 ````bash
-$ rbenv init && rbenv install 2.7.2 && rbenv global  2.7.2 
+$ rbenv init && rbenv install 3.4.8 && rbenv global  3.4.8
 ````
 
 ### Initialise pyenv and install a Python version
@@ -91,9 +91,6 @@ https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
 ```` 
 $ brew install  python heroku postgresql redis  
 ````
-And these
-````bash
-$ brew install --cask handbrake transmission charles sequel-pro microsoft-office loom
-````
+
 
 
