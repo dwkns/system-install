@@ -6,7 +6,7 @@ As with all bash scripts **read it** before you run it. And if you don't underst
 ### Install homebrew
 
 ````bash
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ````
 
 ### Install Oh My Zsh
