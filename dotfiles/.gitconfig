@@ -18,5 +18,5 @@ email = dwkns@me.com
 [credential]
 	helper = osxkeychain
 [core]
-	excludesfile = /Users/dazza/.gitignore_global
+	excludesfile = /Users/dwkns/.gitignore_global
   editor = subl -n -w
