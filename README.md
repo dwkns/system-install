@@ -33,7 +33,7 @@ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/ins
 ### Install apps  
 Definately 
 ````bash
-brew  install --cask sublime-text dropbox typora iina google-chrome firefox@developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle soulver cursor discord zoom whatsapp handbrake transmission charles  microsoft-office loom
+brew  install --cask sublime-text dropbox typora iina google-chrome firefox@developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle soulver cursor discord zoom whatsapp handbrake transmission charles  microsoft-office loom nordvpn
 ````
 ````bash
 brew install chromium --no-quarantine
