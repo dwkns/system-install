@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+
+# shellcheck disable=SC1090
+source "$ROOT_DIR/lib/mas.sh"
+
+install_mas_apps

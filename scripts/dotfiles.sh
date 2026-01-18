@@ -1,33 +1,12 @@
-  ROOT_DIR="$HOME/.system-config"
-  
-  DOTFILES=( 
-  ".bash_profile"
-  ".gemrc"
-  ".gitconfig"
-  ".gitignore_global"
-  ".irbrc"
-  ".rspec"
-  ".jsbeautifyrc"
-  ".zshrc"
-  ".macos"
-  ".background_colour.png"
-  ".rubucop.yml"
-)  
+ROOT_DIR="$HOME/.system-config"
+
+# shellcheck disable=SC1090
+source "$ROOT_DIR/lib/dotfiles.sh"
 
 installDotFiles () {
-  doing 'Installing dotfiles...';
-  for THISFILE in "${DOTFILES[@]}"
-  do  
-    echo "Installing : $THISFILE"
-    cp -f "$ROOT_DIR/dotfiles/$THISFILE"  "$HOME/$THISFILE"
-  done
+  install_dotfiles
 }
 
 backupDotFiles () {
-  doing 'Backing up dotfiles...';
-  echo;
-  for i in "${DOTFILES[@]}"
-  do  
-     cp -rf "$HOME/$i" "$SYS_FILES_ROOT/dotfiles/$i";
-  done
+  backup_dotfiles "$ROOT_DIR/dotfiles"
 }

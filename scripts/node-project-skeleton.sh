@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
-. $HOME/.system-config/scripts/set-up-projects.sh $1
+set -euo pipefail
+. "$HOME/.system-config/scripts/set-up-projects.sh" "$1"
 
 # echo -n "Enable ESLint? ( y/n > default - y) : "
 # read -t 3 ESLINT
@@ -16,16 +17,26 @@
 success "Project $PROJECTNAME will be created!"
 
 ######## Create the folder
-mkdir -p $PROJECTNAME
+mkdir -p "$PROJECTNAME"
 cd "$PROJECTNAME"
 
 # ######## Init the project with auto-defaults
 
-yarn init -y
-yarn add -D vitest
+if command -v yarn >/dev/null 2>&1; then
+  yarn init -y
+  yarn add -D vitest
+else
+  npm init -y
+  npm install -D vitest
+fi
 
 ######## Do some processing of package.json to add build scrips & title.
 # change the name property of package.json (need to save temp file first)
+if ! command -v jq >/dev/null 2>&1; then
+  error "jq is required to edit package.json"
+  exit 1
+fi
+
 tmp=$(mktemp)
 JQVAR=".name = \"$PROJECTNAME\""
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
@@ -59,8 +70,8 @@ JQVAR=".scripts |= .+ { \"test\": \"vitest run\" }"
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
 
 
-cat >README.md <<'EOL'
-##Read Me for $PROJECTNAME
+cat >README.md <<EOL
+## Read Me for $PROJECTNAME
 EOL
 
 ######## Add source folder and files.
@@ -88,7 +99,7 @@ node_modules
 EOL
 
 ######## Initialize git.
-rm -rf .git #  remove the previous git files.
+rm -rf .git # remove previous git files.
 git init
 git add .
 git commit -m "Initial commit"

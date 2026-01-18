@@ -1,99 +1,40 @@
-# System Install
-Highly opinionated config files for Sublime Text 3 and my OS ZSH terminal.
-As with all bash scripts **read it** before you run it. And if you don't understand it. **DON'T RUN IT**.
+## System Install
+Highly opinionated macOS bootstrap + dotfiles repo.  
+Read scripts before running. If you don’t understand it, don’t run it.
 
-
-### Install homebrew
-
-````bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-````
-
-### Install Oh My Zsh
-```` 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```` 
-
-
-### Install useful brew apps
-Some of these apps are used in the install script so we install them first.
-Definately need these:
-````bash
-brew install iterm2 openssl git mas rbenv gh jq jo node netlify-cli coreutils
-````
-
-### Install system config & dot files
-
-````bash
-bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
-````
-
-
-
-### Install apps  
-Definately 
-````bash
-brew  install --cask sublime-text dropbox typora iina google-chrome firefox@developer-edition firefox notion visual-studio-code 1Password slack soulver figma sketch postman font-fira-code omnigraffle soulver cursor discord zoom
-````
-````bash
-brew install chromium --no-quarantine
-````
-
-<!-- Loom? -->
-<!-- sizzy google-drive-file-stream omnigraffle -->
-
-### Initialise rbenv and install a Ruby version
-List all available versions and choose the one you want to install.
-
-````bash
-$ rbenv init          // Initialise rbenv 
-$ rbenv install -l    // List the ruby version available. 
-$ rbenv install 2.7.2 && rbenv global  2.7.2 // Or Whatever ruby version you want
-````
-So shortcutting...
-````bash
-$ rbenv init && rbenv install 2.7.2 && rbenv global  2.7.2 
-````
-
-### Initialise pyenv and install a Python version
-Shortcutting...
-````bash
-$ pyenv init && pyenv install 3.7.3 && pyenv global  3.7.3
-````
-
-pyenv install 3.7.3
-
-### Install some Ruby Gems
-
-````bash
-$ gem install bundler rails  
-````
-
-
-### Install App Store Apps
+## Quick start
 ```bash
-$ source ~/.system-config/scripts/app-store-apps.sh
+bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/install.sh)
 ```
 
-### Things you'll have to download
-[Elgato Control](https://www.elgato.com/en/gaming/downloads)
+## What this does
+- Installs Homebrew packages from `Brewfile`
+- Installs dotfiles from `dotfiles/`
+- Applies macOS defaults from `dotfiles/.macos`
+- Optionally installs Mac App Store apps via `config/mas-apps.txt`
 
-[Snap Scan](http://scansnap.fujitsu.com/global/dl/mac-1100-s1300i.html)
+## Usage
+```bash
+~/.system-config/bin/bootstrap --yes
+~/.system-config/bin/bootstrap --no-macos
+~/.system-config/bin/bootstrap --mas
+~/.system-config/bin/bootstrap --machine-name "dwkns-mac"
+```
 
+## Backups and restore
+```bash
+~/.system-config/bin/backup
+~/.system-config/bin/restore --from ~/.system-config/backups/YYYYMMDD-HHMMSS
+```
 
-Parallels
+## App Store apps
+```bash
+~/.system-config/bin/mas
+```
 
-### Syncing problems with iCloud
-https://apple.stackexchange.com/questions/349082/icloud-sync-activity-log
+## Dotfiles list
+Dotfiles are controlled by `dotfiles/.dotfiles`. Add/remove entries there.
 
-
-### Probably need these
-```` 
-$ brew install  python heroku postgresql redis  
-````
-And these
-````bash
-$ brew install --cask handbrake transmission charles sequel-pro microsoft-office loom
-````
-
-
+## Extras
+- `~/.system-config/bin/doctor` for system checks
+- `Brewfile` for CLI + app installs

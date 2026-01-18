@@ -708,12 +708,12 @@ setting "Don’t display the annoying prompt when quitting iTerm"
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 
-setting "iTerm2.app : ~/.system-config/system-config-files/ for preferences"
+setting "iTerm2.app : ~/.system-config/config-files for preferences"
 # Specify the preferences directory
-defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.system-config/config-files/"
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$HOME/.system-config/config-files"
 
 setting "Tell iTerm2 to use the custom preferences in the directory"
-defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 
 # ############ CONFIGURE ITERM ############ DO WE NEED THIS?
 # setting "Configure iTerm"

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+TARGET_DIR=""
+
+usage() {
+  cat <<'USAGE'
+Usage: backup [--target DIR]
+Creates a snapshot of dotfiles/config and package lists.
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --target) TARGET_DIR="${2:-}"; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1"; usage; exit 1 ;;
+  esac
+  shift
+done
+
+export ROOT_DIR
+
+# shellcheck disable=SC1090
+source "$ROOT_DIR/lib/common.sh"
+source "$ROOT_DIR/lib/dotfiles.sh"
+
+backup_root="${TARGET_DIR:-$ROOT_DIR/backups/$(timestamp)}"
+ensure_dir "$backup_root"
+
+log "Backing up dotfiles"
+backup_dotfiles "$backup_root/dotfiles"
+
+log "Backing up config-files"
+if [[ -d "$ROOT_DIR/config-files" ]]; then
+  run rsync -a "$ROOT_DIR/config-files/" "$backup_root/config-files/"
+fi
+
+if has_cmd brew; then
+  log "Dumping Brewfile"
+  run brew bundle dump --force --file "$backup_root/Brewfile"
+fi
+
+if has_cmd mas; then
+  log "Saving mas list"
+  run mas list > "$backup_root/mas-list.txt"
+fi
+
+note "Backup complete: $backup_root"
