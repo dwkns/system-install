@@ -144,6 +144,8 @@ commands () {
   doing 'Common commands:'
   note "Kill process on port:$fg[yellow] kp <port>$reset_color"
   note "List starter projects:$fg[yellow] projects $reset_color"
+  note "List aliases from .zshrc:$fg[yellow] lista$reset_color"
+  note "List active aliases:$fg[yellow] list_all_aliases$reset_color"
   echo
   doing 'Common git commands:'
   note "Rename branch:$fg[yellow] git branch -m <old> <new> $reset_color"
@@ -160,6 +162,11 @@ commands () {
 list_aliases_fn () {
   doing "Listing aliases"
   alias | sort
+}
+
+list_zshrc_aliases () {
+  doing "Listing aliases from .zshrc"
+  grep "^alias " "$HOME/.zshrc" | sed 's/^alias //' | sort
 }
 
 funcs () {
@@ -311,7 +318,8 @@ alias gl="__gl"
 alias gp="__gp"
 alias update="__update"
 alias emptytrash="__emptytrash"
-alias lista="list_aliases_fn"
+alias list_all_aliases="list_aliases_fn"
+alias lista="list_zshrc_aliases"
 alias cd..="cd .."
 alias ls="ls -lha"
 
