@@ -1,4 +1,4 @@
-source "$HOME/.system-config/lib/colours.sh"
+source "$HOME/.system-config/scripts/colours.sh"
 
 
 setting "Configuring system"

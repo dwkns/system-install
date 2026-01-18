@@ -1,8 +1,3 @@
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
-
 # CLI tools
 brew "git"
 brew "git-lfs"
@@ -19,18 +14,7 @@ brew "direnv"
 brew "netlify-cli"
 brew "coreutils"
 brew "openssl@3"
-brew "ripgrep"
-brew "fd"
-brew "fzf"
-brew "bat"
-brew "htop"
-brew "tmux"
-brew "zoxide"
-brew "shellcheck"
-brew "shfmt"
-brew "wget"
-brew "tree"
-brew "tldr"
+
 
 # Apps
 cask "iterm2"
@@ -56,5 +40,5 @@ cask "discord"
 cask "zoom"
 
 # Productivity
-cask "raycast"
-cask "rectangle"
+#cask "raycast"
+#cask "rectangle"

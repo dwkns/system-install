@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-. "$HOME/.system-config/scripts/set-up-projects.sh" "$1"
+. "$HOME/.system-config/project-scripts/set-up-projects.sh" "$1"
 
 success "Project $PROJECTNAME will be created!"
 

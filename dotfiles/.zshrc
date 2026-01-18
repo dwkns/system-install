@@ -11,20 +11,27 @@ source "$ZSH/oh-my-zsh.sh"
 #  Define variables
 ###############################################################################
 SYS_FILES_ROOT="$HOME/.system-config"
+SYS_PROJECT_SCRIPTS="$SYS_FILES_ROOT/project-scripts"
 
 ###############################################################################
 #  Helper functions
 ###############################################################################
 has_cmd() { command -v "$1" >/dev/null 2>&1; }
+run_do() {
+  local msg="$1"
+  shift
+  doing "$msg"
+  "$@"
+}
 
 ###############################################################################
 #  Import useful scripts
 ###############################################################################
-if [[ -r "$SYS_FILES_ROOT/scripts/colours.sh" ]]; then
-  source "$SYS_FILES_ROOT/scripts/colours.sh"
+if [[ -r "$SYS_FILES_ROOT/lib/colours.sh" ]]; then
+  source "$SYS_FILES_ROOT/lib/colours.sh"
 fi
-if [[ -r "$SYS_FILES_ROOT/scripts/dotfiles.sh" ]]; then
-  source "$SYS_FILES_ROOT/scripts/dotfiles.sh"
+if [[ -r "$SYS_FILES_ROOT/lib/dotfiles.sh" ]]; then
+  source "$SYS_FILES_ROOT/lib/dotfiles.sh"
 fi
 
 ###############################################################################
@@ -49,14 +56,14 @@ usys () {
   echo
 
   if typeset -f installDotFiles >/dev/null; then
-    installDotFiles
+  installDotFiles
   else
     warn "installDotFiles not found"
   fi
   echo
 
   if [[ -r "$HOME/.macos" ]]; then
-    source "$HOME/.macos"
+  source "$HOME/.macos"
   fi
   echo
 
@@ -68,7 +75,7 @@ usys () {
 
 bsys () {
   if typeset -f backupDotFiles >/dev/null; then
-    backupDotFiles
+  backupDotFiles
   else
     warn "backupDotFiles not found"
   fi
@@ -155,29 +162,29 @@ kp () {
   fi
 }
 
-rps () { doing 'Creating Ruby skeleton project'; . "$HOME/.system-config/scripts/ruby-project-skeleton.sh" "$1"; }
-nps () { doing 'Making new node project skeleton'; . "$HOME/.system-config/scripts/node-project-skeleton.sh" "$1"; }
-bps () { doing 'Making new executable bash file'; . "$HOME/.system-config/scripts/bash-executable-skeleton.sh" "$1"; }
+rps () { doing 'Creating Ruby skeleton project'; . "$SYS_PROJECT_SCRIPTS/ruby-project-skeleton.sh" "$1"; }
+nps () { doing 'Making new node project skeleton'; . "$SYS_PROJECT_SCRIPTS/node-project-skeleton.sh" "$1"; }
+bps () { doing 'Making new executable bash file'; . "$SYS_PROJECT_SCRIPTS/bash-executable-skeleton.sh" "$1"; }
 
 em () {
   doing 'Making new 11ty minimal project (11ty-minimal)'
-  REPO_NAME=https://github.com/dwkns/11ty-minimal.git
-  PROJECT_NAME=$1
-  . "$HOME/.system-config/scripts/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
+    REPO_NAME=https://github.com/dwkns/11ty-minimal.git
+    PROJECT_NAME=$1
+  . "$SYS_PROJECT_SCRIPTS/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
 }
 
 etwm () {
   doing 'Making new 11ty/tailwind minimal project (etw-minimal)'
-  REPO_NAME=https://github.com/dwkns/etw-minimal.git
-  PROJECT_NAME=$1
-  . "$HOME/.system-config/scripts/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
+    REPO_NAME=https://github.com/dwkns/etw-minimal.git
+    PROJECT_NAME=$1
+  . "$SYS_PROJECT_SCRIPTS/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
 }
 
 etw () {
   doing 'Making new 11ty/tailwind basics project (etw-basics)'
-  REPO_NAME="https://github.com/dwkns/etw-basics.git"
-  PROJECT_NAME=$1
-  . "$HOME/.system-config/scripts/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
+    REPO_NAME="https://github.com/dwkns/etw-basics.git"
+    PROJECT_NAME=$1
+  . "$SYS_PROJECT_SCRIPTS/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
 }
 
 mkd () { mkdir -p "$1" && cd "$1"; }
@@ -204,53 +211,56 @@ extract () {
 }
 
 ###############################################################################
-#  Aliases
+#  Aliases & command wrappers
 ###############################################################################
 ############### General ################
-alias upkg="doing 'Update package.json dependencies'; npx npm-check-updates -u"
-alias lpkg="doing 'List package.json updates'; npx npm-check-updates"
-alias nd="doing 'netlify dev'; netlify dev"
-alias ep="doing 'Editing zsh profile'; code ~/.zshrc"
-alias rp="doing 'Reloading .zshrc'; source ~/.zshrc"
-alias dev="doing 'Listing dev projects'; cd ~/dev; ls -l"
-alias kd="doing 'Killing the Dock'; killall Dock"
-alias kf="doing 'Killing the Finder'; killall Finder"
-alias dt="doing 'Changing to Desktop'; cd ~/Desktop"
-alias cd..="cd .."
-alias ls="ls -lha"
-alias esys="warn 'dotfiles edited in .system-config are overridden when you do a bsys'; doing 'Editing system files'; cd $HOME/.system-config; code .;"
-alias cdsys="doing 'Changing to dotfiles directory'; cd $HOME/.system-config;"
-alias sys-bootstrap="doing 'Running system bootstrap'; $HOME/.system-config/bin/bootstrap"
-alias sys-backup="doing 'Running system backup'; $HOME/.system-config/bin/backup"
-alias sys-restore="doing 'Running system restore'; $HOME/.system-config/bin/restore"
-alias sys-doctor="doing 'Running system doctor'; $HOME/.system-config/bin/doctor"
-alias sys-mas="doing 'Installing App Store apps'; $HOME/.system-config/bin/mas"
+upkg () { run_do "Update package.json dependencies" npx npm-check-updates -u; }
+lpkg () { run_do "List package.json updates" npx npm-check-updates; }
+nd () { run_do "netlify dev" netlify dev; }
+ep () { run_do "Editing zsh profile" code ~/.zshrc; }
+rp () { run_do "Reloading .zshrc" source ~/.zshrc; }
+dev () { run_do "Listing dev projects" cd ~/dev && ls -l; }
+kd () { run_do "Killing the Dock" killall Dock; }
+kf () { run_do "Killing the Finder" killall Finder; }
+dt () { run_do "Changing to Desktop" cd ~/Desktop; }
+esys () { warn "dotfiles edited in .system-config are overridden when you do a bsys"; run_do "Editing system files" cd "$HOME/.system-config" && code .; }
+cdsys () { run_do "Changing to dotfiles directory" cd "$HOME/.system-config"; }
+sys-bootstrap () { run_do "Running system bootstrap" "$HOME/.system-config/bin/bootstrap"; }
+sys-backup () { run_do "Running system backup" "$HOME/.system-config/bin/backup"; }
+sys-restore () { run_do "Running system restore" "$HOME/.system-config/bin/restore"; }
+sys-doctor () { run_do "Running system doctor" "$HOME/.system-config/bin/doctor"; }
+sys-mas () { run_do "Installing App Store apps" "$HOME/.system-config/bin/mas"; }
+list-aliases () { aliases; }
 
-alias hide="doing 'Showing invisible files in finder'; defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app"
-alias show="doing 'Hiding invisible files in the finder'; defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app"
-
-alias apply-gitignore="doing 'Applying gitignore'; git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached"
+hide () { run_do "Showing invisible files in finder" defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app; }
+show () { run_do "Hiding invisible files in the finder" defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app; }
+apply-gitignore () { run_do "Applying gitignore" git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached; }
 
 ############### Code editors ################
-alias c.="code ."
+c. () { run_do "Opening current folder in VSCode" code .; }
 
 ############### Brew ################
-alias bu="doing 'Doing a brew update && brew upgrade'; brew update && brew upgrade"
+bu () { run_do "Doing a brew update && brew upgrade" brew update && brew upgrade; }
 
 ############### Git ################
-alias ga="doing 'Running git add -A'; git add -A"
-alias gc="doing 'Running git commit'; git commit"
-alias gs="git status"
-alias gl="git log --oneline"
-alias gp="doing 'Pushing current branch'; git push -u origin HEAD"
+ga () { run_do "Running git add -A" git add -A; }
+gc () { run_do "Running git commit" git commit; }
+gs () { run_do "git status" git status; }
+gl () { run_do "git log --oneline" git log --oneline; }
+gp () { run_do "Pushing current branch" git push -u origin HEAD; }
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
+update () { run_do "Updating system + package managers" sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup; }
 
 # Empty the Trash on all mounted volumes and the main HDD.
 # Also, clear Apple’s System Logs to improve shell startup speed.
 # Finally, clear download history from quarantine. https://mths.be/bum
-alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+emptytrash () { run_do "Emptying trash + logs" sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'; }
+
+alias cd..="cd .."
+alias ls="ls -lha"
+alias aliases="list-aliases"
+alias la="list-aliases"
 
 ###############################################################################
 #  Prompt
@@ -274,17 +284,17 @@ fi
 ###############################################################################
 #  Exports
 ###############################################################################
-############### System wide editor ################
+############### System wide editor ################ 
 if has_cmd code; then
-  export EDITOR='code -w'
+export EDITOR='code -w'
 else
   export EDITOR='vi'
 fi
 
 ############### install casks in /Applications ################
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
 
-############### path ################
+############### path ################ 
 typeset -U path PATH
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
