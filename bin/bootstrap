@@ -3,7 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
-ASSUME_YES=0
+ASSUME_YES=1
 DRY_RUN=0
 DO_BREW=1
 DO_DOTFILES=1

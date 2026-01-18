@@ -3,9 +3,9 @@
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 
 # Load colours if available (works in bash too)
-if [[ -r "$ROOT_DIR/scripts/colours.sh" ]]; then
+if [[ -r "$ROOT_DIR/lib/colours.sh" ]]; then
   # shellcheck disable=SC1090
-  source "$ROOT_DIR/scripts/colours.sh"
+  source "$ROOT_DIR/lib/colours.sh"
 fi
 
 has_cmd() { command -v "$1" >/dev/null 2>&1; }
