@@ -330,15 +330,42 @@ fi
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"  
 
 ############### path ################ 
+# Ensure system paths are always present before PATH modifications
+# Initialize PATH from scratch with system paths first
+if [[ -z "${PATH:-}" ]] || [[ "$PATH" != *"/bin"* ]]; then
+  export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+fi
+
+# Make PATH unique while preserving system paths
 typeset -U path PATH
+path=(
+  /usr/local/bin
+  /usr/bin
+  /bin
+  /usr/sbin
+  /sbin
+  $path
+)
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
+  # Ensure system paths remain after Homebrew modifies PATH
+  for sys_path in /usr/local/bin /usr/bin /bin /usr/sbin /sbin; do
+    if [[ ":$PATH:" != *":$sys_path:"* ]]; then
+      export PATH="$sys_path:$PATH"
+    fi
+  done
 fi
 
 if has_cmd rbenv; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init - zsh)"
+  # Ensure system paths remain after rbenv modifies PATH
+  for sys_path in /usr/local/bin /usr/bin /bin /usr/sbin /sbin; do
+    if [[ ":$PATH:" != *":$sys_path:"* ]]; then
+      export PATH="$sys_path:$PATH"
+    fi
+  done
 fi
 
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
