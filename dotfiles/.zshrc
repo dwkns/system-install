@@ -25,6 +25,13 @@ run_do() {
 }
 
 ###############################################################################
+#  Prevent alias/function name collisions
+###############################################################################
+for _name in ga gc gs gl gp aliases; do
+  unalias "$_name" 2>/dev/null || true
+done
+
+###############################################################################
 #  Import useful scripts
 ###############################################################################
 if [[ -r "$SYS_FILES_ROOT/lib/colours.sh" ]]; then
@@ -132,7 +139,7 @@ commands () {
   echo
 }
 
-aliases () {
+list_aliases_fn () {
   doing "Listing aliases"
   alias | sort
 }
@@ -214,53 +221,81 @@ extract () {
 #  Aliases & command wrappers
 ###############################################################################
 ############### General ################
-upkg () { run_do "Update package.json dependencies" npx npm-check-updates -u; }
-lpkg () { run_do "List package.json updates" npx npm-check-updates; }
-nd () { run_do "netlify dev" netlify dev; }
-ep () { run_do "Editing zsh profile" code ~/.zshrc; }
-rp () { run_do "Reloading .zshrc" source ~/.zshrc; }
-dev () { run_do "Listing dev projects" cd ~/dev && ls -l; }
-kd () { run_do "Killing the Dock" killall Dock; }
-kf () { run_do "Killing the Finder" killall Finder; }
-dt () { run_do "Changing to Desktop" cd ~/Desktop; }
-esys () { warn "dotfiles edited in .system-config are overridden when you do a bsys"; run_do "Editing system files" cd "$HOME/.system-config" && code .; }
-cdsys () { run_do "Changing to dotfiles directory" cd "$HOME/.system-config"; }
-sys-bootstrap () { run_do "Running system bootstrap" "$HOME/.system-config/bin/bootstrap"; }
-sys-backup () { run_do "Running system backup" "$HOME/.system-config/bin/backup"; }
-sys-restore () { run_do "Running system restore" "$HOME/.system-config/bin/restore"; }
-sys-doctor () { run_do "Running system doctor" "$HOME/.system-config/bin/doctor"; }
-sys-mas () { run_do "Installing App Store apps" "$HOME/.system-config/bin/mas"; }
-list-aliases () { aliases; }
+__upkg () { run_do "Update package.json dependencies" npx npm-check-updates -u; }
+__lpkg () { run_do "List package.json updates" npx npm-check-updates; }
+__nd () { run_do "netlify dev" netlify dev; }
+__ep () { run_do "Editing zsh profile" code ~/.zshrc; }
+__rp () { run_do "Reloading .zshrc" source ~/.zshrc; }
+__dev () { run_do "Listing dev projects" cd ~/dev && ls -l; }
+__kd () { run_do "Killing the Dock" killall Dock; }
+__kf () { run_do "Killing the Finder" killall Finder; }
+__dt () { run_do "Changing to Desktop" cd ~/Desktop; }
+__esys () { warn "dotfiles edited in .system-config are overridden when you do a bsys"; run_do "Editing system files" cd "$HOME/.system-config" && code .; }
+__cdsys () { run_do "Changing to dotfiles directory" cd "$HOME/.system-config"; }
+__sys_bootstrap () { run_do "Running system bootstrap" "$HOME/.system-config/bin/bootstrap"; }
+__sys_backup () { run_do "Running system backup" "$HOME/.system-config/bin/backup"; }
+__sys_restore () { run_do "Running system restore" "$HOME/.system-config/bin/restore"; }
+__sys_doctor () { run_do "Running system doctor" "$HOME/.system-config/bin/doctor"; }
+__sys_mas () { run_do "Installing App Store apps" "$HOME/.system-config/bin/mas"; }
 
-hide () { run_do "Showing invisible files in finder" defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app; }
-show () { run_do "Hiding invisible files in the finder" defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app; }
-apply-gitignore () { run_do "Applying gitignore" git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached; }
+__hide () { run_do "Showing invisible files in finder" defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app; }
+__show () { run_do "Hiding invisible files in the finder" defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app; }
+__apply_gitignore () { run_do "Applying gitignore" git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached; }
 
 ############### Code editors ################
-c. () { run_do "Opening current folder in VSCode" code .; }
+__code_here () { run_do "Opening current folder in VSCode" code .; }
 
 ############### Brew ################
-bu () { run_do "Doing a brew update && brew upgrade" brew update && brew upgrade; }
+__bu () { run_do "Doing a brew update && brew upgrade" brew update && brew upgrade; }
 
 ############### Git ################
-ga () { run_do "Running git add -A" git add -A; }
-gc () { run_do "Running git commit" git commit; }
-gs () { run_do "git status" git status; }
-gl () { run_do "git log --oneline" git log --oneline; }
-gp () { run_do "Pushing current branch" git push -u origin HEAD; }
+__ga () { run_do "Running git add -A" git add -A; }
+__gc () { run_do "Running git commit" git commit; }
+__gs () { run_do "git status" git status; }
+__gl () { run_do "git log --oneline" git log --oneline; }
+__gp () { run_do "Pushing current branch" git push -u origin HEAD; }
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-update () { run_do "Updating system + package managers" sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup; }
+__update () { run_do "Updating system + package managers" sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup; }
 
 # Empty the Trash on all mounted volumes and the main HDD.
 # Also, clear Apple’s System Logs to improve shell startup speed.
 # Finally, clear download history from quarantine. https://mths.be/bum
-emptytrash () { run_do "Emptying trash + logs" sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'; }
+__emptytrash () { run_do "Emptying trash + logs" sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'; }
 
+list_aliases () { alias | sort; }
+
+alias upkg="__upkg"
+alias lpkg="__lpkg"
+alias nd="__nd"
+alias ep="__ep"
+alias rp="__rp"
+alias dev="__dev"
+alias kd="__kd"
+alias kf="__kf"
+alias dt="__dt"
+alias esys="__esys"
+alias cdsys="__cdsys"
+alias sys-bootstrap="__sys_bootstrap"
+alias sys-backup="__sys_backup"
+alias sys-restore="__sys_restore"
+alias sys-doctor="__sys_doctor"
+alias sys-mas="__sys_mas"
+alias hide="__hide"
+alias show="__show"
+alias apply-gitignore="__apply_gitignore"
+alias c.="__code_here"
+alias bu="__bu"
+alias ga="__ga"
+alias gc="__gc"
+alias gs="__gs"
+alias gl="__gl"
+alias gp="__gp"
+alias update="__update"
+alias emptytrash="__emptytrash"
+alias lista="list_aliases_fn"
 alias cd..="cd .."
 alias ls="ls -lha"
-alias aliases="list-aliases"
-alias la="list-aliases"
 
 ###############################################################################
 #  Prompt
