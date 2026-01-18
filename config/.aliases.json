@@ -1,0 +1,203 @@
+{
+  "aliases": [
+    {
+      "name": "upkg",
+      "description": "Update package.json dependencies",
+      "command": "npx npm-check-updates -u",
+      "category": "general"
+    },
+    {
+      "name": "lpkg",
+      "description": "List package.json updates",
+      "command": "npx npm-check-updates",
+      "category": "general"
+    },
+    {
+      "name": "nd",
+      "description": "Run netlify dev",
+      "command": "netlify dev",
+      "category": "general"
+    },
+    {
+      "name": "update",
+      "description": "Update system + package managers",
+      "command": "sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup",
+      "category": "general"
+    },
+    {
+      "name": "emptytrash",
+      "description": "Empty trash + logs",
+      "command": "sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'",
+      "category": "general"
+    },
+    {
+      "name": "apply-gitignore",
+      "description": "Apply gitignore rules",
+      "command": "git ls-files -ci --exclude-standard -z | xargs -0 git rm --cached",
+      "category": "general"
+    },
+    {
+      "name": "ep",
+      "description": "Edit zsh profile",
+      "command": "code ~/.zshrc",
+      "category": "general"
+    },
+    {
+      "name": "rp",
+      "description": "Reload .zshrc",
+      "command": "source ~/.zshrc",
+      "category": "general"
+    },
+    {
+      "name": "up",
+      "description": "Update .zshrc from repo",
+      "command": "cp \"$HOME/.system-config/dotfiles/.zshrc\" \"$HOME/.zshrc\" && source \"$HOME/.zshrc\"",
+      "category": "general"
+    },
+    {
+      "name": "dev",
+      "description": "List dev projects",
+      "command": "cd ~/dev && ls -l",
+      "category": "general"
+    },
+    {
+      "name": "dt",
+      "description": "Change to Desktop",
+      "command": "cd ~/Desktop",
+      "category": "navigation"
+    },
+    {
+      "name": "cd..",
+      "description": "Go up one directory",
+      "command": "cd ..",
+      "category": "navigation"
+    },
+    {
+      "name": "ls",
+      "description": "List files with details",
+      "command": "ls -lha",
+      "category": "navigation"
+    },
+    {
+      "name": "kd",
+      "description": "Kill the Dock",
+      "command": "killall Dock",
+      "category": "system"
+    },
+    {
+      "name": "kf",
+      "description": "Kill the Finder",
+      "command": "killall Finder",
+      "category": "system"
+    },
+    {
+      "name": "hide",
+      "description": "Show invisible files in Finder",
+      "command": "defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app",
+      "category": "system"
+    },
+    {
+      "name": "show",
+      "description": "Hide invisible files in Finder",
+      "command": "defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app",
+      "category": "system"
+    },
+    {
+      "name": "esys",
+      "description": "Edit system config files",
+      "command": "cd \"$HOME/.system-config\" && code .",
+      "category": "system",
+      "warning": "dotfiles edited in .system-config are overridden when you do a bsys"
+    },
+    {
+      "name": "cdsys",
+      "description": "Change to system config directory",
+      "command": "cd \"$HOME/.system-config\"",
+      "category": "navigation"
+    },
+    {
+      "name": "sys-bootstrap",
+      "description": "Run system bootstrap",
+      "command": "$HOME/.system-config/bin/bootstrap",
+      "category": "system"
+    },
+    {
+      "name": "sys-backup",
+      "description": "Run system backup",
+      "command": "$HOME/.system-config/bin/backup",
+      "category": "system"
+    },
+    {
+      "name": "sys-restore",
+      "description": "Run system restore",
+      "command": "$HOME/.system-config/bin/restore",
+      "category": "system"
+    },
+    {
+      "name": "sys-doctor",
+      "description": "Run system doctor",
+      "command": "$HOME/.system-config/bin/doctor",
+      "category": "system"
+    },
+    {
+      "name": "sys-mas",
+      "description": "Install App Store apps",
+      "command": "$HOME/.system-config/bin/mas",
+      "category": "system"
+    },
+    {
+      "name": "ga",
+      "description": "Git add all files",
+      "command": "git add -A",
+      "category": "git"
+    },
+    {
+      "name": "gc",
+      "description": "Git commit",
+      "command": "git commit",
+      "category": "git"
+    },
+    {
+      "name": "gs",
+      "description": "Git status",
+      "command": "git status",
+      "category": "git"
+    },
+    {
+      "name": "gl",
+      "description": "Git log one line",
+      "command": "git log --oneline",
+      "category": "git"
+    },
+    {
+      "name": "gp",
+      "description": "Push current branch",
+      "command": "git push -u origin HEAD",
+      "category": "git"
+    },
+    {
+      "name": "bu",
+      "description": "Brew update and upgrade",
+      "command": "brew update && brew upgrade",
+      "category": "brew"
+    },
+    {
+      "name": "c.",
+      "description": "Open current folder in VSCode",
+      "command": "code .",
+      "category": "editor"
+    },
+    {
+      "name": "python",
+      "description": "Use Python 3",
+      "command": "python3",
+      "category": "python"
+    },
+    {
+      "name": "pip",
+      "description": "Use pip3",
+      "command": "pip3",
+      "category": "python"
+    }
+  ]
+}

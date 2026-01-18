@@ -33,7 +33,7 @@ bash <(curl -s https://raw.githubusercontent.com/dwkns/system-install/master/ins
 ```
 
 ## Dotfiles list
-Dotfiles are controlled by `dotfiles/.dotfiles`. Add/remove entries there.
+Dotfiles are controlled by `config/.dotfiles`. Add/remove entries there.
 
 ## Optional apps
 Add any of these to `Brewfile` if you want them installed automatically:

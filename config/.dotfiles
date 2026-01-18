@@ -6,6 +6,7 @@
 .rspec
 .jsbeautifyrc
 .zshrc
+.aliases
 .macos
 .background_colour.png
 .profile
