@@ -8,7 +8,7 @@ TARGET_DIR=""
 usage() {
   cat <<'USAGE'
 Usage: backup [--target DIR]
-Creates a snapshot of dotfiles/config and package lists.
+Creates a snapshot of dotfiles/preferences and package lists.
 USAGE
 }
 
@@ -26,6 +26,7 @@ export ROOT_DIR
 # shellcheck disable=SC1090
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/dotfiles.sh"
+source "$ROOT_DIR/lib/preferences.sh"
 
 backup_root="${TARGET_DIR:-$ROOT_DIR/backups/$(timestamp)}"
 ensure_dir "$backup_root"
@@ -33,10 +34,8 @@ ensure_dir "$backup_root"
 log "Backing up dotfiles"
 backup_dotfiles "$backup_root/dotfiles"
 
-log "Backing up config-files"
-if [[ -d "$ROOT_DIR/config-files" ]]; then
-  run rsync -a "$ROOT_DIR/config-files/" "$backup_root/config-files/"
-fi
+log "Backing up preferences"
+backup_preferences "$backup_root/preferences"
 
 if has_cmd brew; then
   log "Dumping Brewfile"

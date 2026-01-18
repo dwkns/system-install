@@ -40,6 +40,9 @@ fi
 if [[ -r "$SYS_FILES_ROOT/lib/dotfiles.sh" ]]; then
   source "$SYS_FILES_ROOT/lib/dotfiles.sh"
 fi
+if [[ -r "$SYS_FILES_ROOT/lib/preferences.sh" ]]; then
+  source "$SYS_FILES_ROOT/lib/preferences.sh"
+fi
 
 ###############################################################################
 #  Shell behavior
@@ -62,15 +65,22 @@ usys () {
   has_cmd git && git pull
   echo
 
-  if typeset -f installDotFiles >/dev/null; then
-  installDotFiles
+  if typeset -f install_dotfiles >/dev/null; then
+    install_dotfiles
   else
-    warn "installDotFiles not found"
+    warn "install_dotfiles not found"
+  fi
+  echo
+
+  if typeset -f install_preferences >/dev/null; then
+    install_preferences
+  else
+    warn "install_preferences not found"
   fi
   echo
 
   if [[ -r "$HOME/.macos" ]]; then
-  source "$HOME/.macos"
+    source "$HOME/.macos"
   fi
   echo
 
@@ -81,11 +91,19 @@ usys () {
 }
 
 bsys () {
-  if typeset -f backupDotFiles >/dev/null; then
-  backupDotFiles
+  if typeset -f backup_dotfiles >/dev/null; then
+    backup_dotfiles
   else
-    warn "backupDotFiles not found"
+    warn "backup_dotfiles not found"
   fi
+  echo
+
+  if typeset -f backup_preferences >/dev/null; then
+    backup_preferences
+  else
+    warn "backup_preferences not found"
+  fi
+  echo
 
   doing 'Backing up system config files'
   (
