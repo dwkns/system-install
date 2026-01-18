@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
+set -euo pipefail
+
 FILENAME=$2
 REPO=$1
 
@@ -7,7 +9,7 @@ if [ -z "${FILENAME}" ]; then # have we passed in a variable $1
     echo $YELLOW"Nothing passed in..."$RESET
     echo
     echo $CYAN"Enter project name (default -> demo-project): "$RESET
-    read PROJECTNAME
+    read -r PROJECTNAME
     PROJECTNAME=${PROJECTNAME:-demo-project}
     success  "Setting project name to '$PROJECTNAME'"
 else   
@@ -19,13 +21,13 @@ fi
 ######## Does the folder already exist? Do you want overide it?
 if [ -e "$PROJECTNAME" ]; then
   echo $CYAN"Project $PROJECTNAME already exists delete it Y/n: "$RESET
-  read DELETEIT
+  read -r DELETEIT
   DELETEIT=${DELETEIT:-Y}
 
   if [  "$DELETEIT" = "Y" ] || [  "$DELETEIT" = "y" ] ; then
-   rm -rf $PROJECTNAME
+    rm -rf -- "$PROJECTNAME"
   else
-    error "OK not doing anything & exiting" 
+    error "OK not doing anything & exiting"
     exit 0
   fi
 fi
@@ -33,7 +35,7 @@ fi
 success "Project $PROJECTNAME will be created!"
 success "Using $REPO as the source repo"
 echo "using as the git repo"
-git clone $REPO $PROJECTNAME
+git clone "$REPO" "$PROJECTNAME"
 
 # ######## Create the folder
 cd "$PROJECTNAME"
@@ -41,6 +43,11 @@ cd "$PROJECTNAME"
 # ######## Do some processing of package.json to add build scrips & title.
 
 # # change the name property of package.json (need to save temp file first)
+if ! command -v jq >/dev/null 2>&1; then
+  error "jq is required to edit package.json"
+  exit 1
+fi
+
 tmp=$(mktemp)
 JQVAR=".name = \"$PROJECTNAME\""
 jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json

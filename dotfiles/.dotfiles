@@ -1,0 +1,12 @@
+.bash_profile
+.gemrc
+.gitconfig
+.gitignore_global
+.irbrc
+.rspec
+.jsbeautifyrc
+.zshrc
+.macos
+.background_colour.png
+.profile
+.rubocop.yml
