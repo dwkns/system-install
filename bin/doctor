@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+
+# shellcheck disable=SC1090
+source "$ROOT_DIR/lib/common.sh"
+
+log "System config doctor"
+
+note "Repo: $ROOT_DIR"
+[[ -d "$ROOT_DIR/.git" ]] && note "Git repo: yes" || warn "Git repo: no"
+
+if has_cmd git; then
+  note "git: $(git --version)"
+else
+  warn "git: not installed"
+fi
+
+if has_cmd brew; then
+  note "brew: $(brew --version | head -n1)"
+else
+  warn "brew: not installed"
+fi
+
+if has_cmd mas; then
+  note "mas: $(mas version)"
+  if mas account >/dev/null 2>&1; then
+    note "mas account: signed in"
+  else
+    warn "mas account: not signed in"
+  fi
+else
+  warn "mas: not installed"
+fi
+
+if [[ -r "$ROOT_DIR/dotfiles/.zshrc" ]]; then
+  note ".zshrc: present"
+else
+  warn ".zshrc: missing"
+fi
+
+if [[ -r "$ROOT_DIR/dotfiles/.macos" ]]; then
+  note ".macos: present"
+else
+  warn ".macos: missing"
+fi
+
+if [[ -r "$ROOT_DIR/Brewfile" ]]; then
+  note "Brewfile: present"
+else
+  warn "Brewfile: missing"
+fi
+
+if [[ -r "$ROOT_DIR/config/mas-apps.txt" ]]; then
+  note "MAS list: present"
+else
+  warn "MAS list: missing"
+fi

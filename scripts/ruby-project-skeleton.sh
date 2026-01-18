@@ -1,10 +1,11 @@
 #!/usr/bin/env zsh
-. $HOME/.system-config/scripts/set-up-projects.sh $1;
+set -euo pipefail
+. "$HOME/.system-config/scripts/set-up-projects.sh" "$1"
 
 success "Project $PROJECTNAME will be created!"
 
 ######## Create the folder
-mkdir -p $PROJECTNAME
+mkdir -p "$PROJECTNAME"
 cd "$PROJECTNAME"
 
 # ######## Init the project with auto-defaults, add Parcel.
@@ -30,7 +31,7 @@ cd "$PROJECTNAME"
 # JQVAR='.author |= .+ "dwkns"'
 # jq "$JQVAR" package.json > "$tmp" && mv "$tmp" package.json
 cat >README.md <<'EOL'
-##Read Me File
+## Read Me File
 EOL
 cat >Gemfile <<'EOL'
 source 'https://rubygems.org'

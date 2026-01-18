@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+FROM_DIR=""
+
+usage() {
+  cat <<'USAGE'
+Usage: restore --from DIR
+Restores dotfiles from a backup directory.
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --from) FROM_DIR="${2:-}"; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1"; usage; exit 1 ;;
+  esac
+  shift
+done
+
+export ROOT_DIR
+
+# shellcheck disable=SC1090
+source "$ROOT_DIR/lib/common.sh"
+source "$ROOT_DIR/lib/dotfiles.sh"
+
+[[ -n "$FROM_DIR" ]] || die "--from is required"
+[[ -d "$FROM_DIR" ]] || die "Backup dir not found: $FROM_DIR"
+
+backup_root="$ROOT_DIR/backups/restore-$(timestamp)"
+ensure_dir "$backup_root"
+
+log "Restoring dotfiles from $FROM_DIR"
+while IFS= read -r file; do
+  local_src="$FROM_DIR/dotfiles/$file"
+  local_dst="$HOME/$file"
+
+  if [[ ! -e "$local_src" ]]; then
+    warn "Missing in backup: $local_src"
+    continue
+  fi
+
+  if [[ -e "$local_dst" ]]; then
+    ensure_dir "$backup_root/$(dirname "$file")"
+    run cp -a "$local_dst" "$backup_root/$file"
+  fi
+
+  ensure_dir "$(dirname "$local_dst")"
+  run cp -a "$local_src" "$local_dst"
+done < <(read_dotfiles)
+
+note "Restore complete. Previous files backed up to: $backup_root"
