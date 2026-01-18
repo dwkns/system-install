@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+ASSUME_YES=0
+DRY_RUN=0
+DO_BREW=1
+DO_DOTFILES=1
+DO_MACOS=1
+DO_MAS=0
+MACHINE_NAME=""
+
+usage() {
+  cat <<'USAGE'
+Usage: bootstrap [options]
+
+Options:
+  --yes                Assume yes to prompts
+  --dry-run            Show actions without executing
+  --no-brew            Skip Homebrew/Brewfile installs
+  --no-dotfiles        Skip dotfiles install
+  --no-macos           Skip macOS defaults
+  --mas                Install Mac App Store apps
+  --machine-name NAME  Set machine name
+  -h, --help           Show help
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --yes) ASSUME_YES=1 ;;
+    --dry-run) DRY_RUN=1 ;;
+    --no-brew) DO_BREW=0 ;;
+    --no-dotfiles) DO_DOTFILES=0 ;;
+    --no-macos) DO_MACOS=0 ;;
+    --mas) DO_MAS=1 ;;
+    --machine-name) MACHINE_NAME="${2:-}"; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1"; usage; exit 1 ;;
+  esac
+  shift
+done
+
+export ROOT_DIR ASSUME_YES DRY_RUN
+
+# shellcheck disable=SC1090
+source "$ROOT_DIR/lib/common.sh"
+source "$ROOT_DIR/lib/brew.sh"
+source "$ROOT_DIR/lib/dotfiles.sh"
+source "$ROOT_DIR/lib/macos.sh"
+source "$ROOT_DIR/lib/mas.sh"
+
+if ! is_macos; then
+  die "This bootstrap is for macOS only."
+fi
+
+log "Starting bootstrap"
+
+if [[ "${ASSUME_YES}" == "0" ]]; then
+  confirm "Continue with bootstrap?" || exit 0
+fi
+
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+if [[ "$DO_BREW" == "1" ]]; then
+  brew_bundle
+fi
+
+if [[ "$DO_DOTFILES" == "1" ]]; then
+  install_dotfiles
+fi
+
+if [[ "$DO_MACOS" == "1" ]]; then
+  if [[ -n "$MACHINE_NAME" ]]; then
+    set_machine_name "$MACHINE_NAME"
+  fi
+  apply_macos_defaults
+fi
+
+if [[ "$DO_MAS" == "1" ]]; then
+  install_mas_apps
+fi
+
+log "Bootstrap complete"
