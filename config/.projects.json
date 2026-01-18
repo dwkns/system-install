@@ -1,0 +1,40 @@
+{
+  "projects": [
+    {
+      "name": "rps",
+      "description": "Ruby project skeleton",
+      "command": "rps",
+      "category": "ruby"
+    },
+    {
+      "name": "nps",
+      "description": "Node project skeleton",
+      "command": "nps",
+      "category": "node"
+    },
+    {
+      "name": "bps",
+      "description": "Executable bash file",
+      "command": "bps",
+      "category": "bash"
+    },
+    {
+      "name": "em",
+      "description": "11ty minimal project (11ty-minimal)",
+      "command": "em",
+      "category": "eleventy"
+    },
+    {
+      "name": "etwm",
+      "description": "11ty/tailwind minimal project (etw-minimal)",
+      "command": "etwm",
+      "category": "eleventy"
+    },
+    {
+      "name": "etw",
+      "description": "11ty/tailwind basics project (etw-basics)",
+      "command": "etw",
+      "category": "eleventy"
+    }
+  ]
+}

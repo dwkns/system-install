@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
-DOTFILES_LIST="${DOTFILES_LIST:-$ROOT_DIR/dotfiles/.dotfiles}"
+DOTFILES_LIST="${DOTFILES_LIST:-$ROOT_DIR/config/.dotfiles}"
 
 # shellcheck disable=SC1090
 source "$ROOT_DIR/lib/common.sh"
