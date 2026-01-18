@@ -8,7 +8,7 @@ FROM_DIR=""
 usage() {
   cat <<'USAGE'
 Usage: restore --from DIR
-Restores dotfiles from a backup directory.
+Restores dotfiles and preferences from a backup directory.
 USAGE
 }
 
@@ -26,6 +26,7 @@ export ROOT_DIR
 # shellcheck disable=SC1090
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/dotfiles.sh"
+source "$ROOT_DIR/lib/preferences.sh"
 
 [[ -n "$FROM_DIR" ]] || die "--from is required"
 [[ -d "$FROM_DIR" ]] || die "Backup dir not found: $FROM_DIR"
@@ -38,10 +39,7 @@ while IFS= read -r file; do
   local_src="$FROM_DIR/dotfiles/$file"
   local_dst="$HOME/$file"
 
-  if [[ ! -e "$local_src" ]]; then
-    warn "Missing in backup: $local_src"
-    continue
-  fi
+  [[ ! -e "$local_src" ]] && { warn "Missing in backup: $local_src"; continue; }
 
   if [[ -e "$local_dst" ]]; then
     ensure_dir "$backup_root/$(dirname "$file")"
@@ -51,5 +49,27 @@ while IFS= read -r file; do
   ensure_dir "$(dirname "$local_dst")"
   run cp -a "$local_src" "$local_dst"
 done < <(read_dotfiles)
+
+log "Restoring preferences from $FROM_DIR"
+if [[ -d "$FROM_DIR/preferences" ]]; then
+  PREFERENCES_DIR="$FROM_DIR/preferences"
+  PREFERENCES_TARGET="$HOME/Library/Preferences"
+
+  while IFS= read -r -d '' file; do
+    local basename="${file#$PREFERENCES_DIR/}"
+    local src="$file"
+    local dst="$PREFERENCES_TARGET/$basename"
+
+    [[ ! -e "$src" ]] && { warn "Missing in backup: $src"; continue; }
+
+    if [[ -e "$dst" ]]; then
+      ensure_dir "$backup_root/preferences/$(dirname "$basename")"
+      run cp -a "$dst" "$backup_root/preferences/$basename"
+    fi
+
+    ensure_dir "$(dirname "$dst")"
+    run cp -a "$src" "$dst"
+  done < <(find "$PREFERENCES_DIR" -name "*.plist" -type f -print0)
+fi
 
 note "Restore complete. Previous files backed up to: $backup_root"

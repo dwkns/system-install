@@ -48,6 +48,7 @@ export ROOT_DIR ASSUME_YES DRY_RUN
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/brew.sh"
 source "$ROOT_DIR/lib/dotfiles.sh"
+source "$ROOT_DIR/lib/preferences.sh"
 source "$ROOT_DIR/lib/macos.sh"
 source "$ROOT_DIR/lib/mas.sh"
 
@@ -70,6 +71,7 @@ fi
 
 if [[ "$DO_DOTFILES" == "1" ]]; then
   install_dotfiles
+  install_preferences
 fi
 
 if [[ "$DO_MACOS" == "1" ]]; then

@@ -19,10 +19,7 @@ install_dotfiles() {
     local src="$ROOT_DIR/dotfiles/$file"
     local dst="$HOME/$file"
 
-    if [[ ! -e "$src" ]]; then
-      warn "Missing in repo: $src"
-      continue
-    fi
+    [[ ! -e "$src" ]] && { warn "Missing in repo: $src"; continue; }
 
     if [[ -e "$dst" ]]; then
       ensure_dir "$backup_root/$(dirname "$file")"
@@ -44,10 +41,7 @@ backup_dotfiles() {
     local src="$HOME/$file"
     local dst="$target_dir/$file"
 
-    if [[ ! -e "$src" ]]; then
-      warn "Missing on system: $src"
-      continue
-    fi
+    [[ ! -e "$src" ]] && { warn "Missing on system: $src"; continue; }
 
     ensure_dir "$(dirname "$dst")"
     run cp -a "$src" "$dst"
