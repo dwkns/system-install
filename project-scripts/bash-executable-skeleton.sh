@@ -1,32 +1,39 @@
 #!/usr/bin/env zsh
+# Bash executable skeleton - clones from git repo
+
 set -euo pipefail
 
-. "$HOME/.system-config/project-scripts/set-up-projects.sh" "$1"
+# Source common utilities
+. "$HOME/.system-config/project-scripts/common.sh"
 
-success "Project $PROJECTNAME will be created!"
+# Get repo URL from first argument
+REPO_URL="$1"
+PROJECT_NAME=""
 
-######## Create the folder
-mkdir -p "$PROJECTNAME"
-cd "$PROJECTNAME"
+# Get project name
+PROJECT_NAME=$(get_project_name "$2" "demo-project")
+check_project_exists "$PROJECT_NAME"
+check_repo_exists "$REPO_URL"
 
-if [[ ${PROJECTNAME: -3} != ".sh" ]]; then
-  FILENAME="$PROJECTNAME.sh"
+# Clone repository
+clone_repo "$REPO_URL" "$PROJECT_NAME"
+
+# Determine filename for bash script (project name or project-name.sh)
+if [[ ${PROJECT_NAME: -3} != ".sh" ]]; then
+  FILENAME="$PROJECT_NAME.sh"
+else
+  FILENAME="$PROJECT_NAME"
 fi
 
-cat >"$FILENAME" <<'EOL'
-  #!/usr/bin/env bash
-EOL
-chmod +x "$FILENAME"
-echo -e ${GREEN}"====> "$BLUE"'$FILENAME'"${GREEN}" Created and set to be Executable"$RESET
+# If script.sh exists in repo, rename it to project-specific name
+if [[ -f "script.sh" ]] && [[ "$FILENAME" != "script.sh" ]]; then
+  mv script.sh "$FILENAME"
+  chmod +x "$FILENAME"
+  success "Renamed script.sh to $FILENAME"
+fi
 
-cat >.gitignore <<'EOL'
-.DS_Store
-EOL
+# Initialize git (remove old remote, reinitialize)
+init_git
 
-######## Initialize git.
-rm -rf .git # remove previous git files.
-git init
-git add .
-git commit -m "Initial commit"
-
-code -r .
+# Open in editor
+open_project

@@ -504,51 +504,49 @@ kp () {
 }
 
 # Project skeleton creation functions
-# These functions bootstrap new projects from template repositories
-# The scripts are sourced (.) rather than executed to run in current shell context
-# This allows them to modify environment variables and current directory
+# These functions bootstrap new projects from git repositories
+# All projects are defined in config/.projects.json and dynamically loaded
+# Each project uses its own script but shares common utilities from common.sh
 
-# Create a new Ruby project skeleton
-# Usage: rps <project-name>
-rps () { doing 'Creating Ruby skeleton project'; . "$SYS_PROJECT_SCRIPTS/ruby-project-skeleton.sh" "$1"; }
-
-# Create a new Node.js project skeleton
-# Usage: nps <project-name>
-nps () { doing 'Making new node project skeleton'; . "$SYS_PROJECT_SCRIPTS/node-project-skeleton.sh" "$1"; }
-
-# Create a new executable bash script skeleton
-# Usage: bps <script-name>
-bps () { doing 'Making new executable bash file'; . "$SYS_PROJECT_SCRIPTS/bash-executable-skeleton.sh" "$1"; }
-
-# Create a new 11ty minimal project from template
-# Clones the 11ty-minimal repository and sets it up as a new project
-# Usage: em <project-name>
-em () {
-  doing 'Making new 11ty minimal project (11ty-minimal)'
-    REPO_NAME=https://github.com/dwkns/11ty-minimal.git
-    PROJECT_NAME=$1
-  . "$SYS_PROJECT_SCRIPTS/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
+# Load project functions dynamically from JSON
+# Creates functions for each project defined in config/.projects.json
+load_project_functions() {
+  local projects_file="$SYS_FILES_ROOT/config/.projects.json"
+  
+  # Check if projects file exists
+  if [[ ! -r "$projects_file" ]]; then
+    warn "Projects configuration file not found: $projects_file" >&2
+    return 1
+  fi
+  
+  # Check for jq dependency
+  if ! has_cmd jq; then
+    warn "jq is required to load project functions. Install with: brew install jq" >&2
+    return 1
+  fi
+  
+  # Create functions for each project in JSON
+  while IFS= read -r project_data; do
+    local project_name repo_url description script_path
+    project_name=$(echo "$project_data" | jq -r '.name')
+    repo_url=$(echo "$project_data" | jq -r '.repo')
+    description=$(echo "$project_data" | jq -r '.description')
+    script_path=$(echo "$project_data" | jq -r '.script')
+    
+    if [[ -n "$project_name" && "$project_name" != "null" && -n "$script_path" && "$script_path" != "null" ]]; then
+      # Create function that calls the appropriate script with repo URL
+      # Source the script so cd commands work in current shell
+      eval "${project_name}() { 
+        doing '${description}';
+        . \"\$SYS_FILES_ROOT/$script_path\" \"$repo_url\" \"\$1\"; 
+      }"
+    fi
+  done < <(jq -c '.projects[]' "$projects_file" 2>/dev/null)
 }
 
-# Create a new 11ty/Tailwind minimal project from template
-# Clones the etw-minimal repository and sets it up as a new project
-# Usage: etwm <project-name>
-etwm () {
-  doing 'Making new 11ty/tailwind minimal project (etw-minimal)'
-    REPO_NAME=https://github.com/dwkns/etw-minimal.git
-    PROJECT_NAME=$1
-  . "$SYS_PROJECT_SCRIPTS/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
-}
-
-# Create a new 11ty/Tailwind basics project from template
-# Clones the etw-basics repository and sets it up as a new project
-# Usage: etw <project-name>
-etw () {
-  doing 'Making new 11ty/tailwind basics project (etw-basics)'
-    REPO_NAME="https://github.com/dwkns/etw-basics.git"
-    PROJECT_NAME=$1
-  . "$SYS_PROJECT_SCRIPTS/eleventy-projects.sh" "$REPO_NAME" "$PROJECT_NAME"
-}
+# Load project functions silently during shell startup
+# Errors are suppressed to keep startup clean
+load_project_functions >/dev/null 2>&1
 
 # Create directory and change into it
 # -p flag creates parent directories as needed

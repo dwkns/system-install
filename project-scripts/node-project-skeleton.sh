@@ -1,109 +1,41 @@
 #!/usr/bin/env zsh
+# Node.js project skeleton - clones from git repo and updates files
+
 set -euo pipefail
-. "$HOME/.system-config/project-scripts/set-up-projects.sh" "$1"
 
-# echo -n "Enable ESLint? ( y/n > default - y) : "
-# read -t 3 ESLINT
-# ESLINT=${ESLINT:-Y}
+# Source common utilities
+. "$HOME/.system-config/project-scripts/common.sh"
 
-# echo -n "Enable Jest? ( y/n > default - n) : "
-# read -t 3 TESTING
-# TESTING=${TESTING:-Y}
+# Get repo URL from first argument
+REPO_URL="$1"
+PROJECT_NAME=""
 
-# echo -n "Use Typescript? ( y/n > default - n) : "
-# read -t 3 TYPESCRIPT
-# TYPESCRIPT=${TYPESCRIPT:-N}
+# Get project name
+PROJECT_NAME=$(get_project_name "$2" "demo-project")
+check_project_exists "$PROJECT_NAME"
+check_repo_exists "$REPO_URL"
 
-success "Project $PROJECTNAME will be created!"
+# Clone repository
+clone_repo "$REPO_URL" "$PROJECT_NAME"
 
-######## Create the folder
-mkdir -p "$PROJECTNAME"
-cd "$PROJECTNAME"
-
-# ######## Init the project with auto-defaults
-
-if command -v yarn >/dev/null 2>&1; then
-  yarn init -y
-  yarn add -D vitest
+# Update package.json with project name and author
+if [[ -f "package.json" ]] && command -v jq >/dev/null 2>&1; then
+  doing "Updating package.json"
+  tmp=$(mktemp)
+  jq ".name = \"$PROJECT_NAME\" | .author = \"$USER\"" package.json > "$tmp" && mv "$tmp" package.json
+  success "Updated package.json"
 else
-  npm init -y
-  npm install -D vitest
+  warn "package.json not found or jq not available. Skipping update."
 fi
 
-######## Do some processing of package.json to add build scrips & title.
-# change the name property of package.json (need to save temp file first)
-if ! command -v jq >/dev/null 2>&1; then
-  error "jq is required to edit package.json"
-  exit 1
+# Initialize git (remove old remote, reinitialize)
+init_git
+
+# Install dependencies
+if [[ -f "package.json" ]]; then
+  doing "Installing npm dependencies"
+  npm install 2>/dev/null || true
 fi
 
-tmp=$(mktemp)
-JQVAR=".name = \"$PROJECTNAME\""
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-# add author  to package.json
-tmp=$(mktemp)
-JQVAR=".author = \"$USER\""
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-tmp=$(mktemp)
-JQVAR=".main = \"app/index.js\""
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-tmp=$(mktemp)
-JQVAR=".type = \"module\""
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-# add some build scripts to package.json
-tmp=$(mktemp)
-JQVAR=".scripts |= .+ { \"start\": \"node app/index.js\" }"
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-
-tmp=$(mktemp)
-JQVAR=".scripts |= .+ { \"dev\": \"npm run start\" }"
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-
-tmp=$(mktemp)
-JQVAR=".scripts |= .+ { \"test\": \"vitest run\" }"
-jq "$JQVAR" package.json >"$tmp" && mv "$tmp" package.json
-
-
-cat >README.md <<EOL
-## Read Me for $PROJECTNAME
-EOL
-
-######## Add source folder and files.
-mkdir 'app'
-
-cat >app/index.js <<'EOL'
-export const sum = (a, b) => a + b;
-console.log(`1 + 2 is: ${sum(1, 2)}`);
-EOL
-
-cat >app/index.test.js <<'EOL'
-import { expect, test } from 'vitest'
-import { sum } from './index.js'
-
-test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3)
-})
-EOL
-
-
-
-cat >.gitignore <<'EOL'
-node_modules
-.env
-EOL
-
-######## Initialize git.
-rm -rf .git # remove previous git files.
-git init
-git add .
-git commit -m "Initial commit"
-
-
-
-code -r .
+# Open in editor
+open_project
