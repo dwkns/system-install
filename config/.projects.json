@@ -4,37 +4,49 @@
       "name": "rps",
       "description": "Ruby project skeleton",
       "command": "rps",
-      "category": "ruby"
+      "category": "ruby",
+      "repo": "https://github.com/dwkns/ruby-skeleton.git",
+      "script": "project-scripts/ruby-project-skeleton.sh"
     },
     {
       "name": "nps",
       "description": "Node project skeleton",
       "command": "nps",
-      "category": "node"
+      "category": "node",
+      "repo": "https://github.com/dwkns/node-skeleton.git",
+      "script": "project-scripts/node-project-skeleton.sh"
     },
     {
       "name": "bps",
       "description": "Executable bash file",
       "command": "bps",
-      "category": "bash"
+      "category": "bash",
+      "repo": "https://github.com/dwkns/bash-skeleton.git",
+      "script": "project-scripts/bash-executable-skeleton.sh"
     },
     {
       "name": "em",
       "description": "11ty minimal project (11ty-minimal)",
       "command": "em",
-      "category": "eleventy"
+      "category": "eleventy",
+      "repo": "https://github.com/dwkns/11ty-minimal.git",
+      "script": "project-scripts/eleventy-projects.sh"
     },
     {
       "name": "etwm",
       "description": "11ty/tailwind minimal project (etw-minimal)",
       "command": "etwm",
-      "category": "eleventy"
+      "category": "eleventy",
+      "repo": "https://github.com/dwkns/etw-minimal.git",
+      "script": "project-scripts/eleventy-projects.sh"
     },
     {
       "name": "etw",
       "description": "11ty/tailwind basics project (etw-basics)",
       "command": "etw",
-      "category": "eleventy"
+      "category": "eleventy",
+      "repo": "https://github.com/dwkns/etw-basics.git",
+      "script": "project-scripts/eleventy-projects.sh"
     }
   ]
 }
