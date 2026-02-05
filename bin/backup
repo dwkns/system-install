@@ -8,7 +8,7 @@ TARGET_DIR=""
 usage() {
   cat <<'USAGE'
 Usage: backup [--target DIR]
-Creates a snapshot of dotfiles/preferences and package lists.
+Creates a snapshot of dotfiles, preferences, colors, and package lists.
 USAGE
 }
 
@@ -27,6 +27,7 @@ export ROOT_DIR
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/dotfiles.sh"
 source "$ROOT_DIR/lib/preferences.sh"
+source "$ROOT_DIR/lib/colors.sh"
 
 backup_root="${TARGET_DIR:-$ROOT_DIR/backups/$(timestamp)}"
 ensure_dir "$backup_root"
@@ -36,6 +37,9 @@ backup_dotfiles "$backup_root/dotfiles"
 
 log "Backing up preferences"
 backup_preferences "$backup_root/preferences"
+
+log "Backing up colors"
+backup_colors "$backup_root/colors"
 
 if has_cmd brew; then
   log "Dumping Brewfile"
