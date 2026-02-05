@@ -8,7 +8,7 @@ FROM_DIR=""
 usage() {
   cat <<'USAGE'
 Usage: restore --from DIR
-Restores dotfiles and preferences from a backup directory.
+Restores dotfiles, preferences, and colors from a backup directory.
 USAGE
 }
 
@@ -27,6 +27,7 @@ export ROOT_DIR
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/dotfiles.sh"
 source "$ROOT_DIR/lib/preferences.sh"
+source "$ROOT_DIR/lib/colors.sh"
 
 [[ -n "$FROM_DIR" ]] || die "--from is required"
 [[ -d "$FROM_DIR" ]] || die "Backup dir not found: $FROM_DIR"
@@ -70,6 +71,30 @@ if [[ -d "$FROM_DIR/preferences" ]]; then
     ensure_dir "$(dirname "$dst")"
     run cp -a "$src" "$dst"
   done < <(find "$PREFERENCES_DIR" -name "*.plist" -type f -print0)
+fi
+
+log "Restoring colors from $FROM_DIR"
+if [[ -d "$FROM_DIR/colors" ]]; then
+  COLORS_DIR="$FROM_DIR/colors"
+  COLORS_TARGET="$HOME/Library/Colors"
+  
+  ensure_dir "$COLORS_TARGET"
+  
+  while IFS= read -r -d '' file; do
+    local basename="${file#$COLORS_DIR/}"
+    local src="$file"
+    local dst="$COLORS_TARGET/$basename"
+    
+    [[ ! -e "$src" ]] && { warn "Missing in backup: $src"; continue; }
+    
+    if [[ -e "$dst" ]]; then
+      ensure_dir "$backup_root/colors/$(dirname "$basename")"
+      run cp -a "$dst" "$backup_root/colors/$basename"
+    fi
+    
+    ensure_dir "$(dirname "$dst")"
+    run cp -a "$src" "$dst"
+  done < <(find "$COLORS_DIR" -name "*.clr" -type f -print0)
 fi
 
 note "Restore complete. Previous files backed up to: $backup_root"
