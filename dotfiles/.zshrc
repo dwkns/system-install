@@ -80,6 +80,13 @@ if [[ -r "$SYS_FILES_ROOT/lib/preferences.sh" ]]; then
   source "$SYS_FILES_ROOT/lib/preferences.sh"
 fi
 
+# Load color file management functions
+# Provides: install_colors(), backup_colors()
+# These handle syncing .clr color palette files to/from ~/Library/Colors
+if [[ -r "$SYS_FILES_ROOT/lib/colors.sh" ]]; then
+  source "$SYS_FILES_ROOT/lib/colors.sh"
+fi
+
 ###############################################################################
 #  Shell behavior
 ###############################################################################
@@ -124,6 +131,15 @@ usys () {
     install_preferences
   else
     warn "install_preferences not found"
+  fi
+  echo
+
+  # Install/update color palette files
+  # Copies .clr files from ~/.system-config/colors/ to ~/Library/Colors
+  if typeset -f install_colors >/dev/null; then
+    install_colors
+  else
+    warn "install_colors not found"
   fi
   echo
 

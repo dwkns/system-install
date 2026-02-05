@@ -1,60 +1,145 @@
 #!/usr/bin/env bash
+###############################################################################
+# doctor - System Configuration Health Check
+###############################################################################
+#
+# PURPOSE:
+#   Diagnoses the system configuration setup by checking for:
+#   - Required tools (git, brew, mas)
+#   - Expected files (dotfiles, Brewfile, etc.)
+#   - Repository status
+#   - Account sign-in status
+#
+#   Run this to verify everything is set up correctly or to debug issues.
+#
+# USAGE:
+#   doctor              # Run all checks
+#   doctor --help       # Show help
+#
+# OUTPUT:
+#   Green "Note" messages indicate things that are working correctly.
+#   Yellow "Warning" messages indicate potential issues to fix.
+#
+# CHECKS PERFORMED:
+#   - Git repository status
+#   - Git installation
+#   - Homebrew installation
+#   - mas (Mac App Store CLI) installation and sign-in
+#   - .zshrc presence
+#   - .macos presence
+#   - Brewfile presence
+#   - MAS apps list presence
+#
+# SEE ALSO:
+#   bootstrap - Set up the system
+#   backup - Create backup
+#
+###############################################################################
+
+# Strict mode: exit on error, undefined vars, pipe failures
 set -euo pipefail
 IFS=$'\n\t'
 
+###############################################################################
+# Configuration
+###############################################################################
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 
+###############################################################################
+# Setup
+###############################################################################
+# Load common utilities for logging functions
 # shellcheck disable=SC1090
 source "$ROOT_DIR/lib/common.sh"
 
+###############################################################################
+# Health Checks
+###############################################################################
 log "System config doctor"
+echo ""
 
+###############################################################################
+# Repository Status
+###############################################################################
+# Check the system-config repository location
 note "Repo: $ROOT_DIR"
-[[ -d "$ROOT_DIR/.git" ]] && note "Git repo: yes" || warn "Git repo: no"
 
+# Check if it's a git repository
+if [[ -d "$ROOT_DIR/.git" ]]; then
+  note "Git repo: yes"
+else
+  warn "Git repo: no (not under version control)"
+fi
+
+echo ""
+
+###############################################################################
+# Tool Checks
+###############################################################################
+# Check for git
 if has_cmd git; then
   note "git: $(git --version)"
 else
   warn "git: not installed"
 fi
 
+# Check for Homebrew
 if has_cmd brew; then
   note "brew: $(brew --version | head -n1)"
 else
-  warn "brew: not installed"
+  warn "brew: not installed (run bootstrap to install)"
 fi
 
+# Check for mas (Mac App Store CLI)
 if has_cmd mas; then
   note "mas: $(mas version)"
+  
+  # Check if signed into App Store
   if mas account >/dev/null 2>&1; then
     note "mas account: signed in"
   else
-    warn "mas account: not signed in"
+    warn "mas account: not signed in (required to install App Store apps)"
   fi
 else
-  warn "mas: not installed"
+  warn "mas: not installed (run: brew install mas)"
 fi
 
+echo ""
+
+###############################################################################
+# File Checks
+###############################################################################
+# Check for .zshrc (main shell configuration)
 if [[ -r "$ROOT_DIR/dotfiles/.zshrc" ]]; then
   note ".zshrc: present"
 else
-  warn ".zshrc: missing"
+  warn ".zshrc: missing from dotfiles/"
 fi
 
+# Check for .macos (macOS defaults script)
 if [[ -r "$ROOT_DIR/dotfiles/.macos" ]]; then
   note ".macos: present"
 else
-  warn ".macos: missing"
+  warn ".macos: missing from dotfiles/"
 fi
 
+# Check for Brewfile (Homebrew packages list)
 if [[ -r "$ROOT_DIR/Brewfile" ]]; then
   note "Brewfile: present"
 else
-  warn "Brewfile: missing"
+  warn "Brewfile: missing (run: brew bundle dump)"
 fi
 
+# Check for mas-apps.txt (Mac App Store apps list)
 if [[ -r "$ROOT_DIR/config/mas-apps.txt" ]]; then
   note "MAS list: present"
 else
-  warn "MAS list: missing"
+  warn "MAS list: missing from config/"
 fi
+
+echo ""
+
+###############################################################################
+# Summary
+###############################################################################
+note "Doctor complete. Fix any warnings above if needed."

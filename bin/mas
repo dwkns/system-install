@@ -1,10 +1,56 @@
 #!/usr/bin/env bash
+###############################################################################
+# mas - Install Mac App Store Applications
+###############################################################################
+#
+# PURPOSE:
+#   Convenience script to install applications from the Mac App Store.
+#   This is a wrapper around the install_mas_apps function that can be
+#   run directly from the command line.
+#
+# USAGE:
+#   mas                 # Install all apps from config/mas-apps.txt
+#
+# PREREQUISITES:
+#   1. mas CLI must be installed: brew install mas
+#   2. Must be signed into Mac App Store (open App Store.app first)
+#   3. Apps must have been "purchased" (even free ones) at least once
+#
+# APP LIST:
+#   Apps to install are listed in config/mas-apps.txt
+#   Format: APP_ID APP_NAME (one per line)
+#   Example:
+#     497799835 Xcode
+#     409183694 Keynote
+#
+# FINDING APP IDS:
+#   - Search: mas search "app name"
+#   - From URL: apps.apple.com/app/id{APP_ID}
+#
+# SEE ALSO:
+#   bootstrap --mas     # Install as part of full bootstrap
+#   config/mas-apps.txt # List of apps to install
+#
+###############################################################################
+
+# Strict mode: exit on error, undefined vars, pipe failures
 set -euo pipefail
 IFS=$'\n\t'
 
+###############################################################################
+# Configuration
+###############################################################################
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 
+###############################################################################
+# Setup
+###############################################################################
+# Load the mas library which provides install_mas_apps function
 # shellcheck disable=SC1090
 source "$ROOT_DIR/lib/mas.sh"
 
+###############################################################################
+# Main
+###############################################################################
+# Install all apps listed in config/mas-apps.txt
 install_mas_apps
