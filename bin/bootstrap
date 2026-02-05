@@ -1,32 +1,94 @@
 #!/usr/bin/env bash
+###############################################################################
+# bootstrap - Full System Setup
+###############################################################################
+#
+# PURPOSE:
+#   Sets up a new macOS system with all your tools, configurations, and
+#   preferences. This is the main script to run on a fresh Mac to get
+#   your complete development environment up and running.
+#
+# WHAT IT DOES:
+#   1. Installs Homebrew and all packages from Brewfile
+#   2. Installs dotfiles to home directory
+#   3. Installs macOS preferences (.plist files)
+#   4. Installs color palettes (.clr files)
+#   5. Applies macOS system defaults (.macos)
+#   6. Optionally installs Mac App Store apps
+#   7. Optionally sets machine name
+#
+# USAGE:
+#   bootstrap                        # Run with defaults
+#   bootstrap --yes                  # Skip confirmation prompts
+#   bootstrap --dry-run              # Show what would happen
+#   bootstrap --no-brew              # Skip Homebrew installation
+#   bootstrap --no-dotfiles          # Skip dotfiles/prefs/colors
+#   bootstrap --no-macos             # Skip macOS defaults
+#   bootstrap --mas                  # Also install App Store apps
+#   bootstrap --machine-name NAME    # Set computer name
+#   bootstrap --help                 # Show help
+#
+# PREREQUISITES:
+#   - macOS (Intel or Apple Silicon)
+#   - Internet connection (for Homebrew and packages)
+#   - Admin password (for sudo operations)
+#
+# SEE ALSO:
+#   backup - Create configuration backup
+#   restore - Restore from backup
+#   doctor - Check system status
+#
+###############################################################################
+
+# Strict mode: exit on error, undefined vars, pipe failures
 set -euo pipefail
 IFS=$'\n\t'
 
+###############################################################################
+# Configuration & Defaults
+###############################################################################
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
-ASSUME_YES=1
-DRY_RUN=0
-DO_BREW=1
-DO_DOTFILES=1
-DO_MACOS=1
-DO_MAS=0
-MACHINE_NAME=""
 
+# Control flags (can be overridden via command-line args)
+ASSUME_YES=1      # Skip confirmation prompts (1=yes, 0=ask)
+DRY_RUN=0         # Show actions without executing (1=dry run, 0=execute)
+DO_BREW=1         # Install Homebrew packages (1=yes, 0=skip)
+DO_DOTFILES=1     # Install dotfiles/prefs/colors (1=yes, 0=skip)
+DO_MACOS=1        # Apply macOS defaults (1=yes, 0=skip)
+DO_MAS=0          # Install App Store apps (0=skip by default, enable with --mas)
+MACHINE_NAME=""   # Computer name (empty = don't change)
+
+###############################################################################
+# Usage Information
+###############################################################################
 usage() {
   cat <<'USAGE'
 Usage: bootstrap [options]
 
+Sets up a new macOS system with your complete configuration.
+
 Options:
-  --yes                Assume yes to prompts
+  --yes                Assume yes to all prompts (default)
   --dry-run            Show actions without executing
   --no-brew            Skip Homebrew/Brewfile installs
-  --no-dotfiles        Skip dotfiles install
+  --no-dotfiles        Skip dotfiles, preferences, and colors
   --no-macos           Skip macOS defaults
   --mas                Install Mac App Store apps
-  --machine-name NAME  Set machine name
-  -h, --help           Show help
+  --machine-name NAME  Set computer/host name
+  -h, --help           Show this help message
+
+Examples:
+  bootstrap                          # Full setup
+  bootstrap --dry-run                # Preview what would happen
+  bootstrap --no-macos               # Skip system preferences
+  bootstrap --mas                    # Include App Store apps
+  bootstrap --machine-name "my-mac"  # Also set computer name
 USAGE
 }
 
+###############################################################################
+# Argument Parsing
+###############################################################################
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --yes) ASSUME_YES=1 ;;
@@ -42,49 +104,95 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+###############################################################################
+# Setup
+###############################################################################
+# Export variables so sourced scripts can access them
 export ROOT_DIR ASSUME_YES DRY_RUN
 
+# Load all required libraries
 # shellcheck disable=SC1090
-source "$ROOT_DIR/lib/common.sh"
-source "$ROOT_DIR/lib/brew.sh"
-source "$ROOT_DIR/lib/dotfiles.sh"
-source "$ROOT_DIR/lib/preferences.sh"
-source "$ROOT_DIR/lib/colors.sh"
-source "$ROOT_DIR/lib/macos.sh"
-source "$ROOT_DIR/lib/mas.sh"
+source "$ROOT_DIR/lib/common.sh"       # Core utilities
+source "$ROOT_DIR/lib/brew.sh"         # Homebrew management
+source "$ROOT_DIR/lib/dotfiles.sh"     # Dotfile management
+source "$ROOT_DIR/lib/preferences.sh"  # Preferences management
+source "$ROOT_DIR/lib/colors.sh"       # Colors management
+source "$ROOT_DIR/lib/macos.sh"        # macOS configuration
+source "$ROOT_DIR/lib/mas.sh"          # Mac App Store
 
+###############################################################################
+# Validation
+###############################################################################
+# Ensure we're running on macOS
 if ! is_macos; then
   die "This bootstrap is for macOS only."
 fi
 
+###############################################################################
+# Main Bootstrap Process
+###############################################################################
 log "Starting bootstrap"
 
+# Ask for confirmation if not in auto-yes mode
 if [[ "${ASSUME_YES}" == "0" ]]; then
   confirm "Continue with bootstrap?" || exit 0
 fi
 
+# Acquire and maintain sudo privileges
+# This keeps sudo active throughout the script
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+###############################################################################
+# Step 1: Homebrew & Packages
+###############################################################################
 if [[ "$DO_BREW" == "1" ]]; then
+  # Install Homebrew if needed, then install all packages from Brewfile
+  # This includes CLI tools, GUI apps (casks), and fonts
   brew_bundle
 fi
 
+###############################################################################
+# Step 2: Dotfiles, Preferences & Colors
+###############################################################################
 if [[ "$DO_DOTFILES" == "1" ]]; then
+  # Copy dotfiles from repo to home directory
+  # Files are listed in config/.dotfiles
   install_dotfiles
+  
+  # Copy macOS preference files to ~/Library/Preferences
+  # Files are stored in preferences/*.plist
   install_preferences
+  
+  # Copy color palette files to ~/Library/Colors
+  # Files are stored in colors/*.clr
   install_colors
 fi
 
+###############################################################################
+# Step 3: macOS System Defaults
+###############################################################################
 if [[ "$DO_MACOS" == "1" ]]; then
+  # Set computer name if provided
   if [[ -n "$MACHINE_NAME" ]]; then
     set_machine_name "$MACHINE_NAME"
   fi
+  
+  # Apply macOS preferences from .macos script
+  # This includes Finder, Dock, keyboard, trackpad settings, etc.
   apply_macos_defaults
 fi
 
+###############################################################################
+# Step 4: Mac App Store (Optional)
+###############################################################################
 if [[ "$DO_MAS" == "1" ]]; then
+  # Install apps from Mac App Store
+  # Requires being signed in to App Store
   install_mas_apps
 fi
 
+###############################################################################
+# Complete
+###############################################################################
 log "Bootstrap complete"

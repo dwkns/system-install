@@ -1,51 +1,131 @@
 #!/usr/bin/env bash
+###############################################################################
+# backup - Create System Configuration Backup
+###############################################################################
+#
+# PURPOSE:
+#   Creates a complete snapshot of your system configuration including:
+#   - Dotfiles (shell configs, git config, etc.)
+#   - macOS preferences (.plist files)
+#   - Color palettes (.clr files)
+#   - Homebrew packages (Brewfile dump)
+#   - Mac App Store apps (mas list)
+#
+# USAGE:
+#   backup                           # Backup to default timestamped directory
+#   backup --target /path/to/dir     # Backup to specific directory
+#   backup --help                    # Show help
+#
+# OUTPUT:
+#   Creates a timestamped directory in ~/.system-config/backups/ containing:
+#     backups/YYYYMMDD-HHMMSS/
+#     ├── dotfiles/           # Copies of dotfiles from ~/
+#     ├── preferences/        # Copies of .plist files from ~/Library/Preferences
+#     ├── colors/             # Copies of .clr files from ~/Library/Colors
+#     ├── Brewfile            # Current Homebrew packages
+#     └── mas-list.txt        # Current Mac App Store apps
+#
+# SEE ALSO:
+#   restore - Restore from a backup
+#   bootstrap - Full system setup
+#
+###############################################################################
+
+# Strict mode: exit on error, undefined vars, pipe failures
 set -euo pipefail
 IFS=$'\n\t'
 
+###############################################################################
+# Configuration
+###############################################################################
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
-TARGET_DIR=""
+TARGET_DIR=""    # Custom target directory (empty = use default)
 
+###############################################################################
+# Usage Information
+###############################################################################
 usage() {
   cat <<'USAGE'
 Usage: backup [--target DIR]
 Creates a snapshot of dotfiles, preferences, colors, and package lists.
+
+Options:
+  --target DIR   Save backup to specific directory
+  -h, --help     Show this help message
+
+Examples:
+  backup                           # Backup to ~/.system-config/backups/TIMESTAMP
+  backup --target ~/my-backup      # Backup to custom location
 USAGE
 }
 
+###############################################################################
+# Argument Parsing
+###############################################################################
+# Process command-line arguments
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --target) TARGET_DIR="${2:-}"; shift ;;
-    -h|--help) usage; exit 0 ;;
-    *) echo "Unknown option: $1"; usage; exit 1 ;;
+    --target) 
+      TARGET_DIR="${2:-}"
+      shift 
+      ;;
+    -h|--help) 
+      usage
+      exit 0 
+      ;;
+    *) 
+      echo "Unknown option: $1"
+      usage
+      exit 1 
+      ;;
   esac
   shift
 done
 
+###############################################################################
+# Setup
+###############################################################################
+# Export ROOT_DIR so sourced scripts can access it
 export ROOT_DIR
 
+# Load required libraries
 # shellcheck disable=SC1090
-source "$ROOT_DIR/lib/common.sh"
-source "$ROOT_DIR/lib/dotfiles.sh"
-source "$ROOT_DIR/lib/preferences.sh"
-source "$ROOT_DIR/lib/colors.sh"
+source "$ROOT_DIR/lib/common.sh"      # Core utilities (log, ensure_dir, etc.)
+source "$ROOT_DIR/lib/dotfiles.sh"    # Dotfile management (backup_dotfiles)
+source "$ROOT_DIR/lib/preferences.sh" # Preferences management (backup_preferences)
+source "$ROOT_DIR/lib/colors.sh"      # Colors management (backup_colors)
 
+###############################################################################
+# Main Backup Process
+###############################################################################
+# Determine backup location (custom or timestamped default)
 backup_root="${TARGET_DIR:-$ROOT_DIR/backups/$(timestamp)}"
 ensure_dir "$backup_root"
 
+# Backup dotfiles from home directory
+# These are files listed in config/.dotfiles (like .zshrc, .gitconfig, etc.)
 log "Backing up dotfiles"
 backup_dotfiles "$backup_root/dotfiles"
 
+# Backup macOS preference files
+# Only backs up preferences already tracked in the repo's preferences/ directory
 log "Backing up preferences"
 backup_preferences "$backup_root/preferences"
 
+# Backup color palette files
+# Copies all .clr files from ~/Library/Colors
 log "Backing up colors"
 backup_colors "$backup_root/colors"
 
+# Dump current Homebrew packages to Brewfile
+# This captures all installed formulas, casks, and taps
 if has_cmd brew; then
   log "Dumping Brewfile"
   run brew bundle dump --force --file "$backup_root/Brewfile"
 fi
 
+# Save list of Mac App Store apps
+# This can be used to reinstall apps later
 if has_cmd mas; then
   log "Saving mas list"
   run mas list > "$backup_root/mas-list.txt"

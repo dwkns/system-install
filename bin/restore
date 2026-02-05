@@ -1,61 +1,148 @@
 #!/usr/bin/env bash
+###############################################################################
+# restore - Restore System Configuration from Backup
+###############################################################################
+#
+# PURPOSE:
+#   Restores system configuration from a previously created backup. This
+#   includes dotfiles, macOS preferences, and color palettes. Before
+#   overwriting any files, creates a safety backup of current files.
+#
+# USAGE:
+#   restore --from /path/to/backup   # Restore from specific backup
+#   restore --help                   # Show help
+#
+# INPUT:
+#   Expects a backup directory structure like:
+#     backup-dir/
+#     ├── dotfiles/           # Dotfiles to restore to ~/
+#     ├── preferences/        # .plist files to restore to ~/Library/Preferences
+#     └── colors/             # .clr files to restore to ~/Library/Colors
+#
+# SAFETY:
+#   Before overwriting any existing files, copies them to:
+#   ~/.system-config/backups/restore-TIMESTAMP/
+#   This allows you to recover if the restore causes problems.
+#
+# SEE ALSO:
+#   backup - Create a backup
+#   bootstrap - Full system setup
+#
+###############################################################################
+
+# Strict mode: exit on error, undefined vars, pipe failures
 set -euo pipefail
 IFS=$'\n\t'
 
+###############################################################################
+# Configuration
+###############################################################################
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
-FROM_DIR=""
+FROM_DIR=""    # Source backup directory (required)
 
+###############################################################################
+# Usage Information
+###############################################################################
 usage() {
   cat <<'USAGE'
 Usage: restore --from DIR
 Restores dotfiles, preferences, and colors from a backup directory.
+
+Options:
+  --from DIR     Backup directory to restore from (required)
+  -h, --help     Show this help message
+
+Examples:
+  restore --from ~/.system-config/backups/20240215-143052
+  restore --from ~/Downloads/my-backup
 USAGE
 }
 
+###############################################################################
+# Argument Parsing
+###############################################################################
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --from) FROM_DIR="${2:-}"; shift ;;
-    -h|--help) usage; exit 0 ;;
-    *) echo "Unknown option: $1"; usage; exit 1 ;;
+    --from) 
+      FROM_DIR="${2:-}"
+      shift 
+      ;;
+    -h|--help) 
+      usage
+      exit 0 
+      ;;
+    *) 
+      echo "Unknown option: $1"
+      usage
+      exit 1 
+      ;;
   esac
   shift
 done
 
+###############################################################################
+# Setup
+###############################################################################
 export ROOT_DIR
 
+# Load required libraries
 # shellcheck disable=SC1090
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/dotfiles.sh"
 source "$ROOT_DIR/lib/preferences.sh"
 source "$ROOT_DIR/lib/colors.sh"
 
-[[ -n "$FROM_DIR" ]] || die "--from is required"
-[[ -d "$FROM_DIR" ]] || die "Backup dir not found: $FROM_DIR"
+###############################################################################
+# Validation
+###############################################################################
+# Ensure --from was provided
+[[ -n "$FROM_DIR" ]] || die "--from is required. Use: restore --from /path/to/backup"
 
+# Ensure the backup directory exists
+[[ -d "$FROM_DIR" ]] || die "Backup directory not found: $FROM_DIR"
+
+###############################################################################
+# Safety Backup
+###############################################################################
+# Create a backup of current files before overwriting
+# This allows recovery if the restore causes problems
 backup_root="$ROOT_DIR/backups/restore-$(timestamp)"
 ensure_dir "$backup_root"
 
+###############################################################################
+# Restore Dotfiles
+###############################################################################
 log "Restoring dotfiles from $FROM_DIR"
-while IFS= read -r file; do
-  local_src="$FROM_DIR/dotfiles/$file"
-  local_dst="$HOME/$file"
 
+# Process each dotfile listed in config/.dotfiles
+while IFS= read -r file; do
+  local_src="$FROM_DIR/dotfiles/$file"  # Source: backup copy
+  local_dst="$HOME/$file"                # Destination: home directory
+
+  # Skip if file doesn't exist in backup
   [[ ! -e "$local_src" ]] && { warn "Missing in backup: $local_src"; continue; }
 
+  # Safety backup: save current file before overwriting
   if [[ -e "$local_dst" ]]; then
     ensure_dir "$backup_root/$(dirname "$file")"
     run cp -a "$local_dst" "$backup_root/$file"
   fi
 
+  # Restore the file from backup
   ensure_dir "$(dirname "$local_dst")"
   run cp -a "$local_src" "$local_dst"
 done < <(read_dotfiles)
 
+###############################################################################
+# Restore Preferences
+###############################################################################
 log "Restoring preferences from $FROM_DIR"
+
 if [[ -d "$FROM_DIR/preferences" ]]; then
   PREFERENCES_DIR="$FROM_DIR/preferences"
   PREFERENCES_TARGET="$HOME/Library/Preferences"
 
+  # Process each .plist file in the backup
   while IFS= read -r -d '' file; do
     local basename="${file#$PREFERENCES_DIR/}"
     local src="$file"
@@ -63,6 +150,7 @@ if [[ -d "$FROM_DIR/preferences" ]]; then
 
     [[ ! -e "$src" ]] && { warn "Missing in backup: $src"; continue; }
 
+    # Safety backup: save current preference before overwriting
     if [[ -e "$dst" ]]; then
       ensure_dir "$backup_root/preferences/$(dirname "$basename")"
       run cp -a "$dst" "$backup_root/preferences/$basename"
@@ -73,13 +161,18 @@ if [[ -d "$FROM_DIR/preferences" ]]; then
   done < <(find "$PREFERENCES_DIR" -name "*.plist" -type f -print0)
 fi
 
+###############################################################################
+# Restore Colors
+###############################################################################
 log "Restoring colors from $FROM_DIR"
+
 if [[ -d "$FROM_DIR/colors" ]]; then
   COLORS_DIR="$FROM_DIR/colors"
   COLORS_TARGET="$HOME/Library/Colors"
   
   ensure_dir "$COLORS_TARGET"
   
+  # Process each .clr file in the backup
   while IFS= read -r -d '' file; do
     local basename="${file#$COLORS_DIR/}"
     local src="$file"
@@ -87,6 +180,7 @@ if [[ -d "$FROM_DIR/colors" ]]; then
     
     [[ ! -e "$src" ]] && { warn "Missing in backup: $src"; continue; }
     
+    # Safety backup: save current color file before overwriting
     if [[ -e "$dst" ]]; then
       ensure_dir "$backup_root/colors/$(dirname "$basename")"
       run cp -a "$dst" "$backup_root/colors/$basename"
@@ -97,4 +191,7 @@ if [[ -d "$FROM_DIR/colors" ]]; then
   done < <(find "$COLORS_DIR" -name "*.clr" -type f -print0)
 fi
 
+###############################################################################
+# Complete
+###############################################################################
 note "Restore complete. Previous files backed up to: $backup_root"
