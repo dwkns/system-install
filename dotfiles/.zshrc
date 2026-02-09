@@ -87,6 +87,13 @@ if [[ -r "$SYS_FILES_ROOT/lib/colors.sh" ]]; then
   source "$SYS_FILES_ROOT/lib/colors.sh"
 fi
 
+# Load Sublime Text configuration management functions
+# Provides: install_sublime(), backup_sublime()
+# These handle syncing Sublime Text config files to/from ~/Library/Application Support/Sublime Text/User
+if [[ -r "$SYS_FILES_ROOT/lib/sublime.sh" ]]; then
+  source "$SYS_FILES_ROOT/lib/sublime.sh"
+fi
+
 ###############################################################################
 #  Shell behavior
 ###############################################################################
@@ -143,6 +150,15 @@ usys () {
   fi
   echo
 
+  # Install/update Sublime Text configuration files
+  # Copies config files from ~/.system-config/sublime-config-files/ to ~/Library/Application Support/Sublime Text/User
+  if typeset -f install_sublime >/dev/null; then
+    install_sublime
+  else
+    warn "install_sublime not found"
+  fi
+  echo
+
   # Source macOS-specific configuration if it exists
   # This file may contain additional macOS settings
   if [[ -r "$HOME/.macos" ]]; then
@@ -178,6 +194,15 @@ bsys () {
     backup_preferences
   else
     warn "backup_preferences not found"
+  fi
+  echo
+
+  # Backup Sublime Text configuration files
+  # Copies config files from ~/Library/Application Support/Sublime Text/User to ~/.system-config/sublime-config-files/
+  if typeset -f backup_sublime >/dev/null; then
+    backup_sublime
+  else
+    warn "backup_sublime not found"
   fi
   echo
 
