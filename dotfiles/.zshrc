@@ -155,18 +155,30 @@ usys () {
   fi
 
   # Source macOS-specific configuration if it exists
-  # This file may contain additional macOS settings
+  # Capture any warnings/errors produced while applying macOS settings
+  # so we can display settings output first, then notes, then warnings.
   if [[ -r "$HOME/.macos" ]]; then
-    source "$HOME/.macos"
+    local _macos_warnings
+    _macos_warnings=$(mktemp)
+    # stdout (settings messages) go to console; stderr (warnings) go to temp file
+    source "$HOME/.macos" 2>"$_macos_warnings"
   fi
-  echo
 
-  # Print all backup locations at the end
+  # Print all backup locations immediately after settings
   note "Dotfiles installed. Backup: $dotfiles_backup"
   note "Preferences installed. Backup: $prefs_backup"
   note "Colors installed. Backup: $colors_backup"
   note "Sublime Text config installed. Backup: $sublime_backup"
   echo
+
+  # If any macOS warnings/errors were captured, print them after notes
+  if [[ -n "$_macos_warnings" && -s "$_macos_warnings" ]]; then
+    warn "Warnings while applying macOS settings:"
+    sed -n '1,200p' "$_macos_warnings"
+    rm -f "$_macos_warnings"
+  elif [[ -n "$_macos_warnings" ]]; then
+    rm -f "$_macos_warnings"
+  fi
 
   # Reload the shell configuration to apply any changes
   doing 'Reloading .zshrc profile'
