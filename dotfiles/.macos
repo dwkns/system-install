@@ -279,6 +279,9 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
 setting "Finder: show hidden files by default"
 #defaults write com.apple.finder AppleShowAllFiles -bool true
+setting "Finder: show hidden files by default"
+defaults write com.apple.finder AppleShowAllFiles -bool false
+
 
 setting "Finder: show all filename extensions"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -350,7 +353,8 @@ setting "Use list view in all Finder windows by default"
 # Nlsv ▸ List View
 # clmv ▸ Column View
 # icnv ▸ Icon View
-defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+setting "Use list view in all Finder windows by default"
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
 setting "Disable the warning before emptying the Trash"
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
@@ -390,6 +394,9 @@ defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
 setting "Set the icon size of Dock items to 36 pixels"
 defaults write com.apple.dock tilesize -int 36
+
+setting "Make Dock autohide by default"
+defaults write com.apple.dock autohide -bool false
 
 # Change minimize/maximize window effect
 # defaults write com.apple.dock mineffect -string "scale"
