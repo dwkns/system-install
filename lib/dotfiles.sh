@@ -126,7 +126,7 @@ install_dotfiles() {
     run cp -a "$src" "$dst"
   done < <(read_dotfiles)
 
-  note "Dotfiles installed. Backup: $backup_root"
+  echo "$backup_root"
 }
 
 ###############################################################################

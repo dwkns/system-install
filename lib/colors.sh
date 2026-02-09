@@ -93,11 +93,11 @@ install_colors() {
     run cp -a "$src" "$dst"
   done < <(find "$COLORS_DIR" -name "*.clr" -type f -print0)
   
-  note "Colors installed. Backup: $backup_root"
+  echo "$backup_root"
 }
 
 ###############################################################################
-# backup_colors - Copy color files from system to repository
+# backup_colors - Backup color files from system to repository
 ###############################################################################
 # Backs up all .clr color palette files from ~/Library/Colors to the
 # repository's colors directory. This captures any custom colors created
