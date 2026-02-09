@@ -165,6 +165,7 @@ usys () {
   fi
 
   # Print all backup locations immediately after settings
+  echo
   note "Dotfiles installed. Backup: $dotfiles_backup"
   note "Preferences installed. Backup: $prefs_backup"
   note "Colors installed. Backup: $colors_backup"
@@ -188,7 +189,7 @@ for app in "Activity Monitor" "Dock" "Finder" "Mail" "Messages" "Safari" "System
   killall "${app}" &> /dev/null || true
 done
 
-echo; warn "Some of these changes require a logout/restart to take effect.";
+echo; warn "Some of these changes require a logout/restart to take effect.";echo
 
   # Reload the shell configuration to apply any changes
   doing 'Reloading .zshrc profile'

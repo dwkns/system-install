@@ -100,11 +100,11 @@ setting "Make Dock autohide by default"
 defaults write com.apple.dock autohide -bool false
 defaults write com.apple.dock tilesize -int 36
 
-setting "Add a spacer to the left side of the Dock (where the applications are)"
-defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
+# setting "Add a spacer to the left side of the Dock (where the applications are)"
+# defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
 
-setting "Add a spacer to the right side of the Dock (where the Trash is)"
-defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
+# setting "Add a spacer to the right side of the Dock (where the Trash is)"
+# defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
 
 # Guarded reset Launchpad database: avoid errors when Dock folder missing
 if [ -d "${HOME}/Library/Application Support/Dock" ]; then
