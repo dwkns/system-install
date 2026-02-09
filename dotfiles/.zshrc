@@ -130,8 +130,6 @@ usys () {
   else
     warn "install_dotfiles not found"
   fi
-  echo
-
   # Install/update macOS preference files
   # Copies .plist files from ~/.system-config/preferences/ to ~/Library/Preferences
   if typeset -f install_preferences >/dev/null; then
@@ -139,8 +137,6 @@ usys () {
   else
     warn "install_preferences not found"
   fi
-  echo
-
   # Install/update color palette files
   # Copies .clr files from ~/.system-config/colors/ to ~/Library/Colors
   if typeset -f install_colors >/dev/null; then
@@ -148,16 +144,13 @@ usys () {
   else
     warn "install_colors not found"
   fi
-  echo
-
   # Install/update Sublime Text configuration files
-  # Copies config files from ~/.system-config/sublime-config-files/ to ~/Library/Application Support/Sublime Text/User
+  # Copies config files from ~/.system-config/config/sublime-config/ to ~/Library/Application Support/Sublime Text/User
   if typeset -f install_sublime >/dev/null; then
     install_sublime
   else
     warn "install_sublime not found"
   fi
-  echo
 
   # Source macOS-specific configuration if it exists
   # This file may contain additional macOS settings
@@ -186,8 +179,6 @@ bsys () {
   else
     warn "backup_dotfiles not found"
   fi
-  echo
-
   # Backup macOS preference files
   # Copies .plist files from ~/Library/Preferences to ~/.system-config/preferences/
   if typeset -f backup_preferences >/dev/null; then
@@ -195,16 +186,20 @@ bsys () {
   else
     warn "backup_preferences not found"
   fi
-  echo
-
+  # Backup color palette files
+  # Copies .clr files from ~/Library/Colors to ~/.system-config/colors/
+  if typeset -f backup_colors >/dev/null; then
+    backup_colors
+  else
+    warn "backup_colors not found"
+  fi
   # Backup Sublime Text configuration files
-  # Copies config files from ~/Library/Application Support/Sublime Text/User to ~/.system-config/sublime-config-files/
+  # Copies config files from ~/Library/Application Support/Sublime Text/User to ~/.system-config/config/sublime-config/
   if typeset -f backup_sublime >/dev/null; then
     backup_sublime
   else
     warn "backup_sublime not found"
   fi
-  echo
 
   # Commit and push changes to the repository
   # Runs in a subshell to avoid changing the current working directory
