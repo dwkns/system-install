@@ -151,15 +151,7 @@ defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Do
 setting "Enable the debug menu in iCal"
 defaults write com.apple.iCal IncludeDebugMenu -bool true
 
-###############################################################################
-# Kill affected applications to apply certain prefs                        #
-###############################################################################
 
-for app in "Activity Monitor" "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" "Terminal"; do
-  killall "${app}" &> /dev/null || true
-done
-
-echo; warn "Some of these changes require a logout/restart to take effect.";
 
 
 #-----------------------------------------------------------------------------

@@ -180,6 +180,16 @@ usys () {
     rm -f "$_macos_warnings"
   fi
 
+  ###############################################################################
+# Kill affected applications to apply certain prefs                        #
+###############################################################################
+
+for app in "Activity Monitor" "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" "Terminal"; do
+  killall "${app}" &> /dev/null || true
+done
+
+echo; warn "Some of these changes require a logout/restart to take effect.";
+
   # Reload the shell configuration to apply any changes
   doing 'Reloading .zshrc profile'
   source "$HOME/.zshrc"
