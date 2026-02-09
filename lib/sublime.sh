@@ -98,7 +98,7 @@ install_sublime() {
     run cp -a "$src" "$dst"
   done < <(find "$SUBLIME_DIR" -type f -print0)
   
-  note "Sublime Text config installed. Backup: $backup_root"
+  echo "$backup_root"
 }
 
 ###############################################################################

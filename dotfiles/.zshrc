@@ -123,31 +123,33 @@ usys () {
   has_cmd git && git pull
   echo
 
+  local dotfiles_backup prefs_backup colors_backup sublime_backup
+
   # Install/update dotfiles from repository to home directory
   # Copies files from ~/.system-config/dotfiles/ to ~/
   if typeset -f install_dotfiles >/dev/null; then
-    install_dotfiles
+    dotfiles_backup=$(install_dotfiles 2>&1 | tail -1)
   else
     warn "install_dotfiles not found"
   fi
   # Install/update macOS preference files
   # Copies .plist files from ~/.system-config/preferences/ to ~/Library/Preferences
   if typeset -f install_preferences >/dev/null; then
-    install_preferences
+    prefs_backup=$(install_preferences 2>&1 | tail -1)
   else
     warn "install_preferences not found"
   fi
   # Install/update color palette files
   # Copies .clr files from ~/.system-config/colors/ to ~/Library/Colors
   if typeset -f install_colors >/dev/null; then
-    install_colors
+    colors_backup=$(install_colors 2>&1 | tail -1)
   else
     warn "install_colors not found"
   fi
   # Install/update Sublime Text configuration files
   # Copies config files from ~/.system-config/config/sublime-config/ to ~/Library/Application Support/Sublime Text/User
   if typeset -f install_sublime >/dev/null; then
-    install_sublime
+    sublime_backup=$(install_sublime 2>&1 | tail -1)
   else
     warn "install_sublime not found"
   fi
@@ -157,6 +159,13 @@ usys () {
   if [[ -r "$HOME/.macos" ]]; then
     source "$HOME/.macos"
   fi
+  echo
+
+  # Print all backup locations at the end
+  note "Dotfiles installed. Backup: $dotfiles_backup"
+  note "Preferences installed. Backup: $prefs_backup"
+  note "Colors installed. Backup: $colors_backup"
+  note "Sublime Text config installed. Backup: $sublime_backup"
   echo
 
   # Reload the shell configuration to apply any changes

@@ -106,7 +106,7 @@ install_preferences() {
     run cp -a "$src" "$dst"
   done < <(find "$PREFERENCES_DIR" -name "*.plist" -type f -print0)
 
-  note "Preferences installed. Backup: $backup_root"
+  echo "$backup_root"
 }
 
 ###############################################################################
