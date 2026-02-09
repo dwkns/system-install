@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ~/.macos — trimmed and modernized (2026)
 # This file has been reorganized: deprecated/removed options pruned,
-# problematic commands guarded, and a curated 'Curated New Defaults (2026)'
-# section appended for convenient, modern defaults.
+# problematic commands guarded. Legacy/optional defaults are commented out
+# at the bottom for reference.
 
 source "$HOME/.system-config/lib/colours.sh"
 
@@ -145,35 +145,11 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Torrents"
 
-setting "Enable the debug menu in Address Book"
-defaults write com.apple.addressbook ABShowDebugMenu -bool true
+# setting "Enable the debug menu in Address Book"
+# defaults write com.apple.addressbook ABShowDebugMenu -bool true
 
 setting "Enable the debug menu in iCal"
 defaults write com.apple.iCal IncludeDebugMenu -bool true
-
-
-
-
-setting "Configure: Screenshots location and format"
-defaults write com.apple.screencapture location -string "${HOME}/Desktop"
-defaults write com.apple.screencapture type -string "png"
-
-setting "Finder: prefer list view and hide extra files"
-defaults write com.apple.finder AppleShowAllFiles -bool false
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
-setting "Dock: autohide and set tile size"
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock tilesize -int 36
-
-setting "Input: disable automatic capitalization and spelling correction"
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-
-setting "Safari: enable Develop menu and Web Inspector"
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-
 
 ###############################################################################
 # Kill affected applications to apply certain prefs                        #
@@ -184,8 +160,7 @@ for app in "Activity Monitor" "Dock" "Finder" "Mail" "Messages" "Safari" "System
 done
 
 echo; warn "Some of these changes require a logout/restart to take effect.";
-echo;
-echo; complete "System config saved.";
+
 
 #-----------------------------------------------------------------------------
 # Legacy / Optional Defaults (from original .macos)
@@ -212,9 +187,6 @@ echo; complete "System config saved.";
 
 # setting "Adjust toolbar title rollover delay (legacy)"
 # defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0
-
-# setting "Window resize animation speed (legacy)"
-# defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 # setting "Expand save panel by default (legacy)"
 # defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
@@ -257,15 +229,6 @@ echo; complete "System config saved.";
 # defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
 ## Input / Trackpad / Keyboard legacy
-# setting "Enable tap-to-click (legacy)"
-# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-
-# setting "Tap behavior for current host (legacy)"
-# defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-
-# setting "Global tap behavior (legacy)"
-# defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-
 # setting "Map bottom-right corner to right-click (legacy)"
 # defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
 
@@ -375,9 +338,6 @@ echo; complete "System config saved.";
 # setting "Avoid creating .DS_Store on USB (legacy)"
 # defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
-# setting "Preferred Finder view style (legacy)"
-# defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
 # setting "Disable empty Trash warning (legacy)"
 # defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
@@ -401,9 +361,6 @@ echo; complete "System config saved.";
 ## Dock legacy tweaks
 # setting "Enable Dock hover highlight (legacy)"
 # defaults write com.apple.dock mouse-over-hilite-stack -bool true
-
-# setting "Set Dock icon size (legacy)"
-# defaults write com.apple.dock tilesize -int 36
 
 # setting "Set minimize/maximize effect (legacy)"
 # defaults write com.apple.dock mineffect -string "scale"
