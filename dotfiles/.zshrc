@@ -793,3 +793,5 @@ n() {
 # These aliases ensure Python 3 is used by default
 alias python=python3
 alias pip=pip3
+export PATH="$HOME/.local/bin:$PATH"
+alias python=/opt/homebrew/bin/python3.9
