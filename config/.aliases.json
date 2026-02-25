@@ -202,7 +202,7 @@
     {
       "name": "pip",
       "description": "Use pip3",
-      "command": "pip3",
+      "command": "python3 -m pip",
       "category": "python"
     }
   ]
