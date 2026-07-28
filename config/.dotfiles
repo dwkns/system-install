@@ -10,3 +10,4 @@
 .background_colour.png
 .profile
 .rubocop.yml
+.config/ghostty/config

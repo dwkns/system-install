@@ -14,10 +14,12 @@ brew "direnv"
 brew "netlify-cli"
 brew "coreutils"
 brew "openssl@3"
+brew "duti"
 
 
 # Apps
 cask "iterm2"
+cask "ghostty"
 cask "sublime-text"
 cask "dropbox"
 cask "typora"

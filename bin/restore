@@ -144,9 +144,11 @@ if [[ -d "$FROM_DIR/preferences" ]]; then
 
   # Process each .plist file in the backup
   while IFS= read -r -d '' file; do
-    local basename="${file#$PREFERENCES_DIR/}"
-    local src="$file"
-    local dst="$PREFERENCES_TARGET/$basename"
+    # NOTE: no 'local' here — this loop runs at script scope, not inside a
+    # function, and 'local' outside a function aborts under 'set -e'.
+    basename="${file#$PREFERENCES_DIR/}"
+    src="$file"
+    dst="$PREFERENCES_TARGET/$basename"
 
     [[ ! -e "$src" ]] && { warn "Missing in backup: $src"; continue; }
 
@@ -174,9 +176,10 @@ if [[ -d "$FROM_DIR/colors" ]]; then
   
   # Process each .clr file in the backup
   while IFS= read -r -d '' file; do
-    local basename="${file#$COLORS_DIR/}"
-    local src="$file"
-    local dst="$COLORS_TARGET/$basename"
+    # NOTE: no 'local' here — script scope, same reason as the preferences loop.
+    basename="${file#$COLORS_DIR/}"
+    src="$file"
+    dst="$COLORS_TARGET/$basename"
     
     [[ ! -e "$src" ]] && { warn "Missing in backup: $src"; continue; }
     

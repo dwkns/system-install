@@ -50,7 +50,7 @@ IFS=$'\n\t'
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 
 # Control flags (can be overridden via command-line args)
-ASSUME_YES=1      # Skip confirmation prompts (1=yes, 0=ask)
+ASSUME_YES=0      # Skip confirmation prompts (1=yes, 0=ask). Default asks; --yes overrides.
 DRY_RUN=0         # Show actions without executing (1=dry run, 0=execute)
 DO_BREW=1         # Install Homebrew packages (1=yes, 0=skip)
 DO_DOTFILES=1     # Install dotfiles/prefs/colors (1=yes, 0=skip)
@@ -68,7 +68,7 @@ Usage: bootstrap [options]
 Sets up a new macOS system with your complete configuration.
 
 Options:
-  --yes                Assume yes to all prompts (default)
+  --yes                Assume yes to all prompts (non-interactive)
   --dry-run            Show actions without executing
   --no-brew            Skip Homebrew/Brewfile installs
   --no-dotfiles        Skip dotfiles, preferences, and colors
@@ -119,6 +119,7 @@ source "$ROOT_DIR/lib/preferences.sh"  # Preferences management
 source "$ROOT_DIR/lib/colors.sh"       # Colors management
 source "$ROOT_DIR/lib/macos.sh"        # macOS configuration
 source "$ROOT_DIR/lib/mas.sh"          # Mac App Store
+source "$ROOT_DIR/lib/ghostty.sh"      # Ghostty default-terminal setup
 
 ###############################################################################
 # Validation
@@ -181,6 +182,9 @@ if [[ "$DO_MACOS" == "1" ]]; then
   # Apply macOS preferences from .macos script
   # This includes Finder, Dock, keyboard, trackpad settings, etc.
   apply_macos_defaults
+
+  # Register Ghostty as the default terminal (LaunchServices associations)
+  set_ghostty_default_terminal
 fi
 
 ###############################################################################

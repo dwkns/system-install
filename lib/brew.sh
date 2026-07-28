@@ -68,9 +68,15 @@ install_homebrew() {
   fi
 
   log "Installing Homebrew"
-  
-  # Run the official Homebrew installation script
-  run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  # Run the official Homebrew installation script.
+  # The curl is kept inside the dry-run gate: with 'run', the "$(curl ...)"
+  # substitution would execute (a network fetch) even in --dry-run mode.
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then
+    note "DRY RUN: install Homebrew via https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
   
   # On Apple Silicon Macs, Homebrew installs to /opt/homebrew
   # We need to add it to the PATH for the current session

@@ -34,6 +34,12 @@
 #
 ###############################################################################
 
+# Include guard: common.sh is sourced by every library, so guard against
+# repeatedly re-sourcing (and re-defining its functions) when a command loads
+# several libs that each source common.sh.
+[[ -n "${_SYSCFG_COMMON_LOADED:-}" ]] && return 0
+_SYSCFG_COMMON_LOADED=1
+
 # Configuration
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 

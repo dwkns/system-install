@@ -1,2 +1,8 @@
 backups/
 .DS_Store
+
+# Secrets — never commit. The Sublime license lives in the macOS keychain
+# (service: sublime-text-license); install_sublime writes it into place.
+config/sublime-config/License.sublime_license
+sublime-config-files/License.sublime_license
+*.sublime_license
