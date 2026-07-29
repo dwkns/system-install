@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
-# ~/.macos — trimmed and modernized (2026)
-# This file has been reorganized: deprecated/removed options pruned,
-# problematic commands guarded. Legacy/optional defaults are commented out
-# at the bottom for reference.
+# ~/.macos — macOS defaults (modernized 2026-07 for macOS Tahoe / 26)
+#
+# Cleaned up: the large commented "legacy" reference block was removed, dead /
+# no-op keys pruned, the two Dock label/value contradictions fixed, and a
+# killall sweep added at the end so changes actually take effect.
+#
+# Run:  bash ~/.macos      (or it is applied by `usys` / `bootstrap`)
 
 source "$HOME/.system-config/lib/colours.sh"
 
 setting "Configuring system"
 echo;
 
-# Close any open System Settings / Preferences panes
+# Close any open System Settings / Preferences panes so they don't overwrite
+# changes we're about to make.
 osascript -e 'tell application "System Settings" to quit' 2>/dev/null || \
   osascript -e 'tell application "System Preferences" to quit' 2>/dev/null || true
 
@@ -20,7 +24,7 @@ osascript -e 'tell application "System Settings" to quit' 2>/dev/null || \
 setting "Set sidebar icon size to medium"
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
 
-setting "Always show scrollbars"
+setting "Show scrollbars only when scrolling"
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 
 setting "Disable automatic capitalization, smart dashes, smart quotes, auto-correct"
@@ -32,12 +36,21 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 setting "Increase window resize speed for Cocoa applications"
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
-setting "Disable Resume system-wide"
+setting "Disable Resume system-wide (don't reopen windows per-app)"
 defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
 
-setting "Disable the 'reopen windows when logging back in' option"
+setting "Disable 'reopen windows when logging back in'"
 defaults write com.apple.loginwindow TALLogoutSavesState -bool false
 defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
+
+setting "Expand save and print panels by default"
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+setting "Save new documents to disk (not iCloud) by default"
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 ###############################################################################
 # Keyboard, Trackpad, and Input                                              #
@@ -50,7 +63,8 @@ setting "Set a blazingly fast keyboard repeat rate"
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 13
 
-setting "Enable tap-to-click for this user"
+setting "Enable tap-to-click (built-in and external trackpads)"
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
@@ -59,7 +73,7 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 # Screen & Screenshots                                                       #
 ###############################################################################
 
-setting "Save screenshots to the desktop (PNG) and remove shadow"
+setting "Save screenshots to the Desktop as PNG, without window shadow"
 defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 defaults write com.apple.screencapture type -string "png"
 defaults write com.apple.screencapture disable-shadow -bool true
@@ -71,53 +85,57 @@ defaults write com.apple.screencapture disable-shadow -bool true
 setting "Show all filename extensions"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
+# NOTE: this shows the full path in the Finder title bar. Convenient, but it
+# means screenshots reveal your home-directory structure.
 setting "Display full POSIX path as Finder window title"
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
 setting "Show the ~/Library folder"
 chflags nohidden ~/Library || true
 
-setting "Finder: prefer list view and hide extra files"
+setting "Finder: prefer list view, hide hidden files"
 defaults write com.apple.finder AppleShowAllFiles -bool false
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-setting "Allow text selection in Quick Look"
-defaults write com.apple.finder QLEnableTextSelection -bool true
+setting "Show the path bar and status bar in Finder"
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
 
-setting "Disable disk image verification"
-defaults write com.apple.frameworks.diskimages skip-verify -bool true
-defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
-defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+setting "Keep folders on top when sorting by name"
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+setting "Search the current folder by default"
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+setting "Disable the warning when changing a file extension"
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+setting "Avoid creating .DS_Store files on network and USB volumes"
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 ###############################################################################
 # Dock                                                                       #
 ###############################################################################
 
-setting "Make Dock icons of hidden applications translucent"
-defaults write com.apple.dock showhidden -bool false
-
-setting "Make Dock autohide by default"
+setting "Do not autohide the Dock"
 defaults write com.apple.dock autohide -bool false
+
+setting "Set the Dock tile size"
 defaults write com.apple.dock tilesize -int 36
 
-# setting "Add a spacer to the left side of the Dock (where the applications are)"
-# defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
-
-# setting "Add a spacer to the right side of the Dock (where the Trash is)"
-# defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
-
-# Guarded reset Launchpad database: avoid errors when Dock folder missing
-if [ -d "${HOME}/Library/Application Support/Dock" ]; then
-  find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete 2>/dev/null || true
-fi
+setting "Don't automatically rearrange Spaces based on most recent use"
+defaults write com.apple.dock mru-spaces -bool false
 
 ###############################################################################
 # Safari & WebKit                                                             #
 ###############################################################################
 
-setting "Enable Develop menu and Web Inspector in Safari"
+# NOTE: Safari's preferences live inside its sandbox container. This only takes
+# effect if your terminal has Full Disk Access (System Settings > Privacy &
+# Security > Full Disk Access); otherwise it is a harmless no-op.
+setting "Enable the Develop menu in Safari"
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 
 ###############################################################################
 # Terminal / iTerm2                                                           #
@@ -141,404 +159,20 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 # Applications                                                                #
 ###############################################################################
 
-# Transmission
+setting "Transmission: use an incomplete-downloads folder"
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Torrents"
 
-# setting "Enable the debug menu in Address Book"
-# defaults write com.apple.addressbook ABShowDebugMenu -bool true
-
-setting "Enable the debug menu in iCal"
-defaults write com.apple.iCal IncludeDebugMenu -bool true
-
-
-
-
-#-----------------------------------------------------------------------------
-# Legacy / Optional Defaults (from original .macos)
-# These lines are provided commented-out for you to review and enable
-# individually. I preserved the original keys grouped roughly by category.
-# To enable one, remove the leading '#' and run this script.
-#-----------------------------------------------------------------------------
-
-## General UI / legacy
-# setting "Reduce UI transparency (legacy)"
-# defaults write com.apple.universalaccess reduceTransparency -bool true
-
-# setting "Set highlight color (legacy)"
-# defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
-
-# setting "Sidebar icon size (legacy)"
-# defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
-
-# setting "Always show scrollbars (legacy)"
-# defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
-
-# setting "Disable animated focus ring (legacy)"
-# defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
-
-# setting "Adjust toolbar title rollover delay (legacy)"
-# defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0
-
-# setting "Expand save panel by default (legacy)"
-# defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-
-# setting "Expand print panel by default (legacy)"
-# defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-
-# setting "Expand print options (legacy)"
-# defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-
-# setting "Expand print options (legacy)"
-# defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
-
-# setting "Save to disk (not iCloud) by default (legacy)"
-# defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-
-# setting "Quit printer app after finishing (legacy)"
-# defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
-
-# setting "Disable 'are you sure' dialog for opening apps (legacy)"
-# defaults write com.apple.LaunchServices LSQuarantine -bool false
-
-# setting "Display ASCII control characters in text views (legacy)"
-# defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
-
-# setting "Disable Resume system-wide (legacy)"
-# defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
-
-# setting "Disable automatic termination of inactive apps (legacy)"
-# defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
-
-# setting "Disable menu bar transparency"
-# defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
-
-# setting "Show remaining battery time; hide percentage"
-# defaults write com.apple.menuextra.battery ShowPercent -string "NO"
-# defaults write com.apple.menuextra.battery ShowTime -string "YES"
-
-# setting "Disable opening and closing window animations"
-# defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-
-## Input / Trackpad / Keyboard legacy
-# setting "Map bottom-right corner to right-click (legacy)"
-# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
-
-# setting "Enable right-click on trackpad (legacy)"
-# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
-
-# setting "Disable natural scrolling (legacy)"
-# defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
-
-# setting "Increase Bluetooth audio quality (legacy)"
-# defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
-
-# setting "Enable full keyboard access (legacy)"
-# defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-
-# setting "Enable ctrl-scroll to zoom (legacy)"
-# defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-
-# setting "Set HID scroll zoom modifier mask (legacy)"
-# defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
-
-# setting "Follow keyboard focus while zoomed (legacy)"
-# defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
-
-# setting "Initial key repeat (legacy)"
-# defaults write NSGlobalDomain InitialKeyRepeat -int 10
-
-# setting "Trackpad corner click behavior (right-click via corner)"
-# defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
-# defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
-
-## Localization / Timezone / Language (legacy examples)
-# setting "Preferred languages (legacy)"
-# defaults write NSGlobalDomain AppleLanguages -array "en" "nl"
-
-# setting "Locale (legacy)"
-# defaults write NSGlobalDomain AppleLocale -string "en_GB@currency=EUR"
-
-# setting "Measurement units (legacy)"
-# defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
-
-# setting "Metric units (legacy)"
-# defaults write NSGlobalDomain AppleMetricUnits -bool true
-
-# setting "Show language menu at login (legacy)"
-# sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
-
-## Screen saver / Security (legacy)
-# setting "Require password after sleep/screensaver (legacy)"
-# defaults write com.apple.screensaver askForPassword -int 1
-
-# setting "Require password delay (legacy)"
-# defaults write com.apple.screensaver askForPasswordDelay -int 0
-
-# setting "Font smoothing (legacy)"
-# defaults write NSGlobalDomain AppleFontSmoothing -int 1
-
-## Finder legacy tweaks
-# setting "Allow quitting Finder via ⌘Q (legacy)"
-# defaults write com.apple.finder QuitMenuItem -bool true
-
-# setting "Disable Finder animations (legacy)"
-# defaults write com.apple.finder DisableAllAnimations -bool true
-
-# setting "Set Desktop as default Finder window (legacy)"
-# defaults write com.apple.finder NewWindowTarget -string "PfDe"
-
-# setting "Set Desktop path for Finder windows (legacy)"
-# defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
-
-# setting "Show external hard drives on desktop (legacy)"
-# defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-
-# setting "Show hard drives on desktop (legacy)"
-# defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-
-# setting "Show mounted servers on desktop (legacy)"
-# defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
-
-# setting "Show removable media on desktop (legacy)"
-# defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
-
-# setting "Show Finder status bar (legacy)"
-# defaults write com.apple.finder ShowStatusBar -bool true
-
-# setting "Show Finder path bar (legacy)"
-# defaults write com.apple.finder ShowPathbar -bool true
-
-# setting "Keep folders on top when sorting by name (legacy)"
-# defaults write com.apple.finder _FXSortFoldersFirst -bool true
-
-# setting "Default Finder search scope (legacy)"
-# defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-
-# setting "Disable extension-change warning (legacy)"
-# defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-# setting "Enable spring loading for directories (legacy)"
-# defaults write NSGlobalDomain com.apple.springing.enabled -bool true
-
-# setting "Remove spring loading delay (legacy)"
-# defaults write NSGlobalDomain com.apple.springing.delay -float 0
-
-# setting "Avoid creating .DS_Store on network/USB (legacy)"
-# defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-
-# setting "Avoid creating .DS_Store on USB (legacy)"
-# defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-
-# setting "Disable empty Trash warning (legacy)"
-# defaults write com.apple.finder WarnOnEmptyTrash -bool false
-
-# setting "Enable AirDrop over Ethernet (legacy)"
-# defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
-
-# setting "Automatically open a new Finder window when a volume is mounted"
-# defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
-# defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
-# defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
-
-# setting "Show item info below desktop icons"
-# /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-
-# setting "Enable snap-to-grid for desktop icons"
-# /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-
-# setting "Empty Trash securely by default"
-# defaults write com.apple.finder EmptyTrashSecurely -bool true
-
-## Dock legacy tweaks
-# setting "Enable Dock hover highlight (legacy)"
-# defaults write com.apple.dock mouse-over-hilite-stack -bool true
-
-# setting "Set minimize/maximize effect (legacy)"
-# defaults write com.apple.dock mineffect -string "scale"
-
-# setting "Minimize windows into app icon (legacy)"
-# defaults write com.apple.dock minimize-to-application -bool true
-
-# setting "Enable spring loading for Dock items (legacy)"
-# defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
-
-# setting "Show indicator lights for open apps in Dock (legacy)"
-# defaults write com.apple.dock show-process-indicators -bool true
-
-# setting "Disable Dock launch animation (legacy)"
-# defaults write com.apple.dock launchanim -bool false
-
-# setting "Speed up Mission Control animations (legacy)"
-# defaults write com.apple.dock expose-animation-duration -float 0.1
-
-# setting "Don't group windows by app in Mission Control (legacy)"
-# defaults write com.apple.dock expose-group-by-app -bool false
-
-# setting "Disable Dashboard (legacy)"
-# defaults write com.apple.dashboard mcx-disabled -bool true
-
-# setting "Don't show Dashboard as a Space (legacy)"
-# defaults write com.apple.dock dashboard-in-overlay -bool true
-
-# setting "Don't automatically rearrange Spaces (legacy)"
-# defaults write com.apple.dock mru-spaces -bool false
-
-# setting "Remove Dock autohide delay (legacy)"
-# defaults write com.apple.dock autohide-delay -float 0
-
-# setting "Remove Dock autohide time modifier (legacy)"
-# defaults write com.apple.dock autohide-time-modifier -float 0
-
-# setting "Make Dock icons of hidden apps translucent (legacy)"
-# defaults write com.apple.dock showhidden -bool true
-
-# setting "Don't show recent apps in Dock (legacy)"
-# defaults write com.apple.dock show-recents -bool false
-
-# setting "Hot corners: top-left (legacy)"
-# defaults write com.apple.dock wvous-tl-corner -int 2
-
-# setting "Hot corners: top-left modifier (legacy)"
-# defaults write com.apple.dock wvous-tl-modifier -int 0
-
-# setting "Hot corners: top-right (legacy)"
-# defaults write com.apple.dock wvous-tr-corner -int 4
-
-# setting "Hot corners: top-right modifier (legacy)"
-# defaults write com.apple.dock wvous-tr-modifier -int 0
-
-# setting "Hot corners: bottom-left (legacy)"
-# defaults write com.apple.dock wvous-bl-corner -int 5
-
-# setting "Hot corners: bottom-left modifier (legacy)"
-# defaults write com.apple.dock wvous-bl-modifier -int 0
-
-# setting "Enable the 2D Dock"
-# defaults write com.apple.dock no-glass -bool true
-
-# setting "Enable iTunes track notifications in the Dock"
-# defaults write com.apple.dock itunes-notifications -bool true
-
-## Safari / WebKit legacy
-# setting "Disable Safari Universal Search (legacy)"
-# defaults write com.apple.Safari UniversalSearchEnabled -bool false
-
-# setting "Suppress Safari search suggestions (legacy)"
-# defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-
-# setting "Press Tab to highlight each item on a web page (legacy)"
-# defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
-
-# setting "Show full URL in Safari (legacy)"
-# defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
-
-# setting "Set Safari home page to about:blank (legacy)"
-# defaults write com.apple.Safari HomePage -string "about:blank"
-
-# setting "Prevent Safari from opening 'safe' files automatically (legacy)"
-# defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
-
-# setting "Hide Safari favorites bar (legacy)"
-# defaults write com.apple.Safari ShowFavoritesBar -bool false
-
-# setting "Hide Safari sidebar in Top Sites (legacy)"
-# defaults write com.apple.Safari ShowSidebarInTopSites -bool false
-
-# setting "Disable Safari thumbnail cache (legacy)"
-# defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
-
-# setting "Enable Safari internal debug menu (legacy)"
-# defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-# setting "Make Safari search default Contains (legacy)"
-# defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
-
-# setting "Remove useless icons from Safari bookmarks bar (legacy)"
-# defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-
-# setting "Enable WebKit dev extras (legacy)"
-# defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-
-# setting "Enable web view context menu Web Inspector (legacy)"
-# defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-
-# setting "Enable continuous spellchecking in Safari (legacy)"
-# defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
-
-# setting "Disable Safari auto-spellcheck (legacy)"
-# defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
-
-# setting "Disable Safari AutoFill from Contacts (legacy)"
-# defaults write com.apple.Safari AutoFillFromAddressBook -bool false
-
-# setting "Disable Safari AutoFill passwords (legacy)"
-# defaults write com.apple.Safari AutoFillPasswords -bool false
-
-# setting "Disable Safari AutoFill credit card data (legacy)"
-# defaults write com.apple.Safari AutoFillCreditCardData -bool false
-
-# setting "Disable Safari AutoFill miscellaneous forms (legacy)"
-# defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
-
-# setting "Warn about fraudulent websites in Safari (legacy)"
-# defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
-
-# setting "Disable Safari plugin support (legacy)"
-# defaults write com.apple.Safari WebKitPluginsEnabled -bool false
-
-# setting "Disable Safari Java (legacy)"
-# defaults write com.apple.Safari WebKitJavaEnabled -bool false
-
-# setting "Disable JavaScript opening windows automatically (legacy)"
-# defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
-
-## Mail, Spotlight, Terminal, Apps (examples)
-# setting "Disable reply animations in Mail (legacy)"
-# defaults write com.apple.mail DisableReplyAnimations -bool true
-
-# setting "Disable send animations in Mail (legacy)"
-# defaults write com.apple.mail DisableSendAnimations -bool true
-
-# setting "Copy email addresses without names (legacy)"
-# defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
-
-# setting "Add ⌘+Enter to send in Mail (legacy)"
-# defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
-
-# setting "Exclude volumes from Spotlight indexing (legacy)"
-# sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
-
-# setting "Enable secure keyboard entry in Terminal (legacy)"
-# defaults write com.apple.terminal SecureKeyboardEntry -bool true
-
-# setting "Disable Terminal line marks (legacy)"
-# defaults write com.apple.Terminal ShowLineMarks -int 0
-
-# setting "Don't prompt on quitting iTerm (legacy)"
-# defaults write com.googlecode.iterm2 PromptOnQuit -bool false
-
-# setting "Disable the Ping sidebar in iTunes"
-# defaults write com.apple.iTunes disablePingSidebar -bool true
-
-# setting "Disable all Ping stuff in iTunes"
-# defaults write com.apple.iTunes disablePing -bool true
-
-# setting "Make ⌘+F focus the search input in iTunes"
-# defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F"
-
-# setting "Enable Dashboard dev mode (allows keeping widgets on the desktop)"
-# defaults write com.apple.dashboard devmode -bool true
-
-# setting "Focus follows mouse for Terminal.app and X11 apps"
-# defaults write com.apple.terminal FocusFollowsMouse -bool true
-# defaults write org.x.X11 wm_ffm -bool true
-
-# setting "Disable local Time Machine backups"
-# hash tmutil &> /dev/null && sudo tmutil disablelocal
-
-# setting "Remove Dropbox's green checkmark icons in Finder"
-# DROPBOX=/Applications/Dropbox.app/Contents/Resources/check.icns
-# [ -e "${DROPBOX}" ] && mv -f "${DROPBOX}" "${DROPBOX}.bak"
-
-# End of legacy / optional block
+###############################################################################
+# Apply changes — restart affected services so settings take effect          #
+###############################################################################
+# Without this, most of the above only applies after the relevant process next
+# restarts (often next login). Terminal is intentionally NOT killed so this is
+# safe to run from a terminal.
+setting "Restarting affected apps"
+for app in "cfprefsd" "Dock" "Finder" "SystemUIServer"; do
+  killall "${app}" &>/dev/null || true
+done
+
+echo;
+note "Some changes require a logout/restart to fully take effect."
