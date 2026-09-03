@@ -59,8 +59,12 @@ install_app_store_apps() {
   local file="$ROOT_DIR/config/mas-apps.txt"
   [[ -r "$file" ]] || return 0
   has_cmd mas || { warn "mas not installed; skipping App Store apps"; return 0; }
-  if ! with_timeout 10 mas account; then
-    warn "Not signed in to the App Store — open App Store.app, then 'sys setup --mas'"
+
+  # `mas account` was removed in mas 7; `mas list` is the real liveness check
+  # and doubles as the list of what is already installed.
+  local installed
+  if ! installed="$(mas list 2>/dev/null)"; then
+    warn "Can't read the App Store — open App Store.app and sign in, then: sys setup --mas"
     return 0
   fi
 
@@ -69,7 +73,12 @@ install_app_store_apps() {
   while IFS= read -r line; do
     [[ -z "$line" || "$line" == \#* ]] && continue
     id="${line%%[^0-9]*}"
-    [[ -n "$id" ]] && run mas install "$id"
+    [[ -n "$id" ]] || continue
+    if printf '%s' "$installed" | awk '{print $1}' | grep -qx "$id"; then
+      note "already installed: $(printf '%s' "$line" | sed 's/^[0-9]*[[:space:]]*#*[[:space:]]*//')"
+    else
+      run mas install "$id"
+    fi
   done < "$file"
 }
 
