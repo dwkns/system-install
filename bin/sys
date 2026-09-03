@@ -15,6 +15,8 @@ sys — system configuration
   sys sync      Pull the latest config and apply it to this machine
   sys push      Save this machine's config into the repo and push
   sys doctor    Check that everything is where it should be
+  sys alias     List your custom aliases and functions
+  sys mise      How to use mise for language versions
 
 Options
   --dry-run           Show what would happen, change nothing
@@ -109,6 +111,97 @@ case "$cmd" in
     done < "$ROOT_DIR/config/licences"
     has_cmd mas && { with_timeout 10 mas list && note "App Store: reachable" || warn "App Store: not signed in"; }
     [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]] && note "Repo is clean" || warn "Repo has uncommitted changes — 'sys push'"
+    ;;
+
+  alias|aliases)
+    file="$ROOT_DIR/dotfiles/.aliases"
+    [[ -r "$file" ]] || die "Not found: $file"
+    awk -v g="$GREEN" -v c="$CYAN" -v y="$YELLOW" -v r="$RESET" '
+      # A comment containing box-drawing rule is a section header. Tested
+      # byte-wise with index() so it works whatever locale awk runs in.
+      /^#/ {
+        if (index($0, "\xe2\x94\x80") > 0) {
+          h = $0
+          gsub(/[^ -~]/, "", h)          # strip non-ASCII (the rule)
+          sub(/^# */, "", h); sub(/ *$/, "", h)
+          if (h != "") printf "\n%s%s%s\n", c, h, r
+          desc = ""; next
+        }
+        desc = $0; sub(/^# */, "", desc); next
+      }
+      # alias name='"'"'command'"'"'   (trailing # comment is the description)
+      /^alias / {
+        line = $0; sub(/^alias /, "", line)
+        eq = index(line, "=")
+        name = substr(line, 1, eq - 1)
+        rest = substr(line, eq + 1)
+        note = ""
+        if (match(rest, /[ \t]+#[ \t]*/)) {
+          note = substr(rest, RSTART + RLENGTH)
+          rest = substr(rest, 1, RSTART - 1)
+        }
+        gsub(/^['"'"'"]|['"'"'"]$/, "", rest)
+        printf "  %s%-8s%s %s%s%s\n", g, name, r, y, rest, r
+        if (note != "") printf "  %8s   %s\n", "", note
+        desc = ""; next
+      }
+      # shell function:  name() {
+      /^[a-z_][a-z0-9_]*\(\)/ {
+        fn = $0; sub(/\(\).*/, "", fn)
+        printf "  %s%-8s%s %s%s%s\n", g, fn, r, y, (desc == "" ? "function" : desc), r
+        desc = ""; next
+      }
+      { desc = "" }
+    ' "$file"
+    proj="$ROOT_DIR/dotfiles/.projects"
+    if [[ -r "$proj" ]]; then
+      printf '\n%sProject starters%s\n' "$CYAN" "$RESET"
+      grep -E "^[a-z]+\(\)  *\{ _new_project" "$proj" | while read -r l; do
+        n="${l%%(*}"; d="$(printf '%s' "$l" | sed -E 's/.*_new_project ([^ ]+).*/\1/')"
+        printf '  %s%-8s%s %s%s%s\n' "$GREEN" "$n" "$RESET" "$YELLOW" "$d" "$RESET"
+      done
+    fi
+    echo
+    ;;
+
+  mise)
+    cat <<'MISE'
+
+mise manages your Ruby, Node and Python versions.
+
+  Global versions live in ~/.config/mise/config.toml, tracked in this repo as
+  dotfiles/.config/mise/config.toml. Edit it, run `sys push`, then `mise install`.
+
+Everyday
+  mise ls                     what is installed, and what is active here
+  mise current                just the active versions
+  mise install                install everything the config asks for
+  mise outdated               what has newer versions available
+  mise upgrade                move up within the versions you have pinned
+
+Change a version
+  mise use -g ruby@3.4.8      change the GLOBAL default (edits the config)
+  mise use ruby@3.3           pin for THIS project (writes ./mise.toml)
+  mise ls-remote ruby         what versions exist
+  mise exec ruby@3.2 -- ruby -v    run once, change nothing
+
+Per project
+  A ./mise.toml overrides the global versions and activates when you cd in.
+  mise trust                  allow a mise.toml you did not write
+
+Python packages
+  mise supplies the interpreter; uv does packages and virtualenvs.
+  uv venv                     create .venv with the active python
+  uv pip install -r requirements.txt
+  uv add <pkg>                for pyproject.toml projects
+  uv run <script.py>          run in the project env, installing as needed
+
+Where things live
+  ~/.config/mise/config.toml       global versions (tracked in this repo)
+  ./mise.toml                      per-project override (commit it)
+  ~/.local/share/mise/installs     the toolchains themselves
+
+MISE
     ;;
 
   ""|-h|--help) usage ;;

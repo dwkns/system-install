@@ -11,6 +11,7 @@ alias ep='code ~/.system-config/dotfiles/.zshrc'   # edit shell config
 alias ea='code ~/.system-config/dotfiles/.aliases'
 alias esys='code ~/.system-config'
 alias rp='exec zsh'                                # reload the shell
+alias la='sys alias'                               # list these aliases
 
 # ── System config ────────────────────────────────────────────────────────────
 alias usys='sys sync'
