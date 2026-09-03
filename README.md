@@ -5,7 +5,7 @@ macOS setup: one command on a new machine, one command to keep it in sync.
 ## New machine
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
 ```
 
 Installs Homebrew and everything in the `Brewfile`, copies dotfiles into place,

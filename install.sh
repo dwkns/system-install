@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One command to set up a new Mac:
 #
-#   curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
 #
 set -euo pipefail
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
