@@ -1,0 +1,158 @@
+{
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "terminal"
+                }
+            ]
+        }
+    ],
+    "editor.colorDecorators": true,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "editor.hover.delay": 1000,
+    "editor.inlineSuggest.enabled": true,
+    "editor.insertSpaces": true,
+    "editor.minimap.enabled": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "editor.quickSuggestionsDelay": 10,
+    "editor.scrollBeyondLastLine": true,
+    "editor.snippetSuggestions": "top",
+    "editor.stickyScroll.enabled": true,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "recentlyUsed",
+    "editor.tabSize": 2,
+    "editor.trimAutoWhitespace": true,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 180,
+    "emmet.excludeLanguages": [],
+    "emmet.includeLanguages": {
+        "*.html.erb": "html",
+        "erb": "html",
+        "html": "html",
+        "html.erb": "html",
+        "javascript": "javascriptreact",
+        "markdown": "html",
+        "njk": "html",
+        "nunjucks": "html",
+        "ruby": "html",
+        "webc": "html",
+        "liquid": "html"
+    },
+    "emmet.triggerExpansionOnTab": true,
+    "errorLens.gutterIconsEnabled": true,
+    "explorer.confirmDragAndDrop": false,
+    "files.associations": {
+        "*.html": "njk",
+        "*.html.erb": "erb",
+        "webc": "html",
+        "*.webc": "html",
+        "**/tailwind.css": "tailwindcss"
+    },
+    "git.mergeEditor": true,
+    "git.openRepositoryInParentFolders": "never",
+    "html.format.indentHandlebars": true,
+    "html.format.wrapLineLength": 0,
+    "html.suggest.html5": true,
+    "javascript.updateImportsOnFileMove.enabled": "never",
+    "json.schemas": [],
+    "search.exclude": {
+        "": true
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "tailwindCSS.colorDecorators": true,
+    "tailwindCSS.emmetCompletions": true,
+    "tailwindCSS.experimental.configFile": "src/css/tailwind.css",
+    "tailwindCSS.experimental.classRegex": [
+        "\\bclass:\\s*'([^']*)'",
+        "\\bclass:\\s*\"([^\"]*)\""
+    ],
+    "tailwindCSS.includeLanguages": {
+        "erb": "html",
+        "html": "html",
+        "njk": "html",
+        "nunjucks": "html",
+        "webc": "html"
+    },
+    "task.allowAutomaticTasks": "on",
+    "terminal.integrated.scrollback": 10000,
+    "typescript.suggest.paths": false,
+    "window.confirmSaveUntitledWorkspace": false,
+    "window.newWindowDimensions": "inherit",
+    "window.openFilesInNewWindow": "on",
+    "workbench.colorCustomizations": {
+        "editor.selectionBackground": "#89898970",
+        "editor.selectionBackgroundBorder": "#ff730000",
+        "editor.selectionForeground": "#00ffb3",
+        "editor.selectionHighlightBackground": "#d6d6d600",
+        "editor.selectionHighlightBorder": "#fbff0048",
+        "editor.wordHighlightBackground": "#d6d6d633",
+        "editor.wordHighlightBorder": "#ff7300b4",
+        "tab.activeBackground": "#0a84ff48",
+        "tab.activeBorderTop": "#0A84FF"
+    },
+    "workbench.editor.empty.hint": "hidden",
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.tabSizingFixedMinWidth": 500,
+    "workbench.sideBar.location": "right",
+    "workbench.startupEditor": "none",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "explorer.confirmDelete": false,
+    "terminal.integrated.tabs.enabled": false,
+    "tailwindCSS.lint.invalidApply": "warning",
+    "vsicons.dontShowNewVersionMessage": true,
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.svg": "default"
+    },
+    "chat.tools.terminal.autoApprove": {
+        "/^npm install 2>&1 \\| head -50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "npm run build": true,
+        "cp": true,
+        "npm run test": true,
+        "npm install": true,
+        "npm run dev": true,
+        "sed": true
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "chat.tools.global.autoApprove": true,
+    "chat.mcp.gallery.enabled": true,
+    "editor.semanticHighlighting.enabled": false,
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "string.quoted.double.nunjucks",
+                "settings": {
+                    "foreground": "#CE9178"
+                }
+            },
+            {
+                "scope": "variable.nunjucks",
+                "settings": {
+                    "foreground": "#dcdcda"
+                }
+            },
+            {
+                "scope": "meta.tag.nunjucks",
+                "settings": {
+                    "foreground": "#FFD700"
+                }
+            },
+        ]
+    },
+    "workbench.colorTheme": "Nunjucks Dark Modern",
+    "workbench.iconTheme": "vscode-icons",
+    "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
+    "monkeyC.developerKeyPath": "/Users/dwkns/Desktop/1050-complex-datafield/developer_key",
+    "window.autoDetectColorScheme": false,
+    "cursor.composer.queueMessageDefaultBehavior": "steer"
+}

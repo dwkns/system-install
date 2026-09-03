@@ -18,6 +18,7 @@ sync_targets() {
 dotfiles|$HOME
 colors|$HOME/Library/Colors
 config/sublime-config|$SUBLIME_USER_DIR
+config/cursor|$HOME/Library/Application Support/Cursor/User
 TARGETS
 }
 

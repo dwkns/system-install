@@ -46,6 +46,8 @@ dotfiles/                    copied into ~
 config/licences              keychain service names -> file paths
 config/mas-apps.txt          App Store app IDs
 config/sublime-config/       copied into Sublime's User dir
+config/cursor/               copied into Cursor's User dir
+config/cursor-extensions.txt Cursor extensions, installed by `sys setup`
 colors/                      .clr palettes -> ~/Library/Colors
 ```
 
@@ -57,6 +59,7 @@ colors/                      .clr palettes -> ~/Library/Colors
 dotfiles              -> ~
 colors                -> ~/Library/Colors
 config/sublime-config -> ~/Library/Application Support/Sublime Text/User
+config/cursor         -> ~/Library/Application Support/Cursor/User
 ```
 
 **The contents of each repo directory are the manifest.** To track a new file,

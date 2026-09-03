@@ -88,6 +88,8 @@ case "$cmd" in
   push)
     doing "Saving this machine's config into the repo"
     sync_backup
+    # keep the Cursor extension list from drifting
+    has_cmd cursor && cursor --list-extensions 2>/dev/null | sort > "$ROOT_DIR/config/cursor-extensions.txt"
     if [[ -n "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
       git -C "$ROOT_DIR" add -A
       git -C "$ROOT_DIR" commit -m "Update config files"

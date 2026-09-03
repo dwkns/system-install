@@ -109,6 +109,7 @@ mirrors three directories:
 dotfiles              \(-> ~
 colors                \(-> ~/Library/Colors
 config/sublime\-config \(-> ~/Library/Application Support/Sublime Text/User
+config/cursor         \(-> ~/Library/Application Support/Cursor/User
 .fi
 .RE
 .PP
@@ -124,6 +125,22 @@ and a note is printed, so a local edit you forgot to
 is never lost.
 .I .drift
 is overwritten each run rather than accumulating; git is the history.
+.SH EDITORS
+VS Code has Settings Sync, so its settings, keybindings and extensions follow
+your account and are deliberately not tracked here.
+.PP
+Cursor does not ship Settings Sync, so its
+.I settings.json
+and
+.I keybindings.json
+are mirrored from
+.IR config/cursor ,
+and its extensions are listed in
+.IR config/cursor\-extensions.txt .
+.B sys setup
+installs any that are missing;
+.B sys push
+refreshes the list so it cannot drift.
 .SH LANGUAGES
 .BR mise (1)
 owns Ruby, Node and Python. Global versions live in

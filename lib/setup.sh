@@ -82,6 +82,25 @@ install_app_store_apps() {
   done < "$file"
 }
 
+# Cursor has no Settings Sync (unlike VS Code, which syncs via your account),
+# so its extensions are tracked here and installed explicitly.
+install_editor_extensions() {
+  local file="$ROOT_DIR/config/cursor-extensions.txt"
+  [[ -r "$file" ]] || return 0
+  has_cmd cursor || { warn "cursor CLI not on PATH; skipping its extensions"; return 0; }
+
+  local have ext missing=0
+  have="$(cursor --list-extensions 2>/dev/null)"
+  while IFS= read -r ext; do
+    [[ -z "$ext" || "$ext" == \#* ]] && continue
+    printf '%s' "$have" | grep -qix "$ext" && continue
+    run cursor --install-extension "$ext" --force >/dev/null 2>&1
+    missing=$((missing + 1))
+  done < "$file"
+  [[ "$missing" -gt 0 ]] && doing "Installed $missing Cursor extension(s)" || note "Cursor extensions: up to date"
+  return 0
+}
+
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
   local bf="$ROOT_DIR/Brewfile.optional"
