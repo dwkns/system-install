@@ -1,0 +1,201 @@
+.TH SYS 1 "September 2026" "system-config" "User Commands"
+.SH NAME
+sys \- set up, sync and check this Mac
+.SH SYNOPSIS
+.B sys
+.I command
+.RI [ options ]
+.SH DESCRIPTION
+.B sys
+is the single entry point to the configuration repository in
+.IR ~/.system-config .
+It sets up a new machine, keeps an existing one in step with the repository,
+saves local changes back, and reports on what is installed.
+.PP
+The repository is the source of truth. Anything it tracks \(em dotfiles, colour
+palettes, Sublime Text settings \(em is mirrored onto the machine by
+.BR "sys sync" ,
+and mirrored back by
+.BR "sys push" .
+.SH COMMANDS
+.TP
+.B setup
+Set up this machine from scratch. Installs Homebrew and everything in the
+.IR Brewfile ,
+copies dotfiles into place, installs language versions with
+.BR mise (1),
+restores app licences from the keychain, installs App Store apps and applies
+macOS defaults. Finishes by printing the steps that need a human.
+.IP
+Safe to re-run. Use
+.B \-\-licences
+or
+.B \-\-mas
+to run only that part.
+.TP
+.B sync
+Pull the latest configuration and apply it here. Equivalent to the
+.B usys
+alias.
+.TP
+.B push
+Save this machine's configuration into the repository, commit and push.
+Equivalent to the
+.B bsys
+alias.
+.TP
+.B doctor
+Check that the expected tools are installed, report language versions, whether
+each licence is in the keychain, whether the App Store is reachable, and whether
+the repository has uncommitted changes. Changes nothing.
+.SH OPTIONS
+.TP
+.B \-\-dry\-run
+Show what would happen without changing anything. Accepted by every command.
+.TP
+.BR \-\-yes ", " \-y
+Do not ask for confirmation.
+.TP
+.BI \-\-name " NAME"
+.RB ( setup )
+Set the computer, host and local host name. Requires
+.BR sudo (8).
+.TP
+.B \-\-no\-brew
+.RB ( setup )
+Skip Homebrew and packages.
+.TP
+.B \-\-no\-macos
+.RB ( setup ", " sync )
+Skip macOS defaults.
+.TP
+.B \-\-licences
+.RB ( setup )
+Only restore licences from the keychain.
+.TP
+.B \-\-mas
+.RB ( setup )
+Only install App Store apps.
+.SH HOW SYNCING WORKS
+.B sys sync
+mirrors three directories:
+.PP
+.RS
+.nf
+dotfiles              \(-> ~
+colors                \(-> ~/Library/Colors
+config/sublime\-config \(-> ~/Library/Application Support/Sublime Text/User
+.fi
+.RE
+.PP
+The contents of each repository directory are the manifest. To track a new file,
+put it in the right directory; there is no list to update. To stop tracking one,
+delete it.
+.PP
+The repository always wins. Before replacing a system file whose contents
+differ, the old version is copied to
+.I ~/.system-config/.drift
+and a note is printed, so a local edit you forgot to
+.B sys push
+is never lost.
+.I .drift
+is overwritten each run rather than accumulating; git is the history.
+.SH LANGUAGES
+.BR mise (1)
+owns Ruby, Node and Python. Global versions live in
+.IR ~/.config/mise/config.toml ;
+override them per project with a local
+.IR mise.toml .
+After changing a version, run
+.B sys push
+then
+.BR "mise install" .
+Python packages and virtual environments go through
+.BR uv (1).
+.SH LICENCES
+Licences are kept in the macOS keychain and never in the repository.
+.I config/licences
+maps a keychain service name to a destination path, one per line, separated by
+a vertical bar. Add a licence with:
+.PP
+.RS
+.nf
+openssl base64 \-A \-in License.sublime_license |
+  security add\-generic\-password \-U \-a "$USER" \\
+    \-s sublime\-text\-license \-w "$(cat)"
+.fi
+.RE
+.PP
+The keychain does not follow you to a new Mac, so
+.B sys setup
+names any missing licence and prints the exact command to add it.
+.B sys doctor
+reports the same.
+.SH FILES
+.TP
+.I ~/.system-config/Brewfile
+Applications and command-line tools.
+.TP
+.I ~/.system-config/macos.sh
+macOS defaults.
+.TP
+.I ~/.system-config/config/licences
+Keychain service names mapped to destination paths.
+.TP
+.I ~/.system-config/config/mas\-apps.txt
+App Store application IDs.
+.TP
+.I ~/.system-config/dotfiles/
+Copied into the home directory.
+.TP
+.I ~/.system-config/.drift/
+System files replaced by the last sync. Not tracked by git.
+.SH ENVIRONMENT
+.TP
+.B ROOT_DIR
+Location of the repository. Default
+.IR ~/.system-config .
+.TP
+.B DRY_RUN
+Set to 1 for the effect of
+.BR \-\-dry\-run .
+.TP
+.B ASSUME_YES
+Set to 1 for the effect of
+.BR \-\-yes .
+.SH EXAMPLES
+Set up a brand new Mac:
+.PP
+.RS
+.nf
+curl \-fsSL https://raw.githubusercontent.com/dwkns/\\
+system\-install/master/install.sh | bash
+.fi
+.RE
+.PP
+See what a sync would change, without changing it:
+.PP
+.RS
+.B sys sync \-\-dry\-run
+.RE
+.PP
+Save a change made directly to a system file:
+.PP
+.RS
+.B sys push
+.RE
+.PP
+Re-run only the licence step after adding one to the keychain:
+.PP
+.RS
+.B sys setup \-\-licences
+.RE
+.SH SEE ALSO
+.BR mise (1),
+.BR uv (1),
+.BR brew (1),
+.BR mas (1),
+.BR defaults (1),
+.BR security (1)
+.PP
+.I ~/.system-config/README.md

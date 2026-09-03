@@ -38,6 +38,8 @@ autoload -Uz compinit && compinit -C
 
 # ── Environment ──────────────────────────────────────────────────────────────
 export EDITOR='code -w'
+# Trailing colon makes man append the system manpath, so `man sys` works.
+export MANPATH="$HOME/.system-config/man:"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export CLAUDE_CODE_OAUTH_TOKEN="$(security find-generic-password -a "$USER" -s claude-code-oauth-token -w 2>/dev/null)"
 

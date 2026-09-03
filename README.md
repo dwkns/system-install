@@ -25,6 +25,8 @@ Access, logging out).
 
 Add `--dry-run` to any of them to see what would happen.
 
+Full documentation: `man sys`
+
 ## Layout
 
 ```
@@ -32,6 +34,7 @@ Brewfile                     apps and CLI tools
 macos.sh                     macOS defaults
 install.sh                   new-machine entry point
 bin/sys                      the only command
+man/man1/sys.1               man page (`man sys`)
 lib/common.sh                colours, logging, helpers
 lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, licences, App Store, macOS
@@ -64,7 +67,7 @@ each run rather than accumulating. Git is the history; there is no `backups/`.
 
 ## Languages
 
-mise owns Ruby, Node, Python and pnpm. Global versions are in
+mise owns Ruby, Node and Python. Global versions are in
 `dotfiles/.config/mise/config.toml`; override per project with a local
 `mise.toml`. Python packages and virtualenvs go through `uv`.
 

@@ -24,6 +24,8 @@ Options
   --no-macos          (setup/sync) Skip macOS defaults
   --licences          (setup) Only install licences from the keychain
   --mas               (setup) Only install App Store apps
+
+Full documentation: man sys
 USAGE
 }
 
