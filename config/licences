@@ -1,4 +1,7 @@
-# App licences, fetched from 1Password at setup time.
-#   <1Password secret reference>|<destination path>
-# Find a reference with:  op item get "Sublime Text" --format json | jq .fields
-op://Private/Sublime Text/license|$HOME/Library/Application Support/Sublime Text/User/License.sublime_license
+# App licences, restored from the macOS keychain at setup time.
+#   <keychain service name>|<destination path>
+#
+# Licences are never stored in this repo. Add one to the keychain with:
+#   openssl base64 -A -in <licence file> |
+#     security add-generic-password -U -a "$USER" -s <service name> -w "$(cat)"
+sublime-text-license|$HOME/Library/Application Support/Sublime Text/User/License.sublime_license

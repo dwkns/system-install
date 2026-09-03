@@ -9,7 +9,7 @@ curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/main/install.s
 ```
 
 Installs Homebrew and everything in the `Brewfile`, copies dotfiles into place,
-installs language versions with mise, pulls app licences from 1Password,
+installs language versions with mise, restores app licences from the keychain,
 installs App Store apps, and applies macOS defaults. It finishes by printing the
 handful of steps that need a human (signing into things, granting Full Disk
 Access, logging out).
@@ -36,7 +36,7 @@ lib/common.sh                colours, logging, helpers
 lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, licences, App Store, macOS
 dotfiles/                    copied into ~
-config/licences              1Password references -> file paths
+config/licences              keychain service names -> file paths
 config/mas-apps.txt          App Store app IDs
 config/sublime-config/       copied into Sublime's User dir
 colors/                      .clr palettes -> ~/Library/Colors
@@ -70,12 +70,21 @@ mise owns Ruby, Node, Python and pnpm. Global versions are in
 
 ## Licences
 
-Licences live in 1Password, not in this repo and not in the keychain — the
-keychain is empty on exactly the new machine you're setting up. `config/licences`
-maps a 1Password secret reference to a destination path:
+Licences live in the macOS keychain, never in this repo. `config/licences` maps
+a keychain service name to a destination path:
 
 ```
-op://Private/Sublime Text/license|$HOME/Library/.../License.sublime_license
+sublime-text-license|$HOME/Library/.../License.sublime_license
 ```
 
-Sign in with `op signin`, then `sys setup --licences`.
+Add one to the keychain:
+
+```bash
+openssl base64 -A -in License.sublime_license |
+  security add-generic-password -U -a "$USER" -s sublime-text-license -w "$(cat)"
+```
+
+Then `sys setup --licences` writes it into place. The keychain does not follow
+you to a new Mac, so on a fresh machine setup will tell you which licences are
+missing and print the exact command to add each one. `sys doctor` reports the
+same thing.

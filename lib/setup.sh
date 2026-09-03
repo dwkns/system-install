@@ -23,34 +23,36 @@ install_languages() {
   run mise install
 }
 
-# Licences live in 1Password so they're available on any machine you've signed
-# into — unlike the keychain, which is empty on exactly the new Mac you're setting up.
+# Licences live in the macOS keychain, never in this repo. A fresh machine has
+# an empty keychain, so if one is missing we say exactly how to add it rather
+# than skipping silently.
 install_licences() {
   local file="$ROOT_DIR/config/licences"
   [[ -r "$file" ]] || return 0
 
-  if ! has_cmd op; then
-    warn "1Password CLI not installed; skipping licences"; return 0
-  fi
-  if ! with_timeout 10 op whoami; then
-    warn "Not signed in to 1Password — run 'op signin', then 'sys setup --licences'"
-    return 0
-  fi
+  local service dst b64 missing=0
+  while IFS='|' read -r service dst; do
+    [[ -z "$service" || "$service" == \#* ]] && continue
+    dst="$(eval printf '%s' \""$dst"\")"
 
-  doing "Installing licences from 1Password"
-  local ref dst
-  while IFS='|' read -r ref dst; do
-    [[ -z "$ref" || "$ref" == \#* ]] && continue
-    dst="$(eval printf '%s' \""$dst"\")"      # expand $HOME in the path
-    if ! op read "$ref" >/dev/null 2>&1; then
-      warn "Not found in 1Password: $ref"; continue
+    b64="$(security find-generic-password -a "$USER" -s "$service" -w 2>/dev/null || true)"
+    if [[ -z "$b64" ]]; then
+      warn "No licence in the keychain for '$service'. Add it with:"
+      printf '    openssl base64 -A -in <licence file> | \\\n'
+      printf '      security add-generic-password -U -a "$USER" -s %s -w "$(cat)"\n' "$service"
+      missing=1
+      continue
     fi
+
     [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: write $dst"; continue; }
     mkdir -p "$(dirname "$dst")"
-    op read "$ref" > "$dst"
+    printf '%s' "$b64" | openssl base64 -A -d > "$dst"
     chmod 600 "$dst"
     note "Installed $(basename "$dst")"
   done < "$file"
+
+  [[ "$missing" == "1" ]] && note "Then re-run: sys setup --licences"
+  return 0
 }
 
 install_app_store_apps() {
@@ -104,9 +106,10 @@ print_manual_steps() {
 
 Things this script can't do for you:
 
-  1. Sign in to 1Password, then:   sys setup --licences
+  1. Add any licences to the keychain — 'sys doctor' lists what's missing
+     and prints the command. Then:   sys setup --licences
   2. Sign in to the App Store, then:   sys setup --mas
-  3. Sign in to Dropbox, Slack, Notion, Figma
+  3. Sign in to 1Password, Dropbox, Slack, Notion, Figma
   4. System Settings > Privacy & Security > Full Disk Access > add Ghostty
      (needed for the Safari defaults in macos.sh)
   5. Log out and back in — some macOS defaults only apply at login

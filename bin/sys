@@ -22,7 +22,7 @@ Options
   --name NAME         (setup) Set the computer name
   --no-brew           (setup) Skip Homebrew and packages
   --no-macos          (setup/sync) Skip macOS defaults
-  --licences          (setup) Only install licences from 1Password
+  --licences          (setup) Only install licences from the keychain
   --mas               (setup) Only install App Store apps
 USAGE
 }
@@ -95,11 +95,15 @@ case "$cmd" in
 
   doctor)
     doing "Checking this machine"
-    for t in git brew mise uv gh jq mas duti op; do
+    for t in git brew mise uv gh jq mas duti; do
       if has_cmd "$t"; then note "$t"; else warn "$t is missing"; fi
     done
     has_cmd mise && { mise ls --current 2>/dev/null | sed 's/^/    /'; }
-    has_cmd op  && { with_timeout 5 op whoami   && note "1Password: signed in" || warn "1Password: not signed in — run 'op signin'"; }
+    while IFS='|' read -r svc _; do
+      [[ -z "$svc" || "$svc" == \#* ]] && continue
+      security find-generic-password -a "$USER" -s "$svc" -w >/dev/null 2>&1 \
+        && note "licence '$svc': in keychain" || warn "licence '$svc': missing — sys setup --licences"
+    done < "$ROOT_DIR/config/licences"
     has_cmd mas && { with_timeout 5 mas account  && note "App Store: signed in" || warn "App Store: not signed in"; }
     [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]] && note "Repo is clean" || warn "Repo has uncommitted changes — 'sys push'"
     ;;

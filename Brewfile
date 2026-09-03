@@ -21,7 +21,6 @@ cask "font-fira-code"
 
 # ── Password manager ─────────────────────────────────────────────────────────
 cask "1password"
-cask "1password-cli"    # `op` — used to install app licences
 
 # ── Browsers ─────────────────────────────────────────────────────────────────
 cask "google-chrome"
