@@ -11,6 +11,7 @@ brew "mise"             # ruby / node / python versions
 brew "uv"               # python packages + venvs
 brew "duti"             # sets Ghostty as the default terminal
 brew "mas"              # App Store installs
+brew "wget"             # file retriever
 
 # ── Terminal & editors ───────────────────────────────────────────────────────
 cask "ghostty"
@@ -18,6 +19,7 @@ cask "sublime-text"
 cask "visual-studio-code"
 cask "cursor"
 cask "font-fira-code"
+cask "font-inter"
 
 # ── Password manager ─────────────────────────────────────────────────────────
 cask "1password"
@@ -41,4 +43,9 @@ cask "discord"
 cask "zoom"
 cask "iina"
 cask "postman"
-cask "transmission"     # .macos configures this, so it must be installed
+cask "transmission"     # macos.sh configures this, so it must be installed
+cask "charles"          # web debugging proxy
+cask "handbrake-app"    # video transcoder
+cask "soulver"          # notepad with a calculator
+cask "whatsapp"
+cask "nordvpn"     # .macos configures this, so it must be installed

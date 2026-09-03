@@ -82,6 +82,34 @@ install_app_store_apps() {
   done < "$file"
 }
 
+# Optional extras — never run by `sys setup`, only by `sys extras`.
+install_extras() {
+  local bf="$ROOT_DIR/Brewfile.optional"
+  if [[ -r "$bf" ]]; then
+    install_homebrew
+    doing "Installing optional extras"
+    run brew bundle --file "$bf"
+  fi
+
+  local file="$ROOT_DIR/config/mas-apps-optional.txt"
+  [[ -r "$file" ]] || return 0
+  has_cmd mas || return 0
+  local installed
+  installed="$(mas list 2>/dev/null)" || { warn "App Store unreachable; skipping optional apps"; return 0; }
+
+  local line id
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    id="${line%%[^0-9]*}"
+    [[ -n "$id" ]] || continue
+    if printf '%s' "$installed" | awk '{print $1}' | grep -qx "$id"; then
+      note "already installed: $(printf '%s' "$line" | sed 's/^[0-9]*[[:space:]]*#*[[:space:]]*//')"
+    else
+      run mas install "$id"
+    fi
+  done < "$file"
+}
+
 apply_macos_defaults() {
   run bash "$ROOT_DIR/macos.sh"
 }

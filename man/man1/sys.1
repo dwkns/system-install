@@ -44,6 +44,15 @@ Equivalent to the
 .B bsys
 alias.
 .TP
+.B extras
+Install the optional extras listed in
+.I Brewfile.optional
+and
+.IR config/mas\-apps\-optional.txt .
+Never run by
+.BR "sys setup" ;
+these are large or occasional installs you ask for explicitly.
+.TP
 .B alias
 List your aliases, functions and project starters, grouped by section, read
 straight from
@@ -159,6 +168,14 @@ Keychain service names mapped to destination paths.
 .TP
 .I ~/.system-config/config/mas\-apps.txt
 App Store application IDs.
+.TP
+.I ~/.system-config/Brewfile.optional
+Optional extras, installed only by
+.BR "sys extras" .
+.TP
+.I ~/.system-config/config/mas\-apps\-optional.txt
+Optional App Store apps, installed only by
+.BR "sys extras" .
 .TP
 .I ~/.system-config/dotfiles/
 Copied into the home directory.

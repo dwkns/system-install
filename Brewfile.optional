@@ -1,0 +1,7 @@
+# Big or occasional installs, kept out of the default setup.
+#   sys extras          install these
+# Everything here is genuinely optional — `sys setup` never touches it.
+
+cask "microsoft-office"   # Word, Excel, PowerPoint, Outlook, Teams, OneNote
+brew "ollama"             # run local LLMs
+brew "duckdb"             # embeddable analytical SQL database

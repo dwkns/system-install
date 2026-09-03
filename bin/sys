@@ -17,6 +17,7 @@ sys — system configuration
   sys doctor    Check that everything is where it should be
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
+  sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
 
 Options
   --dry-run           Show what would happen, change nothing
@@ -162,6 +163,11 @@ case "$cmd" in
       done
     fi
     echo
+    ;;
+
+  extras)
+    is_macos || die "macOS only."
+    install_extras
     ;;
 
   mise)
