@@ -5,7 +5,6 @@
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
 brew "git"
-brew "git-lfs"          # drop if you have no LFS repos
 brew "gh"
 brew "jq"
 brew "mise"             # ruby / node / python versions
