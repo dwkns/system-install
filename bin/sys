@@ -97,9 +97,10 @@ case "$cmd" in
 
   doctor)
     doing "Checking this machine"
-    for t in git brew mise uv gh jq mas duti; do
-      if has_cmd "$t"; then note "$t"; else warn "$t is missing"; fi
-    done
+    tools="git brew mise uv gh jq mas duti"; missing=""
+    for t in $tools; do has_cmd "$t" || missing="$missing $t"; done
+    if [[ -z "$missing" ]]; then note "tools: all present ($(echo $tools | sed 's/ /, /g'))"
+    else warn "missing:$(echo $missing | sed 's/ /, /g')"; fi
     has_cmd mise && { mise ls --current 2>/dev/null | sed 's/^/    /'; }
     while IFS='|' read -r svc _; do
       [[ -z "$svc" || "$svc" == \#* ]] && continue

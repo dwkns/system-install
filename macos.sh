@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 # macOS defaults. Run directly, or via `sys setup` / `sys sync`.
+#
+# Only settings that differ from macOS's own defaults are here — writing a
+# value the system already uses is noise. See `man sys`.
 source "$HOME/.system-config/lib/common.sh"
-
-doing "Applying macOS defaults"
 
 # Stop System Settings overwriting what we're about to change.
 osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
 
 # ── General ──────────────────────────────────────────────────────────────────
-defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
-defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 defaults write com.apple.loginwindow TALLogoutSavesState -bool false
 defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
@@ -34,17 +32,13 @@ defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 13
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # ── Screenshots ──────────────────────────────────────────────────────────────
-defaults write com.apple.screencapture location -string "$HOME/Desktop"
-defaults write com.apple.screencapture type -string "png"
 defaults write com.apple.screencapture disable-shadow -bool true
 
 # ── Finder ───────────────────────────────────────────────────────────────────
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-defaults write com.apple.finder AppleShowAllFiles -bool false
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowStatusBar -bool true
@@ -60,7 +54,6 @@ chflags nohidden ~/Library || true
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
 # ── Dock ─────────────────────────────────────────────────────────────────────
-defaults write com.apple.dock autohide -bool false
 defaults write com.apple.dock tilesize -int 36
 defaults write com.apple.dock mru-spaces -bool false
 
@@ -69,13 +62,9 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "$HOME/Downloads/Torrents"
 
-# Safari keeps its preferences inside a sandbox container, so this is a no-op
-# unless your terminal has Full Disk Access.
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-
 # ── Apply ────────────────────────────────────────────────────────────────────
 for app in cfprefsd Dock Finder SystemUIServer; do
   killall "$app" &>/dev/null || true
 done
 
-note "Done. Some changes need a logout to take effect."
+doing "macOS defaults applied — some need a logout to take effect"

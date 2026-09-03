@@ -83,7 +83,6 @@ install_app_store_apps() {
 }
 
 apply_macos_defaults() {
-  doing "Applying macOS defaults"
   run bash "$ROOT_DIR/macos.sh"
 }
 
