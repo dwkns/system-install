@@ -1,5 +1,3 @@
-904280696 Things 3
-409183694 Keynote
-409203825 Numbers
-409201541 Pages
-# 497799835 Xcode
+# Mac App Store apps, by ID. Find one with: mas search "app name"
+# Keynote / Numbers / Pages are preinstalled on macOS, so they aren't listed.
+904280696   # Things 3

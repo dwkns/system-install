@@ -1,0 +1,8 @@
+# Global tool versions. Override per-project with a local mise.toml.
+# Change a version here, run `sys sync`, then `mise install`.
+
+[tools]
+ruby   = "3.4.8"
+node   = "lts"
+python = "3.13"
+pnpm   = "latest"

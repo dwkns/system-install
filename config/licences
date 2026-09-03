@@ -1,0 +1,4 @@
+# App licences, fetched from 1Password at setup time.
+#   <1Password secret reference>|<destination path>
+# Find a reference with:  op item get "Sublime Text" --format json | jq .fields
+op://Private/Sublime Text/license|$HOME/Library/Application Support/Sublime Text/User/License.sublime_license

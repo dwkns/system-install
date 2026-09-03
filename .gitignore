@@ -1,8 +1,8 @@
-backups/
 .DS_Store
+.ruby-lsp/
 
-# Secrets — never commit. The Sublime license lives in the macOS keychain
-# (service: sublime-text-license); install_sublime writes it into place.
-config/sublime-config/License.sublime_license
-sublime-config-files/License.sublime_license
+# Licences never go in the repo — they live in 1Password (see config/licences)
 *.sublime_license
+
+# Copies of system files replaced by the last sync
+.drift/

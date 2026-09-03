@@ -1,0 +1,40 @@
+# Aliases and small functions. Plain shell — no jq, no JSON, no eval.
+
+# ── Navigation ───────────────────────────────────────────────────────────────
+alias ls='ls -lha'
+alias dt='cd ~/Desktop'
+alias dev='cd ~/dev && ls -lha'
+
+# ── Editors ──────────────────────────────────────────────────────────────────
+alias c.='code .'
+alias ep='code ~/.system-config/dotfiles/.zshrc'   # edit shell config
+alias ea='code ~/.system-config/dotfiles/.aliases'
+alias esys='code ~/.system-config'
+alias rp='exec zsh'                                # reload the shell
+
+# ── System config ────────────────────────────────────────────────────────────
+alias usys='sys sync'
+alias bsys='sys push'
+
+# ── Git ──────────────────────────────────────────────────────────────────────
+alias ga='git add -A'
+alias gc='git commit'
+alias gs='git status'
+alias gl='git log --oneline -20'
+alias gp='git push -u origin HEAD'
+alias ghv='gh repo view --web'
+
+# ── Functions ────────────────────────────────────────────────────────────────
+
+# Kill whatever is listening on a port.  kp 3000
+kp() {
+  [[ -n "$1" ]] || { error "usage: kp <port>"; return 1; }
+  local pids; pids="$(lsof -t -i tcp:"$1" 2>/dev/null)"
+  [[ -n "$pids" ]] && kill -9 ${=pids} || note "Nothing on port $1"
+}
+
+# Delete every node_modules below here.
+dnode() {
+  doing "Deleting node_modules folders"
+  find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
+}

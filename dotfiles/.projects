@@ -1,0 +1,56 @@
+# Project starters. Each clones a skeleton repo, renames it, re-inits git and
+# opens it. Replaces project-scripts/ (5 files, 334 lines).
+#
+#   rps my-app     ruby        nps my-app    node        bps my-tool   bash
+#   em  my-site    11ty        etwm my-site  11ty+tw     etw  my-site  11ty+tw basics
+
+_new_project() {
+  local repo="$1" name="${2:-}" kind="$3"
+
+  if [[ -z "$name" ]]; then
+    printf "Project name: "
+    read -r name
+    [[ -n "$name" ]] || { error "No name given"; return 1; }
+  fi
+
+  if [[ -e "$name" ]]; then
+    error "$name already exists here"
+    return 1
+  fi
+
+  doing "Creating $name from $repo"
+  git clone --quiet "https://github.com/dwkns/$repo.git" "$name" || {
+    error "Could not clone $repo"; return 1
+  }
+  cd "$name" || return 1
+  rm -rf .git
+
+  case "$kind" in
+    node|eleventy)
+      [[ -f package.json ]] && command -v jq >/dev/null &&
+        jq ".name = \"$name\" | .author = \"dwkns\"" package.json > .pkg.tmp &&
+        mv .pkg.tmp package.json
+      [[ "$kind" == eleventy && ! -f .env ]] &&
+        echo 'CURRENT_ENV=development # < development | staging | production >' > .env
+      [[ -f package.json ]] && { doing "Installing dependencies"; npm install --silent; }
+      ;;
+    ruby)
+      [[ -f Gemfile ]] && { doing "Installing gems"; bundle install --quiet; }
+      ;;
+    bash)
+      local file="${name%.sh}.sh"
+      [[ -f script.sh ]] && { mv script.sh "$file"; chmod +x "$file"; }
+      ;;
+  esac
+
+  git init --quiet && git add -A && git commit --quiet -m "Initial commit"
+  doing "Ready"
+  command -v code >/dev/null && code . 2>/dev/null &
+}
+
+rps()  { _new_project ruby-skeleton "$1" ruby; }
+nps()  { _new_project node-skeleton "$1" node; }
+bps()  { _new_project bash-skeleton "$1" bash; }
+em()   { _new_project 11ty-minimal  "$1" eleventy; }
+etwm() { _new_project etw-minimal   "$1" eleventy; }
+etw()  { _new_project etw-basics    "$1" eleventy; }

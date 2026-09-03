@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# One entry point for everything. Run `sys` with no arguments for help.
+set -euo pipefail
+
+export ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+source "$ROOT_DIR/lib/common.sh"
+source "$ROOT_DIR/lib/sync.sh"
+source "$ROOT_DIR/lib/setup.sh"
+
+usage() {
+  cat <<'USAGE'
+sys — system configuration
+
+  sys setup     Set up this machine from scratch
+  sys sync      Pull the latest config and apply it to this machine
+  sys push      Save this machine's config into the repo and push
+  sys doctor    Check that everything is where it should be
+
+Options
+  --dry-run           Show what would happen, change nothing
+  --yes               Don't ask for confirmation
+  --name NAME         (setup) Set the computer name
+  --no-brew           (setup) Skip Homebrew and packages
+  --no-macos          (setup/sync) Skip macOS defaults
+  --licences          (setup) Only install licences from 1Password
+  --mas               (setup) Only install App Store apps
+USAGE
+}
+
+cmd="${1:-}"; [[ $# -gt 0 ]] && shift
+
+DO_BREW=1 DO_MACOS=1 ONLY="" NAME=""
+export DRY_RUN="${DRY_RUN:-0}" ASSUME_YES="${ASSUME_YES:-0}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run)  DRY_RUN=1 ;;
+    --yes|-y)   ASSUME_YES=1 ;;
+    --no-brew)  DO_BREW=0 ;;
+    --no-macos) DO_MACOS=0 ;;
+    --licences|--licenses) ONLY="licences" ;;
+    --mas)      ONLY="mas" ;;
+    --name)     NAME="${2:-}"; shift ;;
+    *) die "Unknown option: $1" ;;
+  esac
+  shift
+done
+
+case "$cmd" in
+  setup)
+    is_macos || die "macOS only."
+
+    case "$ONLY" in
+      licences) install_licences; exit 0 ;;
+      mas)      install_app_store_apps; exit 0 ;;
+    esac
+
+    confirm "Set up this machine from $ROOT_DIR?" || exit 0
+    [[ -n "$NAME" ]] && sudo -v
+
+    [[ "$DO_BREW"  == "1" ]] && install_packages
+    doing "Installing dotfiles"
+    sync_install
+    install_languages
+    install_licences
+    install_app_store_apps
+    set_machine_name "$NAME"
+    [[ "$DO_MACOS" == "1" ]] && { apply_macos_defaults; set_default_terminal; }
+
+    doing "Setup complete"
+    print_manual_steps
+    ;;
+
+  sync)
+    doing "Fetching latest config"
+    run git -C "$ROOT_DIR" pull --ff-only
+    doing "Installing dotfiles"
+    sync_install
+    [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
+    doing "Done — run 'exec zsh' to reload your shell"
+    ;;
+
+  push)
+    doing "Saving this machine's config into the repo"
+    sync_backup
+    if [[ -n "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
+      git -C "$ROOT_DIR" add -A
+      git -C "$ROOT_DIR" commit -m "Update config files"
+      run git -C "$ROOT_DIR" push
+      doing "Pushed"
+    else
+      note "Nothing changed"
+    fi
+    ;;
+
+  doctor)
+    doing "Checking this machine"
+    for t in git brew mise uv gh jq mas duti op; do
+      if has_cmd "$t"; then note "$t"; else warn "$t is missing"; fi
+    done
+    has_cmd mise && { mise ls --current 2>/dev/null | sed 's/^/    /'; }
+    has_cmd op  && { with_timeout 5 op whoami   && note "1Password: signed in" || warn "1Password: not signed in — run 'op signin'"; }
+    has_cmd mas && { with_timeout 5 mas account  && note "App Store: signed in" || warn "App Store: not signed in"; }
+    [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]] && note "Repo is clean" || warn "Repo has uncommitted changes — 'sys push'"
+    ;;
+
+  ""|-h|--help) usage ;;
+  *) error "Unknown command: $cmd"; echo; usage; exit 1 ;;
+esac
