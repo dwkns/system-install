@@ -144,6 +144,17 @@ configure_dock() {
   fi
 }
 
+# Remove a path completely. Several ~/Library folders carry a
+# "group:everyone deny delete" ACL, so the directory itself cannot be removed
+# even by its owner — empty it instead.
+wipe() {
+  local p="$1"
+  [[ -e "$p" ]] || return 0
+  rm -rf "$p" 2>/dev/null && return 0
+  find "$p" -mindepth 1 -delete 2>/dev/null
+  rmdir "$p" 2>/dev/null || true
+}
+
 # Undoes everything setup installed, so a machine can be tested from scratch
 # WITHOUT erasing macOS. Never touches the user account, SSH or Screen Sharing,
 # so a headless machine stays reachable.
@@ -162,7 +173,10 @@ remove_everything() {
   local rel
   while IFS= read -r rel; do plan+=("~/$rel"); done \
     < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
-  plan+=("the config files installed into Cursor, Sublime Text and ~/Library/Colors")
+  plan+=("~/.cursor ($(ls -1 "$HOME/.cursor/extensions" 2>/dev/null | wc -l | tr -d ' ') Cursor extensions)")
+  plan+=("~/Library/Application Support/Cursor and Sublime Text")
+  plan+=("~/Library/Colors")
+  plan+=("preferences for Cursor, Sublime Text and Ghostty")
   plan+=("the Dock and Finder settings, back to macOS defaults")
   plan+=("$ROOT_DIR/.state and $ROOT_DIR/.drift")
 
@@ -197,21 +211,23 @@ remove_everything() {
   rm -rf "$HOME/.local/share/mise" "$HOME/.cache/mise" \
          "$ROOT_DIR/.state" "$ROOT_DIR/.drift" 2>/dev/null
 
-  # Remove only the files this repo installed. Deleting whole ~/Library
-  # directories would take unrelated app data with them, and parts of
-  # ~/Library are protected unless the terminal has Full Disk Access.
-  local repo_rel system_dir repo_dir rel denied=0
+  # Editors, completely — extensions live in ~/.cursor, not Application Support.
+  wipe "$HOME/.cursor"
+  wipe "$HOME/Library/Application Support/Cursor"
+  wipe "$HOME/Library/Application Support/Sublime Text"
+  wipe "$HOME/Library/Colors"
+  wipe "$HOME/Library/Caches/Cursor"
+  rm -f "$HOME/Library/Preferences/com.todesktop.230313mzl4w4u92.plist" \
+        "$HOME/Library/Preferences/com.sublimetext.4.plist" \
+        "$HOME/Library/Preferences/com.mitchellh.ghostty.plist" 2>/dev/null
+
+  # Anything else the sync targets put on this machine.
+  local repo_rel system_dir repo_dir rel
   while IFS='|' read -r repo_rel system_dir; do
     repo_dir="$ROOT_DIR/$repo_rel"
     [[ -d "$repo_dir" ]] || continue
-    while IFS= read -r rel; do
-      rm -f "$system_dir/$rel" 2>/dev/null || denied=1
-    done < <(_tracked "$repo_dir")
+    while IFS= read -r rel; do rm -f "$system_dir/$rel" 2>/dev/null; done < <(_tracked "$repo_dir")
   done < <(sync_targets)
-
-  if [[ "$denied" == "1" ]]; then
-    warn "Some files could not be removed (parts of ~/Library need Full Disk Access)"
-  fi
 
   doing "Resetting the Dock and Finder"
   defaults delete com.apple.dock    >/dev/null 2>&1 || true
