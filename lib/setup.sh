@@ -236,7 +236,8 @@ remove_everything() {
 
   echo
   doing "Removed. The repo is still at $ROOT_DIR"
-  note "This shell still has the old config loaded — open a new terminal."
+  warn "Open a new terminal now. This one still has the old shell hooks"
+  warn "loaded, so it will complain that mise has gone — that is expected."
   print_fresh_user_steps
 }
 
