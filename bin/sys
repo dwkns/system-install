@@ -19,6 +19,7 @@ sys — system configuration
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
   sys dock      Rebuild the Dock from config/dock
+  sys hostname  Set the computer name (asks, or pass one: sys hostname my-mac)
   sys remove    Undo everything setup installed (asks first; --dryrun to preview)
 
 Options
@@ -36,7 +37,7 @@ USAGE
 
 cmd="${1:-}"; [[ $# -gt 0 ]] && shift
 
-DO_BREW=1 DO_MACOS=1 ONLY="" NAME=""
+DO_BREW=1 DO_MACOS=1 ONLY="" NAME="" ARG=""
 export DRY_RUN="${DRY_RUN:-0}" ASSUME_YES="${ASSUME_YES:-0}"
 
 while [[ $# -gt 0 ]]; do
@@ -48,7 +49,8 @@ while [[ $# -gt 0 ]]; do
     --licences|--licenses) ONLY="licences" ;;
     --mas)      ONLY="mas" ;;
     --name)     NAME="${2:-}"; shift ;;
-    *) die "Unknown option: $1" ;;
+    -*) die "Unknown option: $1" ;;
+    *)  ARG="$1" ;;
   esac
   shift
 done
@@ -219,6 +221,12 @@ HEADSUP
   remove)
     is_macos || die "macOS only."
     remove_everything
+    ;;
+
+  hostname)
+    is_macos || die "macOS only."
+    if [[ -n "$ARG" ]]; then set_machine_name "$ARG"; else prompt_machine_name; fi
+    mkdir -p "$ROOT_DIR/.state" && printf 'asked\n' > "$ROOT_DIR/.state/hostname"
     ;;
 
   dock)

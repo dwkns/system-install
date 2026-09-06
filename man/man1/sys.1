@@ -82,6 +82,19 @@ It does not erase macOS and does not touch your user account, SSH or Screen
 Sharing, so a headless machine stays reachable and you can install again
 straight away.
 .TP
+.BR hostname " [" \fIname\fR ]
+Set the computer name. With a name, sets it directly; without one, shows the
+current name and asks, falling back to a default after fifteen seconds.
+.IP
+All three of
+.IR ComputerName ,
+.I HostName
+and
+.I LocalHostName
+are set to the same value, lowercased, with spaces turned to hyphens and other
+punctuation dropped, since scutil rejects those. "Dazza's Mac Mini" becomes
+dazzas\-mac\-mini everywhere.
+.TP
 .B alias
 List your aliases, functions and project starters, grouped by section, read
 straight from

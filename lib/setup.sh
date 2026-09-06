@@ -114,7 +114,7 @@ run_once() {
   local name="$1" fp="$2"; shift 2
   local stamp="$ROOT_DIR/.state/$name"
   if [[ -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$fp" ]]; then
-    note "$name: already done — skipping"
+    note "$name: already done — skipping ('sys $name' forces it)"
     return 0
   fi
   if "$@"; then

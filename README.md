@@ -25,6 +25,7 @@ Access, logging out).
 | `sys mise` | How to use mise and uv |
 | `sys extras` | Install optional extras (Office, Xcode, ollama, duckdb) |
 | `sys dock` | Rebuild the Dock from `config/dock` |
+| `sys hostname` | Set the computer name (asks, or `sys hostname my-mac`) |
 | `sys remove` | Undo everything setup installed (asks first; `--dryrun` previews) |
 | `sys setup` | Re-run setup, or part of it — see `sys` for flags |
 
