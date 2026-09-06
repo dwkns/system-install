@@ -31,6 +31,22 @@ Add `--dry-run` to any of them to see what would happen.
 
 Full documentation: `man sys`
 
+## Starting over
+
+`bin/uninstall` removes everything setup installed — Homebrew and its packages,
+mise toolchains, the dotfiles it copied, editor config, and the Dock — without
+erasing macOS. SSH and Screen Sharing are left alone, so a headless machine
+stays reachable.
+
+```bash
+~/.system-config/bin/uninstall            # dry run, lists what it would remove
+~/.system-config/bin/uninstall --force    # actually remove it
+```
+
+**Do not use Erase All Content and Settings on a headless Mac.** It reboots
+into Setup Assistant, which needs a physical keyboard and display — you would
+lose remote access until someone attaches a screen.
+
 ## Layout
 
 ```

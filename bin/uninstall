@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Undo everything `sys setup` installed, so a machine can be tested again from
+# scratch WITHOUT erasing macOS.
+#
+#   uninstall --dry-run    list what would be removed (default)
+#   uninstall --force      actually remove it
+#
+# Deliberately does NOT touch: your user account, macOS itself, SSH or Screen
+# Sharing. A headless Mac stays reachable.
+set -uo pipefail
+
+ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
+source "$ROOT_DIR/lib/common.sh"
+
+FORCE=0
+[[ "${1:-}" == "--force" ]] && FORCE=1
+
+if [[ "$FORCE" == "0" ]]; then
+  warn "DRY RUN — nothing will be removed. Re-run with --force to do it."
+  echo
+fi
+
+act() {  # act <description> <command...>
+  local desc="$1"; shift
+  if [[ "$FORCE" == "1" ]]; then
+    doing "$desc"
+    "$@" >/dev/null 2>&1 || true
+  else
+    note "would: $desc"
+  fi
+}
+
+doing "Removing what setup installed"
+echo
+
+# ── Homebrew packages, then Homebrew ────────────────────────────────────────
+if has_cmd brew; then
+  note "Homebrew formulae: $(brew list --formula 2>/dev/null | wc -l | tr -d ' ')"
+  note "Homebrew casks:    $(brew list --cask 2>/dev/null | wc -l | tr -d ' ')"
+  if [[ "$FORCE" == "1" ]]; then
+    doing "Uninstalling all casks and formulae"
+    brew list --cask 2>/dev/null | xargs -r brew uninstall --cask --force >/dev/null 2>&1
+    brew list --formula 2>/dev/null | xargs -r brew uninstall --formula --force --ignore-dependencies >/dev/null 2>&1
+    doing "Uninstalling Homebrew itself"
+    NONINTERACTIVE=1 /bin/bash -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)" -- --force >/dev/null 2>&1
+  else
+    note "would: uninstall every cask and formula, then Homebrew itself"
+  fi
+fi
+
+# ── Languages ───────────────────────────────────────────────────────────────
+act "remove ~/.local/share/mise (installed toolchains)" rm -rf "$HOME/.local/share/mise"
+act "remove ~/.cache/mise"                              rm -rf "$HOME/.cache/mise"
+
+# ── Files this repo installs into the home directory ────────────────────────
+while IFS= read -r rel; do
+  act "remove ~/$rel" rm -rf "$HOME/$rel"
+done < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
+
+act "remove ~/Library/Application Support/Cursor"       rm -rf "$HOME/Library/Application Support/Cursor"
+act "remove ~/Library/Application Support/Sublime Text" rm -rf "$HOME/Library/Application Support/Sublime Text"
+act "remove ~/Library/Colors"                           rm -rf "$HOME/Library/Colors"
+
+# ── Dock and macOS defaults back to stock ───────────────────────────────────
+act "reset the Dock to default" defaults delete com.apple.dock
+act "restart the Dock"          killall Dock
+act "reset Finder defaults"     defaults delete com.apple.finder
+
+# ── This repo's own state ───────────────────────────────────────────────────
+act "remove $ROOT_DIR/.state" rm -rf "$ROOT_DIR/.state"
+act "remove $ROOT_DIR/.drift" rm -rf "$ROOT_DIR/.drift"
+
+echo
+if [[ "$FORCE" == "1" ]]; then
+  doing "Done. Log out and back in, then re-run the installer."
+  note "The repo itself is still at $ROOT_DIR — 'rm -rf $ROOT_DIR' to remove it too."
+else
+  echo
+  warn "That was a dry run. To actually do it:  $ROOT_DIR/bin/uninstall --force"
+fi
