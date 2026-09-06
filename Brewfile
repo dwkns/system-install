@@ -27,6 +27,7 @@ cask "ghostty"
 cask "sublime-text"
 cask "visual-studio-code"
 cask "cursor"
+cask "claude"           # Claude desktop app
 cask "font-fira-code"
 cask "font-inter"
 
