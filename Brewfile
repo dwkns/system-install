@@ -10,7 +10,6 @@ brew "jq"
 brew "mise"             # ruby / node / python versions
 brew "uv"               # python packages + venvs
 brew "duti"             # sets Ghostty as the default terminal
-brew "dockutil"         # manages the Dock
 brew "mas"              # App Store installs
 brew "wget"             # file retriever
 

@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+"""Rebuild the Dock from config/dock in a single atomic write.
+
+Fifteen separate `dockutil` calls race against cfprefsd and silently lose
+entries. Building the whole persistent-apps array and importing it once is
+reliable, and needs no external tool.
+
+  set-dock            apply
+  set-dock --dry-run  show what would be applied
+"""
+import os, plistlib, subprocess, sys, urllib.parse, pathlib
+
+DRY = "--dry-run" in sys.argv
+root = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
+cfg = root / "config" / "dock"
+if not cfg.is_file():
+    sys.exit(0)
+
+def tile(path, folder=False):
+    url = urllib.parse.quote(str(path), safe="/:")
+    return {
+        "tile-data": {
+            "file-data": {"_CFURLString": f"file://{url}/", "_CFURLStringType": 15},
+            "file-type": 2 if folder else 41,
+        },
+        "tile-type": "directory-tile" if folder else "file-tile",
+    }
+
+apps, others, missing = [], [], []
+for line in cfg.read_text().splitlines():
+    line = line.strip()
+    if not line:
+        continue
+    if line.startswith("#"):
+        continue
+    path = pathlib.Path(os.path.expandvars(line)).expanduser()
+    if not path.exists():
+        missing.append(path.name or str(path))
+        continue
+    # A .app bundle is itself a directory, so classify by suffix, not is_dir().
+    is_folder = path.suffix != ".app"
+    (others if is_folder else apps).append(tile(path, is_folder))
+
+raw = subprocess.run(["defaults", "export", "com.apple.dock", "-"],
+                     capture_output=True, check=True).stdout
+dock = plistlib.loads(raw)
+dock["persistent-apps"] = apps
+dock["persistent-others"] = others
+
+if DRY:
+    print(f"would set {len(apps)} apps, {len(others)} folders")
+else:
+    subprocess.run(["defaults", "import", "com.apple.dock", "-"],
+                   input=plistlib.dumps(dock), check=True)
+    subprocess.run(["killall", "Dock"], stderr=subprocess.DEVNULL)
+
+msg = f"Dock: {len(apps)} apps, {len(others)} folders"
+if missing:
+    msg += f" ({len(missing)} not installed: {', '.join(missing)})"
+print(msg)

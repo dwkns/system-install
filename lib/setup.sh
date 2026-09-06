@@ -69,6 +69,7 @@ install_app_store_apps() {
   fi
 
   doing "Installing App Store apps"
+  note "If you are asked for your password here, it is the App Store installer."
   local line id
   while IFS= read -r line; do
     [[ -z "$line" || "$line" == \#* ]] && continue
@@ -121,34 +122,21 @@ run_once() {
   return 0
 }
 
-# Rebuilds the Dock from config/dock. Anything not installed on this machine
-# is skipped with a note rather than failing — the Dock lists apps that come
-# from optional extras and from other machines.
+# Rebuilds the Dock from config/dock. bin/set-dock writes the whole Dock in
+# one go: separate per-app calls race against cfprefsd and silently lose
+# entries. Errors are shown, never swallowed.
 configure_dock() {
-  local file="$ROOT_DIR/config/dock"
-  [[ -r "$file" ]] || return 1
-  has_cmd dockutil || { warn "dockutil not installed; the Dock will be set up on the next run"; return 1; }
+  local setter="$ROOT_DIR/bin/set-dock"
+  [[ -x "$setter" ]] || { warn "bin/set-dock missing; skipping the Dock"; return 1; }
+  [[ -r "$ROOT_DIR/config/dock" ]] || return 1
 
   doing "Setting up the Dock"
-  run dockutil --remove all --no-restart >/dev/null 2>&1
-
-  local line path added=0 skipped=0
-  while IFS= read -r line; do
-    [[ -z "$line" || "$line" == \#* ]] && continue
-    path="$(eval printf '%s' \""$line"\")"
-    if [[ ! -e "$path" ]]; then
-      skipped=$((skipped + 1)); continue
-    fi
-    run dockutil --add "$path" --no-restart >/dev/null 2>&1
-    added=$((added + 1))
-  done < "$file"
-
-  run killall Dock >/dev/null 2>&1 || true
-  note "Dock: $added added$( [[ $skipped -gt 0 ]] && printf ', %s not installed' "$skipped" )"
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then
+    ROOT_DIR="$ROOT_DIR" "$setter" --dry-run || return 1
+  else
+    ROOT_DIR="$ROOT_DIR" "$setter" || { error "Could not set the Dock"; return 1; }
+  fi
 }
-
-# The Dock is only built on a machine we have not set up before. Rebuilding it
-# on every run would throw away any arrangement made since. `sys dock` forces it.
 
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
