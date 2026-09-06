@@ -54,6 +54,18 @@ else:
                    input=plistlib.dumps(dock), check=True)
     subprocess.run(["killall", "Dock"], stderr=subprocess.DEVNULL)
 
+    # Read it back. Reporting success without checking is how the Dock ended
+    # up emptied but not refilled.
+    check = plistlib.loads(subprocess.run(
+        ["defaults", "export", "com.apple.dock", "-"],
+        capture_output=True, check=True).stdout)
+    got_apps = len(check.get("persistent-apps", []))
+    got_others = len(check.get("persistent-others", []))
+    if (got_apps, got_others) != (len(apps), len(others)):
+        print(f"ERROR: wanted {len(apps)} apps and {len(others)} folders, "
+              f"but the Dock has {got_apps} and {got_others}", file=sys.stderr)
+        sys.exit(1)
+
 msg = f"Dock: {len(apps)} apps, {len(others)} folders"
 if missing:
     msg += f" ({len(missing)} not installed: {', '.join(missing)})"

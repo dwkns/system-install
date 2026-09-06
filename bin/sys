@@ -97,7 +97,7 @@ HEADSUP
     [[ -n "$NAME" ]] && set_machine_name "$NAME"
     if [[ "$DO_MACOS" == "1" ]]; then
       step "Applying macOS defaults" apply_macos_defaults
-      run_once dock configure_dock
+      run_once dock "$(fingerprint "$ROOT_DIR/config/dock")" configure_dock
       set_default_terminal || true
     fi
 
@@ -213,8 +213,12 @@ HEADSUP
 
   dock)
     is_macos || die "macOS only."
-    configure_dock
-    mkdir -p "$ROOT_DIR/.state" && date > "$ROOT_DIR/.state/dock"
+    if configure_dock; then
+      mkdir -p "$ROOT_DIR/.state"
+      fingerprint "$ROOT_DIR/config/dock" > "$ROOT_DIR/.state/dock"
+    else
+      die "The Dock was not set up."
+    fi
     ;;
 
   extras)

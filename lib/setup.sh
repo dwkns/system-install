@@ -102,25 +102,30 @@ install_editor_extensions() {
   return 0
 }
 
-# Run a step at most once per machine.
+# Run a step at most once per machine, per version of its config.
 #
-# The stamp is written ONLY if the step actually did its work, so a half
-# finished install retries it next time. Each feature has its own stamp, so
-# "already done" means that feature, not the install as a whole.
+#   run_once <name> <fingerprint> <command...>
+#
+# The stamp holds the fingerprint of the config the step last succeeded with,
+# so editing that config makes the step run again. The stamp is written ONLY
+# on success, so a half finished install retries rather than skipping.
 run_once() {
-  local name="$1"; shift
+  local name="$1" fp="$2"; shift 2
   local stamp="$ROOT_DIR/.state/$name"
-  if [[ -e "$stamp" ]]; then
-    note "$name: already done — skipping"
+  if [[ -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$fp" ]]; then
+    note "$name: already done — skipping ('sys $name' forces it)"
     return 0
   fi
   if "$@"; then
-    mkdir -p "$(dirname "$stamp")" && date > "$stamp"
+    mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$fp" >"$stamp"
   else
     note "$name: not done yet, will try again next run"
   fi
   return 0
 }
+
+# Fingerprint a file so a change to it re-triggers its once-only step.
+fingerprint() { shasum -a 256 "$1" 2>/dev/null | cut -d' ' -f1; }
 
 # Rebuilds the Dock from config/dock. bin/set-dock writes the whole Dock in
 # one go: separate per-app calls race against cfprefsd and silently lose

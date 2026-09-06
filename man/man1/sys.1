@@ -62,9 +62,11 @@ rearranged is never overwritten; this command forces it.
 .PP
 Steps like this record that they ran in
 .IR .state/ ,
-one file per feature. The record is written only when the step actually did
-its work, so a half finished install picks up where it left off rather than
-skipping steps that never ran.
+one file per feature, holding a fingerprint of the config they last succeeded
+with. The record is written only when the step actually did its work, so a
+half finished install picks up where it left off; and editing the config makes
+the step run again on the next
+.BR "sys setup" .
 .B sys push
 records the current Dock back to
 .IR config/dock .
