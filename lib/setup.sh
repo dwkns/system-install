@@ -145,64 +145,113 @@ configure_dock() {
 
 # Undoes everything setup installed, so a machine can be tested from scratch
 # WITHOUT erasing macOS. Never touches the user account, SSH or Screen Sharing,
-# so a headless machine stays reachable. FORCE=1 to actually remove.
+# so a headless machine stays reachable.
+#
+# Shows the plan, then asks. DRY_RUN=1 shows the plan and stops.
 remove_everything() {
-  local force="${FORCE:-0}"
+  local dry="${DRY_RUN:-0}" brew_f=0 brew_c=0
+  local -a plan=()
 
-  if [[ "$force" != "1" ]]; then
-    warn "DRY RUN — nothing will be removed. 'sys remove --force' to do it."
-    echo
+  has_cmd brew && {
+    brew_f=$(brew list --formula 2>/dev/null | wc -l | tr -d ' ')
+    brew_c=$(brew list --cask 2>/dev/null | wc -l | tr -d ' ')
+    plan+=("every Homebrew package ($brew_f formulae, $brew_c casks), then Homebrew itself")
+  }
+  plan+=("~/.local/share/mise and ~/.cache/mise (installed toolchains)")
+  local rel
+  while IFS= read -r rel; do plan+=("~/$rel"); done \
+    < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
+  plan+=("~/Library/Application Support/Cursor")
+  plan+=("~/Library/Application Support/Sublime Text")
+  plan+=("~/Library/Colors")
+  plan+=("the Dock and Finder settings, back to macOS defaults")
+  plan+=("$ROOT_DIR/.state and $ROOT_DIR/.drift")
+
+  doing "This will remove:"
+  printf '    %s\n' "${plan[@]}"
+  echo
+  note "It will NOT erase macOS, your user account, SSH or Screen Sharing."
+  echo
+
+  if [[ "$dry" == "1" ]]; then
+    warn "Dry run — nothing removed. Run 'sys remove' to do it."
+    return 0
   fi
 
-  local act
-  act() {
-    local desc="$1"; shift
-    if [[ "$force" == "1" ]]; then doing "$desc"; "$@" >/dev/null 2>&1 || true
-    else note "would: $desc"; fi
-  }
-
-  doing "Removing what setup installed"; echo
+  confirm "Remove all of the above?" || { note "Nothing removed."; return 0; }
+  echo
 
   if has_cmd brew; then
-    note "Homebrew: $(brew list --formula 2>/dev/null | wc -l | tr -d ' ') formulae, $(brew list --cask 2>/dev/null | wc -l | tr -d ' ') casks"
-    if [[ "$force" == "1" ]]; then
-      doing "Uninstalling all casks and formulae"
-      brew list --cask 2>/dev/null | xargs -r brew uninstall --cask --force >/dev/null 2>&1
-      brew list --formula 2>/dev/null | xargs -r brew uninstall --formula --force --ignore-dependencies >/dev/null 2>&1
-      doing "Uninstalling Homebrew itself"
-      NONINTERACTIVE=1 /bin/bash -c \
-        "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)" -- --force >/dev/null 2>&1
-    else
-      note "would: uninstall every cask and formula, then Homebrew itself"
-    fi
+    doing "Uninstalling casks and formulae"
+    brew list --cask 2>/dev/null | xargs -r brew uninstall --cask --force >/dev/null 2>&1
+    brew list --formula 2>/dev/null | xargs -r brew uninstall --formula --force --ignore-dependencies >/dev/null 2>&1
+    doing "Uninstalling Homebrew"
+    NONINTERACTIVE=1 /bin/bash -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)" -- --force >/dev/null 2>&1
   fi
 
-  act "remove ~/.local/share/mise (installed toolchains)" rm -rf "$HOME/.local/share/mise"
-  act "remove ~/.cache/mise"                              rm -rf "$HOME/.cache/mise"
+  doing "Removing installed files"
+  rm -rf "$HOME/.local/share/mise" "$HOME/.cache/mise"
+  while IFS= read -r rel; do rm -rf "$HOME/$rel"; done \
+    < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
+  rm -rf "$HOME/Library/Application Support/Cursor" \
+         "$HOME/Library/Application Support/Sublime Text" \
+         "$HOME/Library/Colors" "$ROOT_DIR/.state" "$ROOT_DIR/.drift"
 
-  local rel
-  while IFS= read -r rel; do
-    act "remove ~/$rel" rm -rf "$HOME/$rel"
-  done < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
-
-  act "remove ~/Library/Application Support/Cursor"       rm -rf "$HOME/Library/Application Support/Cursor"
-  act "remove ~/Library/Application Support/Sublime Text" rm -rf "$HOME/Library/Application Support/Sublime Text"
-  act "remove ~/Library/Colors"                           rm -rf "$HOME/Library/Colors"
-
-  act "reset the Dock to default" defaults delete com.apple.dock
-  act "restart the Dock"          killall Dock
-  act "reset Finder defaults"     defaults delete com.apple.finder
-
-  act "remove $ROOT_DIR/.state" rm -rf "$ROOT_DIR/.state"
-  act "remove $ROOT_DIR/.drift" rm -rf "$ROOT_DIR/.drift"
+  doing "Resetting the Dock and Finder"
+  defaults delete com.apple.dock    >/dev/null 2>&1 || true
+  defaults delete com.apple.finder  >/dev/null 2>&1 || true
+  killall Dock Finder >/dev/null 2>&1 || true
 
   echo
-  if [[ "$force" == "1" ]]; then
-    doing "Done. Log out and back in, then re-run the installer."
-    note "The repo is still at $ROOT_DIR — 'rm -rf $ROOT_DIR' to remove that too."
-  else
-    warn "Dry run only. To actually do it:  sys remove --force"
-  fi
+  doing "Removed. The repo is still at $ROOT_DIR"
+  print_fresh_user_steps
+}
+
+# Printed after a removal: how to get a genuinely clean user on a headless Mac.
+print_fresh_user_steps() {
+  local me="${USER:-$(id -un)}"
+  cat <<STEPS
+
+──────────────────────────────────────────────────────────────────────────
+Starting completely fresh, on a headless machine
+──────────────────────────────────────────────────────────────────────────
+
+You cannot delete the account you are logged in as, so make the new one
+first, log into it over Screen Sharing, then delete the old one.
+
+1. Create a new admin user (it will prompt for the password):
+
+     sudo sysadminctl -addUser NEWUSER -fullName "New User" -password - -admin
+
+2. Turn on remote login (SSH) and allow the new user:
+
+     sudo systemsetup -setremotelogin on
+     sudo dseditgroup -o edit -a NEWUSER -t user com.apple.access_ssh
+
+3. Turn on Screen Sharing for the new user:
+
+     sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \\
+       -activate -configure -access -on -users NEWUSER -privs -all -restart -agent
+
+   Or, to allow every account that can log in:
+
+     sudo launchctl enable system/com.apple.screensharing
+     sudo launchctl kickstart -k system/com.apple.screensharing
+
+4. Log into NEWUSER over Screen Sharing, then remove this account and its
+   home directory:
+
+     sudo sysadminctl -deleteUser $me -secure
+
+5. Run the installer as NEWUSER:
+
+     curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
+
+Do NOT use Erase All Content and Settings: it reboots into Setup Assistant,
+which needs a physical keyboard and display.
+
+STEPS
 }
 
 # Optional extras — never run by `sys setup`, only by `sys extras`.

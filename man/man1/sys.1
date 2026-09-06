@@ -73,10 +73,12 @@ records the current Dock back to
 .TP
 .B remove
 Undo everything setup installed: Homebrew and its packages, mise toolchains,
-the dotfiles it copied, editor configuration and the Dock. Lists what it would
-remove unless
-.B \-\-force
-is given.
+the dotfiles it copied, editor configuration and the Dock. Lists what it will remove and asks before doing
+anything;
+.B \-\-dryrun
+shows the list and stops. Afterwards it prints the commands for creating a
+fresh admin user with remote login and Screen Sharing, which is how to start
+over on a machine with no display attached.
 .IP
 It does not erase macOS and does not touch your user account, SSH or Screen
 Sharing, so a headless machine stays reachable. Erase All Content and Settings
@@ -130,9 +132,10 @@ Only restore licences from the keychain.
 .RB ( setup )
 Only install App Store apps.
 .TP
-.B \-\-force
+.B \-\-dryrun
 .RB ( remove )
-Actually remove things, rather than listing them.
+Show what would be removed and stop. Same as
+.BR \-\-dry\-run .
 .SH HOW SYNCING WORKS
 .B sys sync
 mirrors three directories:

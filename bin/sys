@@ -19,7 +19,7 @@ sys — system configuration
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
   sys dock      Rebuild the Dock from config/dock
-  sys remove    Undo everything setup installed (dry run unless --force)
+  sys remove    Undo everything setup installed (asks first; --dryrun to preview)
 
 Options
   --dry-run           Show what would happen, change nothing
@@ -29,7 +29,6 @@ Options
   --no-macos          (setup/sync) Skip macOS defaults
   --licences          (setup) Only install licences from the keychain
   --mas               (setup) Only install App Store apps
-  --force             (remove) Actually remove things, rather than listing them
 
 Full documentation: man sys
 USAGE
@@ -42,13 +41,12 @@ export DRY_RUN="${DRY_RUN:-0}" ASSUME_YES="${ASSUME_YES:-0}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --dry-run)  DRY_RUN=1 ;;
+    --dry-run|--dryrun) DRY_RUN=1 ;;
     --yes|-y)   ASSUME_YES=1 ;;
     --no-brew)  DO_BREW=0 ;;
     --no-macos) DO_MACOS=0 ;;
     --licences|--licenses) ONLY="licences" ;;
     --mas)      ONLY="mas" ;;
-    --force)    export FORCE=1 ;;
     --name)     NAME="${2:-}"; shift ;;
     *) die "Unknown option: $1" ;;
   esac
