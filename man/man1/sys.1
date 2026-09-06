@@ -111,7 +111,15 @@ Do not ask for confirmation.
 .TP
 .BI \-\-name " NAME"
 .RB ( setup )
-Set the computer, host and local host name. Requires
+Set the computer, host and local host name, without being asked. Without it,
+setup asks once per machine and falls back to a default after fifteen seconds.
+.I ComputerName
+keeps the name as typed;
+.I HostName
+and
+.I LocalHostName
+get a version with spaces turned to hyphens and other punctuation dropped,
+since scutil rejects them. Requires
 .BR sudo (8).
 .TP
 .B \-\-no\-brew

@@ -95,7 +95,11 @@ HEADSUP
     step "Restoring licences"           install_licences
     step "Installing Cursor extensions" install_editor_extensions
     step "Installing App Store apps"    install_app_store_apps
-    [[ -n "$NAME" ]] && set_machine_name "$NAME"
+    if [[ -n "$NAME" ]]; then
+      set_machine_name "$NAME"
+    else
+      run_once hostname asked prompt_machine_name
+    fi
     if [[ "$DO_MACOS" == "1" ]]; then
       step "Applying macOS defaults" apply_macos_defaults
       run_once dock "$(fingerprint "$ROOT_DIR/config/dock")" configure_dock

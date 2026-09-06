@@ -299,11 +299,41 @@ set_default_terminal() {
 set_machine_name() {
   local name="$1"
   [[ -n "$name" ]] || return 0
-  doing "Setting machine name to $name"
-  run sudo scutil --set ComputerName "$name"
-  run sudo scutil --set HostName "$name"
-  run sudo scutil --set LocalHostName "$name"
+
+  # ComputerName is the friendly one and may contain spaces. HostName and
+  # LocalHostName are network names: letters, digits and hyphens only, or
+  # scutil refuses them.
+  local netname
+  netname="$(printf '%s' "$name" | tr ' ' '-' | tr -cd '[:alnum:]-' | sed 's/^-*//;s/-*$//')"
+  [[ -n "$netname" ]] || netname="mac"
+
+  doing "Setting computer name to $name"
+  run sudo scutil --set ComputerName  "$name"
+  run sudo scutil --set HostName      "$netname"
+  run sudo scutil --set LocalHostName "$netname"
 }
+
+# Asked once per machine during setup. 15 seconds, then the default.
+DEFAULT_MACHINE_NAME="${DEFAULT_MACHINE_NAME:-dazzas-mac}"
+prompt_machine_name() {
+  local current reply
+  current="$(scutil --get ComputerName 2>/dev/null || echo "unknown")"
+
+  doing "Computer name"
+  note "Currently: $current"
+  printf '    New name, or Return to accept "%s" (15s): ' "$DEFAULT_MACHINE_NAME"
+
+  reply=""
+  if { true </dev/tty; } 2>/dev/null; then
+    read -t 15 -r reply </dev/tty || true
+  fi
+  echo
+
+  reply="$(printf '%s' "${reply:-$DEFAULT_MACHINE_NAME}" | sed 's/^ *//;s/ *$//')"
+  [[ -n "$reply" ]] || reply="$DEFAULT_MACHINE_NAME"
+  set_machine_name "$reply"
+}
+
 
 # The steps a human has to do; printed at the end of setup.
 print_manual_steps() {
