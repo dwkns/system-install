@@ -5,8 +5,10 @@
 # value the system already uses is noise. See `man sys`.
 source "$HOME/.system-config/lib/common.sh"
 
-# Stop System Settings overwriting what we're about to change.
-osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
+# Stop System Settings overwriting what we're about to change. killall rather
+# than osascript: telling an app to quit needs Automation permission, which
+# makes macOS throw a "wants access to control System Events" dialog.
+killall "System Settings" 2>/dev/null || true
 
 # ── General ──────────────────────────────────────────────────────────────────
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"

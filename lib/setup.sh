@@ -182,6 +182,10 @@ remove_everything() {
   echo
 
   if has_cmd brew; then
+    # Some casks need sudo. Ask once here so the prompt has context, rather
+    # than appearing unexplained in the middle of Homebrew's output.
+    note "Some apps need your password to uninstall."
+    sudo -v || warn "No sudo — some casks may fail to uninstall"
     doing "Uninstalling casks and formulae"
     brew list --cask 2>/dev/null | xargs -r brew uninstall --cask --force >/dev/null 2>&1
     brew list --formula 2>/dev/null | xargs -r brew uninstall --formula --force --ignore-dependencies >/dev/null 2>&1
