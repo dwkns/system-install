@@ -6,3 +6,6 @@
 
 # Copies of system files replaced by the last sync
 .drift/
+
+# Local state (which one-time steps have run)
+.state/

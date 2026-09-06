@@ -101,6 +101,44 @@ install_editor_extensions() {
   return 0
 }
 
+# Rebuilds the Dock from config/dock. Anything not installed on this machine
+# is skipped with a note rather than failing — the Dock lists apps that come
+# from optional extras and from other machines.
+configure_dock() {
+  local file="$ROOT_DIR/config/dock"
+  [[ -r "$file" ]] || return 0
+  has_cmd dockutil || { warn "dockutil not installed; skipping the Dock"; return 0; }
+
+  doing "Setting up the Dock"
+  run dockutil --remove all --no-restart >/dev/null 2>&1
+
+  local line path added=0 skipped=0
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    path="$(eval printf '%s' \""$line"\")"
+    if [[ ! -e "$path" ]]; then
+      skipped=$((skipped + 1)); continue
+    fi
+    run dockutil --add "$path" --no-restart >/dev/null 2>&1
+    added=$((added + 1))
+  done < "$file"
+
+  run killall Dock >/dev/null 2>&1 || true
+  note "Dock: $added added$( [[ $skipped -gt 0 ]] && printf ', %s not installed' "$skipped" )"
+}
+
+# The Dock is only built on a machine we have not set up before. Rebuilding it
+# on every run would throw away any arrangement made since. `sys dock` forces it.
+configure_dock_once() {
+  local stamp="$ROOT_DIR/.state/dock"
+  if [[ -e "$stamp" ]]; then
+    note "Dock already set up — 'sys dock' rebuilds it"
+    return 0
+  fi
+  configure_dock || return 0
+  mkdir -p "$(dirname "$stamp")" && date > "$stamp"
+}
+
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
   local bf="$ROOT_DIR/Brewfile.optional"

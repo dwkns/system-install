@@ -1,0 +1,34 @@
+# Dock contents, in order. Built by `sys dock`, and once during setup.
+# One path per line. Anything not installed is skipped with a note.
+# Refresh from the current Dock with: sys push
+
+/Applications/Safari Technology Preview.app
+/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app
+/System/Applications/Mail.app
+/System/Applications/Messages.app
+/Applications/Ghostty.app
+/System/Applications/Photos.app
+/System/Applications/Calendar.app
+/System/Applications/Contacts.app
+/Applications/Claude.app
+/Applications/Cursor.app
+/Applications/Things3.app
+/Applications/Notion.app
+/Applications/Visual Studio Code.app
+/System/Applications/Music.app
+/System/Applications/App Store.app
+/System/Applications/System Settings.app
+/Applications/Sketch.app
+/Applications/Keynote.app
+/Applications/Pages.app
+/System/Applications/TextEdit.app
+/Applications/WhatsApp.app
+$HOME/Applications/Coinbase.app
+/System/Applications/Preview.app
+/Applications/Discord.app
+/Applications/Xcode.app
+/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
+$HOME/Developer/mail-smart-export/apps/MailExporter/MailExporter.app
+
+# Folders
+$HOME/Downloads

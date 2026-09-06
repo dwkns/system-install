@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+"""Write the current Dock to config/dock, preserving order."""
+import os, plistlib, subprocess, urllib.parse, pathlib, sys
+
+root = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
+home = str(pathlib.Path.home())
+
+raw = subprocess.run(["defaults", "export", "com.apple.dock", "-"],
+                     capture_output=True).stdout
+dock = plistlib.loads(raw)
+
+def paths(section):
+    for tile in dock.get(section, []):
+        url = (tile.get("tile-data", {}).get("file-data") or {}).get("_CFURLString", "")
+        p = urllib.parse.unquote(url.replace("file://", "")).rstrip("/")
+        if p:
+            yield p.replace(home, "$HOME")
+
+out = ["# Dock contents, in order. Built by `sys dock`, and once during setup.",
+       "# One path per line. Anything not installed is skipped with a note.",
+       "# Refresh from the current Dock with: sys push", ""]
+out += list(paths("persistent-apps"))
+others = list(paths("persistent-others"))
+if others:
+    out += ["", "# Folders"] + others
+
+(root / "config" / "dock").write_text("\n".join(out) + "\n")
+print(f"wrote {len([l for l in out if l and not l.startswith('#')])} Dock entries")

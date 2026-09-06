@@ -18,6 +18,7 @@ sys — system configuration
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
+  sys dock      Rebuild the Dock from config/dock
 
 Options
   --dry-run           Show what would happen, change nothing
@@ -96,6 +97,7 @@ HEADSUP
     [[ -n "$NAME" ]] && set_machine_name "$NAME"
     if [[ "$DO_MACOS" == "1" ]]; then
       step "Applying macOS defaults" apply_macos_defaults
+      configure_dock_once || true
       set_default_terminal || true
     fi
 
@@ -126,6 +128,8 @@ HEADSUP
     sync_backup
     # keep the Cursor extension list from drifting
     has_cmd cursor && cursor --list-extensions 2>/dev/null | sort > "$ROOT_DIR/config/cursor-extensions.txt"
+    # capture the Dock as it is now
+    "$ROOT_DIR/bin/dump-dock" >/dev/null 2>&1 || true
     if [[ -n "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
       git -C "$ROOT_DIR" add -A
       git -C "$ROOT_DIR" commit -m "Update config files"
@@ -205,6 +209,12 @@ HEADSUP
       done
     fi
     echo
+    ;;
+
+  dock)
+    is_macos || die "macOS only."
+    configure_dock
+    mkdir -p "$ROOT_DIR/.state" && date > "$ROOT_DIR/.state/dock"
     ;;
 
   extras)

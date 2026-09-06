@@ -53,6 +53,16 @@ Never run by
 .BR "sys setup" ;
 these are large or occasional installs you ask for explicitly.
 .TP
+.B dock
+Rebuild the Dock from
+.IR config/dock ,
+in order. Applications not installed on this machine are skipped. Setup does
+this only on a machine it has not configured before, so a Dock you have since
+rearranged is never overwritten; this command forces it.
+.B sys push
+records the current Dock back to
+.IR config/dock .
+.TP
 .B alias
 List your aliases, functions and project starters, grouped by section, read
 straight from

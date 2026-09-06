@@ -24,6 +24,7 @@ Access, logging out).
 | `sys alias` | List your aliases, functions and project starters (aliased to `la`) |
 | `sys mise` | How to use mise and uv |
 | `sys extras` | Install optional extras (Office, Xcode, ollama, duckdb) |
+| `sys dock` | Rebuild the Dock from `config/dock` |
 | `sys setup` | Re-run setup, or part of it — see `sys` for flags |
 
 Add `--dry-run` to any of them to see what would happen.
