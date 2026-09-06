@@ -13,6 +13,14 @@ brew "duti"             # sets Ghostty as the default terminal
 brew "mas"              # App Store installs
 brew "wget"             # file retriever
 
+# Native gem build dependencies. mise installs Ruby as a prebuilt binary, so
+# these are not needed for `mise install` — but gems with C extensions
+# (nokogiri, sqlite3, ffi) fail to build without them.
+brew "autoconf"
+brew "libyaml"
+brew "libffi"
+brew "pkgconf"
+
 # ── Terminal & editors ───────────────────────────────────────────────────────
 cask "ghostty"
 cask "sublime-text"
