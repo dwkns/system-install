@@ -15,6 +15,7 @@ sys — system configuration
   sys sync      Pull the latest config and apply it to this machine
   sys push      Save this machine's config into the repo and push
   sys doctor    Check that everything is where it should be
+  sys edit      Open this config folder in VS Code
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
@@ -229,6 +230,15 @@ HEADSUP
   remove)
     is_macos || die "macOS only."
     remove_everything
+    ;;
+
+  edit)
+    if has_cmd code; then
+      doing "Opening $ROOT_DIR in VS Code"
+      code "$ROOT_DIR"
+    else
+      die "VS Code's 'code' command is not on PATH. Open it from VS Code with Shell Command: Install 'code' command in PATH."
+    fi
     ;;
 
   hostname)
