@@ -123,11 +123,19 @@ HEADSUP
 
   sync)
     doing "Fetching latest config"
+    before="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
     run git -C "$ROOT_DIR" pull --ff-only
-    doing "Installing dotfiles"
+    after="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
+
     sync_install
-    [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
-    doing "Done — run 'exec zsh' to reload your shell"
+
+    if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" ]]; then
+      doing "Already up to date — nothing to apply"
+    else
+      [[ "${SYNC_CHANGED:-0}" != "0" ]] && doing "Installed ${SYNC_CHANGED} changed file(s)"
+      [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
+      doing "Done — run 'exec zsh' to reload your shell"
+    fi
     ;;
 
   push)

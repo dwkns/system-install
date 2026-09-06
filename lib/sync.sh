@@ -33,8 +33,10 @@ _tracked() {
 # Copy repo -> system. The repo always wins — that is what syncing means — but
 # any system file that would be overwritten with different content is stashed
 # in .drift/ first, so a local edit is never silently lost.
+# Sets SYNC_CHANGED to the number of files it actually replaced.
 sync_install() {
   local drift="$ROOT_DIR/.drift"
+  SYNC_CHANGED=0
   local repo_rel system_dir repo_dir rel src dst drifted=0
 
   while IFS='|' read -r repo_rel system_dir; do
@@ -44,7 +46,12 @@ sync_install() {
     while IFS= read -r rel; do
       src="$repo_dir/$rel"; dst="$system_dir/$rel"
 
-      if [[ -e "$dst" ]] && ! cmp -s "$src" "$dst"; then
+      # Already identical: nothing to do, and nothing to report.
+      if [[ -e "$dst" ]] && cmp -s "$src" "$dst"; then
+        continue
+      fi
+
+      if [[ -e "$dst" ]]; then
         run mkdir -p "$drift/$repo_rel/$(dirname "$rel")"
         run cp -a "$dst" "$drift/$repo_rel/$rel"
         drifted=1
@@ -52,6 +59,7 @@ sync_install() {
 
       run mkdir -p "$(dirname "$dst")"
       run cp -a "$src" "$dst"
+      SYNC_CHANGED=$((SYNC_CHANGED + 1))
     done < <(_tracked "$repo_dir")
   done < <(sync_targets)
 
