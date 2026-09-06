@@ -2,6 +2,7 @@
 # Everything that turns a bare Mac into a working one.
 
 source "${ROOT_DIR:-$HOME/.system-config}/lib/common.sh"
+source "${ROOT_DIR:-$HOME/.system-config}/lib/sync.sh"
 
 install_homebrew() {
   has_cmd brew && return 0
@@ -161,9 +162,7 @@ remove_everything() {
   local rel
   while IFS= read -r rel; do plan+=("~/$rel"); done \
     < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
-  plan+=("~/Library/Application Support/Cursor")
-  plan+=("~/Library/Application Support/Sublime Text")
-  plan+=("~/Library/Colors")
+  plan+=("the config files installed into Cursor, Sublime Text and ~/Library/Colors")
   plan+=("the Dock and Finder settings, back to macOS defaults")
   plan+=("$ROOT_DIR/.state and $ROOT_DIR/.drift")
 
@@ -195,12 +194,24 @@ remove_everything() {
   fi
 
   doing "Removing installed files"
-  rm -rf "$HOME/.local/share/mise" "$HOME/.cache/mise"
-  while IFS= read -r rel; do rm -rf "$HOME/$rel"; done \
-    < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
-  rm -rf "$HOME/Library/Application Support/Cursor" \
-         "$HOME/Library/Application Support/Sublime Text" \
-         "$HOME/Library/Colors" "$ROOT_DIR/.state" "$ROOT_DIR/.drift"
+  rm -rf "$HOME/.local/share/mise" "$HOME/.cache/mise" \
+         "$ROOT_DIR/.state" "$ROOT_DIR/.drift" 2>/dev/null
+
+  # Remove only the files this repo installed. Deleting whole ~/Library
+  # directories would take unrelated app data with them, and parts of
+  # ~/Library are protected unless the terminal has Full Disk Access.
+  local repo_rel system_dir repo_dir rel denied=0
+  while IFS='|' read -r repo_rel system_dir; do
+    repo_dir="$ROOT_DIR/$repo_rel"
+    [[ -d "$repo_dir" ]] || continue
+    while IFS= read -r rel; do
+      rm -f "$system_dir/$rel" 2>/dev/null || denied=1
+    done < <(_tracked "$repo_dir")
+  done < <(sync_targets)
+
+  if [[ "$denied" == "1" ]]; then
+    warn "Some files could not be removed (parts of ~/Library need Full Disk Access)"
+  fi
 
   doing "Resetting the Dock and Finder"
   defaults delete com.apple.dock    >/dev/null 2>&1 || true
@@ -209,6 +220,7 @@ remove_everything() {
 
   echo
   doing "Removed. The repo is still at $ROOT_DIR"
+  note "This shell still has the old config loaded — open a new terminal."
   print_fresh_user_steps
 }
 
