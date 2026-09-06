@@ -12,9 +12,11 @@ REPO="https://github.com/dwkns/system-install.git"
 
 say() { printf '\033[0;32m==>\033[0m %s\n' "$*"; }
 
-# Everything below needs a terminal for prompts. Piped into bash, stdin is
-# this script, so take input from the terminal instead.
-if { true </dev/tty; } 2>/dev/null; then exec </dev/tty; fi
+# Where to read answers from. NEVER redirect this script's own stdin: piped
+# into bash, stdin IS the script, so `exec </dev/tty` makes bash try to read
+# the rest of the script from the keyboard and hang forever. Redirect only
+# the individual commands that prompt.
+if { true </dev/tty; } 2>/dev/null; then TTY=/dev/tty; else TTY=/dev/null; fi
 
 say "Setting up this Mac from $REPO"
 
@@ -51,7 +53,11 @@ fi
 # ── Password, once, up front ─────────────────────────────────────────────────
 # Homebrew and the macOS defaults need it. Asking here keeps the rest unattended.
 say "Your password is needed for Homebrew and system settings"
-sudo -v
+if [[ "$TTY" == /dev/tty ]]; then
+  sudo -v </dev/tty
+else
+  echo "    No terminal available; skipping. Homebrew may prompt later."
+fi
 while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done 2>/dev/null &
 
 # ── The repo ─────────────────────────────────────────────────────────────────
@@ -70,4 +76,4 @@ else
 fi
 
 # Running this installer IS the confirmation, so do not ask again.
-exec "$ROOT_DIR/bin/sys" setup --yes "$@"
+exec "$ROOT_DIR/bin/sys" setup --yes "$@" <"$TTY"
