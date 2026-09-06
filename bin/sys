@@ -78,12 +78,14 @@ This takes 15-30 minutes. Two things to expect:
 
 HEADSUP
 
+    STARTED=$SECONDS
+    header "🚀" "Setting up this Mac"
     STEP=0; TOTAL=7; FAILED=""
     # Output is never piped: buffering would make a slow step look frozen.
     step() {
       local name="$1"; shift
       STEP=$((STEP + 1))
-      printf '\n%s[%s/%s]%s %s\n' "$GREEN" "$STEP" "$TOTAL" "$RESET" "$name"
+      printf '\n%s[%s/%s]%s %s%s%s\n' "$DIM" "$STEP" "$TOTAL" "$RESET" "$BOLD" "$name" "$RESET"
       if "$@"; then :; else
         FAILED="$FAILED|$name"
         warn "$name did not finish — carrying on"
@@ -111,10 +113,10 @@ HEADSUP
 
     echo
     if [[ -n "$FAILED" ]]; then
-      warn "Finished, but these steps had problems:"
-      printf '%s' "$FAILED" | tr '|' '\n' | sed '/^$/d;s/^/    - /'
+      warn "Finished in $(elapsed $((SECONDS - STARTED))), but these steps had problems:"
+      printf '%s' "$FAILED" | tr '|' '\n' | sed '/^$/d;s/^/      /'
     else
-      doing "Every step completed"
+      ok "All 7 steps completed in $(elapsed $((SECONDS - STARTED)))"
     fi
 
     echo
@@ -131,11 +133,11 @@ HEADSUP
     sync_install
 
     if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" ]]; then
-      doing "Already up to date — nothing to apply"
+      ok "Already up to date — nothing to apply"
     else
       [[ "${SYNC_CHANGED:-0}" != "0" ]] && doing "Installed ${SYNC_CHANGED} changed file(s)"
       [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
-      doing "Done — run 'exec zsh' to reload your shell"
+      ok "Done — run 'exec zsh' (or rp) to reload your shell"
     fi
     ;;
 
@@ -150,29 +152,75 @@ HEADSUP
       git -C "$ROOT_DIR" add -A
       git -C "$ROOT_DIR" commit -m "Update config files"
       run git -C "$ROOT_DIR" push
-      doing "Pushed"
+      ok "Pushed"
     else
       note "Nothing changed"
     fi
     ;;
 
   doctor)
-    doing "Checking this machine"
+    # One emoji per row, then a fixed-width label, so columns line up even
+    # though emoji are double width.
+    row() { printf '  %s  %s%-9s%s %s\n' "$1" "$BOLD" "$2" "$RESET" "$3"; }
+    good() { printf '%s%s%s' "$GREEN"  "$1" "$RESET"; }
+    bad()  { printf '%s%s%s' "$YELLOW" "$1" "$RESET"; }
+    issues=0
+
+    header "🩺" "System check"
+
     tools="git brew mise uv gh jq mas duti"; missing=""
     for t in $tools; do has_cmd "$t" || missing="$missing $t"; done
-    if [[ -z "$missing" ]]; then note "tools: all present ($(echo $tools | sed 's/ /, /g'))"
-    else warn "missing:$(echo $missing | sed 's/ /, /g')"; fi
-    has_cmd mise && { mise ls --current 2>/dev/null | sed 's/^/    /'; }
+    if [[ -z "$missing" ]]; then
+      row "🛠 " "Tools" "$(good "all present") ${DIM}$(echo $tools | sed 's/ /, /g')${RESET}"
+    else
+      row "🛠 " "Tools" "$(bad "missing:$(echo $missing | sed 's/ /, /g')")"; issues=1
+    fi
+
+    if has_cmd mise; then
+      while read -r tool ver _; do
+        case "$tool" in
+          ruby)   row "💎" "Ruby"   "$(good "$ver")" ;;
+          node)   row "📗" "Node"   "$(good "$ver")" ;;
+          python) row "🐍" "Python" "$(good "$ver")" ;;
+        esac
+      done < <(mise ls --current 2>/dev/null)
+    fi
+
     while IFS='|' read -r svc _; do
       [[ -z "$svc" || "$svc" == \#* ]] && continue
-      security find-generic-password -a "$USER" -s "$svc" -w >/dev/null 2>&1 \
-        && note "licence '$svc': in keychain" || warn "licence '$svc': missing — sys setup --licences"
-    done < "$ROOT_DIR/config/licences"
-    has_cmd mas && { with_timeout 10 mas list && note "App Store: reachable" || warn "App Store: not signed in"; }
-    if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
-      [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]] && note "Repo is clean" || warn "Repo has uncommitted changes — 'sys push'"
+      if security find-generic-password -a "$USER" -s "$svc" -w >/dev/null 2>&1; then
+        row "🔑" "Licence" "$(good "in keychain") ${DIM}$svc${RESET}"
+      else
+        row "🔑" "Licence" "$(bad "missing") ${DIM}$svc — sys setup --licences${RESET}"; issues=1
+      fi
+    done < "$ROOT_DIR/config/licences" 2>/dev/null
+
+    if has_cmd mas; then
+      if with_timeout 10 mas list; then row "🛒" "App Store" "$(good reachable)"
+      else row "🛒" "App Store" "$(bad "not signed in")"; issues=1; fi
+    fi
+
+    if [[ -e "$ROOT_DIR/.state/dock" ]]; then
+      row "🚀" "Dock" "$(good "set up")"
     else
-      warn "$ROOT_DIR is not a git repo"
+      row "🚀" "Dock" "${DIM}not set up yet — sys dock${RESET}"
+    fi
+
+    if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
+      if [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
+        row "📦" "Repo" "$(good clean)"
+      else
+        row "📦" "Repo" "$(bad "uncommitted changes") ${DIM}sys push${RESET}"; issues=1
+      fi
+    else
+      row "📦" "Repo" "$(bad "not a git repo")"; issues=1
+    fi
+
+    echo
+    if [[ "$issues" == "0" ]]; then
+      printf '  ✅  %sEverything looks good.%s\n\n' "$GREEN" "$RESET"
+    else
+      printf '  ⚠️   %sSome things need attention above.%s\n\n' "$YELLOW" "$RESET"
     fi
     ;;
 

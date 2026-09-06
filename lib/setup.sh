@@ -243,7 +243,7 @@ remove_everything() {
   killall Dock Finder >/dev/null 2>&1 || true
 
   echo
-  doing "Removed. The repo is still at $ROOT_DIR"
+  ok "Removed. The repo is still at $ROOT_DIR"
   warn "Open a new terminal now. This one still has the old shell hooks"
   warn "loaded, so it will complain that mise has gone — that is expected."
   print_fresh_user_steps
@@ -372,11 +372,7 @@ print_manual_steps() {
 
   # No right-hand border: emoji are double-width and terminals disagree on
   # how much, so anything padded to a fixed column ends up ragged.
-  echo
-  printf '%s────────────────────────────────────────────────────────%s\n' "$GREEN" "$RESET"
-  printf ' 🎉  %sAll set!%s  A few things only you can do:\n' "$GREEN" "$RESET"
-  printf '%s────────────────────────────────────────────────────────%s\n' "$GREEN" "$RESET"
-  echo
+  header "🎉" "All set — a few things only you can do"
   printf '  %b\n' "${todo[@]}"
   echo
   printf '  %sTip:%s %ssys doctor%s tells you if anything is still missing.\n\n' \
