@@ -68,6 +68,7 @@ case "$cmd" in
     sync_install
     install_languages
     install_licences
+    install_editor_extensions
     install_app_store_apps
     set_machine_name "$NAME"
     [[ "$DO_MACOS" == "1" ]] && { apply_macos_defaults; set_default_terminal; }
