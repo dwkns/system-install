@@ -61,19 +61,54 @@ case "$cmd" in
     esac
 
     confirm "Set up this machine from $ROOT_DIR?" || exit 0
+
+    cat <<'HEADSUP'
+
+This takes 15-30 minutes. Two things to expect:
+
+  * You will be asked for your password. Type it and press Return once —
+    it will not appear on screen, which is normal.
+  * Some apps install with no output for several minutes. That is not a
+    hang. Leave it alone.
+
+HEADSUP
+
+    STEP=0; TOTAL=7; FAILED=""
+    # Output is never piped: buffering would make a slow step look frozen.
+    step() {
+      local name="$1"; shift
+      STEP=$((STEP + 1))
+      printf '\n%s[%s/%s]%s %s\n' "$GREEN" "$STEP" "$TOTAL" "$RESET" "$name"
+      if "$@"; then :; else
+        FAILED="$FAILED|$name"
+        warn "$name did not finish — carrying on"
+      fi
+      return 0
+    }
+
     [[ -n "$NAME" ]] && sudo -v
+    [[ "$DO_BREW" == "1" ]] && step "Installing apps and tools"  install_packages
+    step "Installing dotfiles"          sync_install
+    step "Installing language versions" install_languages
+    step "Restoring licences"           install_licences
+    step "Installing Cursor extensions" install_editor_extensions
+    step "Installing App Store apps"    install_app_store_apps
+    [[ -n "$NAME" ]] && set_machine_name "$NAME"
+    if [[ "$DO_MACOS" == "1" ]]; then
+      step "Applying macOS defaults" apply_macos_defaults
+      set_default_terminal || true
+    fi
 
-    [[ "$DO_BREW"  == "1" ]] && install_packages
-    doing "Installing dotfiles"
-    sync_install
-    install_languages
-    install_licences
-    install_editor_extensions
-    install_app_store_apps
-    set_machine_name "$NAME"
-    [[ "$DO_MACOS" == "1" ]] && { apply_macos_defaults; set_default_terminal; }
+    echo
+    if [[ -n "$FAILED" ]]; then
+      warn "Finished, but these steps had problems:"
+      printf '%s' "$FAILED" | tr '|' '\n' | sed '/^$/d;s/^/    - /'
+    else
+      doing "Every step completed"
+    fi
 
-    doing "Setup complete"
+    echo
+    "$0" doctor || true
     print_manual_steps
     ;;
 
@@ -114,7 +149,11 @@ case "$cmd" in
         && note "licence '$svc': in keychain" || warn "licence '$svc': missing — sys setup --licences"
     done < "$ROOT_DIR/config/licences"
     has_cmd mas && { with_timeout 10 mas list && note "App Store: reachable" || warn "App Store: not signed in"; }
-    [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]] && note "Repo is clean" || warn "Repo has uncommitted changes — 'sys push'"
+    if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
+      [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]] && note "Repo is clean" || warn "Repo has uncommitted changes — 'sys push'"
+    else
+      warn "$ROOT_DIR is not a git repo"
+    fi
     ;;
 
   alias|aliases)
