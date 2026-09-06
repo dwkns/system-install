@@ -151,7 +151,9 @@ Only restore licences from the keychain.
 .TP
 .B \-\-mas
 .RB ( setup )
-Only install App Store apps.
+Only install App Store apps. Setup itself asks before doing this, since the
+App Store needs you signed in, and skips it if not answered within fifteen
+seconds.
 .TP
 .B \-\-dryrun
 .RB ( remove )

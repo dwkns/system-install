@@ -59,13 +59,20 @@ install_licences() {
 install_app_store_apps() {
   local file="$ROOT_DIR/config/mas-apps.txt"
   [[ -r "$file" ]] || return 0
-  has_cmd mas || { warn "mas not installed; skipping App Store apps"; return 0; }
+  has_cmd mas || { warn "mas not installed; skipping App Store apps"; MAS_SKIPPED=1; return 0; }
 
-  # `mas account` was removed in mas 7; `mas list` is the real liveness check
-  # and doubles as the list of what is already installed.
+  # The App Store needs you signed in, so never assume. Default to no, so an
+  # unattended run walks past it rather than stalling on a password prompt.
+  if ! ask_timeout 15 n "Install App Store apps? (needs you signed in)"; then
+    note "Skipped — run 'sys setup --mas' once you are signed in."
+    MAS_SKIPPED=1
+    return 0
+  fi
+
   local installed
   if ! installed="$(mas list 2>/dev/null)"; then
-    warn "Can't read the App Store — open App Store.app and sign in, then: sys setup --mas"
+    warn "Can't read the App Store — sign in, then: sys setup --mas"
+    MAS_SKIPPED=1
     return 0
   fi
 
@@ -83,6 +90,7 @@ install_app_store_apps() {
     fi
   done < "$file"
 }
+
 
 # Cursor has no Settings Sync (unlike VS Code, which syncs via your account),
 # so its extensions are tracked here and installed explicitly.
@@ -340,19 +348,38 @@ prompt_machine_name() {
 }
 
 
-# The steps a human has to do; printed at the end of setup.
+# Printed at the end of setup. Only lists things that are actually still
+# outstanding, checked live — a list of things you have already done is noise.
 print_manual_steps() {
-  cat <<'STEPS'
+  local -a todo=()
 
-Things this script can't do for you:
+  local svc
+  while IFS='|' read -r svc _; do
+    [[ -z "$svc" || "$svc" == \#* ]] && continue
+    security find-generic-password -a "$USER" -s "$svc" -w >/dev/null 2>&1 || \
+      todo+=("🔑  Add the '$svc' licence to the keychain — ${CYAN}sys doctor${RESET} prints the command")
+  done < "$ROOT_DIR/config/licences" 2>/dev/null
 
-  1. Add any licences to the keychain — 'sys doctor' lists what's missing
-     and prints the command. Then:   sys setup --licences
-  2. Sign in to the App Store, then:   sys setup --mas
-  3. Sign in to 1Password, Dropbox, Slack, Notion, Figma
-  4. System Settings > Privacy & Security > Full Disk Access > add Ghostty
-     (needed for the Safari defaults in macos.sh)
-  5. Log out and back in — some macOS defaults only apply at login
+  [[ "${MAS_SKIPPED:-0}" == "1" ]] && \
+    todo+=("🛒  App Store apps were skipped — sign in, then ${CYAN}sys setup --mas${RESET}")
 
-STEPS
+  has_cmd cursor || \
+    todo+=("🧩  Open Cursor once so its command appears, then ${CYAN}sys setup${RESET} for its extensions")
+
+  todo+=("🔐  Sign in to 1Password, Dropbox, Slack, Notion and Figma")
+  todo+=("🛡   Give Ghostty Full Disk Access — System Settings ▸ Privacy & Security")
+  todo+=("🔄  Log out and back in — some macOS settings only apply at login")
+
+  # No right-hand border: emoji are double-width and terminals disagree on
+  # how much, so anything padded to a fixed column ends up ragged.
+  echo
+  printf '%s────────────────────────────────────────────────────────%s\n' "$GREEN" "$RESET"
+  printf ' 🎉  %sAll set!%s  A few things only you can do:\n' "$GREEN" "$RESET"
+  printf '%s────────────────────────────────────────────────────────%s\n' "$GREEN" "$RESET"
+  echo
+  printf '  %b\n' "${todo[@]}"
+  echo
+  printf '  %sTip:%s %ssys doctor%s tells you if anything is still missing.\n\n' \
+    "$YELLOW" "$RESET" "$CYAN" "$RESET"
 }
+

@@ -42,6 +42,20 @@ with_timeout() {
   return $rc
 }
 
+# Ask a yes/no question that answers itself if left alone.
+#   ask_timeout <seconds> <default: y|n> <question>
+ask_timeout() {
+  local secs="$1" default="$2" question="$3" reply="" hint
+  [[ "$default" == "y" ]] && hint="[Y/n]" || hint="[y/N]"
+  printf '%s %s — %ss, then %s: ' "$question" "$hint" "$secs" \
+    "$([[ "$default" == y ]] && echo yes || echo no)"
+  if { true </dev/tty; } 2>/dev/null; then
+    read -t "$secs" -r reply </dev/tty || true
+  fi
+  echo
+  [[ "${reply:-$default}" == [Yy]* ]]
+}
+
 # Ask before doing something. ASSUME_YES=1 skips the prompt.
 #
 # Reads from /dev/tty rather than stdin: under `curl ... | bash` stdin is the
