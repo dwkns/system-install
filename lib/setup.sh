@@ -114,7 +114,7 @@ run_once() {
   local name="$1" fp="$2"; shift 2
   local stamp="$ROOT_DIR/.state/$name"
   if [[ -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$fp" ]]; then
-    note "$name: already done — skipping ('sys $name' forces it)"
+    note "$name: already done — skipping"
     return 0
   fi
   if "$@"; then
@@ -300,18 +300,23 @@ set_machine_name() {
   local name="$1"
   [[ -n "$name" ]] || return 0
 
-  # ComputerName is the friendly one and may contain spaces. HostName and
-  # LocalHostName are network names: letters, digits and hyphens only, or
-  # scutil refuses them.
-  local netname
-  netname="$(printf '%s' "$name" | tr ' ' '-' | tr -cd '[:alnum:]-' | sed 's/^-*//;s/-*$//')"
-  [[ -n "$netname" ]] || netname="mac"
+  # One name, used for all three, as the original did. Lowercased, spaces to
+  # hyphens, other punctuation dropped — scutil rejects those in HostName and
+  # LocalHostName, and keeping the three identical is the whole point.
+  local clean
+  clean="$(printf '%s' "$name" \
+    | tr '[:upper:]' '[:lower:]' \
+    | tr ' ' '-' \
+    | tr -cd '[:alnum:]-' \
+    | sed 's/^-*//;s/-*$//;s/--*/-/g')"
+  [[ -n "$clean" ]] || { warn "Not a usable computer name: $name"; return 1; }
 
-  doing "Setting computer name to $name"
-  run sudo scutil --set ComputerName  "$name"
-  run sudo scutil --set HostName      "$netname"
-  run sudo scutil --set LocalHostName "$netname"
+  doing "Setting computer name to $clean"
+  run sudo scutil --set ComputerName  "$clean"
+  run sudo scutil --set HostName      "$clean"
+  run sudo scutil --set LocalHostName "$clean"
 }
+
 
 # Asked once per machine during setup. 15 seconds, then the default.
 DEFAULT_MACHINE_NAME="${DEFAULT_MACHINE_NAME:-dazzas-mac}"

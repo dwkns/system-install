@@ -113,13 +113,10 @@ Do not ask for confirmation.
 .RB ( setup )
 Set the computer, host and local host name, without being asked. Without it,
 setup asks once per machine and falls back to a default after fifteen seconds.
-.I ComputerName
-keeps the name as typed;
-.I HostName
-and
-.I LocalHostName
-get a version with spaces turned to hyphens and other punctuation dropped,
-since scutil rejects them. Requires
+.PP
+All three names are set to the same value, lowercased, with spaces turned to
+hyphens and other punctuation dropped, since scutil rejects those. "Dazza's
+Mac Mini" becomes dazzas-mac-mini everywhere. Requires
 .BR sudo (8).
 .TP
 .B \-\-no\-brew
