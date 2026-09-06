@@ -143,6 +143,68 @@ configure_dock() {
   fi
 }
 
+# Undoes everything setup installed, so a machine can be tested from scratch
+# WITHOUT erasing macOS. Never touches the user account, SSH or Screen Sharing,
+# so a headless machine stays reachable. FORCE=1 to actually remove.
+remove_everything() {
+  local force="${FORCE:-0}"
+
+  if [[ "$force" != "1" ]]; then
+    warn "DRY RUN — nothing will be removed. 'sys remove --force' to do it."
+    echo
+  fi
+
+  local act
+  act() {
+    local desc="$1"; shift
+    if [[ "$force" == "1" ]]; then doing "$desc"; "$@" >/dev/null 2>&1 || true
+    else note "would: $desc"; fi
+  }
+
+  doing "Removing what setup installed"; echo
+
+  if has_cmd brew; then
+    note "Homebrew: $(brew list --formula 2>/dev/null | wc -l | tr -d ' ') formulae, $(brew list --cask 2>/dev/null | wc -l | tr -d ' ') casks"
+    if [[ "$force" == "1" ]]; then
+      doing "Uninstalling all casks and formulae"
+      brew list --cask 2>/dev/null | xargs -r brew uninstall --cask --force >/dev/null 2>&1
+      brew list --formula 2>/dev/null | xargs -r brew uninstall --formula --force --ignore-dependencies >/dev/null 2>&1
+      doing "Uninstalling Homebrew itself"
+      NONINTERACTIVE=1 /bin/bash -c \
+        "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)" -- --force >/dev/null 2>&1
+    else
+      note "would: uninstall every cask and formula, then Homebrew itself"
+    fi
+  fi
+
+  act "remove ~/.local/share/mise (installed toolchains)" rm -rf "$HOME/.local/share/mise"
+  act "remove ~/.cache/mise"                              rm -rf "$HOME/.cache/mise"
+
+  local rel
+  while IFS= read -r rel; do
+    act "remove ~/$rel" rm -rf "$HOME/$rel"
+  done < <(cd "$ROOT_DIR/dotfiles" 2>/dev/null && find . -type f ! -name '.DS_Store' | sed 's|^\./||')
+
+  act "remove ~/Library/Application Support/Cursor"       rm -rf "$HOME/Library/Application Support/Cursor"
+  act "remove ~/Library/Application Support/Sublime Text" rm -rf "$HOME/Library/Application Support/Sublime Text"
+  act "remove ~/Library/Colors"                           rm -rf "$HOME/Library/Colors"
+
+  act "reset the Dock to default" defaults delete com.apple.dock
+  act "restart the Dock"          killall Dock
+  act "reset Finder defaults"     defaults delete com.apple.finder
+
+  act "remove $ROOT_DIR/.state" rm -rf "$ROOT_DIR/.state"
+  act "remove $ROOT_DIR/.drift" rm -rf "$ROOT_DIR/.drift"
+
+  echo
+  if [[ "$force" == "1" ]]; then
+    doing "Done. Log out and back in, then re-run the installer."
+    note "The repo is still at $ROOT_DIR — 'rm -rf $ROOT_DIR' to remove that too."
+  else
+    warn "Dry run only. To actually do it:  sys remove --force"
+  fi
+}
+
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
   local bf="$ROOT_DIR/Brewfile.optional"

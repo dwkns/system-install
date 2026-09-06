@@ -71,6 +71,17 @@ the step run again on the next
 records the current Dock back to
 .IR config/dock .
 .TP
+.B remove
+Undo everything setup installed: Homebrew and its packages, mise toolchains,
+the dotfiles it copied, editor configuration and the Dock. Lists what it would
+remove unless
+.B \-\-force
+is given.
+.IP
+It does not erase macOS and does not touch your user account, SSH or Screen
+Sharing, so a headless machine stays reachable. Erase All Content and Settings
+reboots into Setup Assistant, which needs a physical keyboard and display.
+.TP
 .B alias
 List your aliases, functions and project starters, grouped by section, read
 straight from
@@ -118,6 +129,10 @@ Only restore licences from the keychain.
 .B \-\-mas
 .RB ( setup )
 Only install App Store apps.
+.TP
+.B \-\-force
+.RB ( remove )
+Actually remove things, rather than listing them.
 .SH HOW SYNCING WORKS
 .B sys sync
 mirrors three directories:

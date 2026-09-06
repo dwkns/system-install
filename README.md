@@ -25,6 +25,7 @@ Access, logging out).
 | `sys mise` | How to use mise and uv |
 | `sys extras` | Install optional extras (Office, Xcode, ollama, duckdb) |
 | `sys dock` | Rebuild the Dock from `config/dock` |
+| `sys remove` | Undo everything setup installed (dry run unless `--force`) |
 | `sys setup` | Re-run setup, or part of it — see `sys` for flags |
 
 Add `--dry-run` to any of them to see what would happen.
@@ -39,8 +40,8 @@ erasing macOS. SSH and Screen Sharing are left alone, so a headless machine
 stays reachable.
 
 ```bash
-~/.system-config/bin/uninstall            # dry run, lists what it would remove
-~/.system-config/bin/uninstall --force    # actually remove it
+sys remove            # dry run, lists what it would remove
+sys remove --force    # actually remove it
 ```
 
 **Do not use Erase All Content and Settings on a headless Mac.** It reboots
