@@ -97,7 +97,7 @@ HEADSUP
     [[ -n "$NAME" ]] && set_machine_name "$NAME"
     if [[ "$DO_MACOS" == "1" ]]; then
       step "Applying macOS defaults" apply_macos_defaults
-      configure_dock_once || true
+      run_once dock configure_dock
       set_default_terminal || true
     fi
 

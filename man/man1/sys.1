@@ -56,9 +56,15 @@ these are large or occasional installs you ask for explicitly.
 .B dock
 Rebuild the Dock from
 .IR config/dock ,
-in order. Applications not installed on this machine are skipped. Setup does
-this only on a machine it has not configured before, so a Dock you have since
+in order. Applications not installed on this machine are skipped. Setup does this only
+if it has not already succeeded on this machine, so a Dock you have since
 rearranged is never overwritten; this command forces it.
+.PP
+Steps like this record that they ran in
+.IR .state/ ,
+one file per feature. The record is written only when the step actually did
+its work, so a half finished install picks up where it left off rather than
+skipping steps that never ran.
 .B sys push
 records the current Dock back to
 .IR config/dock .

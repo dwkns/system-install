@@ -101,13 +101,33 @@ install_editor_extensions() {
   return 0
 }
 
+# Run a step at most once per machine.
+#
+# The stamp is written ONLY if the step actually did its work, so a half
+# finished install retries it next time. Each feature has its own stamp, so
+# "already done" means that feature, not the install as a whole.
+run_once() {
+  local name="$1"; shift
+  local stamp="$ROOT_DIR/.state/$name"
+  if [[ -e "$stamp" ]]; then
+    note "$name: already done — skipping"
+    return 0
+  fi
+  if "$@"; then
+    mkdir -p "$(dirname "$stamp")" && date > "$stamp"
+  else
+    note "$name: not done yet, will try again next run"
+  fi
+  return 0
+}
+
 # Rebuilds the Dock from config/dock. Anything not installed on this machine
 # is skipped with a note rather than failing — the Dock lists apps that come
 # from optional extras and from other machines.
 configure_dock() {
   local file="$ROOT_DIR/config/dock"
-  [[ -r "$file" ]] || return 0
-  has_cmd dockutil || { warn "dockutil not installed; skipping the Dock"; return 0; }
+  [[ -r "$file" ]] || return 1
+  has_cmd dockutil || { warn "dockutil not installed; the Dock will be set up on the next run"; return 1; }
 
   doing "Setting up the Dock"
   run dockutil --remove all --no-restart >/dev/null 2>&1
@@ -129,15 +149,6 @@ configure_dock() {
 
 # The Dock is only built on a machine we have not set up before. Rebuilding it
 # on every run would throw away any arrangement made since. `sys dock` forces it.
-configure_dock_once() {
-  local stamp="$ROOT_DIR/.state/dock"
-  if [[ -e "$stamp" ]]; then
-    note "Dock already set up — 'sys dock' rebuilds it"
-    return 0
-  fi
-  configure_dock || return 0
-  mkdir -p "$(dirname "$stamp")" && date > "$stamp"
-}
 
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
