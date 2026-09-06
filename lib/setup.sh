@@ -208,48 +208,12 @@ remove_everything() {
   print_fresh_user_steps
 }
 
-# Printed after a removal: how to get a genuinely clean user on a headless Mac.
 print_fresh_user_steps() {
-  local me="${USER:-$(id -un)}"
-  cat <<STEPS
+  cat <<'STEPS'
 
-──────────────────────────────────────────────────────────────────────────
-Starting completely fresh, on a headless machine
-──────────────────────────────────────────────────────────────────────────
+To install again from scratch:
 
-You cannot delete the account you are logged in as, so make the new one
-first, log into it over Screen Sharing, then delete the old one.
-
-1. Create a new admin user (it will prompt for the password):
-
-     sudo sysadminctl -addUser NEWUSER -fullName "New User" -password - -admin
-
-2. Turn on remote login (SSH) and allow the new user:
-
-     sudo systemsetup -setremotelogin on
-     sudo dseditgroup -o edit -a NEWUSER -t user com.apple.access_ssh
-
-3. Turn on Screen Sharing for the new user:
-
-     sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \\
-       -activate -configure -access -on -users NEWUSER -privs -all -restart -agent
-
-   Or, to allow every account that can log in:
-
-     sudo launchctl enable system/com.apple.screensharing
-     sudo launchctl kickstart -k system/com.apple.screensharing
-
-4. Log into NEWUSER over Screen Sharing, then remove this account and its
-   home directory:
-
-     sudo sysadminctl -deleteUser $me -secure
-
-5. Run the installer as NEWUSER:
-
-     curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
-
-Do NOT use Erase All Content and Settings: it reboots into Setup Assistant,
-which needs a physical keyboard and display.
+  curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
 
 STEPS
 }

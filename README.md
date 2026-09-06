@@ -44,8 +44,8 @@ sys remove --dryrun   # list what would be removed, change nothing
 sys remove            # list it, then ask before removing
 ```
 
-Afterwards it prints the commands to create a fresh admin user with remote
-login and Screen Sharing enabled — the way to start over on a headless Mac.
+Then run the installer again. Because it leaves your account and remote access
+alone, a headless machine stays reachable throughout.
 
 **Do not use Erase All Content and Settings on a headless Mac.** It reboots
 into Setup Assistant, which needs a physical keyboard and display — you would
