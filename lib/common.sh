@@ -43,9 +43,21 @@ with_timeout() {
 }
 
 # Ask before doing something. ASSUME_YES=1 skips the prompt.
+#
+# Reads from /dev/tty rather than stdin: under `curl ... | bash` stdin is the
+# script itself, so a plain `read` gets EOF and the answer is always no.
 confirm() {
   [[ "${ASSUME_YES:-0}" == "1" ]] && return 0
-  printf '%s [y/N] ' "${1:-Are you sure?}"
-  local reply; read -r reply
+  local reply
+  # Actually try to open it: the device node is readable by mode even when
+  # there is no controlling terminal to attach to.
+  if { true </dev/tty; } 2>/dev/null; then
+    printf '%s [y/N] ' "${1:-Are you sure?}" >/dev/tty
+    read -r reply </dev/tty || return 1
+  else
+    # No terminal at all (CI, a cron job): refuse rather than guess.
+    warn "No terminal for confirmation — re-run with --yes"
+    return 1
+  fi
   [[ "$reply" == [Yy]* ]]
 }

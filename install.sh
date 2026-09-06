@@ -19,4 +19,10 @@ else
   git clone https://github.com/dwkns/system-install.git "$ROOT_DIR"
 fi
 
-exec "$ROOT_DIR/bin/sys" setup "$@"
+# Hand setup a real terminal. Piped into bash, stdin is this script, which
+# would break every prompt — ours, Homebrew's, and sudo's.
+if { true </dev/tty; } 2>/dev/null; then
+  exec "$ROOT_DIR/bin/sys" setup "$@" </dev/tty
+else
+  exec "$ROOT_DIR/bin/sys" setup --yes "$@"
+fi
