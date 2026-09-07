@@ -24,12 +24,9 @@ Set up this machine from scratch. Installs Homebrew and everything in the
 .IR Brewfile ,
 copies dotfiles into place, installs language versions with
 .BR mise (1),
-restores app licences from the keychain, installs App Store apps and applies
-macOS defaults. Finishes by printing the steps that need a human.
+installs App Store apps and applies macOS defaults. Finishes by printing the steps that need a human.
 .IP
 Safe to re-run. Use
-.B \-\-licences
-or
 .B \-\-mas
 to run only that part.
 .TP
@@ -117,7 +114,7 @@ for Python packages.
 .TP
 .B doctor
 Check that the expected tools are installed, report language versions, whether
-each licence is in the keychain, whether the App Store is reachable, and whether
+the App Store is reachable, and whether
 the repository has uncommitted changes. Changes nothing.
 .SH OPTIONS
 .TP
@@ -144,10 +141,6 @@ Skip Homebrew and packages.
 .B \-\-no\-macos
 .RB ( setup ", " sync )
 Skip macOS defaults.
-.TP
-.B \-\-licences
-.RB ( setup )
-Only restore licences from the keychain.
 .TP
 .B \-\-mas
 .RB ( setup )
@@ -212,25 +205,6 @@ then
 .BR "mise install" .
 Python packages and virtual environments go through
 .BR uv (1).
-.SH LICENCES
-Licences are kept in the macOS keychain and never in the repository.
-.I config/licences
-maps a keychain service name to a destination path, one per line, separated by
-a vertical bar. Add a licence with:
-.PP
-.RS
-.nf
-openssl base64 \-A \-in License.sublime_license |
-  security add\-generic\-password \-U \-a "$USER" \\
-    \-s sublime\-text\-license \-w "$(cat)"
-.fi
-.RE
-.PP
-The keychain does not follow you to a new Mac, so
-.B sys setup
-names any missing licence and prints the exact command to add it.
-.B sys doctor
-reports the same.
 .SH FILES
 .TP
 .I ~/.system-config/Brewfile
@@ -238,9 +212,6 @@ Applications and command-line tools.
 .TP
 .I ~/.system-config/macos.sh
 macOS defaults.
-.TP
-.I ~/.system-config/config/licences
-Keychain service names mapped to destination paths.
 .TP
 .I ~/.system-config/config/mas\-apps.txt
 App Store application IDs.
@@ -291,12 +262,6 @@ Save a change made directly to a system file:
 .PP
 .RS
 .B sys push
-.RE
-.PP
-Re-run only the licence step after adding one to the keychain:
-.PP
-.RS
-.B sys setup \-\-licences
 .RE
 .SH SEE ALSO
 .BR mise (1),

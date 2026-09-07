@@ -24,38 +24,6 @@ install_languages() {
   run mise install
 }
 
-# Licences live in the macOS keychain, never in this repo. A fresh machine has
-# an empty keychain, so if one is missing we say exactly how to add it rather
-# than skipping silently.
-install_licences() {
-  local file="$ROOT_DIR/config/licences"
-  [[ -r "$file" ]] || return 0
-
-  local service dst b64 missing=0
-  while IFS='|' read -r service dst; do
-    [[ -z "$service" || "$service" == \#* ]] && continue
-    dst="$(eval printf '%s' \""$dst"\")"
-
-    b64="$(security find-generic-password -a "$USER" -s "$service" -w 2>/dev/null || true)"
-    if [[ -z "$b64" ]]; then
-      warn "No licence in the keychain for '$service'. Add it with:"
-      printf '    openssl base64 -A -in <licence file> | \\\n'
-      printf '      security add-generic-password -U -a "$USER" -s %s -w "$(cat)"\n' "$service"
-      missing=1
-      continue
-    fi
-
-    [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: write $dst"; continue; }
-    mkdir -p "$(dirname "$dst")"
-    printf '%s' "$b64" | openssl base64 -A -d > "$dst"
-    chmod 600 "$dst"
-    note "Installed $(basename "$dst")"
-  done < "$file"
-
-  [[ "$missing" == "1" ]] && note "Then re-run: sys setup --licences"
-  return 0
-}
-
 install_app_store_apps() {
   local file="$ROOT_DIR/config/mas-apps.txt"
   [[ -r "$file" ]] || return 0
@@ -353,12 +321,6 @@ prompt_machine_name() {
 print_manual_steps() {
   local -a todo=()
 
-  local svc
-  while IFS='|' read -r svc _; do
-    [[ -z "$svc" || "$svc" == \#* ]] && continue
-    security find-generic-password -a "$USER" -s "$svc" -w >/dev/null 2>&1 || \
-      todo+=("🔑  Add the '$svc' licence to the keychain — ${CYAN}sys doctor${RESET} prints the command")
-  done < "$ROOT_DIR/config/licences" 2>/dev/null
 
   [[ "${MAS_SKIPPED:-0}" == "1" ]] && \
     todo+=("🛒  App Store apps were skipped — sign in, then ${CYAN}sys setup --mas${RESET}")
