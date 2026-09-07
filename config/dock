@@ -1,5 +1,5 @@
 # Dock contents, in order. Built by `sys dock`, and once during setup.
-# One path per line; anything not installed on this machine is skipped.
+# One path per line. Anything not installed is skipped with a note.
 # Refresh from the current Dock with: sys push
 
 /System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app
