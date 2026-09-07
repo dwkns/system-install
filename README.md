@@ -22,6 +22,7 @@ Access, logging out).
 | `sys push` | Save this machine's config into the repo and push (aliased to `bsys`) |
 | `sys doctor` | Check everything is installed and signed in |
 | `sys edit` | Open this config folder in VS Code (aliased to `esys`) |
+| `sys ssh` | List hosts you can reach over SSH (read live; nothing stored) |
 | `sys alias` | List your aliases, functions and project starters (aliased to `la`) |
 | `sys mise` | How to use mise and uv |
 | `sys extras` | Install optional extras (Office, Xcode, ollama, duckdb) |

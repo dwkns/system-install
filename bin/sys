@@ -16,6 +16,7 @@ sys — system configuration
   sys push      Save this machine's config into the repo and push
   sys doctor    Check that everything is where it should be
   sys edit      Open this config folder in VS Code
+  sys ssh       List the hosts you can reach over SSH
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
@@ -267,6 +268,10 @@ HEADSUP
   remove)
     is_macos || die "macOS only."
     remove_everything
+    ;;
+
+  ssh)
+    "$ROOT_DIR/bin/ssh-hosts"
     ;;
 
   edit)

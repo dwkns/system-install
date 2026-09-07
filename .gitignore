@@ -9,3 +9,11 @@
 
 # Local state (which one-time steps have run)
 .state/
+
+# Never commit SSH material. `sys ssh` reads ~/.ssh live and stores nothing,
+# but this makes an accidental copy into the repo impossible.
+.ssh/
+id_*
+!*.pub.example
+*.pem
+known_hosts*

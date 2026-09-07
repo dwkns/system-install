@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+"""List the hosts this Mac can reach over SSH.
+
+Everything is read live from the machine — ~/.ssh/config and the Tailscale
+daemon — so nothing about your hosts is ever stored in this repo.
+"""
+import json, os, pathlib, re, subprocess, sys
+
+G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
+
+def rule(title, emoji):
+    line = "─" * 56
+    print(f"\n{D}{line}{R}\n {emoji}  {B}{title}{R}\n{D}{line}{R}\n")
+
+def ssh_config_hosts(path=pathlib.Path.home() / ".ssh" / "config"):
+    """Host blocks, ignoring wildcards and Include lines."""
+    if not path.is_file():
+        return []
+    hosts, cur = [], None
+    for raw in path.read_text(errors="replace").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        parts = line.split(None, 1)
+        key = parts[0].lower()
+        val = parts[1].strip() if len(parts) > 1 else ""
+        if key == "host":
+            for alias in val.split():
+                if "*" not in alias and "?" not in alias:
+                    cur = {"alias": alias, "hostname": "", "user": "", "port": ""}
+                    hosts.append(cur)
+                    break
+            else:
+                cur = None
+        elif cur is not None and key in ("hostname", "user", "port"):
+            cur[key] = val
+    return hosts
+
+def tailnet():
+    """Peers plus this machine, from whichever tailscale binary exists."""
+    for cmd in ("tailscale", "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
+                "/usr/local/bin/tailscale"):
+        try:
+            out = subprocess.run([cmd, "status", "--json"], capture_output=True,
+                                 timeout=10, check=True).stdout
+        except Exception:
+            continue
+        d = json.loads(out)
+        rows, me = [], d.get("Self") or {}
+        for p in list((d.get("Peer") or {}).values()) + ([me] if me else []):
+            ips = p.get("TailscaleIPs") or []
+            rows.append({
+                "name": (p.get("HostName") or "?"),
+                "ip": ips[0] if ips else "",
+                "os": p.get("OS") or "",
+                "online": bool(p.get("Online")),
+                "self": p is me,
+            })
+        return sorted(rows, key=lambda r: (not r["online"], r["name"]))
+    return None
+
+cfg = ssh_config_hosts()
+rule("SSH hosts", "🔌")
+
+if cfg:
+    print(f"  {B}From ~/.ssh/config{R}")
+    for h in cfg:
+        target = h["hostname"] or h["alias"]
+        who = f'{h["user"]}@' if h["user"] else ""
+        port = f' {D}port {h["port"]}{R}' if h["port"] else ""
+        print(f'    {G}{h["alias"]:<14}{R} {D}ssh {who}{target}{R}{port}')
+    print()
+else:
+    print(f"  {D}No Host entries in ~/.ssh/config{R}\n")
+
+net = tailnet()
+if net is None:
+    print(f"  {D}Tailscale not installed — no tailnet devices to list{R}")
+elif not net:
+    print(f"  {D}Not signed in to a tailnet{R}")
+else:
+    print(f"  {B}On your tailnet{R}  {D}(ssh <name> once Tailscale SSH is enabled on the host){R}")
+    for r in net:
+        dot = f"{G}●{R}" if r["online"] else f"{D}○{R}"
+        tag = f" {D}(this Mac){R}" if r["self"] else ""
+        print(f'    {dot} {G}{r["name"]:<14}{R} {D}{r["ip"]:<15} {r["os"]:<7}{R}'
+              f'{"" if r["online"] else D + "offline" + R}{tag}')
+
+print(f'\n  {D}Read live from this Mac. Nothing here is stored in the repo.{R}\n')

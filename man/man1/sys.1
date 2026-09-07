@@ -98,6 +98,15 @@ Open this configuration folder in VS Code. The
 .B esys
 alias runs it.
 .TP
+.B ssh
+List the hosts this Mac can reach over SSH: the Host entries in
+.I ~/.ssh/config
+and the devices on your tailnet, with which are online.
+.IP
+Everything is read from the machine at the moment you run it. No hostname,
+address or key is ever written into this repository, which matters because it
+is public.
+.TP
 .B alias
 List your aliases, functions and project starters, grouped by section, read
 straight from
