@@ -367,7 +367,7 @@ print_manual_steps() {
     todo+=("🧩  Open Cursor once so its command appears, then ${CYAN}sys setup${RESET} for its extensions")
 
   todo+=("🔐  Sign in to 1Password, Dropbox, Slack, Notion and Figma")
-  todo+=("🛡   Give Ghostty Full Disk Access — System Settings ▸ Privacy & Security")
+  todo+=("🔓  Give Ghostty Full Disk Access — System Settings ▸ Privacy & Security")
   todo+=("🔄  Log out and back in — some macOS settings only apply at login")
 
   # No right-hand border: emoji are double-width and terminals disagree on

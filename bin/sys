@@ -171,9 +171,9 @@ HEADSUP
     tools="git brew mise uv gh jq mas duti"; missing=""
     for t in $tools; do has_cmd "$t" || missing="$missing $t"; done
     if [[ -z "$missing" ]]; then
-      row "🛠 " "Tools" "$(good "all present") ${DIM}$(echo $tools | sed 's/ /, /g')${RESET}"
+      row "🧰" "Tools" "$(good "all present") ${DIM}$(echo $tools | sed 's/ /, /g')${RESET}"
     else
-      row "🛠 " "Tools" "$(bad "missing:$(echo $missing | sed 's/ /, /g')")"; issues=1
+      row "🧰" "Tools" "$(bad "missing:$(echo $missing | sed 's/ /, /g')")"; issues=1
     fi
 
     if has_cmd mise; then
@@ -220,7 +220,7 @@ HEADSUP
     if [[ "$issues" == "0" ]]; then
       printf '  ✅  %sEverything looks good.%s\n\n' "$GREEN" "$RESET"
     else
-      printf '  ⚠️   %sSome things need attention above.%s\n\n' "$YELLOW" "$RESET"
+      printf '  🔧  %sSome things need attention above.%s\n\n' "$YELLOW" "$RESET"
     fi
     ;;
 
