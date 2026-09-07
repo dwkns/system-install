@@ -227,6 +227,50 @@ To install again from scratch:
 STEPS
 }
 
+# MailExporter is built from source rather than installed from Homebrew.
+# It needs python3 (mise supplies it) and the Xcode command line tools, so it
+# must run after install_languages. The build takes a few minutes; the result
+# is copied to /Applications so the Dock entry does not point into a checkout.
+MAIL_EXPORTER_REPO="${MAIL_EXPORTER_REPO:-https://github.com/dwkns/mail-smart-export.git}"
+MAIL_EXPORTER_DIR="${MAIL_EXPORTER_DIR:-$HOME/Developer/mail-smart-export}"
+
+build_mail_exporter() {
+  has_cmd git || { warn "git missing; skipping MailExporter"; return 1; }
+  has_cmd python3 || { warn "python3 missing; skipping MailExporter"; return 1; }
+
+  if [[ -d "$MAIL_EXPORTER_DIR/.git" ]]; then
+    run git -C "$MAIL_EXPORTER_DIR" pull --ff-only >/dev/null 2>&1 || \
+      note "Could not update the checkout; building what is there"
+  else
+    doing "Cloning mail-smart-export"
+    run mkdir -p "$(dirname "$MAIL_EXPORTER_DIR")"
+    run git clone --quiet "$MAIL_EXPORTER_REPO" "$MAIL_EXPORTER_DIR" || {
+      warn "Could not clone $MAIL_EXPORTER_REPO"; return 1; }
+  fi
+
+  local build="$MAIL_EXPORTER_DIR/apps/MailExporter/build.sh"
+  local built="$MAIL_EXPORTER_DIR/apps/MailExporter/MailExporter.app"
+  local stamp="$ROOT_DIR/.state/mailexporter"
+  local head; head="$(git -C "$MAIL_EXPORTER_DIR" rev-parse HEAD 2>/dev/null || echo unknown)"
+
+  # Already built from this exact commit, and installed.
+  if [[ -d /Applications/MailExporter.app && -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$head" ]]; then
+    note "MailExporter: already built from this commit"
+    return 0
+  fi
+
+  [[ -x "$build" ]] || { warn "No build.sh in $MAIL_EXPORTER_DIR"; return 1; }
+
+  doing "Building MailExporter — a few minutes, no output while it works"
+  run bash "$build" >/dev/null 2>&1 || { warn "MailExporter build failed"; return 1; }
+  [[ -d "$built" ]] || { warn "Build produced no app bundle"; return 1; }
+
+  run rm -rf "/Applications/MailExporter.app"
+  run cp -R "$built" "/Applications/MailExporter.app" || { warn "Could not install to /Applications"; return 1; }
+  mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$head" > "$stamp"
+  ok "MailExporter installed to /Applications"
+}
+
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
   local bf="$ROOT_DIR/Brewfile.optional"

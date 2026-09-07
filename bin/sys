@@ -77,7 +77,7 @@ HEADSUP
 
     STARTED=$SECONDS
     header "🚀" "Setting up this Mac"
-    STEP=0; TOTAL=6; FAILED=""
+    STEP=0; TOTAL=7; FAILED=""
     # Output is never piped: buffering would make a slow step look frozen.
     step() {
       local name="$1"; shift
@@ -95,6 +95,7 @@ HEADSUP
     step "Installing dotfiles"          sync_install
     step "Installing language versions" install_languages
     step "Installing Cursor extensions" install_editor_extensions
+    step "Building MailExporter"        build_mail_exporter
     step "Installing App Store apps"    install_app_store_apps
     if [[ -n "$NAME" ]]; then
       set_machine_name "$NAME"
@@ -112,7 +113,7 @@ HEADSUP
       warn "Finished in $(elapsed $((SECONDS - STARTED))), but these steps had problems:"
       printf '%s' "$FAILED" | tr '|' '\n' | sed '/^$/d;s/^/      /'
     else
-      ok "All 6 steps completed in $(elapsed $((SECONDS - STARTED)))"
+      ok "All 7 steps completed in $(elapsed $((SECONDS - STARTED)))"
     fi
 
     echo
