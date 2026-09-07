@@ -3,5 +3,7 @@
 # Everything here is genuinely optional — `sys setup` never touches it.
 
 cask "microsoft-office"   # Word, Excel, PowerPoint, Outlook, Teams, OneNote
-brew "ollama"             # run local LLMs
+# The ollama FORMULA ships no llama-server binary, so it installs but cannot
+# run a model. The official cask bundles it.
+cask "ollama-app"         # run local LLMs
 brew "duckdb"             # embeddable analytical SQL database
