@@ -30,6 +30,9 @@ cask "claude"           # Claude desktop app
 cask "font-fira-code"
 cask "font-inter"
 
+# ── Network ──────────────────────────────────────────────────────────────────
+cask "tailscale-app"    # mesh VPN — needed to reach anything on the tailnet
+
 # ── Password manager ─────────────────────────────────────────────────────────
 cask "1password"
 
