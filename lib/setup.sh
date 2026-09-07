@@ -227,55 +227,93 @@ To install again from scratch:
 STEPS
 }
 
-# MailExporter comes from a PRIVATE GitHub repo and publishes no releases, so
-# there is no binary to download: setup clones the source and builds it. That
-# needs GitHub authentication, python3 (from mise) and the Xcode command line
-# tools, so this runs after install_languages. build.sh installs the finished
-# bundle into /Applications itself.
-MAIL_EXPORTER_REPO="${MAIL_EXPORTER_REPO:-dwkns/mail-smart-export}"
-MAIL_EXPORTER_DIR="${MAIL_EXPORTER_DIR:-$HOME/Developer/mail-smart-export}"
+# MailExporter ships as a signed .app on GitHub Releases, so setup downloads
+# and verifies it rather than building from source: seconds instead of minutes,
+# and no dependency on python3, the Xcode tools or a build succeeding. If no
+# release matches this Mac's architecture, it falls back to building.
+MAIL_EXPORTER_REPO="${MAIL_EXPORTER_REPO:-dwkns/mail-exporter}"
+MAIL_EXPORTER_DIR="${MAIL_EXPORTER_DIR:-$HOME/Developer/mail-exporter}"
 
-build_mail_exporter() {
-  has_cmd git || { warn "git missing; skipping MailExporter"; return 1; }
-  has_cmd python3 || { warn "python3 missing; skipping MailExporter"; return 1; }
+install_mail_exporter() {
+  local stamp="$ROOT_DIR/.state/mailexporter"
+  local arch; arch="$(uname -m)"
+  local api="https://api.github.com/repos/$MAIL_EXPORTER_REPO/releases/latest"
+  local json tag url
 
-  if [[ -d "$MAIL_EXPORTER_DIR/.git" ]]; then
-    run git -C "$MAIL_EXPORTER_DIR" pull --ff-only >/dev/null 2>&1 || \
-      note "Could not update the checkout; building what is there"
-  else
-    # Private repo: gh carries the token, plain git would just fail.
-    if ! has_cmd gh || ! gh auth status >/dev/null 2>&1; then
-      warn "MailExporter needs GitHub access ($MAIL_EXPORTER_REPO is private)."
-      warn "Run 'gh auth login', then 'sys setup' again."
-      MAIL_EXPORTER_SKIPPED=1
-      return 1
-    fi
-    doing "Cloning $MAIL_EXPORTER_REPO"
-    run mkdir -p "$(dirname "$MAIL_EXPORTER_DIR")"
-    run gh repo clone "$MAIL_EXPORTER_REPO" "$MAIL_EXPORTER_DIR" -- --quiet || {
-      warn "Could not clone $MAIL_EXPORTER_REPO"; MAIL_EXPORTER_SKIPPED=1; return 1; }
+  json="$(curl -fsSL "$api" 2>/dev/null)" || json=""
+  if [[ -n "$json" ]]; then
+    read -r tag url <<<"$(printf '%s' "$json" | /usr/bin/python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+arch = sys.argv[1]
+hit = next((a["browser_download_url"] for a in d.get("assets", [])
+            if a["name"].endswith(".zip") and arch in a["name"]), "")
+print(d.get("tag_name", ""), hit)' "$arch" 2>/dev/null)"
   fi
 
-  local build="$MAIL_EXPORTER_DIR/apps/MailExporter/build.sh"
-  local stamp="$ROOT_DIR/.state/mailexporter"
-  local head; head="$(git -C "$MAIL_EXPORTER_DIR" rev-parse HEAD 2>/dev/null || echo unknown)"
+  if [[ -z "${url:-}" ]]; then
+    note "No release for $arch — building from source instead"
+    build_mail_exporter
+    return
+  fi
 
-  if [[ -d /Applications/MailExporter.app && -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$head" ]]; then
-    note "MailExporter: already built from this commit"
+  if [[ -d /Applications/MailExporter.app && "$(cat "$stamp" 2>/dev/null)" == "$tag" ]]; then
+    note "MailExporter $tag: already installed"
     return 0
   fi
 
-  [[ -x "$build" ]] || { warn "No build.sh in $MAIL_EXPORTER_DIR"; return 1; }
+  doing "Downloading MailExporter $tag"
+  local tmp; tmp="$(mktemp -d)"
+  if ! run curl -fsSL -o "$tmp/app.zip" "$url"; then
+    warn "Download failed"; rm -rf "$tmp"; return 1
+  fi
 
+  # Verify against the published checksum when there is one — this is a 26MB
+  # binary going into /Applications.
+  local sha_url="$url.sha256" expected actual
+  if expected="$(curl -fsSL "$sha_url" 2>/dev/null | awk '{print $1}')" && [[ -n "$expected" ]]; then
+    actual="$(shasum -a 256 "$tmp/app.zip" | awk '{print $1}')"
+    if [[ "$expected" != "$actual" ]]; then
+      error "Checksum mismatch — refusing to install"
+      rm -rf "$tmp"; return 1
+    fi
+    note "Checksum verified"
+  else
+    warn "No published checksum for this release"
+  fi
+
+  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: install MailExporter $tag"; rm -rf "$tmp"; return 0; }
+
+  ditto -xk "$tmp/app.zip" "$tmp/x" 2>/dev/null || unzip -q "$tmp/app.zip" -d "$tmp/x"
+  if [[ ! -d "$tmp/x/MailExporter.app" ]]; then
+    error "Archive did not contain MailExporter.app"; rm -rf "$tmp"; return 1
+  fi
+  rm -rf /Applications/MailExporter.app
+  ditto "$tmp/x/MailExporter.app" /Applications/MailExporter.app || {
+    error "Could not install to /Applications"; rm -rf "$tmp"; return 1; }
+  rm -rf "$tmp"
+
+  mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$tag" > "$stamp"
+  ok "MailExporter $tag installed"
+}
+
+# Fallback: clone and build. Needs python3, the Xcode tools and a few minutes.
+build_mail_exporter() {
+  has_cmd git || { warn "git missing; skipping MailExporter"; return 1; }
+  if [[ -d "$MAIL_EXPORTER_DIR/.git" ]]; then
+    run git -C "$MAIL_EXPORTER_DIR" pull --ff-only >/dev/null 2>&1 || true
+  else
+    doing "Cloning $MAIL_EXPORTER_REPO"
+    run mkdir -p "$(dirname "$MAIL_EXPORTER_DIR")"
+    run git clone --quiet "https://github.com/$MAIL_EXPORTER_REPO.git" "$MAIL_EXPORTER_DIR" || {
+      warn "Could not clone $MAIL_EXPORTER_REPO"; return 1; }
+  fi
+  local build="$MAIL_EXPORTER_DIR/apps/MailExporter/build.sh"
+  [[ -x "$build" ]] || { warn "No build.sh in $MAIL_EXPORTER_DIR"; return 1; }
   doing "Building MailExporter — a few minutes, no output while it works"
   run bash "$build" >/dev/null 2>&1 || { warn "MailExporter build failed"; return 1; }
-
-  # build.sh installs into /Applications itself; confirm rather than assume.
-  [[ -d /Applications/MailExporter.app ]] || {
-    warn "Build finished but /Applications/MailExporter.app is not there"; return 1; }
-
-  mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$head" > "$stamp"
-  ok "MailExporter installed"
+  [[ -d /Applications/MailExporter.app ]] || { warn "Build produced no installed app"; return 1; }
+  ok "MailExporter built and installed"
 }
 
 # Optional extras — never run by `sys setup`, only by `sys extras`.
@@ -372,9 +410,6 @@ prompt_machine_name() {
 print_manual_steps() {
   local -a todo=()
 
-
-  [[ "${MAIL_EXPORTER_SKIPPED:-0}" == "1" ]] && \
-    todo+=("📮  MailExporter needs GitHub access — ${CYAN}gh auth login${RESET}, then ${CYAN}sys setup${RESET}")
 
   [[ "${MAS_SKIPPED:-0}" == "1" ]] && \
     todo+=("🛒  App Store apps were skipped — sign in, then ${CYAN}sys setup --mas${RESET}")

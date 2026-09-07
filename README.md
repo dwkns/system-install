@@ -9,8 +9,8 @@ curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install
 ```
 
 Installs Homebrew and everything in the `Brewfile`, copies dotfiles into place,
-installs language versions with mise, builds and installs MailExporter from
-source, installs App Store apps, and applies macOS defaults. It finishes by printing the
+installs language versions with mise, downloads and verifies MailExporter
+from its GitHub release, installs App Store apps, and applies macOS defaults. It finishes by printing the
 handful of steps that need a human (signing into things, granting Full Disk
 Access, logging out).
 

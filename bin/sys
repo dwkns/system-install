@@ -95,7 +95,7 @@ HEADSUP
     step "Installing dotfiles"          sync_install
     step "Installing language versions" install_languages
     step "Installing Cursor extensions" install_editor_extensions
-    step "Building MailExporter"        build_mail_exporter
+    step "Installing MailExporter"      install_mail_exporter
     step "Installing App Store apps"    install_app_store_apps
     if [[ -n "$NAME" ]]; then
       set_machine_name "$NAME"
