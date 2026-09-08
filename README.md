@@ -31,7 +31,8 @@ Access, logging out).
 | `sys remove` | Undo everything setup installed (asks first; `--dryrun` previews) |
 | `sys setup` | Re-run setup, or part of it — see `sys` for flags |
 
-Add `--dry-run` to any of them to see what would happen.
+Add `--dry-run` to any of them to see what would happen, or `--force` to
+`sys sync` to reinstall everything even when nothing has changed.
 
 Full documentation: `man sys`
 

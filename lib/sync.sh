@@ -46,12 +46,14 @@ sync_install() {
     while IFS= read -r rel; do
       src="$repo_dir/$rel"; dst="$system_dir/$rel"
 
-      # Already identical: nothing to do, and nothing to report.
-      if [[ -e "$dst" ]] && cmp -s "$src" "$dst"; then
-        continue
-      fi
+      # Already identical: nothing to do, unless forced.
+      local same=0
+      [[ -e "$dst" ]] && cmp -s "$src" "$dst" && same=1
+      [[ "$same" == "1" && "${FORCE:-0}" != "1" ]] && continue
 
-      if [[ -e "$dst" ]]; then
+      # Only stash a file that actually differs — forcing should not fill
+      # .drift with copies of files that were already correct.
+      if [[ -e "$dst" && "$same" == "0" ]]; then
         run mkdir -p "$drift/$repo_rel/$(dirname "$rel")"
         run cp -a "$dst" "$drift/$repo_rel/$rel"
         drifted=1

@@ -44,6 +44,7 @@ export DRY_RUN="${DRY_RUN:-0}" ASSUME_YES="${ASSUME_YES:-0}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run|--dryrun) DRY_RUN=1 ;;
+    --force)    export FORCE=1 ;;
     --yes|-y)   ASSUME_YES=1 ;;
     --no-brew)  DO_BREW=0 ;;
     --no-macos) DO_MACOS=0 ;;
@@ -130,10 +131,14 @@ HEADSUP
 
     sync_install
 
-    if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" ]]; then
+    if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "${FORCE:-0}" != "1" ]]; then
       ok "Already up to date — nothing to apply"
     else
-      [[ "${SYNC_CHANGED:-0}" != "0" ]] && doing "Installed ${SYNC_CHANGED} changed file(s)"
+      if [[ "${FORCE:-0}" == "1" ]]; then
+        doing "Forced — reinstalled ${SYNC_CHANGED} file(s)"
+      elif [[ "${SYNC_CHANGED:-0}" != "0" ]]; then
+        doing "Installed ${SYNC_CHANGED} changed file(s)"
+      fi
       [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
       ok "Done — run 'exec zsh' (or rp) to reload your shell"
     fi

@@ -158,6 +158,12 @@ Only install App Store apps. Setup itself asks before doing this, since the
 App Store needs you signed in, and skips it if not answered within fifteen
 seconds.
 .TP
+.B \-\-force
+.RB ( sync )
+Reinstall every tracked file, including those already identical to the
+repository, and apply the macOS defaults regardless. Without it, a sync that
+finds nothing changed does nothing at all.
+.TP
 .B \-\-dryrun
 .RB ( remove )
 Show what would be removed and stop. Same as
