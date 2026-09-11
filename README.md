@@ -18,7 +18,7 @@ Access, logging out).
 
 | Command | What it does |
 |---|---|
-| `sys sync` | Pull the latest config and apply it here (aliased to `usys`) |
+| `sys sync` | Pull the latest config and apply it here, installing Brewfile changes (aliased to `usys`) |
 | `sys push` | Save this machine's config into the repo and push (aliased to `bsys`) |
 | `sys doctor` | Check everything is installed and signed in |
 | `sys edit` | Open this config folder in VS Code (aliased to `esys`) |

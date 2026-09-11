@@ -35,6 +35,13 @@ to run only that part.
 Pull the latest configuration and apply it here. Equivalent to the
 .B usys
 alias.
+.IP
+If the pull changed the
+.IR Brewfile ,
+packages are installed too. Nothing is ever uninstalled: removing a line from
+the
+.I Brewfile
+stops a new machine getting it, but leaves existing machines alone.
 .TP
 .B push
 Save this machine's configuration into the repository, commit and push.

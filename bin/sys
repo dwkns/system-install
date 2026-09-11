@@ -129,15 +129,29 @@ HEADSUP
     run git -C "$ROOT_DIR" pull --ff-only
     after="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
 
+    # Install Brewfile changes, but only when the Brewfile actually moved:
+    # brew bundle is idempotent yet slow enough to spoil a no-op sync.
+    brew_changed=0
+    if [[ "$before" != "$after" ]] &&
+       ! git -C "$ROOT_DIR" diff --quiet "$before" "$after" -- Brewfile 2>/dev/null; then
+      brew_changed=1
+    fi
+    [[ "${FORCE:-0}" == "1" ]] && brew_changed=1
+
     sync_install
 
-    if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "${FORCE:-0}" != "1" ]]; then
+    if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "$brew_changed" == "0" && "${FORCE:-0}" != "1" ]]; then
       ok "Already up to date — nothing to apply"
     else
       if [[ "${FORCE:-0}" == "1" ]]; then
         doing "Forced — reinstalled ${SYNC_CHANGED} file(s)"
       elif [[ "${SYNC_CHANGED:-0}" != "0" ]]; then
         doing "Installed ${SYNC_CHANGED} changed file(s)"
+      fi
+      # Never --cleanup: that would uninstall anything installed by hand.
+      if [[ "$brew_changed" == "1" && "$DO_BREW" == "1" ]]; then
+        doing "Brewfile changed — installing packages"
+        install_packages
       fi
       [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
       ok "Done — run 'exec zsh' (or rp) to reload your shell"
