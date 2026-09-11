@@ -56,7 +56,6 @@ cask "zoom"
 cask "iina"
 cask "postman"
 cask "transmission"     # macos.sh configures this, so it must be installed
-cask "charles"          # web debugging proxy
 cask "handbrake-app"    # video transcoder
 cask "soulver"          # notepad with a calculator
 cask "whatsapp"
