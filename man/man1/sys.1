@@ -36,6 +36,11 @@ Pull the latest configuration and apply it here. Equivalent to the
 .B usys
 alias.
 .IP
+If the pull updates
+.B sys
+itself, it restarts with the new version, since bash has already parsed the
+running copy and the change would otherwise only take effect next time.
+.IP
 It reconciles with the remote in whichever direction is needed: pulls when
 behind, pushes when ahead, and rebases your commits on top when both have
 moved. It only pushes commits that already exist — recording this machine's
