@@ -153,14 +153,16 @@ HEADSUP
 
     after="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
 
-    # Install Brewfile changes, but only when the Brewfile actually moved:
-    # brew bundle is idempotent yet slow enough to spoil a no-op sync.
+    # Install packages when the Brewfile differs from the one last installed
+    # here. Comparing against a recorded fingerprint rather than against this
+    # pull catches a change made at any point — including one pulled before
+    # this check existed, or a machine that has never run brew bundle.
     brew_changed=0
-    if [[ "$before" != "$after" ]] &&
-       ! git -C "$ROOT_DIR" diff --quiet "$before" "$after" -- Brewfile 2>/dev/null; then
-      brew_changed=1
-    fi
+    brew_stamp="$ROOT_DIR/.state/brewfile"
+    brew_now="$(fingerprint "$ROOT_DIR/Brewfile")"
+    [[ "$(cat "$brew_stamp" 2>/dev/null)" != "$brew_now" ]] && brew_changed=1
     [[ "${FORCE:-0}" == "1" ]] && brew_changed=1
+
 
     sync_install
 
@@ -174,8 +176,8 @@ HEADSUP
       fi
       # Never --cleanup: that would uninstall anything installed by hand.
       if [[ "$brew_changed" == "1" && "$DO_BREW" == "1" ]]; then
-        doing "Brewfile changed — installing packages"
-        install_packages
+        doing "Brewfile differs from what is installed here — running brew bundle"
+        install_packages || warn "brew bundle did not finish — will try again next sync"
       fi
       [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
       ok "Done — run 'exec zsh' (or rp) to reload your shell"

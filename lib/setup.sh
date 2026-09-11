@@ -14,7 +14,9 @@ install_homebrew() {
 install_packages() {
   install_homebrew
   doing "Installing packages from Brewfile"
-  run brew bundle --file "$ROOT_DIR/Brewfile"
+  run brew bundle --file "$ROOT_DIR/Brewfile" || return 1
+  # Record what was installed, so sync knows this Brewfile is satisfied here.
+  mkdir -p "$ROOT_DIR/.state" && fingerprint "$ROOT_DIR/Brewfile" > "$ROOT_DIR/.state/brewfile"
 }
 
 # mise reads dotfiles/.config/mise/config.toml, so dotfiles must be synced first.
