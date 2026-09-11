@@ -14,7 +14,10 @@ install_homebrew() {
 install_packages() {
   install_homebrew
   doing "Installing packages from Brewfile"
-  run brew bundle --file "$ROOT_DIR/Brewfile" || return 1
+  # --no-upgrade: install what is missing, but never upgrade what is already
+  # here. Without it a sync can cascade into upgrading every app on the
+  # machine, which is not what "apply the latest config" should mean.
+  run brew bundle install --no-upgrade --file "$ROOT_DIR/Brewfile" || return 1
   # Record what was installed, so sync knows this Brewfile is satisfied here.
   mkdir -p "$ROOT_DIR/.state" && fingerprint "$ROOT_DIR/Brewfile" > "$ROOT_DIR/.state/brewfile"
 }
