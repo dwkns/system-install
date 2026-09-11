@@ -36,6 +36,13 @@ Pull the latest configuration and apply it here. Equivalent to the
 .B usys
 alias.
 .IP
+It reconciles with the remote in whichever direction is needed: pulls when
+behind, pushes when ahead, and rebases your commits on top when both have
+moved. It only pushes commits that already exist — recording this machine's
+state into new commits is
+.BR "sys push" ,
+so sync never commits on your behalf.
+.IP
 If the pull changed the
 .IR Brewfile ,
 packages are installed too. Nothing is ever uninstalled: removing a line from
