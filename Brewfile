@@ -48,13 +48,13 @@ cask "omnigraffle"
 # ── Everything else ──────────────────────────────────────────────────────────
 cask "dropbox"
 cask "typora"
-cask "obsidian"
+# cask "obsidian"
 cask "notion"
-cask "slack"
-cask "discord"
-cask "zoom"
+# cask "slack"
+# cask "discord"
+# cask "zoom"
 cask "iina"
-cask "postman"
+# cask "postman"
 cask "transmission"     # macos.sh configures this, so it must be installed
 cask "handbrake-app"    # video transcoder
 cask "soulver"          # notepad with a calculator
