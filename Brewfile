@@ -41,22 +41,24 @@ cask "google-chrome"
 cask "firefox@developer-edition"
 
 # ── Design ───────────────────────────────────────────────────────────────────
-cask "figma"
 cask "sketch"
 cask "omnigraffle"
+# cask "figma"
 
 # ── Everything else ──────────────────────────────────────────────────────────
 cask "dropbox"
 cask "typora"
-# cask "obsidian"
 cask "notion"
-# cask "slack"
-# cask "discord"
-# cask "zoom"
 cask "iina"
-# cask "postman"
 cask "transmission"     # macos.sh configures this, so it must be installed
 cask "handbrake-app"    # video transcoder
 cask "soulver"          # notepad with a calculator
 cask "whatsapp"
 cask "nordvpn"     # .macos configures this, so it must be installed
+cask "ollama-app" 
+
+# cask "obsidian"
+# cask "slack"
+# cask "discord"
+# cask "postman"
+# cask "zoom"
