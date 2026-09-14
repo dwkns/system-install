@@ -508,28 +508,87 @@ apply_macos_defaults() {
 apply_input_settings() {
   local file="$ROOT_DIR/config/input"
   [[ -r "$file" ]] || return 0
-  local domain key type value d n=0
+
+  # Work out which settings differ from what is already set, reading each
+  # preferences domain once rather than asking for every key separately.
+  # Prints the config lines that need writing, with "trackpad" expanded into
+  # the two real domains so each can be written on its own.
+  local diffs
+  if ! diffs="$(/usr/bin/python3 - "$file" 2>/dev/null <<'PY'
+import plistlib, subprocess, sys
+
+TRACKPADS = ["com.apple.AppleMultitouchTrackpad",
+             "com.apple.driver.AppleBluetoothMultitouch.trackpad"]
+cache = {}
+
+def domain(name):
+    if name not in cache:
+        host = name.startswith("currentHost:")
+        real = name.split(":", 1)[1] if host else name
+        cmd = ["defaults"] + (["-currentHost"] if host else []) + ["export", real, "-"]
+        out = subprocess.run(cmd, capture_output=True).stdout
+        try:
+            cache[name] = plistlib.loads(out) if out else {}
+        except Exception:
+            cache[name] = {}
+    return cache[name]
+
+def same(have, kind, want):
+    if have is None:
+        return False
+    try:
+        if kind == "bool":
+            return bool(have) == (want == "true")
+        if kind == "int":
+            return int(have) == int(want)
+        if kind == "float":
+            return abs(float(have) - float(want)) < 1e-9
+        return str(have) == want
+    except (TypeError, ValueError):
+        return False
+
+for line in open(sys.argv[1]):
+    line = line.strip()
+    if not line or line.startswith("#"):
+        continue
+    dom, key, kind, want = line.split("|", 3)
+    for real in (TRACKPADS if dom == "trackpad" else [dom]):
+        if not same(domain(real).get(key), kind, want):
+            print(real + "|" + key + "|" + kind + "|" + want)
+PY
+)"; then
+    # No python to compare with: fall back to writing everything, quietly.
+    diffs="$(grep -vE '^[[:space:]]*(#|$)' "$file" | awk -F'|' '
+      $1 == "trackpad" { print "com.apple.AppleMultitouchTrackpad|" $2 "|" $3 "|" $4
+                         print "com.apple.driver.AppleBluetoothMultitouch.trackpad|" $2 "|" $3 "|" $4; next }
+      { print }')"
+  fi
+
+  local domain key type value n=0
   while IFS='|' read -r domain key type value; do
-    [[ -z "$domain" || "$domain" == \#* ]] && continue
-    case "$domain" in
-      trackpad)
-        for d in com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad; do
-          run defaults write "$d" "$key" "-$type" "$value"
-        done ;;
-      currentHost:*)
-        run defaults -currentHost write "${domain#currentHost:}" "$key" "-$type" "$value" ;;
-      *)
-        run defaults write "$domain" "$key" "-$type" "$value" ;;
-    esac
+    [[ -z "$domain" ]] && continue
+    if [[ "$domain" == currentHost:* ]]; then
+      run defaults -currentHost write "${domain#currentHost:}" "$key" "-$type" "$value"
+    else
+      run defaults write "$domain" "$key" "-$type" "$value"
+    fi
     n=$((n + 1))
-  done < "$file"
+  done <<<"$diffs"
+
+  # Nothing differed: nothing to write, nothing to apply, nothing to say.
+  (( n == 0 )) && return 0
+
   # These normally wait for the next login. activateSettings applies them
   # straight away. It is undocumented, so it is best effort only.
   local activate=/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings
   if [[ "${DRY_RUN:-0}" != "1" && -x "$activate" ]]; then
     "$activate" -u >/dev/null 2>&1 || true
   fi
-  note "Keyboard and trackpad: $n settings applied"
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then
+    note "Keyboard and trackpad: $n setting(s) would change"
+  else
+    note "Keyboard and trackpad: $n setting(s) updated"
+  fi
 }
 
 # Solid desktop colour from config/desktop-colour. Setup only, once per
