@@ -54,6 +54,9 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 # ── Dock ─────────────────────────────────────────────────────────────────────
 defaults write com.apple.dock tilesize -int 36
 defaults write com.apple.dock mru-spaces -bool false
+# Click wallpaper to show desktop: only in Stage Manager. macOS offers just
+# Always (true, the default) or this — no Off or Command-click option.
+defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
 
 # ── Other ────────────────────────────────────────────────────────────────────
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
