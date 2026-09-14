@@ -21,11 +21,14 @@ die()   { error "$*"; exit 1; }
 
 # A titled rule, used at the top of anything worth reading properly.
 #   header "🩺" "System check"
+#   header "📦" "Installing apps" "[1/8]" "$CYAN"   coloured rules, dim suffix
 header() {
   local rule="────────────────────────────────────────────────────────"
-  printf '\n%s%s%s\n' "$DIM" "$rule" "$RESET"
-  printf ' %s  %s%s%s\n' "$1" "$BOLD" "$2" "$RESET"
-  printf '%s%s%s\n\n' "$DIM" "$rule" "$RESET"
+  local colour="${4:-$DIM}" suffix=""
+  [[ -n "${3:-}" ]] && suffix="  $DIM$3$RESET"
+  printf '\n%s%s%s\n' "$colour" "$rule" "$RESET"
+  printf ' %s  %s%s%s%s\n' "$1" "$BOLD" "$2" "$RESET" "$suffix"
+  printf '%s%s%s\n\n' "$colour" "$rule" "$RESET"
 }
 
 # "4m 12s" from a number of seconds.

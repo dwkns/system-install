@@ -102,9 +102,9 @@ HEADSUP
     STEP=0; TOTAL=8; FAILED=""
     # Output is never piped: buffering would make a slow step look frozen.
     step() {
-      local name="$1"; shift
+      local icon="$1" name="$2"; shift 2
       STEP=$((STEP + 1))
-      printf '\n%s[%s/%s]%s %s%s%s\n' "$DIM" "$STEP" "$TOTAL" "$RESET" "$BOLD" "$name" "$RESET"
+      header "$icon" "$name" "[$STEP/$TOTAL]" "$CYAN"
       if "$@"; then :; else
         FAILED="$FAILED|$name"
         warn "$name did not finish — carrying on"
@@ -112,20 +112,20 @@ HEADSUP
       return 0
     }
 
-    [[ "$DO_BREW" == "1" ]] && step "Installing apps and tools"  install_packages
-    step "Installing dotfiles"          sync_install
-    step "Installing language versions" install_languages
-    step "Installing Cursor extensions" install_editor_extensions
-    step "Installing MailExporter"      install_mail_exporter
-    step "Installing App Store apps"    install_app_store_apps
+    [[ "$DO_BREW" == "1" ]] && step "📦" "Installing apps and tools"  install_packages
+    step "📁" "Installing dotfiles"          sync_install
+    step "🧪" "Installing language versions" install_languages
+    step "🧩" "Installing Cursor extensions" install_editor_extensions
+    step "📮" "Installing MailExporter"      install_mail_exporter
+    step "🛒" "Installing App Store apps"    install_app_store_apps
     if [[ -n "$NAME" ]]; then
       set_machine_name "$NAME"
     else
       run_once hostname asked prompt_machine_name
     fi
-    step "Turning on Remote Login"      enable_remote_login
+    step "🔐" "Turning on Remote Login"      enable_remote_login
     if [[ "$DO_MACOS" == "1" ]]; then
-      step "Applying macOS defaults" apply_macos_defaults
+      step "🍎" "Applying macOS defaults" apply_macos_defaults
       run_once dock "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" configure_dock
       apply_input_settings
       run_once desktop "$(fingerprint "$ROOT_DIR/config/desktop-colour" "$ROOT_DIR/bin/set-desktop-colour")" set_desktop_colour
