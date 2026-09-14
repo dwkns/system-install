@@ -209,7 +209,8 @@ run_once() {
 }
 
 # Fingerprint a file so a change to it re-triggers its once-only step.
-fingerprint() { shasum -a 256 "$1" 2>/dev/null | cut -d' ' -f1; }
+# One file gives the same digest as before, so existing stamps stay valid.
+fingerprint() { cat "$@" 2>/dev/null | shasum -a 256 | cut -d' ' -f1; }
 
 # Rebuilds the Dock from config/dock. bin/set-dock writes the whole Dock in
 # one go: separate per-app calls race against cfprefsd and silently lose
@@ -343,6 +344,22 @@ STEPS
 MAIL_EXPORTER_REPO="${MAIL_EXPORTER_REPO:-dwkns/mail-exporter}"
 MAIL_EXPORTER_DIR="${MAIL_EXPORTER_DIR:-$HOME/Developer/mail-exporter}"
 
+# True when version $1 is at least $2, comparing each dot-separated number
+# (so 1.10 is newer than 1.9). Suffixes such as -beta are ignored. Bash only.
+version_ge() {
+  local -a a b
+  local i x y
+  IFS=. read -r -a a <<<"$1"
+  IFS=. read -r -a b <<<"$2"
+  for ((i = 0; i < ${#a[@]} || i < ${#b[@]}; i++)); do
+    x="${a[i]:-0}"; y="${b[i]:-0}"
+    x="${x%%[!0-9]*}"; y="${y%%[!0-9]*}"
+    (( 10#${x:-0} > 10#${y:-0} )) && return 0
+    (( 10#${x:-0} < 10#${y:-0} )) && return 1
+  done
+  return 0
+}
+
 install_mail_exporter() {
   local stamp="$ROOT_DIR/.state/mailexporter"
   local arch; arch="$(uname -m)"
@@ -368,6 +385,22 @@ print(d.get("tag_name", ""), hit)' "$arch" 2>/dev/null)"
 
   if [[ -d /Applications/MailExporter.app && "$(cat "$stamp" 2>/dev/null)" == "$tag" ]]; then
     note "MailExporter $tag: already installed"
+    return 0
+  fi
+
+  # Already this version, just never recorded? Then there is nothing to replace,
+  # and leaving the bundle alone avoids needing permission to touch it at all.
+  # Same version or newer (a local build ahead of the latest release)? Then
+  # leave it: replacing would be pointless, or a downgrade.
+  local have
+  have="$(defaults read /Applications/MailExporter.app/Contents/Info.plist CFBundleShortVersionString 2>/dev/null || true)"
+  if [[ -n "$have" ]] && version_ge "${have#v}" "${tag#v}"; then
+    if [[ "${have#v}" == "${tag#v}" ]]; then
+      note "MailExporter $tag: already installed"
+    else
+      note "MailExporter $have is installed, newer than the latest release ($tag) — leaving it"
+    fi
+    [[ "${DRY_RUN:-0}" != "1" ]] && mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$tag" > "$stamp"
     return 0
   fi
 
@@ -400,9 +433,19 @@ print(d.get("tag_name", ""), hit)' "$arch" 2>/dev/null)"
   if [[ ! -d "$tmp/x/MailExporter.app" ]]; then
     error "Archive did not contain MailExporter.app"; rm -rf "$tmp"; return 1
   fi
-  rm -rf /Applications/MailExporter.app
-  ditto "$tmp/x/MailExporter.app" /Applications/MailExporter.app || {
-    error "Could not install to /Applications"; rm -rf "$tmp"; return 1; }
+  # Replace the app as this user. If that is refused — an app owned by another
+  # account or by root — use the password already held for the run.
+  if ! { rm -rf /Applications/MailExporter.app 2>/dev/null &&
+         ditto "$tmp/x/MailExporter.app" /Applications/MailExporter.app 2>/dev/null; }; then
+    note "Replacing MailExporter needs administrator rights"
+    if ! { sudo_run rm -rf /Applications/MailExporter.app &&
+           sudo_run ditto "$tmp/x/MailExporter.app" /Applications/MailExporter.app &&
+           sudo_run chown -R "$(id -un)":admin /Applications/MailExporter.app; }; then
+      error "Could not replace /Applications/MailExporter.app"
+      note "macOS may be protecting it: System Settings ▸ Privacy & Security ▸ App Management ▸ allow your terminal app"
+      rm -rf "$tmp"; return 1
+    fi
+  fi
   rm -rf "$tmp"
 
   mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$tag" > "$stamp"
