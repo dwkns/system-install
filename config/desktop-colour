@@ -1,0 +1,4 @@
+# Solid desktop colour, captured from dwkns-mbp-m1 (about #41 65 B2).
+# Red, green, blue, alpha — each 0 to 1, in the generic RGB colour space.
+# Applied once by `sys setup`; edit it and setup applies it again.
+0.2538864314556122 0.39693576097488403 0.697217583656311 1.0

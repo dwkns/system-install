@@ -70,6 +70,8 @@ lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, App Store, macOS, the Dock
 dotfiles/                    copied into ~
 config/mas-apps.txt          App Store app IDs
+config/input                 keyboard and trackpad, applied on every sync
+config/desktop-colour        solid desktop colour, applied once at setup
 config/sublime-config/       copied into Sublime's User dir
 config/cursor/               copied into Cursor's User dir
 config/cursor-extensions.txt Cursor extensions, installed by `sys setup`

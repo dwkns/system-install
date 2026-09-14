@@ -109,6 +109,8 @@ HEADSUP
     if [[ "$DO_MACOS" == "1" ]]; then
       step "Applying macOS defaults" apply_macos_defaults
       run_once dock "$(fingerprint "$ROOT_DIR/config/dock")" configure_dock
+      apply_input_settings
+      run_once desktop "$(fingerprint "$ROOT_DIR/config/desktop-colour")" set_desktop_colour
       set_default_terminal || true
     fi
 
@@ -177,6 +179,9 @@ HEADSUP
 
 
     sync_install
+    # Every sync, not just when something changed: quick, and it is what
+    # keeps typing and clicking identical across machines.
+    [[ "$DO_MACOS" == "1" ]] && apply_input_settings
 
     if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "$brew_changed" == "0" && "${FORCE:-0}" != "1" ]]; then
       ok "Already up to date — nothing to apply"

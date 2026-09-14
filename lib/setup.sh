@@ -353,6 +353,41 @@ apply_macos_defaults() {
   run bash "$ROOT_DIR/macos.sh"
 }
 
+# Keyboard and trackpad from config/input. Runs on every sync as well as at
+# setup, so it must stay quiet and quick: plain defaults writes, no restarts.
+apply_input_settings() {
+  local file="$ROOT_DIR/config/input"
+  [[ -r "$file" ]] || return 0
+  local domain key type value d n=0
+  while IFS='|' read -r domain key type value; do
+    [[ -z "$domain" || "$domain" == \#* ]] && continue
+    case "$domain" in
+      trackpad)
+        for d in com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad; do
+          run defaults write "$d" "$key" "-$type" "$value"
+        done ;;
+      currentHost:*)
+        run defaults -currentHost write "${domain#currentHost:}" "$key" "-$type" "$value" ;;
+      *)
+        run defaults write "$domain" "$key" "-$type" "$value" ;;
+    esac
+    n=$((n + 1))
+  done < "$file"
+  note "Keyboard and trackpad: $n settings applied"
+}
+
+# Solid desktop colour from config/desktop-colour. Setup only, once per
+# version of that file.
+set_desktop_colour() {
+  local setter="$ROOT_DIR/bin/set-desktop-colour"
+  [[ -x "$setter" && -r "$ROOT_DIR/config/desktop-colour" ]] || return 1
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then
+    ROOT_DIR="$ROOT_DIR" "$setter" --dry-run
+  else
+    ROOT_DIR="$ROOT_DIR" "$setter"
+  fi
+}
+
 set_default_terminal() {
   has_cmd duti || { warn "duti not installed; skipping default terminal"; return 0; }
   [[ -d /Applications/Ghostty.app ]] || { warn "Ghostty not installed; skipping"; return 0; }

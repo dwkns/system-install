@@ -1,0 +1,64 @@
+#!/usr/bin/python3
+"""Set a solid desktop colour from config/desktop-colour.
+
+macOS 14+ keeps the wallpaper in a private plist rather than a defaults
+domain. This writes the same structure System Settings writes for a custom
+colour, then restarts WallpaperAgent to pick it up. No AppleScript, so no
+Automation permission prompt.
+
+  set-desktop-colour            apply
+  set-desktop-colour --dry-run  show what would be applied
+"""
+import datetime, os, pathlib, plistlib, shutil, subprocess, sys
+
+DRY = "--dry-run" in sys.argv
+root = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
+cfg = root / "config" / "desktop-colour"
+store = pathlib.Path.home() / "Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+
+line = next((l for l in cfg.read_text().splitlines() if l.strip() and not l.lstrip().startswith("#")), "")
+try:
+    r, g, b, a = (float(x) for x in line.split())
+except ValueError:
+    sys.exit(f"config/desktop-colour: expected four numbers, got {line!r}")
+
+def content():
+    options = {"values": {"customColor": {"color": {"_0": {"color": {
+        "components": [r, g, b, a],
+        "colorSpace": plistlib.dumps("kCGColorSpaceGenericRGB", fmt=plistlib.FMT_BINARY),
+    }}}}}}
+    return {
+        "Choices": [{
+            "Provider": "com.apple.wallpaper.choice.color",
+            "Files": [],
+            "Configuration": plistlib.dumps({"type": "customColor"}, fmt=plistlib.FMT_BINARY),
+        }],
+        "Shuffle": "$null",
+        "EncodedOptionValues": plistlib.dumps(options, fmt=plistlib.FMT_BINARY),
+    }
+
+hexcol = "#%02X%02X%02X" % tuple(round(v * 255) for v in (r, g, b))
+if DRY:
+    print(f"would set desktop colour {hexcol}")
+    sys.exit(0)
+
+data = plistlib.load(open(store, "rb")) if store.exists() else {}
+now = datetime.datetime.now()
+for scope in ("AllSpacesAndDisplays", "SystemDefault"):
+    s = data.setdefault(scope, {"Type": "individual"})
+    desk = s.setdefault("Desktop", {})
+    desk["Content"] = content()
+    desk["LastSet"] = now
+    desk.setdefault("LastUse", now)
+
+# Keep the previous wallpaper state, so this is reversible.
+if store.exists():
+    backup = root / ".drift" / "wallpaper-Index.plist"
+    backup.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(store, backup)
+
+store.parent.mkdir(parents=True, exist_ok=True)
+with open(store, "wb") as f:
+    plistlib.dump(data, f, fmt=plistlib.FMT_BINARY)
+subprocess.run(["killall", "WallpaperAgent"], stderr=subprocess.DEVNULL)
+print(f"Desktop colour {hexcol}")

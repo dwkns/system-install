@@ -1,0 +1,54 @@
+# Keyboard and trackpad, captured from dwkns-mbp-m1. Applied by `sys setup`
+# and on EVERY `sys sync`, so every machine types and clicks the same way.
+#
+#   domain | key | type | value
+#
+# Domains:  trackpad        = both the built-in trackpad and a Bluetooth
+#                             Magic Trackpad (a Mac mini only has the latter)
+#           currentHost:X   = per-host value of domain X
+#
+# Keys this Mac leaves unset (natural scrolling, swipe between pages, Dock
+# gestures) are deliberately absent: they stay at macOS's own default.
+
+# ── Keyboard ─────────────────────────────────────────────────────────────────
+NSGlobalDomain|KeyRepeat|int|1
+NSGlobalDomain|InitialKeyRepeat|int|13
+NSGlobalDomain|ApplePressAndHoldEnabled|bool|false
+
+# ── Trackpad: point & click ──────────────────────────────────────────────────
+NSGlobalDomain|com.apple.trackpad.scaling|float|2
+NSGlobalDomain|com.apple.trackpad.forceClick|bool|true
+trackpad|FirstClickThreshold|int|1
+trackpad|SecondClickThreshold|int|1
+trackpad|ActuateDetents|int|1
+trackpad|ActuationStrength|int|0
+trackpad|ForceSuppressed|int|0
+trackpad|TrackpadRightClick|int|1
+trackpad|TrackpadCornerSecondaryClick|int|0
+trackpad|TrackpadThreeFingerTapGesture|int|0
+
+# Tap to click, off — in all three places, or the checkbox disagrees
+trackpad|Clicking|int|0
+currentHost:NSGlobalDomain|com.apple.mouse.tapBehavior|int|0
+
+# ── Trackpad: scroll, zoom, drag ─────────────────────────────────────────────
+trackpad|TrackpadScroll|int|1
+trackpad|TrackpadHorizScroll|int|1
+trackpad|TrackpadMomentumScroll|int|1
+trackpad|TrackpadPinch|int|1
+trackpad|TrackpadRotate|int|1
+trackpad|TrackpadTwoFingerDoubleTapGesture|int|1
+trackpad|TrackpadThreeFingerDrag|int|0
+trackpad|Dragging|int|0
+trackpad|DragLock|int|0
+trackpad|TrackpadHandResting|int|1
+trackpad|USBMouseStopsTrackpad|int|0
+
+# ── Trackpad: more gestures ──────────────────────────────────────────────────
+trackpad|TrackpadThreeFingerHorizSwipeGesture|int|2
+trackpad|TrackpadThreeFingerVertSwipeGesture|int|2
+trackpad|TrackpadFourFingerHorizSwipeGesture|int|2
+trackpad|TrackpadFourFingerVertSwipeGesture|int|2
+trackpad|TrackpadFourFingerPinchGesture|int|2
+trackpad|TrackpadFiveFingerPinchGesture|int|2
+trackpad|TrackpadTwoFingerFromRightEdgeSwipeGesture|int|3
