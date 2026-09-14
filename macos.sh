@@ -11,6 +11,8 @@ source "$HOME/.system-config/lib/common.sh"
 killall "System Settings" 2>/dev/null || true
 
 # ── General ──────────────────────────────────────────────────────────────────
+# Sidebar icons small. 1 = small, 2 = medium (the macOS default), 3 = large.
+defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 defaults write com.apple.loginwindow TALLogoutSavesState -bool false
