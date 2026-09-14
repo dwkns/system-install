@@ -72,16 +72,18 @@ case "$cmd" in
 
 This takes 15-30 minutes. Two things to expect:
 
-  * You will be asked for your password. Type it and press Return once —
-    it will not appear on screen, which is normal.
+  * You will be asked for your password once, right at the start. It will
+    not appear as you type, which is normal. That is the only time.
   * Some apps install with no output for several minutes. That is not a
     hang. Leave it alone.
 
 HEADSUP
 
+    acquire_sudo
+
     STARTED=$SECONDS
     header "🚀" "Setting up this Mac"
-    STEP=0; TOTAL=7; FAILED=""
+    STEP=0; TOTAL=8; FAILED=""
     # Output is never piped: buffering would make a slow step look frozen.
     step() {
       local name="$1"; shift
@@ -94,7 +96,6 @@ HEADSUP
       return 0
     }
 
-    [[ -n "$NAME" ]] && sudo -v
     [[ "$DO_BREW" == "1" ]] && step "Installing apps and tools"  install_packages
     step "Installing dotfiles"          sync_install
     step "Installing language versions" install_languages
@@ -106,6 +107,7 @@ HEADSUP
     else
       run_once hostname asked prompt_machine_name
     fi
+    step "Turning on Remote Login"      enable_remote_login
     if [[ "$DO_MACOS" == "1" ]]; then
       step "Applying macOS defaults" apply_macos_defaults
       run_once dock "$(fingerprint "$ROOT_DIR/config/dock")" configure_dock
@@ -119,12 +121,21 @@ HEADSUP
       warn "Finished in $(elapsed $((SECONDS - STARTED))), but these steps had problems:"
       printf '%s' "$FAILED" | tr '|' '\n' | sed '/^$/d;s/^/      /'
     else
-      ok "All 7 steps completed in $(elapsed $((SECONDS - STARTED)))"
+      ok "All 8 steps completed in $(elapsed $((SECONDS - STARTED)))"
     fi
 
     echo
     "$0" doctor || true
     print_manual_steps
+    request_reload
+
+    # From the one-line installer there is no sys function to reload the
+    # shell, so hand over a fresh login shell with the new config loaded.
+    if [[ "${SYS_FROM_INSTALLER:-0}" == "1" ]] && { true </dev/tty; } 2>/dev/null; then
+      release_sudo
+      doing "Starting a fresh shell with your new config"
+      exec /bin/zsh -l </dev/tty
+    fi
     ;;
 
   sync)
@@ -193,11 +204,17 @@ HEADSUP
       fi
       # Never --cleanup: that would uninstall anything installed by hand.
       if [[ "$brew_changed" == "1" && "$DO_BREW" == "1" ]]; then
+        acquire_sudo
         doing "Brewfile differs from what is installed here — running brew bundle"
         install_packages || warn "brew bundle did not finish — will try again next sync"
       fi
       [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
-      ok "Done — run 'exec zsh' (or rp) to reload your shell"
+      request_reload
+      if [[ -n "${SYS_RELOAD_FILE:-}" ]]; then
+        ok "Done — reloading your shell"
+      else
+        ok "Done — run 'exec zsh' (or rp) to reload your shell"
+      fi
     fi
     ;;
 

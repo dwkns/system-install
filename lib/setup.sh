@@ -7,8 +7,110 @@ source "${ROOT_DIR:-$HOME/.system-config}/lib/sync.sh"
 install_homebrew() {
   has_cmd brew && return 0
   doing "Installing Homebrew"
-  run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # With the password helper in place it can run unattended, instead of
+  # stopping to say "Press RETURN" and asking for the password itself.
+  if [[ -n "${SUDO_ASKPASS:-}" ]]; then
+    run env NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
   [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+}
+
+# Remote Login (SSH) on, for this user. systemsetup -setremotelogin needs Full
+# Disk Access on current macOS, which a fresh terminal does not have, so this
+# talks to launchd directly: enable the sshd service and load it.
+enable_remote_login() {
+  if nc -z -G 2 127.0.0.1 22 >/dev/null 2>&1; then
+    note "Remote Login: already on"
+  else
+    doing "Turning on Remote Login"
+    run sudo_run launchctl enable system/com.openssh.sshd
+    run sudo_run launchctl bootstrap system /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || true
+  fi
+
+  # If SSH is limited to particular users, make sure this one is included.
+  if dseditgroup -o read com.apple.access_ssh >/dev/null 2>&1 &&
+     ! dseditgroup -o checkmember -m "$USER" com.apple.access_ssh >/dev/null 2>&1; then
+    run sudo_run dseditgroup -o edit -a "$USER" -t user com.apple.access_ssh
+  fi
+
+  [[ "${DRY_RUN:-0}" == "1" ]] && return 0
+  local i
+  for i in 1 2 3 4 5; do
+    nc -z -G 2 127.0.0.1 22 >/dev/null 2>&1 && break
+    sleep 1
+  done
+  if nc -z -G 2 127.0.0.1 22 >/dev/null 2>&1; then
+    ok "Remote Login on — ssh $USER@$(scutil --get LocalHostName 2>/dev/null).local"
+  else
+    warn "Remote Login did not come on — System Settings ▸ General ▸ Sharing ▸ Remote Login"
+    return 1
+  fi
+}
+
+# ── One password for the whole run ───────────────────────────────────────────
+# A cached sudo login keeps getting lost: Homebrew's installer clears it when
+# it exits, and casks run sudo of their own. So instead of caching, ask once,
+# check it, and give sudo a helper that answers for you (SUDO_ASKPASS —
+# Homebrew passes -A whenever it is set). The password sits in a private temp
+# file for the length of this run only, and is removed when sys exits.
+acquire_sudo() {
+  [[ "${DRY_RUN:-0}" == "1" ]] && return 0
+  [[ -n "${SUDO_ASKPASS:-}" ]] && return 0
+  if ! { true </dev/tty; } 2>/dev/null; then
+    warn "No terminal to ask for a password — sudo may prompt later"
+    return 0
+  fi
+
+  SUDO_DIR="$(mktemp -d)" || return 1
+  chmod 700 "$SUDO_DIR"
+  local pw tries=0
+  while (( tries < 3 )); do
+    printf '  🔑  Your Mac password — asked once, for the whole run: ' >/dev/tty
+    IFS= read -rs pw </dev/tty || pw=""
+    printf '\n' >/dev/tty
+    # printf is a shell builtin, so the password never appears in ps output.
+    if printf '%s\n' "$pw" | sudo -S -v 2>/dev/null; then
+      ( umask 077; printf '%s\n' "$pw" > "$SUDO_DIR/pw" )
+      printf '#!/bin/sh\ncat "%s"\n' "$SUDO_DIR/pw" > "$SUDO_DIR/askpass"
+      chmod 700 "$SUDO_DIR/askpass"
+      pw=""
+      export SUDO_ASKPASS="$SUDO_DIR/askpass"
+      # Keep the login fresh, and restore it quietly if something clears it.
+      ( while kill -0 "$$" 2>/dev/null; do sudo -A -v >/dev/null 2>&1; sleep 50; done ) &
+      SUDO_KEEPALIVE=$!
+      trap release_sudo EXIT
+      trap 'release_sudo; exit 130' INT TERM
+      ok "Password accepted — you won't be asked again"
+      return 0
+    fi
+    tries=$((tries + 1))
+    warn "That password didn't work ($tries of 3)"
+  done
+  rm -rf "$SUDO_DIR"
+  die "Could not get administrator access."
+}
+
+release_sudo() {
+  [[ -n "${SUDO_KEEPALIVE:-}" ]] && kill "$SUDO_KEEPALIVE" 2>/dev/null
+  [[ -n "${SUDO_DIR:-}" ]] && rm -rf "$SUDO_DIR"
+  SUDO_KEEPALIVE="" SUDO_DIR=""
+  unset SUDO_ASKPASS
+  return 0
+}
+
+# sudo through the helper when there is one, plain sudo otherwise.
+sudo_run() {
+  if [[ -n "${SUDO_ASKPASS:-}" ]]; then sudo -A "$@"; else sudo "$@"; fi
+}
+
+# sys is a child process, so it cannot reload the shell it was started from.
+# The sys function in ~/.aliases passes SYS_RELOAD_FILE; touching it asks that
+# function to reload the shell once sys has finished.
+request_reload() {
+  [[ -n "${SYS_RELOAD_FILE:-}" ]] && : > "$SYS_RELOAD_FILE"
+  return 0
 }
 
 install_packages() {
@@ -157,6 +259,7 @@ remove_everything() {
   plan+=("~/.cursor ($(ls -1 "$HOME/.cursor/extensions" 2>/dev/null | wc -l | tr -d ' ') Cursor extensions)")
   plan+=("~/Library/Application Support/Cursor and Sublime Text")
   plan+=("~/Library/Colors")
+  plan+=("~/Library/Application Support/system-config (the desktop colour image)")
   plan+=("preferences for Cursor, Sublime Text and Ghostty")
   plan+=("the Dock and Finder settings, back to macOS defaults")
   plan+=("$ROOT_DIR/.state and $ROOT_DIR/.drift")
@@ -197,6 +300,7 @@ remove_everything() {
   wipe "$HOME/Library/Application Support/Cursor"
   wipe "$HOME/Library/Application Support/Sublime Text"
   wipe "$HOME/Library/Colors"
+  wipe "$HOME/Library/Application Support/system-config"
   wipe "$HOME/Library/Caches/Cursor"
   rm -f "$HOME/Library/Preferences/com.todesktop.230313mzl4w4u92.plist" \
         "$HOME/Library/Preferences/com.sublimetext.4.plist" \
@@ -267,6 +371,10 @@ print(d.get("tag_name", ""), hit)' "$arch" 2>/dev/null)"
     return 0
   fi
 
+  # A dry run downloads nothing, so it must stop before the checksum check —
+  # otherwise it verifies a file that was never fetched and reports a mismatch.
+  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: download and verify MailExporter $tag"; return 0; }
+
   doing "Downloading MailExporter $tag"
   local tmp; tmp="$(mktemp -d)"
   if ! run curl -fsSL -o "$tmp/app.zip" "$url"; then
@@ -287,7 +395,6 @@ print(d.get("tag_name", ""), hit)' "$arch" 2>/dev/null)"
     warn "No published checksum for this release"
   fi
 
-  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: install MailExporter $tag"; rm -rf "$tmp"; return 0; }
 
   ditto -xk "$tmp/app.zip" "$tmp/x" 2>/dev/null || unzip -q "$tmp/app.zip" -d "$tmp/x"
   if [[ ! -d "$tmp/x/MailExporter.app" ]]; then
@@ -373,6 +480,12 @@ apply_input_settings() {
     esac
     n=$((n + 1))
   done < "$file"
+  # These normally wait for the next login. activateSettings applies them
+  # straight away. It is undocumented, so it is best effort only.
+  local activate=/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings
+  if [[ "${DRY_RUN:-0}" != "1" && -x "$activate" ]]; then
+    "$activate" -u >/dev/null 2>&1 || true
+  fi
   note "Keyboard and trackpad: $n settings applied"
 }
 
@@ -417,21 +530,46 @@ set_machine_name() {
   [[ -n "$clean" ]] || { warn "Not a usable computer name: $name"; return 1; }
 
   doing "Setting computer name to $clean"
-  run sudo scutil --set ComputerName  "$clean"
-  run sudo scutil --set HostName      "$clean"
-  run sudo scutil --set LocalHostName "$clean"
+  run sudo_run scutil --set ComputerName  "$clean"
+  run sudo_run scutil --set HostName      "$clean"
+  run sudo_run scutil --set LocalHostName "$clean"
 }
 
 
+# The default computer name: dwkns-<type>-<chip>, e.g. dwkns-mbp-m1 or
+# dwkns-mini-m4. The model name comes from system_profiler, not hw.model —
+# newer Macs report generic identifiers like Mac14,3 that do not say "mini".
+MACHINE_NAME_PREFIX="${MACHINE_NAME_PREFIX:-dwkns}"
+default_machine_name() {
+  local model chip type proc
+  model="$(system_profiler SPHardwareDataType 2>/dev/null | awk -F': ' '/Model Name/{print $2; exit}')"
+  chip="$(sysctl -n machdep.cpu.brand_string 2>/dev/null)"
+  case "$model" in
+    "MacBook Pro"*) type=mbp ;;
+    "MacBook Air"*) type=mba ;;
+    "Mac mini"*)    type=mini ;;
+    "Mac Studio"*)  type=studio ;;
+    "Mac Pro"*)     type=macpro ;;
+    iMac*)          type=imac ;;
+    *)              type=mac ;;
+  esac
+  case "$chip" in
+    "Apple M"*) proc="$(printf '%s' "$chip" | awk '{print tolower($2)}')" ;;  # "Apple M1 Max" -> m1
+    *Intel*)    proc=intel ;;
+    *)          proc="$(uname -m)" ;;
+  esac
+  printf '%s-%s-%s\n' "$MACHINE_NAME_PREFIX" "$type" "$proc"
+}
+
 # Asked once per machine during setup. 15 seconds, then the default.
-DEFAULT_MACHINE_NAME="${DEFAULT_MACHINE_NAME:-dazzas-mac}"
 prompt_machine_name() {
-  local current reply
+  local current reply default
   current="$(scutil --get ComputerName 2>/dev/null || echo "unknown")"
+  default="${DEFAULT_MACHINE_NAME:-$(default_machine_name)}"
 
   doing "Computer name"
   note "Currently: $current"
-  printf '    New name, or Return to accept "%s" (15s): ' "$DEFAULT_MACHINE_NAME"
+  printf '    New name, or Return to accept "%s" (15s): ' "$default"
 
   reply=""
   if { true </dev/tty; } 2>/dev/null; then
@@ -439,8 +577,8 @@ prompt_machine_name() {
   fi
   echo
 
-  reply="$(printf '%s' "${reply:-$DEFAULT_MACHINE_NAME}" | sed 's/^ *//;s/ *$//')"
-  [[ -n "$reply" ]] || reply="$DEFAULT_MACHINE_NAME"
+  reply="$(printf '%s' "${reply:-$default}" | sed 's/^ *//;s/ *$//')"
+  [[ -n "$reply" ]] || reply="$default"
   set_machine_name "$reply"
 }
 

@@ -50,15 +50,9 @@ if ! git --version >/dev/null 2>&1; then
   exit 1
 fi
 
-# ── Password, once, up front ─────────────────────────────────────────────────
-# Homebrew and the macOS defaults need it. Asking here keeps the rest unattended.
-say "Your password is needed for Homebrew and system settings"
-if [[ "$TTY" == /dev/tty ]]; then
-  sudo -v </dev/tty
-else
-  echo "    No terminal available; skipping. Homebrew may prompt later."
-fi
-while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done 2>/dev/null &
+# ── Password ─────────────────────────────────────────────────────────────────
+# Not asked here: sys setup asks once and holds it for the whole run. Asking
+# here as well would only mean typing it twice.
 
 # ── The repo ─────────────────────────────────────────────────────────────────
 if [[ -d "$ROOT_DIR/.git" ]]; then
@@ -76,4 +70,5 @@ else
 fi
 
 # Running this installer IS the confirmation, so do not ask again.
+export SYS_FROM_INSTALLER=1
 exec "$ROOT_DIR/bin/sys" setup --yes "$@" <"$TTY"

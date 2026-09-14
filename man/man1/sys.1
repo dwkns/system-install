@@ -27,6 +27,14 @@ copies dotfiles into place, installs language versions with
 downloads and verifies MailExporter from its GitHub release, installs App Store apps and
 applies macOS defaults. Finishes by printing the steps that need a human.
 .IP
+Setup also turns on Remote Login (SSH) for you, using launchd directly, since
+.B systemsetup
+needs Full Disk Access on current macOS.
+.IP
+Your password is asked for once, at the start, and used for the whole run:
+it is handed to sudo through a helper that is deleted when setup finishes, so
+Homebrew and the casks never prompt again.
+.IP
 Safe to re-run. Use
 .B \-\-mas
 to run only that part.
@@ -156,7 +164,9 @@ Do not ask for confirmation.
 .BI \-\-name " NAME"
 .RB ( setup )
 Set the computer, host and local host name, without being asked. Without it,
-setup asks once per machine and falls back to a default after fifteen seconds.
+setup asks once per machine and falls back to a name built from the machine after fifteen seconds:
+.IR dwkns\-type\-chip ,
+such as dwkns\-mbp\-m1 or dwkns\-mini\-m4.
 .PP
 All three names are set to the same value, lowercased, with spaces turned to
 hyphens and other punctuation dropped, since scutil rejects those. "Dazza's
@@ -187,6 +197,19 @@ finds nothing changed does nothing at all.
 .RB ( remove )
 Show what would be removed and stop. Same as
 .BR \-\-dry\-run .
+.SH RELOADING YOUR SHELL
+.B sys
+runs as its own process, so it cannot reload the shell you started it from.
+The
+.B sys
+function in
+.I ~/.aliases
+wraps it: when setup or sync changes anything, it reloads your shell with
+.B exec zsh
+once
+.B sys
+has finished successfully. Run from the one-line installer, setup starts a
+fresh login shell itself.
 .SH HOW SYNCING WORKS
 .B sys sync
 mirrors three directories:
@@ -252,13 +275,15 @@ macOS defaults.
 App Store application IDs.
 .TP
 .I ~/.system-config/config/input
-Keyboard repeat, trackpad speed, clicking and gestures. Applied by
+Keyboard repeat, trackpad speed, clicking and gestures, applied immediately
+rather than at next login. Applied by
 .B sys setup
 and on every
 .BR "sys sync" .
 .TP
 .I ~/.system-config/config/desktop-colour
-Solid desktop colour as four numbers. Applied once by
+Solid desktop colour as four numbers, set through macOS's wallpaper API and
+checked on screen afterwards. Applied once by
 .BR "sys setup" .
 .TP
 .I ~/.system-config/Brewfile.optional

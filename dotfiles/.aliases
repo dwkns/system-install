@@ -27,6 +27,22 @@ alias ghv='gh repo view --web'
 
 # ── Functions ────────────────────────────────────────────────────────────────
 
+# bin/sys runs as its own process, so it cannot reload the shell that started
+# it. This passes it a flag file; if setup or sync changed anything it touches
+# the flag, and the reload happens here, in your actual shell.
+# Run sys, then reload this shell if setup or sync changed anything.
+sys() {
+  local flag="${TMPDIR:-/tmp}/sys-reload-$$"
+  rm -f "$flag"
+  SYS_RELOAD_FILE="$flag" command "$HOME/.system-config/bin/sys" "$@"
+  local rc=$?
+  if [[ -e "$flag" ]]; then
+    rm -f "$flag"
+    (( rc == 0 )) && exec zsh
+  fi
+  return $rc
+}
+
 # Kill whatever is listening on a port.  kp 3000
 kp() {
   [[ -n "$1" ]] || { error "usage: kp <port>"; return 1; }

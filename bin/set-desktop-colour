@@ -1,64 +1,108 @@
 #!/usr/bin/python3
 """Set a solid desktop colour from config/desktop-colour.
 
-macOS 14+ keeps the wallpaper in a private plist rather than a defaults
-domain. This writes the same structure System Settings writes for a custom
-colour, then restarts WallpaperAgent to pick it up. No AppleScript, so no
-Automation permission prompt.
+Makes a small PNG of the colour and sets it on every screen with NSWorkspace's
+public setDesktopImageURL API, called through JavaScript for Automation. That
+runs inside this process and sends no Apple Events, so there is no Automation
+prompt, and it behaves the same on any recent macOS.
+
+(An earlier version wrote macOS's private wallpaper store directly. That file
+is undocumented, can change between macOS versions, and a correct file was
+never proof the screen had changed.)
+
+The result is read back from the system afterwards, so this only reports
+success when every screen is really showing the new colour.
 
   set-desktop-colour            apply
   set-desktop-colour --dry-run  show what would be applied
 """
-import datetime, os, pathlib, plistlib, shutil, subprocess, sys
+import json, os, pathlib, struct, subprocess, sys, time, zlib
 
 DRY = "--dry-run" in sys.argv
 root = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
 cfg = root / "config" / "desktop-colour"
-store = pathlib.Path.home() / "Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-
 line = next((l for l in cfg.read_text().splitlines() if l.strip() and not l.lstrip().startswith("#")), "")
 try:
     r, g, b, a = (float(x) for x in line.split())
 except ValueError:
     sys.exit(f"config/desktop-colour: expected four numbers, got {line!r}")
 
-def content():
-    options = {"values": {"customColor": {"color": {"_0": {"color": {
-        "components": [r, g, b, a],
-        "colorSpace": plistlib.dumps("kCGColorSpaceGenericRGB", fmt=plistlib.FMT_BINARY),
-    }}}}}}
-    return {
-        "Choices": [{
-            "Provider": "com.apple.wallpaper.choice.color",
-            "Files": [],
-            "Configuration": plistlib.dumps({"type": "customColor"}, fmt=plistlib.FMT_BINARY),
-        }],
-        "Shuffle": "$null",
-        "EncodedOptionValues": plistlib.dumps(options, fmt=plistlib.FMT_BINARY),
-    }
-
-hexcol = "#%02X%02X%02X" % tuple(round(v * 255) for v in (r, g, b))
+rgb8 = tuple(max(0, min(255, round(v * 255))) for v in (r, g, b))
+hexcol = "#%02X%02X%02X" % rgb8
 if DRY:
     print(f"would set desktop colour {hexcol}")
     sys.exit(0)
 
-data = plistlib.load(open(store, "rb")) if store.exists() else {}
-now = datetime.datetime.now()
-for scope in ("AllSpacesAndDisplays", "SystemDefault"):
-    s = data.setdefault(scope, {"Type": "individual"})
-    desk = s.setdefault("Desktop", {})
-    desk["Content"] = content()
-    desk["LastSet"] = now
-    desk.setdefault("LastUse", now)
+def write_png(path, rgb, size=64):
+    row = b"\x00" + bytes(rgb) * size
+    def chunk(kind, data):
+        return (struct.pack(">I", len(data)) + kind + data
+                + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF))
+    path.write_bytes(b"\x89PNG\r\n\x1a\n"
+                     + chunk(b"IHDR", struct.pack(">IIBBBBB", size, size, 8, 2, 0, 0, 0))
+                     + chunk(b"IDAT", zlib.compress(row * size, 9))
+                     + chunk(b"IEND", b""))
 
-# Keep the previous wallpaper state, so this is reversible.
-if store.exists():
-    backup = root / ".drift" / "wallpaper-Index.plist"
-    backup.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(store, backup)
+# One file per colour: macOS caches wallpaper by path, so reusing a single name
+# for a different colour can leave the old colour on screen.
+folder = pathlib.Path.home() / "Library/Application Support/system-config"
+folder.mkdir(parents=True, exist_ok=True)
+image = folder / f"desktop-{hexcol[1:].lower()}.png"
+write_png(image, rgb8)
+for old in folder.glob("desktop-*.png"):
+    if old != image:
+        old.unlink()
 
-store.parent.mkdir(parents=True, exist_ok=True)
-with open(store, "wb") as f:
-    plistlib.dump(data, f, fmt=plistlib.FMT_BINARY)
-subprocess.run(["killall", "WallpaperAgent"], stderr=subprocess.DEVNULL)
-print(f"Desktop colour {hexcol}")
+set_script = f"""
+ObjC.import("AppKit");
+const ws = $.NSWorkspace.sharedWorkspace;
+const url = $.NSURL.fileURLWithPath({json.dumps(str(image))});
+const opts = $.NSMutableDictionary.dictionary;
+opts.setObjectForKey($.NSNumber.numberWithInt(1), $.NSWorkspaceDesktopImageScalingKey);
+opts.setObjectForKey($.NSColor.colorWithCalibratedRedGreenBlueAlpha({r}, {g}, {b}, {a}),
+                     $.NSWorkspaceDesktopImageFillColorKey);
+const screens = $.NSScreen.screens;
+let set = 0;
+for (let i = 0; i < screens.count; i++)
+  if (ws.setDesktopImageURLForScreenOptionsError(url, screens.objectAtIndex(i), opts, null)) set++;
+JSON.stringify({{screens: Number(screens.count), set: set}});
+"""
+
+check_script = f"""
+ObjC.import("AppKit");
+const ws = $.NSWorkspace.sharedWorkspace;
+const screens = $.NSScreen.screens;
+let shown = 0;
+for (let i = 0; i < screens.count; i++) {{
+  const now = ws.desktopImageURLForScreen(screens.objectAtIndex(i));
+  if (!now.isNil() && now.path.js === {json.dumps(str(image))}) shown++;
+}}
+JSON.stringify({{screens: Number(screens.count), shown: shown}});
+"""
+
+def jxa(src):
+    res = subprocess.run(["/usr/bin/osascript", "-l", "JavaScript", "-e", src],
+                         capture_output=True, text=True)
+    try:
+        # The ObjC bridge can hand counts back as strings; normalise to ints.
+        return {k: int(v) for k, v in json.loads(res.stdout.strip()).items()}
+    except (ValueError, TypeError):
+        sys.exit(f"Could not set the desktop colour: {res.stderr.strip() or res.stdout.strip()}")
+
+done = jxa(set_script)
+if done["screens"] == 0:
+    sys.exit("No screens available — run this from a logged-in desktop session, not over SSH.")
+
+# macOS applies a new wallpaper asynchronously, so a check made straight away
+# still sees the old one. Ask again, from a fresh process each time, for up to
+# ten seconds before deciding it did not work.
+seen = {"shown": 0, "screens": done["screens"]}
+for _ in range(20):
+    time.sleep(0.5)
+    seen = jxa(check_script)
+    if seen["shown"] == seen["screens"]:
+        break
+
+if seen["shown"] != seen["screens"]:
+    sys.exit(f"Desktop colour {hexcol} showing on {seen['shown']} of {seen['screens']} screen(s).")
+print(f"Desktop colour {hexcol} on {seen['screens']} screen(s)")
