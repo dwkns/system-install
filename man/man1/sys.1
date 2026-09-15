@@ -115,6 +115,51 @@ List the machines this one can reach over SSH: the aliases sys wrote from
 then anything hand-written in
 .I ~/.ssh/config
 (flagged when its address is not on your tailnet). Read live from the machine.
+.PP
+Every
+.B sys sync
+also applies
+.IR config/ssh/access ,
+which says who may log in where and as which account. On each machine that
+means: make its ed25519 key in
+.I ~/.ssh/id_ed25519
+if it has none; share its public keys as
+.I config/ssh/keys/NAME.pub
+(the user key) and
+.I config/ssh/hostkeys/NAME.pub
+(the sshd host key), committing and pushing those files \(em the only thing
+sync ever commits by itself; install the keys of the machines the access file
+lets in here, in a marked block of
+.I ~/.ssh/authorized_keys
+that leaves anything outside the block alone; pin every other machine's host
+key in
+.IR ~/.ssh/known_hosts_sys ,
+so a wrong machine is refused and a first contact needs no question; and write
+.I ~/.ssh/config.d/sys
+with an alias and account for every other machine, so
+.B ssh mini\-m1
+reaches
+.B dwkns\-mini\-m1
+as the right user. Each alias tries the Tailscale name first and, if that does
+not answer on port 22 within two seconds, falls back to
+.IR NAME.local ,
+so it works on the home network with Tailscale off and from anywhere with it
+on. The aliases never offer a password: a machine that refuses the key is
+either not allowed by the access file or not the machine it claims to be.
+Plain
+.B ssh user@host
+still can. A machine whose host key is not in the repo yet is accepted on
+first contact until it is. A single
+.B Include config.d/*
+line is added at the top of
+.IR ~/.ssh/config ;
+the rest of that file is yours.
+.PP
+The key has no passphrase, deliberately: the disk is encrypted, a headless
+machine has nobody to type one, and the point is that ssh just works. The
+private key never leaves the machine that made it. Nothing here ever types a
+password. Sharing the keys needs a GitHub login on this machine; a machine
+without one is signed in on the spot, once, with a code and a browser page.
 .TP
 .B ssh harden
 Optional. Turn off password logins on this machine by writing

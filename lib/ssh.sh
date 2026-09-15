@@ -201,9 +201,16 @@ ssh_write_aliases() {
   while read -r m account _; do
     [[ "$m" == "$me" ]] && continue
     a="$(ssh_alias "$m")"; all="$all $a"
-    [[ -s "$SSH_HOSTKEYS_DIR/$m.pub" ]] && strict=yes || strict=accept-new
+    # Pinned: only the repo's copy of the host key counts, so a stale entry in
+    # the ordinary known_hosts can never vouch for an impostor. Not pinned
+    # yet: the ordinary file, accepted on first contact, as before.
+    if [[ -s "$SSH_HOSTKEYS_DIR/$m.pub" ]]; then
+      strict="  StrictHostKeyChecking yes"$'\n'"  UserKnownHostsFile ~/.ssh/known_hosts_sys"
+    else
+      strict="  StrictHostKeyChecking accept-new"$'\n'"  UserKnownHostsFile ~/.ssh/known_hosts"
+    fi
     out="$out"$'\n'"Match originalhost $a exec \"$ROOT_DIR/bin/ssh-reach $m\""$'\n'"  HostName $m"$'\n'
-    out="$out"$'\n'"Host $a"$'\n'"  HostName $m.local"$'\n'"  User $account"$'\n'"  HostKeyAlias $m"$'\n'"  StrictHostKeyChecking $strict"$'\n'
+    out="$out"$'\n'"Host $a"$'\n'"  HostName $m.local"$'\n'"  User $account"$'\n'"  HostKeyAlias $m"$'\n'"$strict"$'\n'
   done < <(ssh_access_lines)
   [[ -n "$all" ]] || { [[ -z "$quiet" ]] && note "No other machines in config/ssh/access"; return 0; }
   out="$out"$'\n'"Host$all"$'\n'
@@ -212,7 +219,7 @@ ssh_write_aliases() {
   # see a password typed at it. Plain `ssh user@host` still can.
   out="$out  IdentityFile ~/.ssh/id_ed25519"$'\n'"  IdentitiesOnly yes"$'\n'
   out="$out  PasswordAuthentication no"$'\n'"  KbdInteractiveAuthentication no"$'\n'
-  out="$out  UserKnownHostsFile ~/.ssh/known_hosts_sys ~/.ssh/known_hosts"$'\n'
+
   out="$out  ServerAliveInterval 30"$'\n'"  ControlMaster auto"$'\n'"  ControlPath ~/.ssh/cm-%C"$'\n'"  ControlPersist 10m"
 
   if [[ -f "$SSH_ALIASES" && "$(cat "$SSH_ALIASES")" == "$out" ]]; then
