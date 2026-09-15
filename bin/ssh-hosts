@@ -96,10 +96,9 @@ def show(h):
     target = h["hostkeyalias"] or h["hostname"] or h["alias"]
     who = f'{h["user"]}@' if h["user"] else ""
     port = f' {D}port {h["port"]}{R}' if h["port"] else ""
-    flag = ""
+    print(f'    {G}ssh {h["alias"]:<12}{R} {D}→ {who}{target}{R}{port}')
     if known and target.split(".")[0] not in known:
-        flag = f'  {Y}not on your tailnet — stale?{R}'
-    print(f'    {G}ssh {h["alias"]:<12}{R} {D}→ {who}{target}{R}{port}{flag}')
+        print(f'                     {Y}not on your tailnet — an old entry?{R}')
 
 managed = [h for h in cfg if h["managed"]]
 manual = [h for h in cfg if not h["managed"]]
@@ -116,4 +115,5 @@ if manual:
         show(h)
     print()
 
-print(f"  {D}Who may log in where: config/ssh/access in the repo. Edit it, sys push, then sys sync on each machine.{R}\n")
+print(f"  {D}Who may log in where: config/ssh/access in the repo.{R}")
+print(f"  {D}Edit it, sys push, then sys sync on each machine.{R}\n")
