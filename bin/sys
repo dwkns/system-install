@@ -17,7 +17,7 @@ sys — system configuration
   sys push      Save this machine's config into the repo and push
   sys doctor    Check that everything is where it should be
   sys edit      Open this config folder in VS Code
-  sys ssh       List the machines you can reach over SSH, with a cheat sheet
+  sys ssh       List the machines you can reach over SSH
   sys ssh harden          Keys only on this machine — optional, passwords stay on otherwise
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions

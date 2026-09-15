@@ -171,7 +171,7 @@ ssh_write_aliases() {
   fi
 }
 
-# Everything, in order. Run by setup, by every sync, and by `sys ssh apply`.
+# Everything, in order. Run by setup and by every sync.
 ssh_apply() {
   local quiet="${1:-}"
   if [[ ! -f "$SSH_ACCESS" ]]; then

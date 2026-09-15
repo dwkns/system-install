@@ -6,7 +6,7 @@ Tailscale daemon. Entries that sys wrote from config/ssh/access are listed
 first; anything hand-written in ~/.ssh/config follows, and is flagged when its
 address is not a machine on your tailnet.
 """
-import glob, json, os, pathlib, shutil, subprocess, sys
+import glob, json, os, pathlib, subprocess, sys
 
 G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
@@ -123,17 +123,4 @@ else:
         print(f'    {dot} {G}{r["name"]:<18}{R} {D}{r["ip"]:<15} {r["os"]:<7}{R}'
               f'{"" if r["online"] else D + "offline" + R}{tag}')
 
-ex = managed[0]["alias"] if managed else (manual[0]["alias"] if manual else "NAME")
-def tip(cmd, what):
-    print(f"    {G}{cmd:<26}{R}{D}{what}{R}")
-print(f"\n  {B}Cheat sheet{R}")
-tip(f"ssh {ex}", "log in — no password")
-tip(f"ssh {ex} uptime", "run one command there, come straight back")
-tip(f"scp file {ex}:~/", f"copy a file there   ·   scp {ex}:~/file .   copies one back")
-tip("exit", "log out")
-tip("sys ssh", "this list, live: who you can reach, who is online")
-if shutil.which("tailscale"):
-    tip("tailscale status", f"the tailnet from Tailscale itself   ·   tailscale ping {ex}")
-tip("sys sync", "also applies config/ssh/access here — new keys, new machines")
-tip("sys ssh harden", "turn password logins off on this machine, keys only — optional")
 print(f"\n  {D}Who may log in where: config/ssh/access in the repo. Edit it, sys push, then sys sync on each machine.{R}\n")
