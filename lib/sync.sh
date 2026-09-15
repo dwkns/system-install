@@ -72,6 +72,15 @@ sync_install() {
   return 0
 }
 
+# Push commits that already exist. Never stops at a bare "Username:" prompt: a
+# machine with no GitHub login saved is told what to do, once.
+push_repo() {
+  if run env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then return 0; fi
+  warn "Could not push to GitHub — this machine has no GitHub login saved"
+  note "Once, on this machine:  gh auth login  then  gh auth setup-git  — then sys sync again"
+  return 1
+}
+
 # Copy system -> repo, for files the repo already tracks.
 sync_backup() {
   local repo_rel system_dir repo_dir rel src dst

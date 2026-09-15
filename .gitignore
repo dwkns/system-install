@@ -10,8 +10,8 @@
 # Local state (which one-time steps have run)
 .state/
 
-# Never commit SSH material. `sys ssh` reads ~/.ssh live and stores nothing,
-# but this makes an accidental copy into the repo impossible.
+# Public keys live in config/ssh/keys/*.pub and are meant to be shared. Nothing
+# else from SSH ever goes in: this makes an accidental private key impossible.
 .ssh/
 id_*
 !*.pub.example

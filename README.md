@@ -28,11 +28,9 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys push` | Save this machine's config into the repo and push (aliased to `bsys`) |
 | `sys doctor` | Check everything is installed and signed in |
 | `sys edit` | Open this config folder in VS Code (aliased to `esys`) |
-| `sys ssh` | List hosts you can reach over SSH (read live; nothing stored) |
-| `sys ssh setup` | Make this machine's SSH key and an alias for every machine on the tailnet |
-| `sys ssh user <alias> <account>` | Which account to log in as on that machine (kept locally, not in the repo) |
-| `sys ssh trust <alias>` | Let this machine into another one — asks for its password once, never again |
-| `sys ssh harden` | Keys only on this machine; refuses until at least one key can get in |
+| `sys ssh` | List the machines you can reach over SSH, and what is on your tailnet |
+| `sys ssh apply` | Apply `config/ssh/access` here now (`sys sync` does this anyway) |
+| `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
 | `sys alias` | List your aliases, functions and project starters (aliased to `la`) |
 | `sys mise` | How to use mise and uv |
 | `sys extras` | Install optional extras (Office, Xcode, ollama, duckdb) |
@@ -48,36 +46,39 @@ Full documentation: `man sys`
 
 ## SSH between machines
 
-Every machine makes its own key and never shares the private half. Aliases
-are generated from Tailscale, so `ssh mbp-m5` works from anywhere, not just
-at home. Nothing about hosts or keys is stored in this repo — it is public.
+One file in the repo says who may log in where:
 
-Which machine may log in where is decided by where you run `sys ssh trust`:
-it puts *this* machine's key on the one you name. Run it on the machine that
-should be doing the logging in.
-
-```bash
-sys ssh setup                        # once per machine: key + aliases
-sys ssh trust mini-m1 mbp-ubuntu     # from the laptops: they can reach everything
-sys ssh trust mbp-ubuntu             # from the mini: it can reach the Ubuntu box
-sys ssh harden                       # on each machine, once a key works: no passwords
+```
+# config/ssh/access
+# machine            account   may be logged into from
+dwkns-mbp-m5         dwkns     dwkns-mbp-m1
+dwkns-mbp-m1         dwkns     dwkns-mbp-m5
+dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mbp-ubuntu
+dwkns-mbp-ubuntu     admin     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mini-m1
 ```
 
-`sys sync` refreshes the aliases on any machine that has run `sys ssh setup`,
-so a renamed or new machine shows up everywhere. `sys doctor` reports whether
-this machine has a key and whether password logins are still on.
+Every `sys sync` applies it. On each machine that means: make its own key if
+it has none, share the public half into `config/ssh/keys/` (the one thing
+sync commits by itself — a public key is safe to publish, and it is always the
+machine's own), install the keys of the machines let in here, and write an
+alias for every other machine. So `ssh mini-m1` just works, from anywhere
+Tailscale reaches, as the right account, with no password. Passwords stay on
+as a fallback unless you run `sys ssh harden`.
 
-The Ubuntu box is not a Mac and does not run `sys`. It only has to accept
-keys from the Macs (done from their side) and hold one key for the mini:
+Private keys never leave the machine that made them. Nothing here ever types
+a password or copies a key by hand.
+
+**A new Mac** needs nothing beyond the installer. Its key is shared on the first
+sync that has a GitHub login; if it has none yet, setup says so and
+`gh auth login` once fixes it. Add the new machine to `config/ssh/access` on
+any machine and `sys push`; every other machine follows on its next sync.
+
+**The Ubuntu box** does not run `sys`. It runs one command instead, once to
+set up and again whenever a machine is added:
 
 ```bash
-ssh-keygen -t ed25519 -a 100 -N "" -C "$USER@$(hostname -s)" -f ~/.ssh/id_ed25519
-ssh-copy-id -i ~/.ssh/id_ed25519.pub dwkns@dwkns-mini-m1   # MagicDNS name, no alias needed
+curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/bin/ssh-access | bash
 ```
-
-Once its own logins work by key, drop `PasswordAuthentication no` and
-`KbdInteractiveAuthentication no` into `/etc/ssh/sshd_config.d/00-keys-only.conf`
-and run `sudo systemctl restart ssh`.
 
 ## Starting over
 
@@ -111,6 +112,10 @@ man/man1/sys.1               man page (`man sys`)
 lib/common.sh                colours, logging, helpers
 lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, App Store, macOS, the Dock
+lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access
+bin/ssh-access               the one command for a machine that does not run sys
+config/ssh/access            who may log in where, and as which account
+config/ssh/keys/             each machine's public key, shared by sys sync
 dotfiles/                    copied into ~
 config/mas-apps.txt          App Store app IDs
 config/input                 keyboard and trackpad, applied on every sync

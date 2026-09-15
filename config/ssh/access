@@ -1,0 +1,12 @@
+# Who may log in where, and as which account. Applied by every `sys sync`.
+#
+#   machine            account   may be logged into from
+#
+# Names are each machine's hostname. Aliases drop the shared "dwkns-" so
+# `ssh mini-m1` reaches dwkns-mini-m1. Public keys live in keys/NAME.pub and
+# are shared automatically; private keys never leave their machine.
+
+dwkns-mbp-m5         dwkns     dwkns-mbp-m1
+dwkns-mbp-m1         dwkns     dwkns-mbp-m5
+dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mbp-ubuntu
+dwkns-mbp-ubuntu     admin     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mini-m1

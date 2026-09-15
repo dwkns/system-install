@@ -17,11 +17,9 @@ sys — system configuration
   sys push      Save this machine's config into the repo and push
   sys doctor    Check that everything is where it should be
   sys edit      Open this config folder in VS Code
-  sys ssh       List the hosts you can reach over SSH
-  sys ssh setup           Make this machine's key and aliases for the tailnet
-  sys ssh user <alias> <account>  Which account to log in as on that machine
-  sys ssh trust <alias>…  Let this machine into another one (asks its password once)
-  sys ssh harden          Keys only on this machine — no more password logins
+  sys ssh       List the machines you can reach over SSH
+  sys ssh apply           Apply config/ssh/access here now (sync does this anyway)
+  sys ssh harden          Keys only on this machine — optional, passwords stay on otherwise
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
@@ -130,7 +128,7 @@ HEADSUP
       run_once hostname asked prompt_machine_name
     fi
     step "🔐" "Turning on Remote Login"      enable_remote_login
-    step "🔑" "Making an SSH key and aliases" ssh_setup
+    step "🔑" "SSH key and access"             ssh_apply
     step "📺" "Turning on Screen Sharing"    enable_screen_sharing
     if [[ "$DO_MACOS" == "1" ]]; then
       step "🍎" "Applying macOS defaults" apply_macos_defaults
@@ -180,12 +178,12 @@ HEADSUP
           if ! run git -C "$ROOT_DIR" pull --rebase --quiet; then
             die "Rebase hit a conflict. Resolve it in $ROOT_DIR, then run sys sync again."
           fi
-          run git -C "$ROOT_DIR" push --quiet && ok "Pushed $ahead commit(s)"
+          push_repo && ok "Pushed $ahead commit(s)"
         elif [[ "$behind" -gt 0 ]]; then
           run git -C "$ROOT_DIR" pull --ff-only --quiet || die "Could not pull. Check $ROOT_DIR."
           doing "Pulled $behind commit(s)"
         elif [[ "$ahead" -gt 0 ]]; then
-          run git -C "$ROOT_DIR" push --quiet && ok "Pushed $ahead commit(s)"
+          push_repo && ok "Pushed $ahead commit(s)"
         fi
       fi
     fi
@@ -217,9 +215,10 @@ HEADSUP
     # Every sync, not just when something changed: quick, and it is what
     # keeps typing and clicking identical across machines.
     [[ "$DO_MACOS" == "1" ]] && apply_input_settings
-    # Refresh the SSH aliases from the tailnet, but only once `sys ssh setup`
-    # has been run here: a machine that has not opted in is left alone.
-    [[ -f "$SSH_ALIASES" ]] && ssh_write_aliases quiet || true
+    # SSH access from config/ssh/access: this machine's key shared, the keys
+    # it lets in installed, an alias for every other machine. Quiet unless
+    # something changed.
+    ssh_apply quiet
 
     if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "$brew_changed" == "0" && "${FORCE:-0}" != "1" ]]; then
       ok "Already up to date — nothing to apply"
@@ -296,11 +295,12 @@ HEADSUP
       else row "🛒" "App Store" "$(bad "not signed in")"; issues=1; fi
     fi
 
-    if ssh_has_key; then
-      n="$(ssh_trusted_count)"
-      row "🔑" "SSH key" "$(good present) ${DIM}$n machine(s) can log in here${RESET}"
+    if ! ssh_has_key; then
+      row "🔑" "SSH key" "$(bad "none") ${DIM}sys sync makes one${RESET}"; issues=1
+    elif ssh_shared; then
+      row "🔑" "SSH key" "$(good shared) ${DIM}$(ssh_trusted_count) machine(s) let in here${RESET}"
     else
-      row "🔑" "SSH key" "$(bad "none") ${DIM}sys ssh setup${RESET}"; issues=1
+      row "🔑" "SSH key" "$(bad "not shared yet") ${DIM}sys sync — may need a GitHub login once${RESET}"; issues=1
     fi
     # Passwords staying on is a choice, not a problem: never flagged.
     if ssh_keys_only; then
@@ -399,14 +399,9 @@ HEADSUP
   ssh)
     case "${ARGS[0]:-}" in
       "")      "$ROOT_DIR/bin/ssh-hosts" ;;
-      setup)   ssh_setup ;;
+      apply)   ssh_apply ;;
       harden)  ssh_harden ;;
-      user)    ssh_user "${ARGS[1]:-}" "${ARGS[2]:-}" ;;
-      trust)
-        [[ ${#ARGS[@]} -gt 1 ]] || die "Which machine? sys ssh trust <alias> — 'sys ssh' lists them"
-        ssh_trust "${ARGS[@]:1}"
-        ;;
-      *) die "Unknown: sys ssh $ARG — try setup, user <alias> <account>, trust <alias> or harden" ;;
+      *) die "Unknown: sys ssh $ARG — try apply or harden" ;;
     esac
     ;;
 

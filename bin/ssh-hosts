@@ -1,33 +1,31 @@
 #!/usr/bin/env python3
-"""List the hosts this machine can reach over SSH.
+"""List the machines this one can reach over SSH.
 
-Everything is read live from the machine — ~/.ssh/config and the Tailscale
-daemon — so nothing about your hosts is ever stored in this repo.
-
-    ssh-hosts             the listing
-    ssh-hosts --generate  print an ssh_config with one alias per tailnet
-                          machine (what `sys ssh setup` writes to
-                          ~/.ssh/config.d/sys); exits 1 if Tailscale is
-                          unavailable
+Read live from the machine — ~/.ssh/config (following Include lines) and the
+Tailscale daemon. Entries that sys wrote from config/ssh/access are listed
+first; anything hand-written in ~/.ssh/config follows, and is flagged when its
+address is not a machine on your tailnet.
 """
 import glob, json, os, pathlib, subprocess, sys
 
 G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
+MANAGED = SSH_DIR / "config.d" / "sys"
 
 def rule(title, emoji):
     line = "─" * 56
     print(f"\n{D}{line}{R}\n {emoji}  {B}{title}{R}\n{D}{line}{R}\n")
 
-def ssh_config_hosts(path=SSH_DIR / "config", seen=None):
+def ssh_config_hosts(path=SSH_DIR / "config", seen=None, by_alias=None):
     """Host blocks, ignoring wildcards. Include lines are followed, relative
-    to ~/.ssh, so generated aliases in config.d/ are listed too."""
+    to ~/.ssh. A line naming several aliases (a shared-settings block) applies
+    to each; the first value for a setting wins, as in ssh itself."""
     seen = seen if seen is not None else set()
+    by_alias = by_alias if by_alias is not None else {}
     if not path.is_file() or path in seen:
         return []
     seen.add(path)
     hosts, cur = [], []
-    by_alias = {}
     for raw in path.read_text(errors="replace").splitlines():
         line = raw.strip()
         if not line or line.startswith("#"):
@@ -41,25 +39,21 @@ def ssh_config_hosts(path=SSH_DIR / "config", seen=None):
                 if not os.path.isabs(pattern):
                     pattern = str(SSH_DIR / pattern)
                 for inc in sorted(glob.glob(pattern)):
-                    for h in ssh_config_hosts(pathlib.Path(inc), seen):
-                        if h["alias"] not in by_alias:
-                            by_alias[h["alias"]] = h
-                            hosts.append(h)
+                    hosts.extend(ssh_config_hosts(pathlib.Path(inc), seen, by_alias))
             cur = []
         elif key == "host":
-            # A line naming several aliases (a shared-settings block) applies
-            # to each of them; an alias seen before keeps its existing row.
             cur = []
             for alias in val.split():
                 if "*" in alias or "?" in alias:
                     continue
                 if alias not in by_alias:
-                    by_alias[alias] = {"alias": alias, "hostname": "", "user": "", "port": ""}
+                    by_alias[alias] = {"alias": alias, "hostname": "", "user": "", "port": "",
+                                       "managed": path == MANAGED}
                     hosts.append(by_alias[alias])
                 cur.append(by_alias[alias])
         elif cur and key in ("hostname", "user", "port"):
             for h in cur:
-                h[key] = h[key] or val      # first value wins, as in ssh itself
+                h[key] = h[key] or val
     return hosts
 
 def tailnet():
@@ -79,7 +73,6 @@ def tailnet():
             rows.append({
                 # DNSName is the MagicDNS name; HostName can be "localhost" on phones.
                 "name": dns.split(".")[0] if dns else (p.get("HostName") or "?"),
-                "dns": dns,
                 "ip": ips[0] if ips else "",
                 "os": p.get("OS") or "",
                 "online": bool(p.get("Online")),
@@ -88,60 +81,36 @@ def tailnet():
         return sorted(rows, key=lambda r: (not r["online"], r["name"]))
     return None
 
-def alias_for(name, user):
-    """dwkns-mbp-m5 -> mbp-m5: the machine-naming convention minus the owner."""
-    prefix = f"{user}-"
-    short = name[len(prefix):] if name.startswith(prefix) and len(name) > len(prefix) else name
-    return short
-
-def generate():
-    net = tailnet()
-    if not net:
-        print("Tailscale is not running or not signed in", file=sys.stderr)
-        return 1
-    user = os.environ.get("USER") or os.getlogin()
-    machines = [r for r in net if not r["self"] and r["dns"] and r["os"] in ("macOS", "linux")]
-    if not machines:
-        print("No other Macs or Linux machines on the tailnet", file=sys.stderr)
-        return 1
-    aliases = {}
-    for r in sorted(machines, key=lambda r: r["name"]):
-        a = alias_for(r["name"], user)
-        aliases[a if a not in aliases else r["name"]] = r
-    out = ["# Written by `sys ssh setup` from your tailnet. Do not edit — re-run to refresh.",
-           "# Hand-written hosts belong in ~/.ssh/config, which includes this file.", ""]
-    for a, r in aliases.items():
-        out += [f"Host {a}", f"  HostName {r['dns']}", ""]
-    # No User line: the account differs per machine and is set with
-    # `sys ssh user <alias> <account>`, which writes config.d/users.
-    out += [f"Host {' '.join(aliases)}",
-            "  IdentityFile ~/.ssh/id_ed25519",
-            "  IdentitiesOnly yes",
-            "  ServerAliveInterval 30",
-            "  ControlMaster auto",
-            "  ControlPath ~/.ssh/cm-%C",
-            "  ControlPersist 10m"]
-    print("\n".join(out))
-    return 0
-
-if "--generate" in sys.argv[1:]:
-    sys.exit(generate())
-
 cfg = ssh_config_hosts()
+net = tailnet()
+known = {r["name"] for r in net} if net else set()
+
 rule("SSH hosts", "🔌")
 
-if cfg:
-    print(f"  {B}From ~/.ssh/config{R}")
-    for h in cfg:
-        target = h["hostname"] or h["alias"]
-        who = f'{h["user"]}@' if h["user"] else ""
-        port = f' {D}port {h["port"]}{R}' if h["port"] else ""
-        print(f'    {G}{h["alias"]:<14}{R} {D}ssh {who}{target}{R}{port}')
+def show(h):
+    target = h["hostname"] or h["alias"]
+    who = f'{h["user"]}@' if h["user"] else ""
+    port = f' {D}port {h["port"]}{R}' if h["port"] else ""
+    flag = ""
+    if known and target.split(".")[0] not in known:
+        flag = f'  {Y}not on your tailnet — stale?{R}'
+    print(f'    {G}{h["alias"]:<14}{R} {D}ssh {who}{target}{R}{port}{flag}')
+
+managed = [h for h in cfg if h["managed"]]
+manual = [h for h in cfg if not h["managed"]]
+if managed:
+    print(f"  {B}From config/ssh/access{R}  {D}(sys sync keeps these current){R}")
+    for h in managed:
+        show(h)
     print()
 else:
-    print(f"  {D}No Host entries in ~/.ssh/config — sys ssh setup makes them{R}\n")
+    print(f"  {D}Nothing from config/ssh/access yet — sys sync sets it up{R}\n")
+if manual:
+    print(f"  {B}Hand-written in ~/.ssh/config{R}")
+    for h in manual:
+        show(h)
+    print()
 
-net = tailnet()
 if net is None:
     print(f"  {D}Tailscale not installed — no tailnet devices to list{R}")
 elif not net:
@@ -154,5 +123,5 @@ else:
         print(f'    {dot} {G}{r["name"]:<18}{R} {D}{r["ip"]:<15} {r["os"]:<7}{R}'
               f'{"" if r["online"] else D + "offline" + R}{tag}')
 
-print(f'\n  {D}Read live from this machine. Nothing here is stored in the repo.{R}')
-print(f'  {D}sys ssh setup · sys ssh trust <alias> · sys ssh harden{R}\n')
+print(f'\n  {D}Who may log in where: config/ssh/access in the repo. Edit it, sys push, then sys sync everywhere.{R}')
+print(f'  {D}sys ssh apply · sys ssh harden (optional){R}\n')
