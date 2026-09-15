@@ -49,6 +49,35 @@ enable_remote_login() {
   fi
 }
 
+# Screen Sharing on, the same way: enable the launchd service and load it.
+enable_screen_sharing() {
+  if nc -z -G 2 127.0.0.1 5900 >/dev/null 2>&1; then
+    note "Screen Sharing: already on"
+  else
+    doing "Turning on Screen Sharing"
+    run sudo_run launchctl enable system/com.apple.screensharing
+    run sudo_run launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null || true
+  fi
+
+  if dseditgroup -o read com.apple.access_screensharing >/dev/null 2>&1 &&
+     ! dseditgroup -o checkmember -m "$USER" com.apple.access_screensharing >/dev/null 2>&1; then
+    run sudo_run dseditgroup -o edit -a "$USER" -t user com.apple.access_screensharing
+  fi
+
+  [[ "${DRY_RUN:-0}" == "1" ]] && return 0
+  local i
+  for i in 1 2 3 4 5; do
+    nc -z -G 2 127.0.0.1 5900 >/dev/null 2>&1 && break
+    sleep 1
+  done
+  if nc -z -G 2 127.0.0.1 5900 >/dev/null 2>&1; then
+    ok "Screen Sharing on — vnc://$(scutil --get LocalHostName 2>/dev/null).local"
+  else
+    warn "Screen Sharing did not come on — System Settings ▸ General ▸ Sharing ▸ Screen Sharing"
+    return 1
+  fi
+}
+
 # ── One password for the whole run ───────────────────────────────────────────
 # A cached sudo login keeps getting lost: Homebrew's installer clears it when
 # it exits, and casks run sudo of their own. So instead of caching, ask once,

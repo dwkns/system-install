@@ -15,10 +15,13 @@ success when every screen is really showing the new colour.
 
   set-desktop-colour            apply
   set-desktop-colour --dry-run  show what would be applied
+  set-desktop-colour --check    is every screen showing it? exit 0 yes,
+                                1 no, 2 no screens to check (e.g. over SSH)
 """
 import json, os, pathlib, struct, subprocess, sys, time, zlib
 
 DRY = "--dry-run" in sys.argv
+CHECK = "--check" in sys.argv
 root = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
 cfg = root / "config" / "desktop-colour"
 line = next((l for l in cfg.read_text().splitlines() if l.strip() and not l.lstrip().startswith("#")), "")
@@ -46,12 +49,13 @@ def write_png(path, rgb, size=64):
 # One file per colour: macOS caches wallpaper by path, so reusing a single name
 # for a different colour can leave the old colour on screen.
 folder = pathlib.Path.home() / "Library/Application Support/system-config"
-folder.mkdir(parents=True, exist_ok=True)
-image = folder / f"desktop-{hexcol[1:].lower()}.png"
-write_png(image, rgb8)
-for old in folder.glob("desktop-*.png"):
-    if old != image:
-        old.unlink()
+image =folder / f"desktop-{hexcol[1:].lower()}.png"
+if not CHECK:
+    folder.mkdir(parents=True, exist_ok=True)
+    write_png(image, rgb8)
+    for old in folder.glob("desktop-*.png"):
+        if old != image:
+            old.unlink()
 
 set_script = f"""
 ObjC.import("AppKit");
@@ -88,6 +92,14 @@ def jxa(src):
         return {k: int(v) for k, v in json.loads(res.stdout.strip()).items()}
     except (ValueError, TypeError):
         sys.exit(f"Could not set the desktop colour: {res.stderr.strip() or res.stdout.strip()}")
+
+if CHECK:
+    seen = jxa(check_script)
+    if seen["screens"] == 0:
+        print("no screens to check")
+        sys.exit(2)
+    print(f"{hexcol} on {seen['shown']} of {seen['screens']} screen(s)")
+    sys.exit(0 if seen["shown"] == seen["screens"] else 1)
 
 done = jxa(set_script)
 if done["screens"] == 0:

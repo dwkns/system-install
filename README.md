@@ -15,7 +15,7 @@ handful of steps that need a human (signing into things, granting Full Disk
 Access, logging out).
 
 It asks for your password once, at the start, and never again during the run.
-It turns on Remote Login, so you can `ssh` in once it finishes.
+It turns on Remote Login and Screen Sharing, so you can `ssh` or `vnc://` in once it finishes.
 It names the Mac `dwkns-<type>-<chip>` — for example `dwkns-mbp-m1` or
 `dwkns-mini-m4` — unless you type something else within fifteen seconds. When
 it finishes it opens a fresh shell with the new config loaded.

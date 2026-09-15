@@ -99,7 +99,7 @@ HEADSUP
 
     STARTED=$SECONDS
     header "🚀" "Setting up this Mac"
-    STEP=0; TOTAL=8; FAILED=""
+    STEP=0; TOTAL=9; FAILED=""
     # Output is never piped: buffering would make a slow step look frozen.
     step() {
       local icon="$1" name="$2"; shift 2
@@ -124,6 +124,7 @@ HEADSUP
       run_once hostname asked prompt_machine_name
     fi
     step "🔐" "Turning on Remote Login"      enable_remote_login
+    step "📺" "Turning on Screen Sharing"    enable_screen_sharing
     if [[ "$DO_MACOS" == "1" ]]; then
       step "🍎" "Applying macOS defaults" apply_macos_defaults
       run_once dock "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" configure_dock
@@ -290,6 +291,13 @@ HEADSUP
     else
       row "🚀" "Dock" "${DIM}not set up yet — sys dock${RESET}"
     fi
+
+    colour="$("$ROOT_DIR/bin/set-desktop-colour" --check 2>&1)" && rc=0 || rc=$?
+    case "$rc" in
+      0) row "🎨" "Desktop" "$(good "${colour%% on *}") ${DIM}${colour#* }${RESET}" ;;
+      2) row "🎨" "Desktop" "${DIM}no screen to check (over SSH?)${RESET}" ;;
+      *) row "🎨" "Desktop" "$(bad "not set") ${DIM}${colour} — sys desktop${RESET}"; issues=1 ;;
+    esac
 
     if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
       if [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
