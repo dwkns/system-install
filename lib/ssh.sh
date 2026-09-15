@@ -84,7 +84,8 @@ ssh_trust() {
       ok "$host: key login works — ssh $host"
     else
       # Show what the other side actually said, rather than guessing.
-      local why; why="$($SSH_TEST "$host" true 2>&1 | grep -v '^Warning: Permanently added' | tail -1)"
+      local why   # `|| true`: under set -e a failing substitution would end the script here
+      why="$({ $SSH_TEST "$host" true 2>&1 || true; } | grep -v '^Warning: Permanently added' | tail -1)"
       warn "$host: key login still fails — $why"
       case "$why" in
         *"tailnet policy"*) note "That machine has Tailscale SSH on, which ignores keys. On it: sudo tailscale set --ssh=false" ;;
