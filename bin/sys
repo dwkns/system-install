@@ -6,6 +6,7 @@ export ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/sync.sh"
 source "$ROOT_DIR/lib/setup.sh"
+source "$ROOT_DIR/lib/ssh.sh"
 
 usage() {
   cat <<'USAGE'
@@ -17,6 +18,9 @@ sys — system configuration
   sys doctor    Check that everything is where it should be
   sys edit      Open this config folder in VS Code
   sys ssh       List the hosts you can reach over SSH
+  sys ssh setup           Make this machine's key and aliases for the tailnet
+  sys ssh trust <alias>…  Let this machine into another one (asks its password once)
+  sys ssh harden          Keys only on this machine — no more password logins
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
   sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
@@ -42,6 +46,7 @@ SYS_ARGV=("$@")
 cmd="${1:-}"; [[ $# -gt 0 ]] && shift
 
 DO_BREW=1 DO_MACOS=1 ONLY="" NAME="" ARG=""
+ARGS=()   # every positional argument, in order (ARG is the last one)
 export DRY_RUN="${DRY_RUN:-0}" ASSUME_YES="${ASSUME_YES:-0}"
 
 while [[ $# -gt 0 ]]; do
@@ -54,7 +59,7 @@ while [[ $# -gt 0 ]]; do
     --mas)      ONLY="mas" ;;
     --name)     NAME="${2:-}"; shift ;;
     -*) die "Unknown option: $1" ;;
-    *)  ARG="$1" ;;
+    *)  ARG="$1"; ARGS+=("$1") ;;
   esac
   shift
 done
@@ -99,7 +104,7 @@ HEADSUP
 
     STARTED=$SECONDS
     header "🚀" "Setting up this Mac"
-    STEP=0; TOTAL=9; FAILED=""
+    STEP=0; TOTAL=10; FAILED=""
     # Output is never piped: buffering would make a slow step look frozen.
     step() {
       local icon="$1" name="$2"; shift 2
@@ -124,6 +129,7 @@ HEADSUP
       run_once hostname asked prompt_machine_name
     fi
     step "🔐" "Turning on Remote Login"      enable_remote_login
+    step "🔑" "Making an SSH key and aliases" ssh_setup
     step "📺" "Turning on Screen Sharing"    enable_screen_sharing
     if [[ "$DO_MACOS" == "1" ]]; then
       step "🍎" "Applying macOS defaults" apply_macos_defaults
@@ -138,7 +144,7 @@ HEADSUP
       warn "Finished in $(elapsed $((SECONDS - STARTED))), but these steps had problems:"
       printf '%s' "$FAILED" | tr '|' '\n' | sed '/^$/d;s/^/      /'
     else
-      ok "All 8 steps completed in $(elapsed $((SECONDS - STARTED)))"
+      ok "All $STEP steps completed in $(elapsed $((SECONDS - STARTED)))"
     fi
 
     echo
@@ -210,6 +216,9 @@ HEADSUP
     # Every sync, not just when something changed: quick, and it is what
     # keeps typing and clicking identical across machines.
     [[ "$DO_MACOS" == "1" ]] && apply_input_settings
+    # Refresh the SSH aliases from the tailnet, but only once `sys ssh setup`
+    # has been run here: a machine that has not opted in is left alone.
+    [[ -f "$SSH_ALIASES" ]] && ssh_write_aliases quiet || true
 
     if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "$brew_changed" == "0" && "${FORCE:-0}" != "1" ]]; then
       ok "Already up to date — nothing to apply"
@@ -284,6 +293,20 @@ HEADSUP
     if has_cmd mas; then
       if with_timeout 10 mas list; then row "🛒" "App Store" "$(good reachable)"
       else row "🛒" "App Store" "$(bad "not signed in")"; issues=1; fi
+    fi
+
+    if ssh_has_key; then
+      n="$(ssh_trusted_count)"
+      row "🔑" "SSH key" "$(good present) ${DIM}$n machine(s) can log in here${RESET}"
+    else
+      row "🔑" "SSH key" "$(bad "none") ${DIM}sys ssh setup${RESET}"; issues=1
+    fi
+    if ssh_keys_only; then
+      row "🔐" "sshd" "$(good "keys only")"
+    elif [[ "$(ssh_trusted_count)" -gt 0 ]]; then
+      row "🔐" "sshd" "$(bad "passwords allowed") ${DIM}sys ssh harden${RESET}"; issues=1
+    else
+      row "🔐" "sshd" "${DIM}passwords allowed — trust a key from another machine, then sys ssh harden${RESET}"
     fi
 
     if [[ -e "$ROOT_DIR/.state/dock" ]]; then
@@ -374,7 +397,16 @@ HEADSUP
     ;;
 
   ssh)
-    "$ROOT_DIR/bin/ssh-hosts"
+    case "${ARGS[0]:-}" in
+      "")      "$ROOT_DIR/bin/ssh-hosts" ;;
+      setup)   ssh_setup ;;
+      harden)  ssh_harden ;;
+      trust)
+        [[ ${#ARGS[@]} -gt 1 ]] || die "Which machine? sys ssh trust <alias> — 'sys ssh' lists them"
+        ssh_trust "${ARGS[@]:1}"
+        ;;
+      *) die "Unknown: sys ssh $ARG — try setup, trust <alias> or harden" ;;
+    esac
     ;;
 
   edit)

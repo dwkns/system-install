@@ -128,11 +128,49 @@ alias runs it.
 .B ssh
 List the hosts this Mac can reach over SSH: the Host entries in
 .I ~/.ssh/config
-and the devices on your tailnet, with which are online.
+(following its Include lines) and the devices on your tailnet, with which are online.
 .IP
 Everything is read from the machine at the moment you run it. No hostname,
 address or key is ever written into this repository, which matters because it
 is public.
+.TP
+.B ssh setup
+Make this machine's own ed25519 key in
+.I ~/.ssh/id_ed25519
+if it has none, and write
+.I ~/.ssh/config.d/sys
+with one alias per Mac or Linux machine on the tailnet: the machine name minus
+your username, so
+.B dwkns\-mbp\-m5
+becomes
+.BR mbp\-m5 .
+A single
+.B Include config.d/*
+line is added at the top of
+.IR ~/.ssh/config ;
+the rest of that file is left alone. Setup runs this for you, and
+.B sys sync
+rewrites the aliases on any machine that has run it, so renames flow through.
+.IP
+The key has no passphrase, deliberately: the disk is encrypted, a headless
+machine has nobody to type one, and the point is that
+.B ssh mini\-m1
+just works. The private key never leaves the machine that made it.
+.TP
+.BI "ssh trust " alias ...
+Let this machine log in to another one: copies this machine's public key into
+that machine's
+.IR ~/.ssh/authorized_keys ,
+asking for its password once, then checks that a key login works. Run it on
+the machine that should be doing the logging in. Which machine may reach
+which is decided entirely by where you run this.
+.TP
+.B ssh harden
+Turn off password logins on this machine by writing
+.I /etc/ssh/sshd_config.d/00\-sys\-keys\-only.conf
+and restarting sshd. Refuses to run until at least one key is in
+.IR ~/.ssh/authorized_keys ,
+so a headless machine cannot lock itself out. Open sessions are not dropped.
 .TP
 .B alias
 List your aliases, functions and project starters, grouped by section, read
