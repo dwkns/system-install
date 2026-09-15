@@ -83,7 +83,14 @@ ssh_trust() {
     if $SSH_TEST "$host" true 2>/dev/null; then
       ok "$host: key login works — ssh $host"
     else
-      warn "$host: key login still fails. Is Remote Login on there, and was the password right?"
+      # Show what the other side actually said, rather than guessing.
+      local why; why="$($SSH_TEST "$host" true 2>&1 | grep -v '^Warning: Permanently added' | tail -1)"
+      warn "$host: key login still fails — $why"
+      case "$why" in
+        *"tailnet policy"*) note "That machine has Tailscale SSH on, which ignores keys. On it: sudo tailscale set --ssh=false" ;;
+        *"Permission denied"*) note "The key did not get on. Is Remote Login on there, and was the password right?" ;;
+        *"Connection refused"*|*"timed out"*) note "Nothing is listening for SSH there, or it is asleep." ;;
+      esac
       rc=1
     fi
   done
