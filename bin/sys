@@ -14,6 +14,7 @@ sys — system configuration
 
   sys setup       Set up this machine from scratch
   sys sync        Pull the latest config and apply it here (apps, dotfiles, Dock, SSH…)
+  sys sync all    The same here, then on every machine this one may log into
   sys push        Save this machine's config into the repo and push
   sys doctor      Check that everything is where it should be
   sys ssh         List the machines you can reach over SSH
@@ -170,6 +171,7 @@ HEADSUP
     if ! is_macos; then
       ssh_apply quiet
       ok "Done"
+      [[ "$ARG" == "all" ]] && ssh_sync_others
       exit 0
     fi
 
@@ -220,6 +222,12 @@ HEADSUP
       else
         ok "Done — run 'exec zsh' (or rp) to reload your shell"
       fi
+    fi
+    # sys sync all: now the other machines, each over ssh.
+    if [[ "$ARG" == "all" ]]; then
+      ssh_sync_others || true
+    elif [[ -n "$ARG" ]]; then
+      die "Unknown: sys sync $ARG — try sys sync, or sys sync all"
     fi
     ;;
 

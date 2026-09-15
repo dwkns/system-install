@@ -255,6 +255,38 @@ install_terminfo() {
   return 0
 }
 
+# `sys sync all`: after syncing here, run sys sync on every machine this one
+# may log into, per the access file, one after another. Unreachable machines
+# are skipped with a note; the rest report as themselves.
+ssh_sync_others() {
+  local me m a rc=0 targets
+  me="$(ssh_machine)"
+  targets="$(ssh_access_lines | awk -v me="$me" '{for(i=3;i<=NF;i++) if($i==me) print $1}')"
+  [[ -n "$targets" ]] || { note "config/ssh/access lets $me into no other machine"; return 0; }
+  for m in $targets; do
+    a="$(ssh_alias "$m")"
+    header "🔄" "sys sync on $a" "" "$CYAN"
+    if ! "$ROOT_DIR/bin/ssh-reach" "$m" && ! "$ROOT_DIR/bin/ssh-reach" "$m.local"; then
+      note "$a is not reachable right now — skipped"; continue
+    fi
+    if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: ssh $a sys sync"; continue
+    fi
+    # -t: a real terminal there, so a one-time GitHub sign-in can show its code.
+    if ssh -t -o BatchMode=yes -o ConnectTimeout=8 "$a" \
+         'test -x ~/.system-config/bin/sys && exec ~/.system-config/bin/sys sync; echo "sys is not installed here"; exit 99'; then
+      :
+    else
+      case $? in
+        99)  warn "$a: sys is not installed there yet — run its setup command on it once" ;;
+        255) warn "$a: could not log in — is this machine let in there?" ;;
+        *)   warn "$a: sys sync had problems there (see above)" ;;
+      esac
+      rc=1
+    fi
+  done
+  return $rc
+}
+
 # Everything, in order. Run by setup and by every sync.
 ssh_apply() {
   local quiet="${1:-}"

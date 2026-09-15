@@ -25,6 +25,7 @@ it finishes it opens a fresh shell with the new config loaded.
 | Command | What it does |
 |---|---|
 | `sys sync` | Pull the latest config and apply it here: apps, dotfiles, Dock, desktop colour, SSH access |
+| `sys sync all` | The same here, then on every machine this one may log into, one after another |
 | `sys push` | Save this machine's config into the repo and push |
 | `sys doctor` | Check everything is installed and signed in |
 | `sys ssh` | List the machines you can reach over SSH |
