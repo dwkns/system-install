@@ -1,4 +1,4 @@
-.TH SYS 1 "September 2026" "system-config" "User Commands"
+.TH SYS 1 2026-09-15 "system-config" "User Commands"
 .SH NAME
 sys \- set up, sync and check this Mac
 .SH SYNOPSIS
@@ -13,7 +13,7 @@ It sets up a new machine, keeps an existing one in step with the repository,
 saves local changes back, and reports on what is installed.
 .PP
 The repository is the source of truth. Anything it tracks \(em dotfiles, colour
-palettes, Sublime Text settings \(em is mirrored onto the machine by
+palettes, editor settings, the Dock, SSH access \(em is mirrored onto the machine by
 .BR "sys sync" ,
 and mirrored back by
 .BR "sys push" .
@@ -40,9 +40,7 @@ Safe to re-run. Use
 to run only that part.
 .TP
 .B sync
-Pull the latest configuration and apply it here. Equivalent to the
-.B usys
-alias.
+Pull the latest configuration and apply it here.
 .IP
 If the pull updates
 .B sys
@@ -60,18 +58,21 @@ machine's own SSH public key, which it shares into
 by itself; see
 .BR ssh .
 .IP
-If the pull changed the
-.IR Brewfile ,
-packages are installed too. Nothing is ever uninstalled: removing a line from
-the
+If the
 .I Brewfile
-stops a new machine getting it, but leaves existing machines alone.
+differs from the one last installed here, the added and removed lines are
+shown and the missing packages installed — as you, with no stored password;
+an app that truly needs an admin password asks for it itself. Nothing is ever
+uninstalled: removing a line stops a new machine getting it, but leaves
+existing machines alone. The Dock and desktop colour are rebuilt the same
+way, whenever
+.I config/dock
+or
+.I config/desktop-colour
+changes.
 .TP
 .B push
 Save this machine's configuration into the repository, commit and push.
-Equivalent to the
-.B bsys
-alias.
 .TP
 .B extras
 Install the optional extras listed in
@@ -81,24 +82,6 @@ and
 Never run by
 .BR "sys setup" ;
 these are large or occasional installs you ask for explicitly.
-.TP
-.B dock
-Rebuild the Dock from
-.IR config/dock ,
-in order. Applications not installed on this machine are skipped. Setup does this only
-if it has not already succeeded on this machine, so a Dock you have since
-rearranged is never overwritten; this command forces it.
-.PP
-Steps like this record that they ran in
-.IR .state/ ,
-one file per feature, holding a fingerprint of the config they last succeeded
-with. The record is written only when the step actually did its work, so a
-half finished install picks up where it left off; and editing the config makes
-the step run again on the next
-.BR "sys setup" .
-.B sys push
-records the current Dock back to
-.IR config/dock .
 .TP
 .B remove
 Undo everything setup installed: Homebrew and its packages, mise toolchains,
@@ -113,7 +96,9 @@ straight away.
 .TP
 .BR hostname " [" \fIname\fR ]
 Set the computer name. With a name, sets it directly; without one, shows the
-current name and asks, falling back to a default after fifteen seconds.
+current name and asks, falling back after fifteen seconds to
+.IR dwkns\-type\-chip ,
+such as dwkns\-mbp\-m1 or dwkns\-mini\-m4. Setup asks the same question once.
 .IP
 All three of
 .IR ComputerName ,
@@ -124,59 +109,12 @@ are set to the same value, lowercased, with spaces turned to hyphens and other
 punctuation dropped, since scutil rejects those. "Dazza's Mac Mini" becomes
 dazzas\-mac\-mini everywhere.
 .TP
-.B edit
-Open this configuration folder in VS Code. The
-.B esys
-alias runs it.
-.TP
 .B ssh
 List the machines this one can reach over SSH: the aliases sys wrote from
 .IR config/ssh/access ,
 then anything hand-written in
 .I ~/.ssh/config
 (flagged when its address is not on your tailnet). Read live from the machine.
-.TP
-.B tailscale
-List the devices on your tailnet and which are online.
-.PP
-Every
-.B sys sync
-also applies
-.IR config/ssh/access .
-It makes this machine's ed25519 key in
-.I ~/.ssh/id_ed25519
-if it has none; shares the public half as
-.IR config/ssh/keys/NAME.pub ,
-committing and pushing that one file (the only thing sync ever commits by
-itself); installs the keys of the machines the access file lets in here, in a
-marked block of
-.I ~/.ssh/authorized_keys
-that leaves anything outside the block alone; and writes
-.I ~/.ssh/config.d/sys
-with an alias and account for every other machine, so
-.B ssh mini\-m1
-reaches
-.B dwkns\-mini\-m1
-as the right user. Each alias tries the Tailscale name first and, if that does
-not answer on port 22 within two seconds, falls back to
-.IR NAME.local ,
-so it works on the home network with Tailscale off and from anywhere with it
-on. A single
-.B Include config.d/*
-line is added at the top of
-.IR ~/.ssh/config ;
-the rest of that file is yours.
-.IP
-The key has no passphrase, deliberately: the disk is encrypted, a headless
-machine has nobody to type one, and the point is that ssh just works. The
-private key never leaves the machine that made it. Nothing here ever types a
-password.
-.IP
-Sharing the key needs a GitHub login on this machine. A machine without one
-is signed in on the spot through
-.BR gh (1),
-once, in the browser, and the push is retried; it is never stopped at a bare
-username prompt.
 .TP
 .B ssh harden
 Optional. Turn off password logins on this machine by writing
@@ -185,69 +123,26 @@ and restarting sshd. Refuses to run until at least one machine is let in
 here, so a headless machine cannot lock itself out. Open sessions are not
 dropped. Passwords stay on unless you run this.
 .TP
-.B alias
-List your aliases, functions and project starters, grouped by section, read
-straight from
-.IR dotfiles/.aliases .
-Also available as the
-.B la
-alias.
-.TP
-.B mise
-Print a short guide to using
-.BR mise (1)
-for language versions, and
-.BR uv (1)
-for Python packages.
-.TP
 .B doctor
 Check that the expected tools are installed, report language versions, whether
-the App Store is reachable, and whether
-the repository has uncommitted changes. Changes nothing.
+the App Store is reachable, whether this machine's SSH keys are shared and
+who is let in, whether sshd still allows passwords, whether the Dock and
+desktop colour match their config, and whether the repository has
+uncommitted changes. Changes nothing.
 .SH OPTIONS
 .TP
 .B \-\-dry\-run
-Show what would happen without changing anything. Accepted by every command.
+Show what would happen without changing anything. Accepted by every command,
+and leaves no "already done" marks behind.
 .TP
 .BR \-\-yes ", " \-y
-Do not ask for confirmation.
-.TP
-.BI \-\-name " NAME"
-.RB ( setup )
-Set the computer, host and local host name, without being asked. Without it,
-setup asks once per machine and falls back to a name built from the machine after fifteen seconds:
-.IR dwkns\-type\-chip ,
-such as dwkns\-mbp\-m1 or dwkns\-mini\-m4.
-.PP
-All three names are set to the same value, lowercased, with spaces turned to
-hyphens and other punctuation dropped, since scutil rejects those. "Dazza's
-Mac Mini" becomes dazzas-mac-mini everywhere. Requires
-.BR sudo (8).
-.TP
-.B \-\-no\-brew
-.RB ( setup )
-Skip Homebrew and packages.
-.TP
-.B \-\-no\-macos
-.RB ( setup ", " sync )
-Skip macOS defaults.
-.TP
-.B \-\-mas
-.RB ( setup )
-Only install App Store apps. Setup itself asks before doing this, since the
-App Store needs you signed in, and skips it if not answered within fifteen
-seconds.
+Do not ask for confirmation
+.RB ( remove ).
 .TP
 .B \-\-force
 .RB ( sync )
-Reinstall every tracked file, including those already identical to the
-repository, and apply the macOS defaults regardless. Without it, a sync that
-finds nothing changed does nothing at all.
-.TP
-.B \-\-dryrun
-.RB ( remove )
-Show what would be removed and stop. Same as
-.BR \-\-dry\-run .
+Reinstall every tracked file, run the Brewfile, and rebuild the Dock and
+desktop colour even when nothing has changed.
 .SH RELOADING YOUR SHELL
 .B sys
 runs as its own process, so it cannot reload the shell you started it from.

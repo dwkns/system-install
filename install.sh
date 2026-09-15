@@ -55,13 +55,9 @@ fi
 # here as well would only mean typing it twice.
 
 # ── The repo ─────────────────────────────────────────────────────────────────
-if [[ -d "$ROOT_DIR/.git" ]]; then
-  say "Updating $ROOT_DIR"
-  # Never abort the install over this — a local edit or a diverged branch
-  # should not stop setup running with the copy already on disk.
-  git -C "$ROOT_DIR" pull --ff-only 2>/dev/null \
-    || echo "    Could not update; continuing with the existing copy."
-else
+# Only cloned when missing: sys setup itself pulls the latest and restarts
+# if that changed sys, so pulling here too would only do the work twice.
+if [[ ! -d "$ROOT_DIR/.git" ]]; then
   say "Cloning into $ROOT_DIR"
   if ! git clone --quiet "$REPO" "$ROOT_DIR"; then
     echo "Could not clone $REPO — check your network and try again."

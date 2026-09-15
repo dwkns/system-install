@@ -17,65 +17,48 @@ install_homebrew() {
   [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 }
 
-# Remote Login (SSH) on, for this user. systemsetup -setremotelogin needs Full
-# Disk Access on current macOS, which a fresh terminal does not have, so this
-# talks to launchd directly: enable the sshd service and load it.
-enable_remote_login() {
-  if nc -z -G 2 127.0.0.1 22 >/dev/null 2>&1; then
-    note "Remote Login: already on"
+# Turn on a sharing service by talking to launchd directly — systemsetup
+# needs Full Disk Access on current macOS, which a fresh terminal does not
+# have — and make sure this user is allowed to use it.
+#   enable_service <label> <launchd name> <plist> <port> <access group> <how to reach it>
+enable_service() {
+  local label="$1" name="$2" plist="$3" port="$4" group="$5" reach="$6"
+  if nc -z -G 2 127.0.0.1 "$port" >/dev/null 2>&1; then
+    note "$label: already on"
   else
-    doing "Turning on Remote Login"
-    run sudo_run launchctl enable system/com.openssh.sshd
-    run sudo_run launchctl bootstrap system /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || true
+    doing "Turning on $label"
+    run sudo_run launchctl enable "system/$name"
+    run sudo_run launchctl bootstrap system "$plist" 2>/dev/null || true
   fi
 
-  # If SSH is limited to particular users, make sure this one is included.
-  if dseditgroup -o read com.apple.access_ssh >/dev/null 2>&1 &&
-     ! dseditgroup -o checkmember -m "$USER" com.apple.access_ssh >/dev/null 2>&1; then
-    run sudo_run dseditgroup -o edit -a "$USER" -t user com.apple.access_ssh
+  # If the service is limited to particular users, make sure this one is included.
+  if dseditgroup -o read "$group" >/dev/null 2>&1 &&
+     ! dseditgroup -o checkmember -m "$USER" "$group" >/dev/null 2>&1; then
+    run sudo_run dseditgroup -o edit -a "$USER" -t user "$group"
   fi
 
   [[ "${DRY_RUN:-0}" == "1" ]] && return 0
   local i
   for i in 1 2 3 4 5; do
-    nc -z -G 2 127.0.0.1 22 >/dev/null 2>&1 && break
+    nc -z -G 2 127.0.0.1 "$port" >/dev/null 2>&1 && break
     sleep 1
   done
-  if nc -z -G 2 127.0.0.1 22 >/dev/null 2>&1; then
-    ok "Remote Login on — ssh $USER@$(scutil --get LocalHostName 2>/dev/null).local"
+  if nc -z -G 2 127.0.0.1 "$port" >/dev/null 2>&1; then
+    ok "$label on — $reach"
   else
-    warn "Remote Login did not come on — System Settings ▸ General ▸ Sharing ▸ Remote Login"
+    warn "$label did not come on — System Settings ▸ General ▸ Sharing ▸ $label"
     return 1
   fi
 }
 
-# Screen Sharing on, the same way: enable the launchd service and load it.
+enable_remote_login() {
+  enable_service "Remote Login" com.openssh.sshd /System/Library/LaunchDaemons/ssh.plist 22 \
+    com.apple.access_ssh "ssh $USER@$(scutil --get LocalHostName 2>/dev/null).local"
+}
+
 enable_screen_sharing() {
-  if nc -z -G 2 127.0.0.1 5900 >/dev/null 2>&1; then
-    note "Screen Sharing: already on"
-  else
-    doing "Turning on Screen Sharing"
-    run sudo_run launchctl enable system/com.apple.screensharing
-    run sudo_run launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null || true
-  fi
-
-  if dseditgroup -o read com.apple.access_screensharing >/dev/null 2>&1 &&
-     ! dseditgroup -o checkmember -m "$USER" com.apple.access_screensharing >/dev/null 2>&1; then
-    run sudo_run dseditgroup -o edit -a "$USER" -t user com.apple.access_screensharing
-  fi
-
-  [[ "${DRY_RUN:-0}" == "1" ]] && return 0
-  local i
-  for i in 1 2 3 4 5; do
-    nc -z -G 2 127.0.0.1 5900 >/dev/null 2>&1 && break
-    sleep 1
-  done
-  if nc -z -G 2 127.0.0.1 5900 >/dev/null 2>&1; then
-    ok "Screen Sharing on — vnc://$(scutil --get LocalHostName 2>/dev/null).local"
-  else
-    warn "Screen Sharing did not come on — System Settings ▸ General ▸ Sharing ▸ Screen Sharing"
-    return 1
-  fi
+  enable_service "Screen Sharing" com.apple.screensharing /System/Library/LaunchDaemons/com.apple.screensharing.plist 5900 \
+    com.apple.access_screensharing "vnc://$(scutil --get LocalHostName 2>/dev/null).local"
 }
 
 # ── One password for the whole run ───────────────────────────────────────────
@@ -162,8 +145,11 @@ install_packages() {
   # here. Without it a sync can cascade into upgrading every app on the
   # machine, which is not what "apply the latest config" should mean.
   run brew bundle install --no-upgrade --file "$ROOT_DIR/Brewfile" || return 1
-  # Record what was installed, so sync knows this Brewfile is satisfied here.
+  # Record what was installed, so sync knows this Brewfile is satisfied here
+  # and can show what changed next time. Not on a dry run.
+  [[ "${DRY_RUN:-0}" == "1" ]] && return 0
   mkdir -p "$ROOT_DIR/.state" && fingerprint "$ROOT_DIR/Brewfile" > "$ROOT_DIR/.state/brewfile"
+  cp "$ROOT_DIR/Brewfile" "$ROOT_DIR/.state/Brewfile.last"
 }
 
 # mise reads dotfiles/.config/mise/config.toml, so dotfiles must be synced first.
@@ -181,14 +167,14 @@ install_app_store_apps() {
   # The App Store needs you signed in, so never assume. Default to no, so an
   # unattended run walks past it rather than stalling on a password prompt.
   if ! ask_timeout 15 n "Install App Store apps? (needs you signed in)"; then
-    note "Skipped — run 'sys setup --mas' once you are signed in."
+    note "Skipped — run 'sys setup' again once you are signed in."
     MAS_SKIPPED=1
     return 0
   fi
 
   local installed
   if ! installed="$(mas list 2>/dev/null)"; then
-    warn "Can't read the App Store — sign in, then: sys setup --mas"
+    warn "Can't read the App Store — sign in, then run sys setup again"
     MAS_SKIPPED=1
     return 0
   fi
@@ -200,7 +186,7 @@ install_app_store_apps() {
     [[ -z "$line" || "$line" == \#* ]] && continue
     id="${line%%[^0-9]*}"
     [[ -n "$id" ]] || continue
-    if printf '%s' "$installed" | awk '{print $1}' | grep -qx "$id"; then
+    if printf '%s\n' "$installed" | awk -v id="$id" '$1==id{f=1} END{exit !f}'; then
       note "already installed: $(printf '%s' "$line" | sed 's/^[0-9]*[[:space:]]*#*[[:space:]]*//')"
     else
       run mas install "$id"
@@ -238,12 +224,13 @@ install_editor_extensions() {
 run_once() {
   local name="$1" fp="$2"; shift 2
   local stamp="$ROOT_DIR/.state/$name"
-  if [[ -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$fp" ]]; then
-    note "$name: already done — skipping ('sys $name' forces it)"
+  if [[ "${FORCE:-0}" != "1" && -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$fp" ]]; then
+    [[ "${RUN_ONCE_NOTE:-0}" == "1" ]] && note "$name: already done — skipping (sys sync --force redoes it)"
     return 0
   fi
   if "$@"; then
-    mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$fp" >"$stamp"
+    # A dry run must not leave a "done" stamp, or the real run skips the step.
+    [[ "${DRY_RUN:-0}" == "1" ]] || { mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$fp" >"$stamp"; }
   else
     note "$name: not done yet, will try again next run"
   fi
@@ -252,7 +239,7 @@ run_once() {
 
 # Fingerprint a file so a change to it re-triggers its once-only step.
 # One file gives the same digest as before, so existing stamps stay valid.
-fingerprint() { cat "$@" 2>/dev/null | shasum -a 256 | cut -d' ' -f1; }
+fingerprint() { { cat "$@" 2>/dev/null || true; } | shasum -a 256 | cut -d' ' -f1; }
 
 # Rebuilds the Dock from config/dock. bin/set-dock writes the whole Dock in
 # one go: separate per-app calls race against cfprefsd and silently lose
@@ -533,7 +520,7 @@ install_extras() {
     [[ -z "$line" || "$line" == \#* ]] && continue
     id="${line%%[^0-9]*}"
     [[ -n "$id" ]] || continue
-    if printf '%s' "$installed" | awk '{print $1}' | grep -qx "$id"; then
+    if printf '%s\n' "$installed" | awk -v id="$id" '$1==id{f=1} END{exit !f}'; then
       note "already installed: $(printf '%s' "$line" | sed 's/^[0-9]*[[:space:]]*#*[[:space:]]*//')"
     else
       run mas install "$id"
@@ -734,7 +721,7 @@ print_manual_steps() {
 
 
   [[ "${MAS_SKIPPED:-0}" == "1" ]] && \
-    todo+=("🛒  App Store apps were skipped — sign in, then ${CYAN}sys setup --mas${RESET}")
+    todo+=("🛒  App Store apps were skipped — sign in, then ${CYAN}sys setup${RESET} again")
 
   has_cmd cursor || \
     todo+=("🧩  Open Cursor once so its command appears, then ${CYAN}sys setup${RESET} for its extensions")
@@ -742,7 +729,7 @@ print_manual_steps() {
   ssh_has_key && ! ssh_shared && \
     todo+=("🔑  Share this machine's SSH key: ${CYAN}sys sync${RESET} — it signs you in to GitHub once, in the browser")
 
-  todo+=("🔐  Sign in to 1Password, Dropbox, Slack, Notion and Figma")
+  todo+=("🔐  Sign in to 1Password, Slack, Notion and Figma")
   todo+=("🔓  Give Ghostty Full Disk Access — System Settings ▸ Privacy & Security")
   todo+=("🔄  Log out and back in — some macOS settings only apply at login")
 

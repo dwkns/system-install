@@ -46,7 +46,6 @@ cask "omnigraffle"
 # cask "figma"
 
 # ── Everything else ──────────────────────────────────────────────────────────
-cask "dropbox"
 cask "typora"
 cask "notion"
 cask "iina"

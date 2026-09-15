@@ -117,6 +117,41 @@ github_device_login() {
   ok "Signed in to GitHub"
 }
 
+# If a pull changed sys itself, this running copy is stale — bash parsed it
+# before the new version arrived. Start again with the new one. SYS_RESTARTED
+# stops it looping if something goes wrong. Used by setup and sync.
+restart_if_updated() {
+  local before="$1" after="$2"
+  [[ "$before" != "$after" && "${SYS_RESTARTED:-0}" != "1" ]] || return 0
+  git -C "$ROOT_DIR" diff --quiet "$before" "$after" -- bin lib 2>/dev/null && return 0
+  doing "sys was updated — restarting with the new version"
+  export SYS_RESTARTED=1
+  exec "$ROOT_DIR/bin/sys" ${SYS_ARGV[@]+"${SYS_ARGV[@]}"}
+}
+
+# Fast-forward to the latest repo (local edits set aside and put back), then
+# restart if that changed sys. Never fatal: a machine that cannot reach
+# GitHub carries on with the copy on disk.
+update_self() {
+  git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1 || return 0
+  local before after
+  doing "Updating $ROOT_DIR"
+  before="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
+  run git -C "$ROOT_DIR" pull --ff-only --autostash --quiet 2>/dev/null \
+    || note "Could not update; continuing with the copy on disk"
+  after="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
+  restart_if_updated "$before" "$after"
+}
+
+# What is about to be installed: the Brewfile lines added since the last
+# install here, so a change is never applied unseen.
+show_brewfile_changes() {
+  local last="$ROOT_DIR/.state/Brewfile.last"
+  if [[ ! -f "$last" ]]; then note "First install of this Brewfile here"; return 0; fi
+  diff "$last" "$ROOT_DIR/Brewfile" 2>/dev/null | grep -E '^[<>]' | sed 's/^</    removed: /;s/^>/    added:   /' | head -20 || true
+  return 0
+}
+
 # Push commits that already exist. Never stops at a bare "Username:" prompt: a
 # machine with no GitHub login saved is signed in, once.
 push_repo() {

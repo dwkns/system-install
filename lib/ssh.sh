@@ -15,6 +15,9 @@ source "${ROOT_DIR:-$HOME/.system-config}/lib/sync.sh"
 SSH_KEY="$HOME/.ssh/id_ed25519"
 SSH_ACCESS="$ROOT_DIR/config/ssh/access"
 SSH_KEYS_DIR="$ROOT_DIR/config/ssh/keys"
+SSH_HOSTKEYS_DIR="$ROOT_DIR/config/ssh/hostkeys"     # each machine's sshd host key, also public
+SSH_KNOWN="$HOME/.ssh/config.d/known_hosts_sys"       # generated from hostkeys/, pins every machine
+SSH_HOST_PUB="/etc/ssh/ssh_host_ed25519_key.pub"
 SSH_ALIASES="$HOME/.ssh/config.d/sys"                 # generated, safe to delete
 SSH_AUTH="$HOME/.ssh/authorized_keys"
 SSHD_DROPIN="/etc/ssh/sshd_config.d/00-sys-keys-only.conf"
@@ -24,11 +27,17 @@ SSH_MARK_END="# <<< sys ssh <<<"
 ssh_machine()   { hostname -s 2>/dev/null | tr '[:upper:]' '[:lower:]'; }
 ssh_has_key()   { [[ -f "$SSH_KEY" && -f "$SSH_KEY.pub" ]]; }
 ssh_keys_only() { [[ -f "$SSHD_DROPIN" ]] && grep -q '^PasswordAuthentication no' "$SSHD_DROPIN" 2>/dev/null; }
-# Shared means committed, not merely copied into the working tree.
+# This machine's sshd host key (public half), so others can pin it.
+ssh_host_pub() { [[ -r "$SSH_HOST_PUB" ]] && awk '{print $1, $2}' "$SSH_HOST_PUB"; return 0; }
+
+# Shared means committed, not merely copied into the working tree: the user
+# key, and the host key where this machine has one.
 ssh_shared() {
   ssh_has_key || return 1
   local me; me="$(ssh_machine)"
-  [[ "$(git -C "$ROOT_DIR" show "HEAD:config/ssh/keys/$me.pub" 2>/dev/null)" == "$(cat "$SSH_KEY.pub")" ]]
+  [[ "$(git -C "$ROOT_DIR" show "HEAD:config/ssh/keys/$me.pub" 2>/dev/null)" == "$(cat "$SSH_KEY.pub")" ]] || return 1
+  local hk; hk="$(ssh_host_pub)"
+  [[ -z "$hk" || "$(git -C "$ROOT_DIR" show "HEAD:config/ssh/hostkeys/$me.pub" 2>/dev/null)" == "$hk" ]]
 }
 
 # How many machines the managed block lets in here.
@@ -68,36 +77,41 @@ ssh_make_key() {
   run ssh-keygen -q -t ed25519 -a 100 -N "" -C "${USER:-$(id -un)}@$(ssh_machine)" -f "$SSH_KEY"
 }
 
-# Put this machine's public key into the repo and push it. The one thing sync
-# commits on its own: a public key is safe to publish and always this
-# machine's own. Committed by path, so nothing else you have edited rides along.
+# Put this machine's public keys into the repo and push them: the user key
+# (so it can log in elsewhere) and the sshd host key (so others can pin it and
+# never have to trust a first contact). The one thing sync commits on its own:
+# both are safe to publish and always this machine's own. Committed by path,
+# so nothing else you have edited rides along.
 ssh_share_key() {
   ssh_has_key || return 0
-  local me dst; me="$(ssh_machine)"; dst="$SSH_KEYS_DIR/$me.pub"
+  local me dst hdst hk; me="$(ssh_machine)"; dst="$SSH_KEYS_DIR/$me.pub"; hdst="$SSH_HOSTKEYS_DIR/$me.pub"
   ssh_shared && return 0
-  doing "Sharing this machine's public key as config/ssh/keys/$me.pub"
+  doing "Sharing this machine's public keys as config/ssh/keys/$me.pub and hostkeys/$me.pub"
   [[ "${DRY_RUN:-0}" == "1" ]] && return 0
   git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1 || return 0
-  # A machine that cannot push (the Ubuntu box: no gh, no login) must not
-  # leave the file lying in the working tree either — an untracked copy of a
-  # file someone then commits elsewhere makes every later pull refuse.
+  hk="$(ssh_host_pub)"
+  # A machine that cannot push (no gh, no login) must not leave the files
+  # lying in the working tree either — an untracked copy of a file someone
+  # then commits elsewhere makes every later pull refuse.
   if ! is_macos && ! has_cmd gh; then
-    warn "This machine cannot push to GitHub. On a Mac, paste this as config/ssh/keys/$me.pub, then sys push:"
-    note "$(cat "$SSH_KEY.pub")"
+    warn "This machine cannot push to GitHub. On a Mac, paste these into the repo, then sys push:"
+    note "config/ssh/keys/$me.pub:      $(cat "$SSH_KEY.pub")"
+    [[ -n "$hk" ]] && note "config/ssh/hostkeys/$me.pub:  $hk"
     return 0
   fi
-  mkdir -p "$SSH_KEYS_DIR" && cp "$SSH_KEY.pub" "$dst"
-  git -C "$ROOT_DIR" add -- "$dst"
+  mkdir -p "$SSH_KEYS_DIR" "$SSH_HOSTKEYS_DIR" && cp "$SSH_KEY.pub" "$dst"
+  [[ -n "$hk" ]] && printf '%s\n' "$hk" > "$hdst"
+  git -C "$ROOT_DIR" add -- "$dst" ${hk:+"$hdst"}
   # An identity of its own: a machine with no .gitconfig (Ubuntu) has none.
   if ! git -C "$ROOT_DIR" -c user.name=sys -c "user.email=sys@$me" \
-         commit -q -m "Add SSH key for $me" -- "$dst" >/dev/null 2>&1; then
-    git -C "$ROOT_DIR" reset -q -- "$dst" 2>/dev/null; rm -f "$dst"
-    warn "Could not commit the key — nothing shared"; return 0
+         commit -q -m "Add SSH keys for $me" -- "$dst" ${hk:+"$hdst"} >/dev/null 2>&1; then
+    git -C "$ROOT_DIR" reset -q -- "$dst" ${hk:+"$hdst"} 2>/dev/null; rm -f "$dst" ${hk:+"$hdst"}
+    warn "Could not commit the keys — nothing shared"; return 0
   fi
   if push_repo; then
-    ok "Key shared — other machines pick it up on their next sys sync"
+    ok "Keys shared — other machines pick them up on their next sys sync"
   else
-    note "The key is committed here and will be pushed by the next sys sync that can"
+    note "The keys are committed here and will be pushed by the next sys sync that can"
   fi
   return 0
 }
@@ -153,35 +167,53 @@ ssh_install_access() {
   return 0
 }
 
+# ~/.ssh/config.d/known_hosts_sys: every other machine's host key from the
+# repo, under the name HostKeyAlias uses, so a wrong machine is refused and
+# the first contact needs no "are you sure?".
+ssh_write_known_hosts() {
+  local quiet="${1:-}" me m out="" f
+  me="$(ssh_machine)"
+  while read -r m _; do
+    [[ "$m" == "$me" ]] && continue
+    f="$SSH_HOSTKEYS_DIR/$m.pub"
+    [[ -s "$f" ]] && out="$out$m $(head -1 "$f")"$'\n'
+  done < <(ssh_access_lines)
+  if [[ -f "$SSH_KNOWN" && "$(cat "$SSH_KNOWN")" == "$(printf '%s' "$out")" ]]; then return 0; fi
+  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: write $SSH_KNOWN"; return 0; }
+  mkdir -p "$HOME/.ssh/config.d" && chmod 700 "$HOME/.ssh" "$HOME/.ssh/config.d"
+  printf '%s' "$out" > "$SSH_KNOWN" && chmod 600 "$SSH_KNOWN"
+  return 0
+}
+
 # ~/.ssh/config.d/sys: an alias, address and account for every other machine
 # in the access file. ~/.ssh/config gets one Include line at the top; the rest
 # of it is yours.
 ssh_write_aliases() {
-  local quiet="${1:-}" me cfg="$HOME/.ssh/config" inc="Include config.d/*" all="" out
+  local quiet="${1:-}" me cfg="$HOME/.ssh/config" inc="Include config.d/*" all="" out a strict
   me="$(ssh_machine)"
   out="# Written by sys from config/ssh/access. Do not edit — sys sync rewrites it."$'\n'
   out="$out# Hand-written hosts belong in ~/.ssh/config, which includes this file."$'\n'
   # Two routes per machine. The Match line wins when the Tailscale name
   # answers on port 22; otherwise the Host block's NAME.local is used, which
   # works on the home network with Tailscale off. HostKeyAlias makes both
-  # routes share one known_hosts entry.
-  local a
+  # routes share one pinned host key. A machine whose host key is not in the
+  # repo yet is accepted on first contact, as before, until it is.
   while read -r m account _; do
     [[ "$m" == "$me" ]] && continue
     a="$(ssh_alias "$m")"; all="$all $a"
+    [[ -s "$SSH_HOSTKEYS_DIR/$m.pub" ]] && strict=yes || strict=accept-new
     out="$out"$'\n'"Match originalhost $a exec \"$ROOT_DIR/bin/ssh-reach $m\""$'\n'"  HostName $m"$'\n'
-    out="$out"$'\n'"Host $a"$'\n'"  HostName $m.local"$'\n'"  User $account"$'\n'"  HostKeyAlias $m"$'\n'
+    out="$out"$'\n'"Host $a"$'\n'"  HostName $m.local"$'\n'"  User $account"$'\n'"  HostKeyAlias $m"$'\n'"  StrictHostKeyChecking $strict"$'\n'
   done < <(ssh_access_lines)
   [[ -n "$all" ]] || { [[ -z "$quiet" ]] && note "No other machines in config/ssh/access"; return 0; }
   out="$out"$'\n'"Host$all"$'\n'
-  # accept-new: no "authenticity can't be established" question the first
-  # time, on a private tailnet; a *changed* host key is still refused.
-  out="$out  IdentityFile ~/.ssh/id_ed25519"$'\n'"  IdentitiesOnly yes"$'\n'"  StrictHostKeyChecking accept-new"$'\n'"  ServerAliveInterval 30"$'\n'
-  out="$out  ControlMaster auto"$'\n'"  ControlPath ~/.ssh/cm-%C"$'\n'"  ControlPersist 10m"
-
-  # Left over from the earlier per-machine `sys ssh user`: the account now
-  # comes from the access file.
-  [[ -f "$HOME/.ssh/config.d/users" ]] && run rm -f "$HOME/.ssh/config.d/users"
+  # Keys only, from these aliases: a machine that refuses the key is either
+  # not allowed by config/ssh/access or an impostor, and neither should ever
+  # see a password typed at it. Plain `ssh user@host` still can.
+  out="$out  IdentityFile ~/.ssh/id_ed25519"$'\n'"  IdentitiesOnly yes"$'\n'
+  out="$out  PasswordAuthentication no"$'\n'"  KbdInteractiveAuthentication no"$'\n'
+  out="$out  UserKnownHostsFile ~/.ssh/config.d/known_hosts_sys ~/.ssh/known_hosts"$'\n'
+  out="$out  ServerAliveInterval 30"$'\n'"  ControlMaster auto"$'\n'"  ControlPath ~/.ssh/cm-%C"$'\n'"  ControlPersist 10m"
 
   if [[ -f "$SSH_ALIASES" && "$(cat "$SSH_ALIASES")" == "$out" ]]; then
     [[ -z "$quiet" ]] && ok "Aliases:$all"
@@ -209,6 +241,7 @@ ssh_apply() {
   ssh_make_key || warn "Could not make an SSH key"
   ssh_share_key
   ssh_install_access "$quiet"
+  ssh_write_known_hosts "$quiet"
   ssh_write_aliases "$quiet"
   return 0
 }

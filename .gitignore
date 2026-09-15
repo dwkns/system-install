@@ -1,9 +1,5 @@
 .DS_Store
 __pycache__/
-.ruby-lsp/
-
-# Licences never go in the repo — they live in 1Password (see config/licences)
-*.sublime_license
 
 # Copies of system files replaced by the last sync
 .drift/
@@ -15,6 +11,5 @@ __pycache__/
 # else from SSH ever goes in: this makes an accidental private key impossible.
 .ssh/
 id_*
-!*.pub.example
 *.pem
 known_hosts*

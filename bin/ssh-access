@@ -14,11 +14,8 @@ DIR="${ROOT_DIR:-$HOME/.system-config}"
 
 command -v git >/dev/null 2>&1 || { echo "Installing git"; sudo apt-get install -y git; }
 
-if [ -d "$DIR/.git" ]; then
-  git -C "$DIR" pull --ff-only --quiet || echo "Could not update $DIR; using the copy on disk"
-else
-  git clone --quiet "$REPO" "$DIR"
-fi
+# Only cloned when missing: sys sync pulls the latest itself.
+[ -d "$DIR/.git" ] || git clone --quiet "$REPO" "$DIR"
 
 # So that from now on it is just `sys sync` here, like everywhere else.
 mkdir -p "$HOME/.local/bin" && ln -sf "$DIR/bin/sys" "$HOME/.local/bin/sys"

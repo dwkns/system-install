@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""List the machines this one can reach over SSH (`sys ssh`), or the devices
-on the tailnet (`sys tailscale`, via --tailnet).
+"""List the machines this one can reach over SSH (`sys ssh`).
 
 Read live from the machine — ~/.ssh/config (following Include lines) and the
 Tailscale daemon. Entries that sys wrote from config/ssh/access are listed
@@ -85,21 +84,6 @@ def tailnet():
     return None
 
 net = tailnet()
-
-if "--tailnet" in sys.argv[1:]:
-    rule("Tailnet", "🕸️")
-    if net is None:
-        print(f"  {D}Tailscale is not installed{R}")
-    elif not net:
-        print(f"  {D}Not signed in to a tailnet{R}")
-    else:
-        for r in net:
-            dot = f"{G}●{R}" if r["online"] else f"{D}○{R}"
-            tag = f" {D}(this machine){R}" if r["self"] else ""
-            print(f'    {dot} {G}{r["name"]:<18}{R} {D}{r["ip"]:<15} {r["os"]:<7}{R}'
-                  f'{"" if r["online"] else D + "offline" + R}{tag}')
-    print()
-    sys.exit(0)
 
 cfg = ssh_config_hosts()
 known = {r["name"] for r in net} if net else set()

@@ -12,29 +12,20 @@ usage() {
   cat <<'USAGE'
 sys — system configuration
 
-  sys setup     Set up this machine from scratch
-  sys sync      Pull the latest config and apply it to this machine
-  sys push      Save this machine's config into the repo and push
-  sys doctor    Check that everything is where it should be
-  sys edit      Open this config folder in VS Code
-  sys ssh       List the machines you can reach over SSH
-  sys tailscale List the devices on your tailnet, and which are online
-  sys ssh harden          Keys only on this machine — optional, passwords stay on otherwise
-  sys alias     List your custom aliases and functions
-  sys mise      How to use mise for language versions
-  sys extras    Install the optional extras (Office, Xcode, ollama, duckdb)
-  sys dock      Rebuild the Dock from config/dock
-  sys desktop   Set the desktop colour from config/desktop-colour
-  sys hostname  Set the computer name (asks, or pass one: sys hostname my-mac)
-  sys remove    Undo everything setup installed (asks first; --dryrun to preview)
+  sys setup       Set up this machine from scratch
+  sys sync        Pull the latest config and apply it here (apps, dotfiles, Dock, SSH…)
+  sys push        Save this machine's config into the repo and push
+  sys doctor      Check that everything is where it should be
+  sys ssh         List the machines you can reach over SSH
+  sys ssh harden  Keys only on this machine — optional, passwords stay on otherwise
+  sys hostname    Set the computer name (asks, or pass one: sys hostname my-mac)
+  sys extras      Install the optional extras (Office, Xcode, duckdb)
+  sys remove      Undo everything setup installed (asks first; --dry-run to preview)
 
 Options
-  --dry-run           Show what would happen, change nothing
-  --yes               Don't ask for confirmation
-  --name NAME         (setup) Set the computer name
-  --no-brew           (setup) Skip Homebrew and packages
-  --no-macos          (setup/sync) Skip macOS defaults
-  --mas               (setup) Only install App Store apps
+  --dry-run   Show what would happen, change nothing
+  --force     sync: reinstall and rebuild everything, even if nothing changed
+  --yes       Don't ask for confirmation (remove)
 
 Full documentation: man sys
 USAGE
@@ -44,7 +35,7 @@ USAGE
 SYS_ARGV=("$@")
 cmd="${1:-}"; [[ $# -gt 0 ]] && shift
 
-DO_BREW=1 DO_MACOS=1 ONLY="" NAME="" ARG=""
+ARG=""
 ARGS=()   # every positional argument, in order (ARG is the last one)
 export DRY_RUN="${DRY_RUN:-0}" ASSUME_YES="${ASSUME_YES:-0}"
 
@@ -53,10 +44,6 @@ while [[ $# -gt 0 ]]; do
     --dry-run|--dryrun) DRY_RUN=1 ;;
     --force)    export FORCE=1 ;;
     --yes|-y)   ASSUME_YES=1 ;;
-    --no-brew)  DO_BREW=0 ;;
-    --no-macos) DO_MACOS=0 ;;
-    --mas)      ONLY="mas" ;;
-    --name)     NAME="${2:-}"; shift ;;
     -*) die "Unknown option: $1" ;;
     *)  ARG="$1"; ARGS+=("$1") ;;
   esac
@@ -67,26 +54,9 @@ case "$cmd" in
   setup)
     is_macos || die "macOS only."
 
-    case "$ONLY" in
-      mas)      install_app_store_apps; exit 0 ;;
-    esac
-
     # The same as the one-line installer: running it is the confirmation, and
-    # it starts from the latest config. If that updates sys itself, restart so
-    # the new version does the setup rather than this already-parsed copy.
-    if [[ "${SYS_RESTARTED:-0}" != "1" ]] && git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
-      doing "Updating $ROOT_DIR"
-      before="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
-      run git -C "$ROOT_DIR" pull --ff-only --autostash --quiet 2>/dev/null \
-        || note "Could not update; continuing with the copy on disk"
-      after="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
-      if [[ "$before" != "$after" ]] &&
-         ! git -C "$ROOT_DIR" diff --quiet "$before" "$after" -- bin lib 2>/dev/null; then
-        doing "sys was updated — restarting with the new version"
-        export SYS_RESTARTED=1
-        exec "$ROOT_DIR/bin/sys" ${SYS_ARGV[@]+"${SYS_ARGV[@]}"}
-      fi
-    fi
+    # it starts from the latest config, restarting if that updated sys itself.
+    update_self
 
     cat <<'HEADSUP'
 
@@ -116,27 +86,21 @@ HEADSUP
       return 0
     }
 
-    [[ "$DO_BREW" == "1" ]] && step "📦" "Installing apps and tools"  install_packages
-    step "📁" "Installing dotfiles"          sync_install
-    step "🧪" "Installing language versions" install_languages
-    step "🧩" "Installing Cursor extensions" install_editor_extensions
-    step "📮" "Installing MailExporter"      install_mail_exporter
-    step "🛒" "Installing App Store apps"    install_app_store_apps
-    if [[ -n "$NAME" ]]; then
-      set_machine_name "$NAME"
-    else
-      run_once hostname asked prompt_machine_name
-    fi
-    step "🔐" "Turning on Remote Login"      enable_remote_login
-    step "🔑" "SSH key and access"             ssh_apply
-    step "📺" "Turning on Screen Sharing"    enable_screen_sharing
-    if [[ "$DO_MACOS" == "1" ]]; then
-      step "🍎" "Applying macOS defaults" apply_macos_defaults
-      run_once dock "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" configure_dock
-      apply_input_settings
-      run_once desktop "$(fingerprint "$ROOT_DIR/config/desktop-colour" "$ROOT_DIR/bin/set-desktop-colour")" set_desktop_colour
-      set_default_terminal || true
-    fi
+    step "📦" "Installing apps and tools"     install_packages
+    step "📁" "Installing dotfiles"           sync_install
+    step "🧪" "Installing language versions"  install_languages
+    step "🧩" "Installing Cursor extensions"  install_editor_extensions
+    step "📮" "Installing MailExporter"       install_mail_exporter
+    step "🛒" "Installing App Store apps"     install_app_store_apps
+    RUN_ONCE_NOTE=1 run_once hostname asked prompt_machine_name
+    step "🔐" "Turning on Remote Login"       enable_remote_login
+    step "🔑" "SSH key and access"            ssh_apply
+    step "📺" "Turning on Screen Sharing"     enable_screen_sharing
+    step "🍎" "Applying macOS defaults"       apply_macos_defaults
+    RUN_ONCE_NOTE=1 run_once dock "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" configure_dock
+    apply_input_settings
+    RUN_ONCE_NOTE=1 run_once desktop "$(fingerprint "$ROOT_DIR/config/desktop-colour" "$ROOT_DIR/bin/set-desktop-colour")" set_desktop_colour
+    set_default_terminal || true
 
     echo
     if [[ -n "$FAILED" ]]; then
@@ -167,7 +131,8 @@ HEADSUP
 
     # Reconcile with the remote in whichever direction is needed. Only ever
     # pushes commits that already exist — capturing this machine's state into
-    # new commits stays 'sys push', so sync never commits behind your back.
+    # new commits stays 'sys push'. The one thing sync commits by itself is
+    # this machine's own SSH public keys (see lib/ssh.sh).
     if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
       run git -C "$ROOT_DIR" fetch --quiet origin || true
       upstream="$(git -C "$ROOT_DIR" rev-parse --abbrev-ref '@{upstream}' 2>/dev/null || echo '')"
@@ -192,16 +157,7 @@ HEADSUP
     fi
 
     after="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
-
-    # If the pull updated sys itself, this running copy is already stale —
-    # bash parsed it before the new version arrived. Start again with the new
-    # one. SYS_RESTARTED stops it looping if something goes wrong.
-    if [[ "$before" != "$after" && "${SYS_RESTARTED:-0}" != "1" ]] &&
-       ! git -C "$ROOT_DIR" diff --quiet "$before" "$after" -- bin lib 2>/dev/null; then
-      doing "sys was updated — restarting with the new version"
-      export SYS_RESTARTED=1
-      exec "$ROOT_DIR/bin/sys" ${SYS_ARGV[@]+"${SYS_ARGV[@]}"}
-    fi
+    restart_if_updated "$before" "$after"
 
     # Push only now, after any restart, so a fix to the push itself is the
     # version that runs. The restarted sys sees itself as ahead and lands here.
@@ -227,15 +183,18 @@ HEADSUP
     [[ "$(cat "$brew_stamp" 2>/dev/null)" != "$brew_now" ]] && brew_changed=1
     [[ "${FORCE:-0}" == "1" ]] && brew_changed=1
 
-
     sync_install
     # Every sync, not just when something changed: quick, and it is what
     # keeps typing and clicking identical across machines.
-    [[ "$DO_MACOS" == "1" ]] && apply_input_settings
-    # SSH access from config/ssh/access: this machine's key shared, the keys
-    # it lets in installed, an alias for every other machine. Quiet unless
-    # something changed.
+    apply_input_settings
+    # SSH access from config/ssh/access: this machine's keys shared, the keys
+    # it lets in installed, every other machine pinned and aliased. Quiet
+    # unless something changed.
     ssh_apply quiet
+    # The Dock and desktop colour: rebuilt when their config changes, like the
+    # Brewfile. Edit config/dock, sys push, and every machine follows.
+    run_once dock "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" configure_dock
+    run_once desktop "$(fingerprint "$ROOT_DIR/config/desktop-colour" "$ROOT_DIR/bin/set-desktop-colour")" set_desktop_colour
 
     if [[ "$before" == "$after" && "${SYNC_CHANGED:-0}" == "0" && "$brew_changed" == "0" && "${FORCE:-0}" != "1" ]]; then
       ok "Already up to date — nothing to apply"
@@ -246,12 +205,15 @@ HEADSUP
         doing "Installed ${SYNC_CHANGED} changed file(s)"
       fi
       # Never --cleanup: that would uninstall anything installed by hand.
-      if [[ "$brew_changed" == "1" && "$DO_BREW" == "1" ]]; then
-        acquire_sudo
-        doing "Brewfile differs from what is installed here — running brew bundle"
+      # Run as you, with no stored password: the Brewfile is code from the
+      # repo, and it gets no more than your own account already has. An app
+      # that truly needs an admin password asks for it itself, then only.
+      if [[ "$brew_changed" == "1" ]]; then
+        show_brewfile_changes
+        doing "Brewfile changed — installing what is new"
         install_packages || warn "brew bundle did not finish — will try again next sync"
       fi
-      [[ "$DO_MACOS" == "1" ]] && apply_macos_defaults
+      apply_macos_defaults
       request_reload
       if [[ -n "${SYS_RELOAD_FILE:-}" ]]; then
         ok "Done — reloading your shell"
@@ -335,17 +297,17 @@ HEADSUP
       row "🔐" "sshd" "${DIM}keys and passwords — sys ssh harden turns passwords off${RESET}"
     fi
 
-    if [[ -e "$ROOT_DIR/.state/dock" ]]; then
-      row "🚀" "Dock" "$(good "set up")"
+    if [[ "$(cat "$ROOT_DIR/.state/dock" 2>/dev/null)" == "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" ]]; then
+      row "🚀" "Dock" "$(good "matches config/dock") ${DIM}as of the last sync${RESET}"
     else
-      row "🚀" "Dock" "${DIM}not set up yet — sys dock${RESET}"
+      row "🚀" "Dock" "${DIM}config/dock changed — sys sync rebuilds it${RESET}"
     fi
 
     colour="$("$ROOT_DIR/bin/set-desktop-colour" --check 2>&1)" && rc=0 || rc=$?
     case "$rc" in
       0) row "🎨" "Desktop" "$(good "${colour%% on *}") ${DIM}${colour#* }${RESET}" ;;
       2) row "🎨" "Desktop" "${DIM}no screen to check (over SSH?)${RESET}" ;;
-      *) row "🎨" "Desktop" "$(bad "not set") ${DIM}${colour} — sys desktop${RESET}"; issues=1 ;;
+      *) row "🎨" "Desktop" "$(bad "not set") ${DIM}${colour} — sys sync --force${RESET}"; issues=1 ;;
     esac
 
     if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
@@ -366,56 +328,6 @@ HEADSUP
     fi
     ;;
 
-  alias|aliases)
-    file="$ROOT_DIR/dotfiles/.aliases"
-    [[ -r "$file" ]] || die "Not found: $file"
-    awk -v g="$GREEN" -v c="$CYAN" -v y="$YELLOW" -v r="$RESET" '
-      # A comment containing box-drawing rule is a section header. Tested
-      # byte-wise with index() so it works whatever locale awk runs in.
-      /^#/ {
-        if (index($0, "\xe2\x94\x80") > 0) {
-          h = $0
-          gsub(/[^ -~]/, "", h)          # strip non-ASCII (the rule)
-          sub(/^# */, "", h); sub(/ *$/, "", h)
-          if (h != "") printf "\n%s%s%s\n", c, h, r
-          desc = ""; next
-        }
-        desc = $0; sub(/^# */, "", desc); next
-      }
-      # alias name='"'"'command'"'"'   (trailing # comment is the description)
-      /^alias / {
-        line = $0; sub(/^alias /, "", line)
-        eq = index(line, "=")
-        name = substr(line, 1, eq - 1)
-        rest = substr(line, eq + 1)
-        note = ""
-        if (match(rest, /[ \t]+#[ \t]*/)) {
-          note = substr(rest, RSTART + RLENGTH)
-          rest = substr(rest, 1, RSTART - 1)
-        }
-        gsub(/^['"'"'"]|['"'"'"]$/, "", rest)
-        printf "  %s%-8s%s %s%s%s\n", g, name, r, y, rest, r
-        if (note != "") printf "  %8s   %s\n", "", note
-        desc = ""; next
-      }
-      # shell function:  name() {
-      /^[a-z_][a-z0-9_]*\(\)/ {
-        fn = $0; sub(/\(\).*/, "", fn)
-        printf "  %s%-8s%s %s%s%s\n", g, fn, r, y, (desc == "" ? "function" : desc), r
-        desc = ""; next
-      }
-      { desc = "" }
-    ' "$file"
-    proj="$ROOT_DIR/dotfiles/.projects"
-    if [[ -r "$proj" ]]; then
-      printf '\n%sProject starters%s\n' "$CYAN" "$RESET"
-      grep -E "^[a-z]+\(\)  *\{ _new_project" "$proj" | while read -r l; do
-        n="${l%%(*}"; d="$(printf '%s' "$l" | sed -E 's/.*_new_project ([^ ]+).*/\1/')"
-        printf '  %s%-8s%s %s%s%s\n' "$GREEN" "$n" "$RESET" "$YELLOW" "$d" "$RESET"
-      done
-    fi
-    echo
-    ;;
 
   remove)
     is_macos || die "macOS only."
@@ -430,91 +342,21 @@ HEADSUP
     esac
     ;;
 
-  tailscale)
-    "$ROOT_DIR/bin/ssh-hosts" --tailnet
-    ;;
 
-  edit)
-    if has_cmd code; then
-      doing "Opening $ROOT_DIR in VS Code"
-      code "$ROOT_DIR"
-    else
-      die "VS Code's 'code' command is not on PATH. Open it from VS Code with Shell Command: Install 'code' command in PATH."
-    fi
-    ;;
 
   hostname)
     is_macos || die "macOS only."
     if [[ -n "$ARG" ]]; then set_machine_name "$ARG"; else prompt_machine_name; fi
-    mkdir -p "$ROOT_DIR/.state" && printf 'asked\n' > "$ROOT_DIR/.state/hostname"
+    [[ "${DRY_RUN:-0}" == "1" ]] || { mkdir -p "$ROOT_DIR/.state" && printf 'asked\n' > "$ROOT_DIR/.state/hostname"; }
     ;;
 
-  desktop)
-    is_macos || die "macOS only."
-    if set_desktop_colour; then
-      if [[ "${DRY_RUN:-0}" != "1" ]]; then
-        mkdir -p "$ROOT_DIR/.state"
-        fingerprint "$ROOT_DIR/config/desktop-colour" "$ROOT_DIR/bin/set-desktop-colour" > "$ROOT_DIR/.state/desktop"
-      fi
-    else
-      die "The desktop colour was not set."
-    fi
-    ;;
 
-  dock)
-    is_macos || die "macOS only."
-    if configure_dock; then
-      mkdir -p "$ROOT_DIR/.state"
-      fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock" > "$ROOT_DIR/.state/dock"
-    else
-      die "The Dock was not set up."
-    fi
-    ;;
 
   extras)
     is_macos || die "macOS only."
     install_extras
     ;;
 
-  mise)
-    cat <<'MISE'
-
-mise manages your Ruby, Node and Python versions.
-
-  Global versions live in ~/.config/mise/config.toml, tracked in this repo as
-  dotfiles/.config/mise/config.toml. Edit it, run `sys push`, then `mise install`.
-
-Everyday
-  mise ls                     what is installed, and what is active here
-  mise current                just the active versions
-  mise install                install everything the config asks for
-  mise outdated               what has newer versions available
-  mise upgrade                move up within the versions you have pinned
-
-Change a version
-  mise use -g ruby@3.4.8      change the GLOBAL default (edits the config)
-  mise use ruby@3.3           pin for THIS project (writes ./mise.toml)
-  mise ls-remote ruby         what versions exist
-  mise exec ruby@3.2 -- ruby -v    run once, change nothing
-
-Per project
-  A ./mise.toml overrides the global versions and activates when you cd in.
-  mise trust                  allow a mise.toml you did not write
-
-Python packages
-  mise supplies the interpreter; uv does packages and virtualenvs.
-  uv venv                     create .venv with the active python
-  uv pip install -r requirements.txt
-  uv add <pkg>                for pyproject.toml projects
-  uv run <script.py>          run in the project env, installing as needed
-
-Where things live
-  ~/.config/mise/config.toml       global versions (tracked in this repo)
-  ./mise.toml                      per-project override (commit it)
-  ~/.local/share/mise/installs     the toolchains themselves
-
-MISE
-    ;;
 
   ""|-h|--help) usage ;;
   *) error "Unknown command: $cmd"; echo; usage; exit 1 ;;
