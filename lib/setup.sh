@@ -113,8 +113,21 @@ request_reload() {
   return 0
 }
 
+# Homebrew belongs to whoever installed it. Delete that account and make a new
+# one (even with the same name, it gets a new user id) and brew refuses to
+# update: "/opt/homebrew is not writable". Hand it back to this user first.
+reclaim_homebrew() {
+  local prefix=/opt/homebrew
+  [[ -d "$prefix" ]] || return 0
+  # Top level only: that is what brew checks, and a full walk takes seconds.
+  [[ -n "$(find "$prefix" -maxdepth 1 ! -user "$(id -u)" -print -quit 2>/dev/null)" ]] || return 0
+  doing "Homebrew belongs to another account — giving it to $(id -un)"
+  run sudo_run chown -R "$(id -un):admin" "$prefix"
+}
+
 install_packages() {
   install_homebrew
+  reclaim_homebrew
   doing "Installing packages from Brewfile"
   # --no-upgrade: install what is missing, but never upgrade what is already
   # here. Without it a sync can cascade into upgrading every app on the
