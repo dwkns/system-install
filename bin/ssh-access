@@ -20,4 +20,8 @@ else
   git clone --quiet "$REPO" "$DIR"
 fi
 
+# So that from now on it is just `sys sync` here, like everywhere else.
+mkdir -p "$HOME/.local/bin" && ln -sf "$DIR/bin/sys" "$HOME/.local/bin/sys"
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) echo "Note: open a new terminal for the sys command to be found" ;; esac
+
 exec "$DIR/bin/sys" sync

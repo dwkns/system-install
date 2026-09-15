@@ -73,16 +73,18 @@ sync; if the machine has no GitHub login yet, sync signs you in through `gh`
 once, in the browser, and carries on. Add the new machine to `config/ssh/access` on
 any machine and `sys push`; every other machine follows on its next sync.
 
-**The Ubuntu box** does not run `sys`. It runs one command instead, once to
-set up and again whenever a machine is added:
+**The Ubuntu box** gets the same repo and a `sys` command that does only the
+repo update and SSH access. Once, to set up:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/bin/ssh-access | bash
 ```
 
+After that it is `sys sync` there too, whenever a machine is added.
+
 ## Starting over
 
-`bin/uninstall` removes everything setup installed — Homebrew and its packages,
+`sys remove` removes everything setup installed — Homebrew and its packages,
 mise toolchains, the dotfiles it copied, editor config, and the Dock — without
 erasing macOS. SSH and Screen Sharing are left alone, so a headless machine
 stays reachable.
@@ -129,7 +131,7 @@ colors/                      .clr palettes -> ~/Library/Colors
 
 ## How syncing works
 
-`lib/sync.sh` holds a three-row table:
+`lib/sync.sh` holds a table of repo directory to system directory:
 
 ```
 dotfiles              -> ~

@@ -80,7 +80,7 @@ github_device_login() {
   local client="178c6fc778ccc68e1d6a"   # gh's own OAuth app, so gh owns the token
   local resp device code uri interval token err waited=0
   resp="$(curl -fsS -X POST https://github.com/login/device/code \
-            -d "client_id=$client" -d "scope=repo read:org gist workflow" 2>/dev/null)" || {
+            -d "client_id=$client" -d "scope=public_repo" 2>/dev/null)" || {
     warn "Could not reach GitHub to start the sign-in"; return 1; }
   field() { printf '%s' "$1" | tr '&' '\n' | sed -n "s/^$2=//p" | sed 's/%3A/:/g;s/%2F/\//g'; }
   device="$(field "$resp" device_code)"; code="$(field "$resp" user_code)"
@@ -91,11 +91,15 @@ github_device_login() {
   { open "$uri" 2>/dev/null || xdg-open "$uri" 2>/dev/null; } >/dev/null 2>&1 &
   note "Waiting for you to approve it there…"
 
+  local failures=0
   while (( waited < 900 )); do
     sleep "${interval:-5}"; waited=$((waited + ${interval:-5}))
-    resp="$(curl -fsS -X POST https://github.com/login/oauth/access_token \
+    if ! resp="$(curl -fsS -X POST https://github.com/login/oauth/access_token \
               -d "client_id=$client" -d "device_code=$device" \
-              -d "grant_type=urn:ietf:params:oauth:grant-type:device_code" 2>/dev/null)" || continue
+              -d "grant_type=urn:ietf:params:oauth:grant-type:device_code" 2>/dev/null)"; then
+      failures=$((failures + 1)); (( failures >= 6 )) && { warn "Lost contact with GitHub"; return 1; }
+      continue
+    fi
     token="$(field "$resp" access_token)"
     [[ -n "$token" ]] && break
     err="$(field "$resp" error)"
@@ -104,6 +108,7 @@ github_device_login() {
       slow_down) sleep 5 ;;
       expired_token) warn "That code expired"; return 1 ;;
       access_denied) warn "You cancelled the sign-in"; return 1 ;;
+      *) warn "GitHub said: ${err:-nothing useful}"; return 1 ;;
     esac
   done
   [[ -n "$token" ]] || { warn "Timed out waiting for the sign-in"; return 1; }
@@ -115,11 +120,20 @@ github_device_login() {
 # Push commits that already exist. Never stops at a bare "Username:" prompt: a
 # machine with no GitHub login saved is signed in, once.
 push_repo() {
-  if run env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then return 0; fi
-  [[ "${DRY_RUN:-0}" == "1" ]] && return 1
+  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: git push"; return 0; }
+  local err
+  if err="$(env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>&1)"; then return 0; fi
 
-  # No login saved: sign in through gh, once, right here — it opens the
-  # browser and shows a code to type — then let gh hand git its credentials.
+  # Only a missing login gets the sign-in. Anything else (someone else pushed
+  # first, no network) is reported as what it is and retried next sync.
+  if ! printf '%s' "$err" | grep -qiE 'could not read Username|Authentication failed|terminal prompts disabled|Permission to .* denied'; then
+    warn "Could not push to GitHub — $(printf '%s' "$err" | grep -v '^$' | tail -1)"
+    note "Will try again on the next sys sync"
+    return 1
+  fi
+
+  # No login saved: sign in right here — a code and a browser page — then
+  # let gh hand git its credentials from now on.
   if has_cmd gh && { true </dev/tty; } 2>/dev/null; then
     doing "This machine needs a GitHub login to push — signing in once with gh"
     if ! gh auth status -h github.com >/dev/null 2>&1; then

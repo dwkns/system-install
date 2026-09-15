@@ -3,6 +3,7 @@
 # aliases sys writes: the Tailscale name is tried first, and if it is not
 # reachable (Tailscale off, or the machine not on it) ssh falls back to
 # NAME.local on the home network. Exit 0 = reachable.
+[ $# -eq 1 ] && [ -n "$1" ] || exit 1
 exec python3 -c '
 import socket, sys
 try:

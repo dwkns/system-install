@@ -264,15 +264,24 @@ HEADSUP
   push)
     doing "Saving this machine's config into the repo"
     sync_backup
-    # keep the Cursor extension list from drifting
-    has_cmd cursor && cursor --list-extensions 2>/dev/null | sort > "$ROOT_DIR/config/cursor-extensions.txt"
-    # capture the Dock as it is now
-    "$ROOT_DIR/bin/dump-dock" >/dev/null 2>&1 || true
+    if [[ "${DRY_RUN:-0}" != "1" ]]; then
+      # keep the Cursor extension list from drifting — but never truncate it
+      # to nothing because the cursor command failed
+      if has_cmd cursor && exts="$(cursor --list-extensions 2>/dev/null)" && [[ -n "$exts" ]]; then
+        printf '%s\n' "$exts" | sort > "$ROOT_DIR/config/cursor-extensions.txt"
+      fi
+      # capture the Dock as it is now
+      "$ROOT_DIR/bin/dump-dock" >/dev/null 2>&1 || true
+    fi
     if [[ -n "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
-      git -C "$ROOT_DIR" add -A
-      git -C "$ROOT_DIR" commit -m "Update config files"
-      run git -C "$ROOT_DIR" push
-      ok "Pushed"
+      if [[ "${DRY_RUN:-0}" == "1" ]]; then
+        note "dry run: would commit and push these changes:"
+        git -C "$ROOT_DIR" status --short | sed 's/^/      /'
+      else
+        git -C "$ROOT_DIR" add -A
+        git -C "$ROOT_DIR" commit -q -m "Update config files"
+        push_repo && ok "Pushed"
+      fi
     else
       note "Nothing changed"
     fi

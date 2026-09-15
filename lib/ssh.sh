@@ -24,7 +24,12 @@ SSH_MARK_END="# <<< sys ssh <<<"
 ssh_machine()   { hostname -s 2>/dev/null | tr '[:upper:]' '[:lower:]'; }
 ssh_has_key()   { [[ -f "$SSH_KEY" && -f "$SSH_KEY.pub" ]]; }
 ssh_keys_only() { [[ -f "$SSHD_DROPIN" ]] && grep -q '^PasswordAuthentication no' "$SSHD_DROPIN" 2>/dev/null; }
-ssh_shared()    { ssh_has_key && cmp -s "$SSH_KEY.pub" "$SSH_KEYS_DIR/$(ssh_machine).pub" 2>/dev/null; }
+# Shared means committed, not merely copied into the working tree.
+ssh_shared() {
+  ssh_has_key || return 1
+  local me; me="$(ssh_machine)"
+  [[ "$(git -C "$ROOT_DIR" show "HEAD:config/ssh/keys/$me.pub" 2>/dev/null)" == "$(cat "$SSH_KEY.pub")" ]]
+}
 
 # How many machines the managed block lets in here.
 ssh_trusted_count() {
@@ -60,7 +65,7 @@ ssh_make_key() {
   doing "Making this machine's SSH key"
   run mkdir -p "$HOME/.ssh"
   run chmod 700 "$HOME/.ssh"
-  run ssh-keygen -q -t ed25519 -a 100 -N "" -C "$USER@$(ssh_machine)" -f "$SSH_KEY"
+  run ssh-keygen -q -t ed25519 -a 100 -N "" -C "${USER:-$(id -un)}@$(ssh_machine)" -f "$SSH_KEY"
 }
 
 # Put this machine's public key into the repo and push it. The one thing sync
@@ -72,10 +77,23 @@ ssh_share_key() {
   ssh_shared && return 0
   doing "Sharing this machine's public key as config/ssh/keys/$me.pub"
   [[ "${DRY_RUN:-0}" == "1" ]] && return 0
-  mkdir -p "$SSH_KEYS_DIR" && cp "$SSH_KEY.pub" "$dst"
   git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1 || return 0
+  # A machine that cannot push (the Ubuntu box: no gh, no login) must not
+  # leave the file lying in the working tree either — an untracked copy of a
+  # file someone then commits elsewhere makes every later pull refuse.
+  if ! is_macos && ! has_cmd gh; then
+    warn "This machine cannot push to GitHub. On a Mac, paste this as config/ssh/keys/$me.pub, then sys push:"
+    note "$(cat "$SSH_KEY.pub")"
+    return 0
+  fi
+  mkdir -p "$SSH_KEYS_DIR" && cp "$SSH_KEY.pub" "$dst"
   git -C "$ROOT_DIR" add -- "$dst"
-  git -C "$ROOT_DIR" commit -q -m "Add SSH key for $me" -- "$dst" >/dev/null 2>&1 || true
+  # An identity of its own: a machine with no .gitconfig (Ubuntu) has none.
+  if ! git -C "$ROOT_DIR" -c user.name=sys -c "user.email=sys@$me" \
+         commit -q -m "Add SSH key for $me" -- "$dst" >/dev/null 2>&1; then
+    git -C "$ROOT_DIR" reset -q -- "$dst" 2>/dev/null; rm -f "$dst"
+    warn "Could not commit the key — nothing shared"; return 0
+  fi
   if push_repo; then
     ok "Key shared — other machines pick it up on their next sys sync"
   else
@@ -90,12 +108,16 @@ ssh_share_key() {
 ssh_install_access() {
   local quiet="${1:-}" me row m f want="" missing="" names=""
   me="$(ssh_machine)"
-  row="$(ssh_access_lines | awk -v m="$me" '$1==m')"
+  row="$(ssh_access_lines | awk -v m="$me" '$1==m{print; exit}')"
   if [[ -z "$row" ]]; then
-    [[ -z "$quiet" ]] && note "$me is not in config/ssh/access — no machine is let in here"
+    # Not quiet: a machine outside the file is the commonest mistake, and the
+    # only symptom would otherwise be "nobody can log in".
+    warn "$me is not in config/ssh/access — nothing is let in here. Add a line for it, sys push, sys sync"
     return 0
   fi
-  set -- $row; shift 2
+  set -- $row
+  [[ $# -ge 2 ]] || { warn "config/ssh/access: the line for $me needs an account name"; return 0; }
+  shift 2
   for m in "$@"; do
     f="$SSH_KEYS_DIR/$m.pub"
     if [[ -s "$f" ]]; then
@@ -147,7 +169,7 @@ ssh_write_aliases() {
   while read -r m account _; do
     [[ "$m" == "$me" ]] && continue
     a="$(ssh_alias "$m")"; all="$all $a"
-    out="$out"$'\n'"Match originalhost $a exec \"~/.system-config/bin/ssh-reach $m\""$'\n'"  HostName $m"$'\n'
+    out="$out"$'\n'"Match originalhost $a exec \"$ROOT_DIR/bin/ssh-reach $m\""$'\n'"  HostName $m"$'\n'
     out="$out"$'\n'"Host $a"$'\n'"  HostName $m.local"$'\n'"  User $account"$'\n'"  HostKeyAlias $m"$'\n'
   done < <(ssh_access_lines)
   [[ -n "$all" ]] || { [[ -z "$quiet" ]] && note "No other machines in config/ssh/access"; return 0; }
