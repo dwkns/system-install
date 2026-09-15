@@ -18,6 +18,7 @@ sys — system configuration
   sys doctor    Check that everything is where it should be
   sys edit      Open this config folder in VS Code
   sys ssh       List the machines you can reach over SSH
+  sys tailscale List the devices on your tailnet, and which are online
   sys ssh harden          Keys only on this machine — optional, passwords stay on otherwise
   sys alias     List your custom aliases and functions
   sys mise      How to use mise for language versions
@@ -418,6 +419,10 @@ HEADSUP
       harden)  ssh_harden ;;
       *) die "Unknown: sys ssh $ARG — sys ssh lists, sys ssh harden locks to keys" ;;
     esac
+    ;;
+
+  tailscale)
+    "$ROOT_DIR/bin/ssh-hosts" --tailnet
     ;;
 
   edit)

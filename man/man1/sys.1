@@ -132,10 +132,12 @@ alias runs it.
 .B ssh
 List the machines this one can reach over SSH: the aliases sys wrote from
 .IR config/ssh/access ,
-anything hand-written in
+then anything hand-written in
 .I ~/.ssh/config
-(flagged when its address is not on your tailnet), and the devices on your
-tailnet, with which are online. Read live from the machine.
+(flagged when its address is not on your tailnet). Read live from the machine.
+.TP
+.B tailscale
+List the devices on your tailnet and which are online.
 .PP
 Every
 .B sys sync
@@ -151,11 +153,15 @@ marked block of
 .I ~/.ssh/authorized_keys
 that leaves anything outside the block alone; and writes
 .I ~/.ssh/config.d/sys
-with an alias, address and account for every other machine, so
+with an alias and account for every other machine, so
 .B ssh mini\-m1
 reaches
 .B dwkns\-mini\-m1
-as the right user. A single
+as the right user. Each alias tries the Tailscale name first and, if that does
+not answer on port 22 within two seconds, falls back to
+.IR NAME.local ,
+so it works on the home network with Tailscale off and from anywhere with it
+on. A single
 .B Include config.d/*
 line is added at the top of
 .IR ~/.ssh/config ;

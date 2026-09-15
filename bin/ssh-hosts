@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""List the machines this one can reach over SSH.
+"""List the machines this one can reach over SSH (`sys ssh`), or the devices
+on the tailnet (`sys tailscale`, via --tailnet).
 
 Read live from the machine — ~/.ssh/config (following Include lines) and the
 Tailscale daemon. Entries that sys wrote from config/ssh/access are listed
@@ -41,6 +42,8 @@ def ssh_config_hosts(path=SSH_DIR / "config", seen=None, by_alias=None):
                 for inc in sorted(glob.glob(pattern)):
                     hosts.extend(ssh_config_hosts(pathlib.Path(inc), seen, by_alias))
             cur = []
+        elif key == "match":
+            cur = []          # a Match block is a route choice, not a host
         elif key == "host":
             cur = []
             for alias in val.split():
@@ -48,10 +51,10 @@ def ssh_config_hosts(path=SSH_DIR / "config", seen=None, by_alias=None):
                     continue
                 if alias not in by_alias:
                     by_alias[alias] = {"alias": alias, "hostname": "", "user": "", "port": "",
-                                       "managed": path == MANAGED}
+                                       "hostkeyalias": "", "managed": path == MANAGED}
                     hosts.append(by_alias[alias])
                 cur.append(by_alias[alias])
-        elif cur and key in ("hostname", "user", "port"):
+        elif cur and key in ("hostname", "user", "port", "hostkeyalias"):
             for h in cur:
                 h[key] = h[key] or val
     return hosts
@@ -81,14 +84,32 @@ def tailnet():
         return sorted(rows, key=lambda r: (not r["online"], r["name"]))
     return None
 
-cfg = ssh_config_hosts()
 net = tailnet()
+
+if "--tailnet" in sys.argv[1:]:
+    rule("Tailnet", "🕸️")
+    if net is None:
+        print(f"  {D}Tailscale is not installed{R}")
+    elif not net:
+        print(f"  {D}Not signed in to a tailnet{R}")
+    else:
+        for r in net:
+            dot = f"{G}●{R}" if r["online"] else f"{D}○{R}"
+            tag = f" {D}(this machine){R}" if r["self"] else ""
+            print(f'    {dot} {G}{r["name"]:<18}{R} {D}{r["ip"]:<15} {r["os"]:<7}{R}'
+                  f'{"" if r["online"] else D + "offline" + R}{tag}')
+    print()
+    sys.exit(0)
+
+cfg = ssh_config_hosts()
 known = {r["name"] for r in net} if net else set()
 
 rule("SSH hosts", "🔌")
 
 def show(h):
-    target = h["hostname"] or h["alias"]
+    # A managed entry has two routes (Tailscale, then NAME.local); show the
+    # machine it means, which HostKeyAlias carries, rather than either route.
+    target = h["hostkeyalias"] or h["hostname"] or h["alias"]
     who = f'{h["user"]}@' if h["user"] else ""
     port = f' {D}port {h["port"]}{R}' if h["port"] else ""
     flag = ""
@@ -111,16 +132,4 @@ if manual:
         show(h)
     print()
 
-if net is None:
-    print(f"  {D}Tailscale not installed — no tailnet devices to list{R}")
-elif not net:
-    print(f"  {D}Not signed in to a tailnet{R}")
-else:
-    print(f"  {B}On your tailnet{R}")
-    for r in net:
-        dot = f"{G}●{R}" if r["online"] else f"{D}○{R}"
-        tag = f" {D}(this machine){R}" if r["self"] else ""
-        print(f'    {dot} {G}{r["name"]:<18}{R} {D}{r["ip"]:<15} {r["os"]:<7}{R}'
-              f'{"" if r["online"] else D + "offline" + R}{tag}')
-
-print(f"\n  {D}Who may log in where: config/ssh/access in the repo. Edit it, sys push, then sys sync on each machine.{R}\n")
+print(f"  {D}Who may log in where: config/ssh/access in the repo. Edit it, sys push, then sys sync on each machine.{R}\n")

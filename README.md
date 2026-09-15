@@ -28,7 +28,8 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys push` | Save this machine's config into the repo and push (aliased to `bsys`) |
 | `sys doctor` | Check everything is installed and signed in |
 | `sys edit` | Open this config folder in VS Code (aliased to `esys`) |
-| `sys ssh` | List the machines you can reach over SSH, and what is on your tailnet |
+| `sys ssh` | List the machines you can reach over SSH |
+| `sys tailscale` | List the devices on your tailnet, and which are online |
 | `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
 | `sys alias` | List your aliases, functions and project starters (aliased to `la`) |
 | `sys mise` | How to use mise and uv |
@@ -113,6 +114,7 @@ lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, App Store, macOS, the Dock
 lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access (run by sync)
 bin/ssh-access               the one command for a machine that does not run sys
+bin/ssh-reach                Tailscale name or NAME.local? the aliases ask this
 config/ssh/access            who may log in where, and as which account
 config/ssh/keys/             each machine's public key, shared by sys sync
 dotfiles/                    copied into ~

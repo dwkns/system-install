@@ -139,10 +139,16 @@ ssh_write_aliases() {
   me="$(ssh_machine)"
   out="# Written by sys from config/ssh/access. Do not edit — sys sync rewrites it."$'\n'
   out="$out# Hand-written hosts belong in ~/.ssh/config, which includes this file."$'\n'
+  # Two routes per machine. The Match line wins when the Tailscale name
+  # answers on port 22; otherwise the Host block's NAME.local is used, which
+  # works on the home network with Tailscale off. HostKeyAlias makes both
+  # routes share one known_hosts entry.
+  local a
   while read -r m account _; do
     [[ "$m" == "$me" ]] && continue
-    all="$all $(ssh_alias "$m")"
-    out="$out"$'\n'"Host $(ssh_alias "$m")"$'\n'"  HostName $m"$'\n'"  User $account"$'\n'
+    a="$(ssh_alias "$m")"; all="$all $a"
+    out="$out"$'\n'"Match originalhost $a exec \"~/.system-config/bin/ssh-reach $m\""$'\n'"  HostName $m"$'\n'
+    out="$out"$'\n'"Host $a"$'\n'"  HostName $m.local"$'\n'"  User $account"$'\n'"  HostKeyAlias $m"$'\n'
   done < <(ssh_access_lines)
   [[ -n "$all" ]] || { [[ -z "$quiet" ]] && note "No other machines in config/ssh/access"; return 0; }
   out="$out"$'\n'"Host$all"$'\n'

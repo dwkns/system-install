@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Can this name be reached on port 22 within two seconds? Used by the ssh
+# aliases sys writes: the Tailscale name is tried first, and if it is not
+# reachable (Tailscale off, or the machine not on it) ssh falls back to
+# NAME.local on the home network. Exit 0 = reachable.
+exec python3 -c '
+import socket, sys
+try:
+    socket.create_connection((sys.argv[1], 22), timeout=2).close()
+except Exception:
+    sys.exit(1)
+' "$1"
