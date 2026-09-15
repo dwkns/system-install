@@ -161,6 +161,7 @@ HEADSUP
     ;;
 
   sync)
+    want_push=0
     doing "Fetching latest config"
     before="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || echo none)"
 
@@ -180,12 +181,12 @@ HEADSUP
           if ! run git -C "$ROOT_DIR" pull --rebase --autostash --quiet; then
             die "The two sides changed the same lines. Fix it in $ROOT_DIR (git status shows where), then run sys sync again."
           fi
-          push_repo && ok "Pushed $ahead commit(s)"
+          want_push=1
         elif [[ "$behind" -gt 0 ]]; then
           run git -C "$ROOT_DIR" pull --ff-only --autostash --quiet || die "Could not pull. Check $ROOT_DIR."
           doing "Pulled $behind commit(s)"
         elif [[ "$ahead" -gt 0 ]]; then
-          push_repo && ok "Pushed $ahead commit(s)"
+          want_push=1
         fi
       fi
     fi
@@ -200,6 +201,12 @@ HEADSUP
       doing "sys was updated — restarting with the new version"
       export SYS_RESTARTED=1
       exec "$ROOT_DIR/bin/sys" ${SYS_ARGV[@]+"${SYS_ARGV[@]}"}
+    fi
+
+    # Push only now, after any restart, so a fix to the push itself is the
+    # version that runs. The restarted sys sees itself as ahead and lands here.
+    if [[ "${want_push:-0}" == "1" ]]; then
+      push_repo && ok "Pushed $ahead commit(s)"
     fi
 
     # Install packages when the Brewfile differs from the one last installed
