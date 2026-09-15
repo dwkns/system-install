@@ -72,8 +72,48 @@ sync_install() {
   return 0
 }
 
+# Sign in to GitHub with the same "device flow" gh uses, but driven from here
+# so gh never draws an interactive prompt: those query the terminal and the
+# replies land on screen as escape codes. Prints a code, opens the browser,
+# waits for approval, hands the token to gh. Nothing else touches the terminal.
+github_device_login() {
+  local client="178c6fc778ccc68e1d6a"   # gh's own OAuth app, so gh owns the token
+  local resp device code uri interval token err waited=0
+  resp="$(curl -fsS -X POST https://github.com/login/device/code \
+            -d "client_id=$client" -d "scope=repo read:org gist workflow" 2>/dev/null)" || {
+    warn "Could not reach GitHub to start the sign-in"; return 1; }
+  field() { printf '%s' "$1" | tr '&' '\n' | sed -n "s/^$2=//p" | sed 's/%3A/:/g;s/%2F/\//g'; }
+  device="$(field "$resp" device_code)"; code="$(field "$resp" user_code)"
+  uri="$(field "$resp" verification_uri)"; interval="$(field "$resp" interval)"
+  [[ -n "$device" && -n "$code" ]] || { warn "GitHub gave no sign-in code"; return 1; }
+
+  printf '\n    Your code:  %s%s%s\n    Type it on the GitHub page that is opening: %s\n\n' "$BOLD" "$code" "$RESET" "$uri"
+  { open "$uri" 2>/dev/null || xdg-open "$uri" 2>/dev/null; } >/dev/null 2>&1 &
+  note "Waiting for you to approve it there…"
+
+  while (( waited < 900 )); do
+    sleep "${interval:-5}"; waited=$((waited + ${interval:-5}))
+    resp="$(curl -fsS -X POST https://github.com/login/oauth/access_token \
+              -d "client_id=$client" -d "device_code=$device" \
+              -d "grant_type=urn:ietf:params:oauth:grant-type:device_code" 2>/dev/null)" || continue
+    token="$(field "$resp" access_token)"
+    [[ -n "$token" ]] && break
+    err="$(field "$resp" error)"
+    case "$err" in
+      authorization_pending) ;;
+      slow_down) sleep 5 ;;
+      expired_token) warn "That code expired"; return 1 ;;
+      access_denied) warn "You cancelled the sign-in"; return 1 ;;
+    esac
+  done
+  [[ -n "$token" ]] || { warn "Timed out waiting for the sign-in"; return 1; }
+  printf '%s\n' "$token" | gh auth login --hostname github.com --with-token >/dev/null 2>&1 \
+    || { warn "gh did not accept the sign-in"; return 1; }
+  ok "Signed in to GitHub"
+}
+
 # Push commits that already exist. Never stops at a bare "Username:" prompt: a
-# machine with no GitHub login saved is told what to do, once.
+# machine with no GitHub login saved is signed in, once.
 push_repo() {
   if run env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then return 0; fi
   [[ "${DRY_RUN:-0}" == "1" ]] && return 1
@@ -82,18 +122,10 @@ push_repo() {
   # browser and shows a code to type — then let gh hand git its credentials.
   if has_cmd gh && { true </dev/tty; } 2>/dev/null; then
     doing "This machine needs a GitHub login to push — signing in once with gh"
-    # Make gh git's credential helper first (what `gh auth setup-git` writes,
-    # but that refuses to run before a login). With it in place gh asks no
-    # questions — its y/n prompt chokes on stray terminal escape sequences —
-    # only prints a code and opens the browser. Any stray input is drained.
-    git config --global --replace-all credential.https://github.com.helper "" 2>/dev/null || true
-    git config --global --add credential.https://github.com.helper "!$(command -v gh) auth git-credential" 2>/dev/null || true
     if ! gh auth status -h github.com >/dev/null 2>&1; then
-      read -t 1 -rs _junk </dev/tty 2>/dev/null || true
-      note "A code appears below — type it into the browser page that opens"
-      gh auth login --hostname github.com --git-protocol https --web --skip-ssh-key </dev/tty >/dev/tty 2>&1 \
-        || { warn "GitHub sign-in did not finish — run sys sync again to retry"; return 1; }
+      github_device_login || { warn "GitHub sign-in did not finish — run sys sync again to retry"; return 1; }
     fi
+    gh auth setup-git -h github.com >/dev/null 2>&1 || true
     if env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then
       ok "Signed in to GitHub — pushed. You will not be asked again on this machine"
       return 0
