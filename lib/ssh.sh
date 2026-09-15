@@ -16,7 +16,7 @@ SSH_KEY="$HOME/.ssh/id_ed25519"
 SSH_ACCESS="$ROOT_DIR/config/ssh/access"
 SSH_KEYS_DIR="$ROOT_DIR/config/ssh/keys"
 SSH_HOSTKEYS_DIR="$ROOT_DIR/config/ssh/hostkeys"     # each machine's sshd host key, also public
-SSH_KNOWN="$HOME/.ssh/config.d/known_hosts_sys"       # generated from hostkeys/, pins every machine
+SSH_KNOWN="$HOME/.ssh/known_hosts_sys"        # generated from hostkeys/; NOT under config.d, which ssh reads as config
 SSH_HOST_PUB="/etc/ssh/ssh_host_ed25519_key.pub"
 SSH_ALIASES="$HOME/.ssh/config.d/sys"                 # generated, safe to delete
 SSH_AUTH="$HOME/.ssh/authorized_keys"
@@ -167,7 +167,7 @@ ssh_install_access() {
   return 0
 }
 
-# ~/.ssh/config.d/known_hosts_sys: every other machine's host key from the
+# ~/.ssh/known_hosts_sys: every other machine's host key from the
 # repo, under the name HostKeyAlias uses, so a wrong machine is refused and
 # the first contact needs no "are you sure?".
 ssh_write_known_hosts() {
@@ -212,7 +212,7 @@ ssh_write_aliases() {
   # see a password typed at it. Plain `ssh user@host` still can.
   out="$out  IdentityFile ~/.ssh/id_ed25519"$'\n'"  IdentitiesOnly yes"$'\n'
   out="$out  PasswordAuthentication no"$'\n'"  KbdInteractiveAuthentication no"$'\n'
-  out="$out  UserKnownHostsFile ~/.ssh/config.d/known_hosts_sys ~/.ssh/known_hosts"$'\n'
+  out="$out  UserKnownHostsFile ~/.ssh/known_hosts_sys ~/.ssh/known_hosts"$'\n'
   out="$out  ServerAliveInterval 30"$'\n'"  ControlMaster auto"$'\n'"  ControlPath ~/.ssh/cm-%C"$'\n'"  ControlPersist 10m"
 
   if [[ -f "$SSH_ALIASES" && "$(cat "$SSH_ALIASES")" == "$out" ]]; then
