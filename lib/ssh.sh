@@ -238,6 +238,23 @@ ssh_write_aliases() {
   fi
 }
 
+# Terminal descriptions the machines need to know about each other's
+# terminals: Ghostty sets TERM=xterm-ghostty, and a machine you ssh into
+# answers "unknown terminal type" until it has the description. Each file in
+# config/terminfo is compiled into ~/.terminfo here, once.
+install_terminfo() {
+  local f name
+  has_cmd tic || return 0
+  for f in "$ROOT_DIR"/config/terminfo/*; do
+    [[ -f "$f" ]] || continue
+    name="$(basename "$f")"
+    infocmp "$name" >/dev/null 2>&1 && continue
+    doing "Teaching this machine about the $name terminal"
+    run tic -x -o "$HOME/.terminfo" "$f" 2>/dev/null || warn "Could not compile $name"
+  done
+  return 0
+}
+
 # Everything, in order. Run by setup and by every sync.
 ssh_apply() {
   local quiet="${1:-}"
@@ -250,6 +267,7 @@ ssh_apply() {
   ssh_install_access "$quiet"
   ssh_write_known_hosts "$quiet"
   ssh_write_aliases "$quiet"
+  install_terminfo
   return 0
 }
 

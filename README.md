@@ -123,6 +123,7 @@ config/input                 keyboard and trackpad, applied on every sync
 config/desktop-colour        solid desktop colour, applied by sync when it changes
 config/dock                  the Dock, captured by push and applied by sync when it changes
 config/ssh/hostkeys/         each machine's sshd host key, pinned everywhere by sync
+config/terminfo/             terminal descriptions (Ghostty) every machine learns, so ssh sessions work
 config/sublime-config/       copied into Sublime's User dir
 config/cursor/               copied into Cursor's User dir
 config/cursor-extensions.txt Cursor extensions, installed by `sys setup`
