@@ -79,7 +79,9 @@ ssh_trust() {
       note "$host: already accepts this machine's key"; continue
     fi
     doing "Putting this machine's key on $host — you will be asked for its password"
-    ssh-copy-id -i "$SSH_KEY.pub" "$host" 2>&1 | grep -vE '^(/usr/bin/ssh-copy-id|Number of key|Now try|$)' || true
+    # ssh-copy-id reads a DRY_RUN variable of its own; sys exports one too, so
+    # it must be cleared or the key is only ever "would have been added".
+    env -u DRY_RUN ssh-copy-id -i "$SSH_KEY.pub" "$host" 2>&1 | grep -vE '^(/usr/bin/ssh-copy-id|Number of key|Now try|$)' || true
     if $SSH_TEST "$host" true 2>/dev/null; then
       ok "$host: key login works — ssh $host"
     else
