@@ -76,6 +76,22 @@ sync_install() {
 # machine with no GitHub login saved is told what to do, once.
 push_repo() {
   if run env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then return 0; fi
+  [[ "${DRY_RUN:-0}" == "1" ]] && return 1
+
+  # No login saved: sign in through gh, once, right here — it opens the
+  # browser and shows a code to type — then let gh hand git its credentials.
+  if has_cmd gh && { true </dev/tty; } 2>/dev/null; then
+    doing "This machine needs a GitHub login to push — signing in once with gh"
+    if ! gh auth status -h github.com >/dev/null 2>&1; then
+      gh auth login --hostname github.com --git-protocol https --web </dev/tty >/dev/tty 2>&1 \
+        || { warn "GitHub sign-in did not finish — run sys sync again to retry"; return 1; }
+    fi
+    gh auth setup-git >/dev/null 2>&1 || true
+    if env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then
+      ok "Signed in to GitHub — pushed. You will not be asked again on this machine"
+      return 0
+    fi
+  fi
   warn "Could not push to GitHub — this machine has no GitHub login saved"
   note "Once, on this machine:  gh auth login  then  gh auth setup-git  — then sys sync again"
   return 1

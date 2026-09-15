@@ -740,7 +740,7 @@ print_manual_steps() {
     todo+=("🧩  Open Cursor once so its command appears, then ${CYAN}sys setup${RESET} for its extensions")
 
   ssh_has_key && ! ssh_shared && \
-    todo+=("🔑  Share this machine's SSH key: ${CYAN}gh auth login${RESET}, ${CYAN}gh auth setup-git${RESET}, then ${CYAN}sys sync${RESET}")
+    todo+=("🔑  Share this machine's SSH key: ${CYAN}sys sync${RESET} — it signs you in to GitHub once, in the browser")
 
   todo+=("🔐  Sign in to 1Password, Dropbox, Slack, Notion and Figma")
   todo+=("🔓  Give Ghostty Full Disk Access — System Settings ▸ Privacy & Security")

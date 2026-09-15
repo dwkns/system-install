@@ -168,10 +168,11 @@ machine has nobody to type one, and the point is that ssh just works. The
 private key never leaves the machine that made it. Nothing here ever types a
 password.
 .IP
-Sharing the key needs a GitHub login on this machine. A machine without one is
-told so, once, instead of being stopped at a bare username prompt, and the key
-is pushed by the next sync after
-.BR "gh auth login" .
+Sharing the key needs a GitHub login on this machine. A machine without one
+is signed in on the spot through
+.BR gh (1),
+once, in the browser, and the push is retried; it is never stopped at a bare
+username prompt.
 .TP
 .B ssh harden
 Optional. Turn off password logins on this machine by writing

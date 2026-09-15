@@ -69,8 +69,8 @@ Private keys never leave the machine that made them. Nothing here ever types
 a password or copies a key by hand.
 
 **A new Mac** needs nothing beyond the installer. Its key is shared on the first
-sync that has a GitHub login; if it has none yet, setup says so and
-`gh auth login` once fixes it. Add the new machine to `config/ssh/access` on
+sync; if the machine has no GitHub login yet, sync signs you in through `gh`
+once, in the browser, and carries on. Add the new machine to `config/ssh/access` on
 any machine and `sys push`; every other machine follows on its next sync.
 
 **The Ubuntu box** does not run `sys`. It runs one command instead, once to
