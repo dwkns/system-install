@@ -301,12 +301,11 @@ HEADSUP
     else
       row "🔑" "SSH key" "$(bad "none") ${DIM}sys ssh setup${RESET}"; issues=1
     fi
+    # Passwords staying on is a choice, not a problem: never flagged.
     if ssh_keys_only; then
       row "🔐" "sshd" "$(good "keys only")"
-    elif [[ "$(ssh_trusted_count)" -gt 0 ]]; then
-      row "🔐" "sshd" "$(bad "passwords allowed") ${DIM}sys ssh harden${RESET}"; issues=1
     else
-      row "🔐" "sshd" "${DIM}passwords allowed — trust a key from another machine, then sys ssh harden${RESET}"
+      row "🔐" "sshd" "${DIM}keys and passwords — sys ssh harden turns passwords off${RESET}"
     fi
 
     if [[ -e "$ROOT_DIR/.state/dock" ]]; then
