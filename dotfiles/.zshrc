@@ -29,8 +29,10 @@ setopt EXTENDED_GLOB PROMPT_SUBST
 autoload -Uz colors vcs_info && colors
 zstyle ':vcs_info:git:*' formats " on %F{green}%b%f"
 precmd() { vcs_info }
-PROMPT='%F{yellow}%~%f${vcs_info_msg_0_}
-$ '
+# Host name first, in grey: quiet, but you always know which Mac you're on.
+# A raw escape rather than %F{8}: zsh looks colours up in terminfo, and over
+# ssh an unknown TERM (xterm-ghostty) turns %F{…} into garbage.
+PROMPT=$'%{\e[90m%}%m%{\e[39m%} %F{yellow}%~%f${vcs_info_msg_0_}\n$ '
 
 # ── Completions ──────────────────────────────────────────────────────────────
 fpath=(~/.grok/completions/zsh $fpath)
