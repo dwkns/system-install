@@ -82,11 +82,18 @@ push_repo() {
   # browser and shows a code to type — then let gh hand git its credentials.
   if has_cmd gh && { true </dev/tty; } 2>/dev/null; then
     doing "This machine needs a GitHub login to push — signing in once with gh"
+    # Make gh git's credential helper first (what `gh auth setup-git` writes,
+    # but that refuses to run before a login). With it in place gh asks no
+    # questions — its y/n prompt chokes on stray terminal escape sequences —
+    # only prints a code and opens the browser. Any stray input is drained.
+    git config --global --replace-all credential.https://github.com.helper "" 2>/dev/null || true
+    git config --global --add credential.https://github.com.helper "!$(command -v gh) auth git-credential" 2>/dev/null || true
     if ! gh auth status -h github.com >/dev/null 2>&1; then
-      gh auth login --hostname github.com --git-protocol https --web </dev/tty >/dev/tty 2>&1 \
+      read -t 1 -rs _junk </dev/tty 2>/dev/null || true
+      note "A code appears below — type it into the browser page that opens"
+      gh auth login --hostname github.com --git-protocol https --web --skip-ssh-key </dev/tty >/dev/tty 2>&1 \
         || { warn "GitHub sign-in did not finish — run sys sync again to retry"; return 1; }
     fi
-    gh auth setup-git >/dev/null 2>&1 || true
     if env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then
       ok "Signed in to GitHub — pushed. You will not be asked again on this machine"
       return 0
