@@ -29,7 +29,6 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys doctor` | Check everything is installed and signed in |
 | `sys edit` | Open this config folder in VS Code (aliased to `esys`) |
 | `sys ssh` | List the machines you can reach over SSH, and what is on your tailnet |
-| `sys ssh apply` | Apply `config/ssh/access` here now (`sys sync` does this anyway) |
 | `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
 | `sys alias` | List your aliases, functions and project starters (aliased to `la`) |
 | `sys mise` | How to use mise and uv |
@@ -112,7 +111,7 @@ man/man1/sys.1               man page (`man sys`)
 lib/common.sh                colours, logging, helpers
 lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, App Store, macOS, the Dock
-lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access
+lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access (run by sync)
 bin/ssh-access               the one command for a machine that does not run sys
 config/ssh/access            who may log in where, and as which account
 config/ssh/keys/             each machine's public key, shared by sys sync

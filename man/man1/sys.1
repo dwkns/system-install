@@ -58,7 +58,7 @@ so sync never commits your files on your behalf. The one exception is this
 machine's own SSH public key, which it shares into
 .I config/ssh/keys/
 by itself; see
-.BR "ssh apply" .
+.BR ssh .
 .IP
 If the pull changed the
 .IR Brewfile ,
@@ -136,14 +136,12 @@ anything hand-written in
 .I ~/.ssh/config
 (flagged when its address is not on your tailnet), and the devices on your
 tailnet, with which are online. Read live from the machine.
-.TP
-.B ssh apply
-Apply
-.I config/ssh/access
-here now. Every
+.PP
+Every
 .B sys sync
-does this anyway, so it is only for when you cannot wait. It makes this
-machine's ed25519 key in
+also applies
+.IR config/ssh/access .
+It makes this machine's ed25519 key in
 .I ~/.ssh/id_ed25519
 if it has none; shares the public half as
 .IR config/ssh/keys/NAME.pub ,

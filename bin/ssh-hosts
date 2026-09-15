@@ -134,6 +134,6 @@ tip("exit", "log out")
 tip("sys ssh", "this list, live: who you can reach, who is online")
 if shutil.which("tailscale"):
     tip("tailscale status", f"the tailnet from Tailscale itself   ·   tailscale ping {ex}")
-tip("sys ssh apply", "apply config/ssh/access here right now, instead of waiting for sys sync")
+tip("sys sync", "also applies config/ssh/access here — new keys, new machines")
 tip("sys ssh harden", "turn password logins off on this machine, keys only — optional")
 print(f"\n  {D}Who may log in where: config/ssh/access in the repo. Edit it, sys push, then sys sync on each machine.{R}\n")

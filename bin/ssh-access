@@ -3,10 +3,10 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/bin/ssh-access | bash
 #
-# Gets or updates the repo in ~/.system-config, then applies config/ssh/access
-# here exactly as `sys sync` does on a Mac: makes this machine's key if it has
-# none, installs the keys of the machines let in, writes the aliases. Run it
-# again whenever the access file changes or a machine is added.
+# Gets or updates the repo in ~/.system-config, then runs `sys sync`, which on
+# a machine that is not a Mac does just the repo update and SSH access: makes
+# this machine's key if it has none, installs the keys of the machines let in,
+# writes the aliases. Run it again whenever a machine is added.
 set -euo pipefail
 
 REPO="https://github.com/dwkns/system-install.git"
@@ -20,4 +20,4 @@ else
   git clone --quiet "$REPO" "$DIR"
 fi
 
-exec "$DIR/bin/sys" ssh apply
+exec "$DIR/bin/sys" sync
