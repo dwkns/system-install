@@ -30,6 +30,7 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys edit` | Open this config folder in VS Code (aliased to `esys`) |
 | `sys ssh` | List hosts you can reach over SSH (read live; nothing stored) |
 | `sys ssh setup` | Make this machine's SSH key and an alias for every machine on the tailnet |
+| `sys ssh user <alias> <account>` | Which account to log in as on that machine (kept locally, not in the repo) |
 | `sys ssh trust <alias>` | Let this machine into another one — asks for its password once, never again |
 | `sys ssh harden` | Keys only on this machine; refuses until at least one key can get in |
 | `sys alias` | List your aliases, functions and project starters (aliased to `la`) |

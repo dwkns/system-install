@@ -58,6 +58,23 @@ ssh_write_aliases() {
   ok "$((n - 1)) alias(es) ready — 'sys ssh' lists them"
 }
 
+# Which account to log in as on one machine. Kept in ~/.ssh/config.d/users,
+# outside the repo. Without one, ssh uses your username on this machine.
+SSH_USERS="$HOME/.ssh/config.d/users"
+ssh_user() {
+  local alias="${1:-}" account="${2:-}"
+  [[ -n "$alias" && -n "$account" ]] || die "Usage: sys ssh user <alias> <account> — e.g. sys ssh user mbp-ubuntu admin"
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: $alias logs in as $account"; return 0; fi
+  mkdir -p "$HOME/.ssh/config.d" && chmod 700 "$HOME/.ssh" "$HOME/.ssh/config.d"
+  local tmp="$SSH_USERS.tmp"
+  { [[ -f "$SSH_USERS" ]] && awk -v a="$alias" '
+        /^Host /   { skip = ($2 == a) }
+        !skip      { print }' "$SSH_USERS"
+    printf 'Host %s\n  User %s\n' "$alias" "$account"; } > "$tmp"
+  mv "$tmp" "$SSH_USERS" && chmod 600 "$SSH_USERS"
+  ok "$alias: logs in as $account — ssh $alias"
+}
+
 ssh_setup() {
   ssh_make_key || return 1
   ssh_write_aliases || return 1
@@ -78,7 +95,9 @@ ssh_trust() {
     if $SSH_TEST "$host" true 2>/dev/null; then
       note "$host: already accepts this machine's key"; continue
     fi
-    doing "Putting this machine's key on $host — you will be asked for its password"
+    local as; as="$(ssh -G "$host" 2>/dev/null | awk '$1 == "user" {print $2}')"
+    doing "Putting this machine's key on $host, account '${as:-?}' — you will be asked for that account's password"
+    note "Wrong account? Ctrl-C, then: sys ssh user $host <account>"
     # ssh-copy-id reads a DRY_RUN variable of its own; sys exports one too, so
     # it must be cleared or the key is only ever "would have been added".
     env -u DRY_RUN ssh-copy-id -i "$SSH_KEY.pub" "$host" 2>&1 | grep -vE '^(/usr/bin/ssh-copy-id|Number of key|Now try|$)' || true

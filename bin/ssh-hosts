@@ -112,8 +112,9 @@ def generate():
            "# Hand-written hosts belong in ~/.ssh/config, which includes this file.", ""]
     for a, r in aliases.items():
         out += [f"Host {a}", f"  HostName {r['dns']}", ""]
+    # No User line: the account differs per machine and is set with
+    # `sys ssh user <alias> <account>`, which writes config.d/users.
     out += [f"Host {' '.join(aliases)}",
-            f"  User {user}",
             "  IdentityFile ~/.ssh/id_ed25519",
             "  IdentitiesOnly yes",
             "  ServerAliveInterval 30",

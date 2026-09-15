@@ -157,6 +157,13 @@ machine has nobody to type one, and the point is that
 .B ssh mini\-m1
 just works. The private key never leaves the machine that made it.
 .TP
+.BI "ssh user " "alias account"
+Which account to log in as on that machine, for example
+.BR "sys ssh user mbp\-ubuntu admin" .
+Kept in
+.IR ~/.ssh/config.d/users ,
+never in the repo. Without one, ssh uses your username on this machine.
+.TP
 .BI "ssh trust " alias ...
 Let this machine log in to another one: copies this machine's public key into
 that machine's

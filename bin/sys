@@ -19,6 +19,7 @@ sys — system configuration
   sys edit      Open this config folder in VS Code
   sys ssh       List the hosts you can reach over SSH
   sys ssh setup           Make this machine's key and aliases for the tailnet
+  sys ssh user <alias> <account>  Which account to log in as on that machine
   sys ssh trust <alias>…  Let this machine into another one (asks its password once)
   sys ssh harden          Keys only on this machine — no more password logins
   sys alias     List your custom aliases and functions
@@ -400,11 +401,12 @@ HEADSUP
       "")      "$ROOT_DIR/bin/ssh-hosts" ;;
       setup)   ssh_setup ;;
       harden)  ssh_harden ;;
+      user)    ssh_user "${ARGS[1]:-}" "${ARGS[2]:-}" ;;
       trust)
         [[ ${#ARGS[@]} -gt 1 ]] || die "Which machine? sys ssh trust <alias> — 'sys ssh' lists them"
         ssh_trust "${ARGS[@]:1}"
         ;;
-      *) die "Unknown: sys ssh $ARG — try setup, trust <alias> or harden" ;;
+      *) die "Unknown: sys ssh $ARG — try setup, user <alias> <account>, trust <alias> or harden" ;;
     esac
     ;;
 
