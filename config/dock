@@ -1,8 +1,9 @@
-# Dock contents, in order. Built by `sys dock`, and once during setup.
+# Dock contents, in order. Applied by setup, and by sys sync when this file changes.
 # One path per line. Anything not installed is skipped with a note.
 # Refresh from the current Dock with: sys push
 
 /System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app
+/Applications/Google Chrome.app
 /System/Applications/Mail.app
 /System/Applications/Messages.app
 /Applications/WhatsApp.app
