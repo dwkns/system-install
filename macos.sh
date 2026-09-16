@@ -60,6 +60,8 @@ defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool fa
 
 # ── Other ────────────────────────────────────────────────────────────────────
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+# Mail: Control-A archives the selected message. Applies next time Mail opens.
+defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Archive" "^a"
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "$HOME/Downloads/Torrents"
 
