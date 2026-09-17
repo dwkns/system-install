@@ -37,7 +37,8 @@ defaults write com.apple.screencapture disable-shadow -bool true
 
 # ── Finder ───────────────────────────────────────────────────────────────────
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+# Open windows in column view. Folders with their own saved view keep it.
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
