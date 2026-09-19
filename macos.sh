@@ -61,6 +61,11 @@ defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool fa
 
 # ── Other ────────────────────────────────────────────────────────────────────
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+# Safari: tick "Show features for web developers" (Settings → Advanced), which
+# brings back the Develop menu. Safari's prefs live in its sandbox container, so
+# this needs Full Disk Access for the terminal running the script, and Safari
+# rewrites the file when it quits — close Safari first, or it may not stick.
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
 # Mail: Control-A archives the selected message. Applies next time Mail opens.
 defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Archive" "^a"
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
