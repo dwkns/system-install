@@ -35,8 +35,13 @@ precmd() { vcs_info }
 PROMPT=$'%{\e[90m%}%m%{\e[39m%} %F{yellow}%~%f${vcs_info_msg_0_}\n$ '
 
 # ── Completions ──────────────────────────────────────────────────────────────
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
+fpath=(~/.config/zsh/completions ~/.grok/completions/zsh $fpath)
+autoload -Uz compinit
+# -C skips the scan for new completion files, which is what makes shells start
+# quickly — so rebuild the cache when sys's own completion is newer than it.
+# -i on the rebuild: Homebrew ships a group-writable _ghostty, and without it
+# compinit stops dead and you get no completions at all.
+if [[ ~/.config/zsh/completions/_sys -nt ~/.zcompdump ]]; then compinit -i; else compinit -C; fi
 
 # ── Environment ──────────────────────────────────────────────────────────────
 export EDITOR='code -w'

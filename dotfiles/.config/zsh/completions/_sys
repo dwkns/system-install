@@ -1,0 +1,60 @@
+#compdef sys
+# Tab completion for sys. Sub-commands are listed here; the things that come
+# from config files (network shares, machine names) are read live, so adding a
+# line to config/net is all it takes for it to complete.
+
+_sys() {
+  local root="${ROOT_DIR:-$HOME/.system-config}"
+  local -a cmds opts items
+
+  cmds=(
+    'setup:Set up this machine from scratch'
+    'sync:Pull the latest config and apply it here'
+    'push:Save this machine'"'"'s config into the repo and push'
+    'doctor:Check that everything is where it should be'
+    'ssh:List the machines you can reach over SSH'
+    'net:List the network shares, or connect to one'
+    'hostname:Set the computer name'
+    'extras:Install the optional extras'
+    'remove:Undo everything setup installed'
+  )
+  opts=(
+    '--dry-run:Show what would happen, change nothing'
+    '--force:Reinstall and rebuild everything'
+    '--yes:Do not ask for confirmation'
+  )
+
+  if (( CURRENT == 2 )); then
+    _describe -t commands 'sys command' cmds
+    return
+  fi
+
+  case "${words[2]}" in
+    net)
+      # name | url  — the first field of every non-comment line
+      items=( ${(f)"$(sed 's/#.*//' "$root/config/net" 2>/dev/null |
+                      awk -F'|' 'NF>=2 {gsub(/[ \t]/, "", $1); if ($1 != "") print $1}')"} )
+      _describe -t shares 'share' items
+      ;;
+    sync)
+      items=( 'all:then every machine this one may log into' )
+      _describe -t targets 'target' items
+      _describe -t options 'option' opts
+      ;;
+    ssh)
+      items=( 'harden:keys only on this machine — passwords off' )
+      _describe -t subcommands 'sys ssh' items
+      ;;
+    hostname)
+      # Machine names already in use, so the pattern is to hand.
+      items=( ${(f)"$(sed 's/#.*//' "$root/config/ssh/access" 2>/dev/null |
+                      awk 'NF {print $1}')"} )
+      _describe -t machines 'computer name' items
+      ;;
+    *)
+      _describe -t options 'option' opts
+      ;;
+  esac
+}
+
+_sys "$@"

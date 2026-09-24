@@ -327,6 +327,15 @@ so a share that another account is barred from reports "the share does not
 exist" rather than a permission error while you are signed in as someone else;
 and a stuck Finder dialog blocks every later mount attempt silently.
 
+**Tab completion.** `dotfiles/.config/zsh/completions/_sys` completes the
+sub-commands, and reads `config/net` and `config/ssh/access` live, so a new
+line in either completes without touching the completion file. `.zshrc` keeps
+`compinit -C` for fast shell start-up and rebuilds the cache only when `_sys`
+is newer than `~/.zcompdump` — with `-i`, because Homebrew ships a
+group-writable `_ghostty` and a plain `compinit` aborts on it, leaving the
+shell with no completions at all. Test it for real in a pty (a
+non-interactive zsh returns at the top of `.zshrc`).
+
 **A new command or setup step.** Add the `case` branch in `bin/sys`, bump
 `TOTAL` if it is a numbered setup step, and update **both** `README.md` and
 `man/man1/sys.1` plus the usage text. Those three drift easily; check them
