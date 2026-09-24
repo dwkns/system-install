@@ -110,6 +110,7 @@ macos.sh                     macOS defaults
 install.sh                   new-machine entry point
 bin/sys                      the only command
 man/man1/sys.1               man page (`man sys`)
+AGENTS.md                    how it all works, and how to change it (for AI assistants)
 lib/common.sh                colours, logging, helpers
 lib/sync.sh                  mirrors config between repo and system
 lib/setup.sh                 brew, mise, App Store, macOS, the Dock
