@@ -1,0 +1,11 @@
+# Machines that cannot run sys — one name per line.
+#
+# The Synology has no git, so it cannot keep a copy of this repo. It only ever
+# receives logins and never makes any, so all it needs is its authorized_keys.
+# Every machine that syncs and is allowed in there writes that file over SSH
+# instead, and `sys sync all` does not try to run sys on it.
+#
+# Bootstrap: one key has to be in place by hand before the first push can
+# happen. Add it in DSM (Control Panel ▸ Terminal & SNMP) or with ssh-copy-id.
+
+dwkns-smb-nas

@@ -72,6 +72,12 @@ sync; if the machine has no GitHub login yet, sync signs you in through `gh`
 once, in the browser, and carries on. Add the new machine to `config/ssh/access` on
 any machine and `sys push`; every other machine follows on its next sync.
 
+**A machine that cannot run sys** — the Synology NAS has no git — is listed in
+`config/ssh/no-sys`. It only ever receives logins, so every machine that syncs
+and is allowed in there writes its `authorized_keys` over SSH instead, and
+`sys sync all` does not try to run `sys` on it. One key has to be put there by
+hand first, or there would be no way in to write the file with.
+
 **The Ubuntu box** gets the same repo and a `sys` command that does only the
 repo update and SSH access. Once, to set up:
 
@@ -118,6 +124,7 @@ lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access
 bin/ssh-access               the one command for a machine that does not run sys
 bin/ssh-reach                Tailscale name or NAME.local? the aliases ask this
 config/ssh/access            who may log in where, and as which account
+config/ssh/no-sys            machines that cannot run sys; their access is pushed to them
 config/net                   network shares for `sys net`
 config/ssh/keys/             each machine's public key, shared by sys sync
 dotfiles/                    copied into ~

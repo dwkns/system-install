@@ -16,6 +16,7 @@ SSH_KEY="$HOME/.ssh/id_ed25519"
 SSH_ACCESS="$ROOT_DIR/config/ssh/access"
 SSH_KEYS_DIR="$ROOT_DIR/config/ssh/keys"
 SSH_HOSTKEYS_DIR="$ROOT_DIR/config/ssh/hostkeys"     # each machine's sshd host key, also public
+SSH_NO_SYS="$ROOT_DIR/config/ssh/no-sys"      # machines that cannot run sys; their access is pushed to them
 SSH_KNOWN="$HOME/.ssh/known_hosts_sys"        # generated from hostkeys/; NOT under config.d, which ssh reads as config
 SSH_HOST_PUB="/etc/ssh/ssh_host_ed25519_key.pub"
 SSH_ALIASES="$HOME/.ssh/config.d/sys"                 # generated, safe to delete
@@ -262,6 +263,8 @@ ssh_sync_others() {
   local me m a rc=0 targets
   me="$(ssh_machine)"
   targets="$(ssh_access_lines | awk -v me="$me" '{for(i=3;i<=NF;i++) if($i==me) print $1}')"
+  # Machines that cannot run sys are configured by ssh_push_access instead.
+  targets="$(printf '%s\n' $targets | while read -r m; do ssh_is_no_sys "$m" || printf '%s\n' "$m"; done)"
   [[ -n "$targets" ]] || { note "config/ssh/access lets $me into no other machine"; return 0; }
   for m in $targets; do
     a="$(ssh_alias "$m")"
@@ -287,6 +290,76 @@ ssh_sync_others() {
   return $rc
 }
 
+# Machines that cannot run sys (config/ssh/no-sys), one name per line.
+ssh_no_sys_list() {
+  [[ -f "$SSH_NO_SYS" ]] && sed 's/#.*//' "$SSH_NO_SYS" | awk 'NF{print $1}'
+  return 0
+}
+ssh_is_no_sys() { ssh_no_sys_list | grep -qx "$1"; }
+
+# For each machine that cannot run sys: write its authorized_keys over SSH,
+# from the same access file everything else comes from. Only a machine the
+# access file lets in there can do it, and one key has to be in place by hand
+# first — otherwise there would be no way in to write the file with.
+ssh_push_access() {
+  local quiet="${1:-}" me m a row keys names f out payload
+  me="$(ssh_machine)"
+  while read -r m; do
+    [[ -n "$m" ]] || continue
+    row="$(ssh_access_lines | awk -v m="$m" '$1==m{print; exit}')"
+    [[ -n "$row" ]] || continue
+    # Not allowed in there ourselves? Then it is not ours to configure.
+    printf '%s' "$row" | awk -v me="$me" '{for(i=3;i<=NF;i++) if($i==me) f=1} END{exit !f}' || continue
+
+    keys=""; names=""
+    set -- $row; shift 2
+    for f in "$@"; do
+      [[ -s "$SSH_KEYS_DIR/$f.pub" ]] || continue
+      keys="$keys$(head -1 "$SSH_KEYS_DIR/$f.pub")"$'\n'
+      names="$names $(ssh_alias "$f")"
+    done
+    [[ -n "$keys" ]] || continue
+
+    a="$(ssh_alias "$m")"
+    "$ROOT_DIR/bin/ssh-reach" "$m" || "$ROOT_DIR/bin/ssh-reach" "$m.local" || {
+      [[ -z "$quiet" ]] && note "$a is not reachable — its access was not updated"
+      continue
+    }
+    if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: write authorized_keys on $a for:$names"; continue; fi
+
+    # ssh re-parses the remote command through a shell, so a multi-line
+    # argument would arrive as several commands. One base64 blob instead:
+    # marker, marker, then the keys.
+    payload="$(printf '%s\n%s\n%s' "$SSH_MARK_START" "$SSH_MARK_END" "$keys" | base64 | tr -d '\n')"
+    out="$(ssh -o BatchMode=yes -o ConnectTimeout=8 "$a" /bin/sh -s -- "$payload" <<'REMOTE' 2>&1
+blob=$(printf '%s' "$1" | base64 -d) || { echo "could not decode"; exit 1; }
+start=$(printf '%s\n' "$blob" | sed -n 1p)
+end=$(printf '%s\n' "$blob" | sed -n 2p)
+want=$(printf '%s\n' "$blob" | sed -n '3,$p')
+auth="$HOME/.ssh/authorized_keys"
+mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
+outside=""
+[ -f "$auth" ] && outside=$(awk -v s="$start" -v e="$end" '$0==s{i=1;next} $0==e{i=0;next} !i' "$auth")
+# Drop any loose copy of a key the block now carries, so it is not let in twice.
+have=$(printf '%s\n' "$want" | awk '{print $2}' | tr '\n' ' ')
+outside=$(printf '%s\n' "$outside" | awk -v have="$have" '
+  BEGIN{n=split(have,k," "); for(i=1;i<=n;i++) if(k[i]!="") h[k[i]]=1}
+  !($2 in h)' | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}')
+new=$(printf '%s\n\n%s\n%s\n%s\n' "$outside" "$start" "$want" "$end" | sed '/./,$!d')
+if [ -f "$auth" ] && [ "$(cat "$auth")" = "$new" ]; then echo unchanged; exit 0; fi
+printf '%s\n' "$new" > "$auth.sys.tmp" && mv "$auth.sys.tmp" "$auth" && chmod 600 "$auth" && echo changed
+REMOTE
+)" || { warn "$a: could not update its access — $out"; continue; }
+
+    case "$out" in
+      unchanged) [[ -z "$quiet" ]] && ok "$a lets in:$names" ;;
+      changed)   doing "$a now lets in:$names" ;;
+      *)         warn "$a: unexpected reply — $out" ;;
+    esac
+  done < <(ssh_no_sys_list)
+  return 0
+}
+
 # Everything, in order. Run by setup and by every sync.
 ssh_apply() {
   local quiet="${1:-}"
@@ -299,6 +372,7 @@ ssh_apply() {
   ssh_install_access "$quiet"
   ssh_write_known_hosts "$quiet"
   ssh_write_aliases "$quiet"
+  ssh_push_access "$quiet"
   install_terminfo
   return 0
 }

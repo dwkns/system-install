@@ -164,6 +164,15 @@ on the local machine:
 Aliases drop the shared `dwkns-` prefix when every machine has it, so `ssh
 mini-m1` works.
 
+**Machines that cannot run sys** are listed in `config/ssh/no-sys` (the
+Synology: no git, so no repo). `ssh_push_access` writes their
+`authorized_keys` over SSH from every machine that syncs and is allowed in
+there, and `ssh_sync_others` skips them. Two things to know if you touch it:
+`ssh` re-parses the remote command through a shell, so the keys travel as one
+base64 blob rather than a multi-line argument; and the remote end only rewrites
+the text between the markers, leaving hand-added keys alone. Bootstrapping
+still needs one key put there by hand.
+
 `install_terminfo` also runs here, compiling `config/terminfo/*` (Ghostty's
 `xterm-ghostty`) so ssh sessions from Ghostty do not land on "unknown terminal".
 
