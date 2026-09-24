@@ -10,3 +10,4 @@ dwkns-mbp-m5         dwkns     dwkns-mbp-m1
 dwkns-mbp-m1         dwkns     dwkns-mbp-m5
 dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mbp-ubuntu
 dwkns-mbp-ubuntu     admin     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mini-m1
+dwkns-smb-nas        dwkns     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mini-m1  dwkns-mbp-ubuntu
