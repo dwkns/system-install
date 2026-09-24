@@ -48,7 +48,6 @@ net_list() {
       printf '    %ssys net %-12s%s %s→ %s%s\n' \
         "$GREEN" "$name" "$RESET" "$DIM" "$url" "$RESET"
     fi
-    [[ -n "$desc" ]] && printf '                     %s%s%s\n' "$DIM" "$desc" "$RESET"
   done < <(net_lines)
   if [[ "$any" == "0" ]]; then
     note "Nothing in config/net yet"

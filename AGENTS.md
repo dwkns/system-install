@@ -307,7 +307,7 @@ no `sys dock` command.
 until macOS reports it applied. Re-run it with
 `rm .state/desktop && sys sync`, or `sys sync --force`.
 
-**A network share.** Add a line to `config/net`: `name | url | description`.
+**A network share.** Add a line to `config/net`: `name | url`.
 The url must name the share (`smb://user@host/Share`) or Finder stops to ask
 which one. `sys net NAME` hands the url to `open`, then waits for the volume to
 appear rather than trusting that `open` returned. Passwords are never handled

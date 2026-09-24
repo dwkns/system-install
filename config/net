@@ -1,6 +1,6 @@
 # Network shares, for `sys net`.
 #
-#   name | url | what it is
+#   name | url
 #
 # The url must include the share name, or Finder stops to ask which one you
 # want.
@@ -15,5 +15,5 @@
 # accounts at once needs the same NAS reached by two different names. Not
 # worth it: for admin work, ssh in instead.
 
-dwkns-nas    | smb://dwkns@192.168.5.45/dwkns-nas   | your files on the NAS
-backup-nas   | smb://dwkns@192.168.5.45/backup-nas  | backups, as dwkns
+dwkns-nas    | smb://dwkns@192.168.5.45/dwkns-nas
+backup-nas   | smb://dwkns@192.168.5.45/backup-nas
