@@ -7,6 +7,7 @@ source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/sync.sh"
 source "$ROOT_DIR/lib/setup.sh"
 source "$ROOT_DIR/lib/ssh.sh"
+source "$ROOT_DIR/lib/net.sh"
 
 usage() {
   cat <<'USAGE'
@@ -19,6 +20,7 @@ sys — system configuration
   sys doctor      Check that everything is where it should be
   sys ssh         List the machines you can reach over SSH
   sys ssh harden  Keys only on this machine — optional, passwords stay on otherwise
+  sys net         List the network shares; sys net NAME connects to one
   sys hostname    Set the computer name (asks, or pass one: sys hostname my-mac)
   sys extras      Install the optional extras (Office, Xcode, duckdb)
   sys remove      Undo everything setup installed (asks first; --dry-run to preview)
@@ -340,6 +342,11 @@ HEADSUP
   remove)
     is_macos || die "macOS only."
     remove_everything
+    ;;
+
+  net)
+    is_macos || die "macOS only."
+    if [[ -n "${ARGS[0]:-}" ]]; then net_connect "${ARGS[0]}"; else net_list; fi
     ;;
 
   ssh)

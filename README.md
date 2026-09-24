@@ -30,6 +30,7 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys doctor` | Check everything is installed and signed in |
 | `sys ssh` | List the machines you can reach over SSH |
 | `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
+| `sys net` | List the network shares; `sys net dwkns-nas` mounts one |
 | `sys hostname` | Set the computer name (asks, or `sys hostname my-mac`) |
 | `sys extras` | Install optional extras (Office, Xcode, duckdb) |
 | `sys remove` | Undo everything setup installed (asks first; `--dry-run` previews) |
@@ -118,6 +119,7 @@ lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access
 bin/ssh-access               the one command for a machine that does not run sys
 bin/ssh-reach                Tailscale name or NAME.local? the aliases ask this
 config/ssh/access            who may log in where, and as which account
+config/net                   network shares for `sys net`
 config/ssh/keys/             each machine's public key, shared by sys sync
 dotfiles/                    copied into ~
 config/mas-apps.txt          App Store app IDs

@@ -62,6 +62,7 @@ double-width (📦 🔑 🩺); narrow ones (🛠 🛡 ⚠️) break column align
 | `bin/set-desktop-colour` | Solid desktop colour via JXA, with verification |
 | `bin/ssh-hosts` | `sys ssh` — lists reachable machines, live from `~/.ssh/config` and Tailscale |
 | `bin/ssh-reach` | Is NAME answering on port 22 within 2s? Used by the ssh aliases |
+| `lib/net.sh` | `sys net` — network shares from `config/net`, mounted through Finder |
 | `man/man1/sys.1` | Man page. Keep in step with behaviour |
 
 Config lives in `config/`, dotfiles in `dotfiles/`, palettes in `colors/`.
@@ -305,6 +306,17 @@ no `sys dock` command.
 `bin/set-desktop-colour` writes a solid PNG, sets it through JXA, then polls
 until macOS reports it applied. Re-run it with
 `rm .state/desktop && sys sync`, or `sys sync --force`.
+
+**A network share.** Add a line to `config/net`: `name | url | description`.
+The url must name the share (`smb://user@host/Share`) or Finder stops to ask
+which one. `sys net NAME` hands the url to `open`, then waits for the volume to
+appear rather than trusting that `open` returned. Passwords are never handled
+here: the Keychain items Finder writes are locked to Finder and NetAuthAgent,
+so `smbutil` and `mount_smbfs` are refused and would fall back to prompting.
+Two things learned on the Synology: macOS keeps **one SMB session per server**,
+so a share that another account is barred from reports "the share does not
+exist" rather than a permission error while you are signed in as someone else;
+and a stuck Finder dialog blocks every later mount attempt silently.
 
 **A new command or setup step.** Add the `case` branch in `bin/sys`, bump
 `TOTAL` if it is a numbered setup step, and update **both** `README.md` and

@@ -179,6 +179,15 @@ the App Store is reachable, whether this machine's SSH keys are shared and
 who is let in, whether sshd still allows passwords, whether the Dock and
 desktop colour match their config, and whether the repository has
 uncommitted changes. Changes nothing.
+.TP
+.BR net " [" \fIname\fR ]
+List the network shares in
+.I config/net
+and say which are mounted. With a name, connect to that one:
+.B sys net dwkns\-nas
+hands the url to Finder, which authenticates from the login Keychain, and waits
+for the volume to appear. Passwords are never stored or typed by
+.BR sys .
 .SH OPTIONS
 .TP
 .B \-\-dry\-run
