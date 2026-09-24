@@ -3,7 +3,7 @@
 # ── Navigation ───────────────────────────────────────────────────────────────
 alias ls='ls -lha'
 alias dt='cd ~/Desktop'
-alias dev='cd ~/dev && ls -lha'
+alias dev='cd ~/Developer && ls -lha'
 
 # ── Editors ──────────────────────────────────────────────────────────────────
 alias c.='code .'

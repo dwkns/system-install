@@ -1,4 +1,4 @@
-# Dock contents, in order. Applied by setup, and by sys sync when this file changes.
+# Dock contents, in order. Captured by `sys push`; applied by `sys sync` when it changes.
 # One path per line. Anything not installed is skipped with a note.
 # Refresh from the current Dock with: sys push
 
@@ -19,9 +19,6 @@
 /System/Applications/System Settings.app
 /Applications/Tailscale.app
 /Applications/Sketch.app
-/Applications/Keynote.app
-/Applications/Numbers.app
-/Applications/Pages.app
 /System/Applications/Preview.app
 /Applications/MailExporter.app
 
