@@ -48,10 +48,9 @@ One file in the repo says who may log in where:
 ```
 # config/ssh/access
 # machine            account   may be logged into from
-dwkns-mbp-m5         dwkns     dwkns-mbp-m1
-dwkns-mbp-m1         dwkns     dwkns-mbp-m5
-dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mbp-ubuntu
-dwkns-mbp-ubuntu     admin     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mini-m1
+dwkns-mbp-m5         dwkns     dwkns-mini-m1
+dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-ubuntu
+dwkns-mbp-ubuntu     admin     dwkns-mbp-m5  dwkns-mini-m1
 ```
 
 Every `sys sync` applies it. On each machine that means: make its own key if

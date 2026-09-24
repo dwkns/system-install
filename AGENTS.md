@@ -133,8 +133,8 @@ One file drives it: **`config/ssh/access`**.
 
 ```
 # machine            account   may be logged into from
-dwkns-mbp-m5         dwkns     dwkns-mbp-m1
-dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-m1  dwkns-mbp-ubuntu
+dwkns-mbp-m5         dwkns     dwkns-mini-m1
+dwkns-mini-m1        dwkns     dwkns-mbp-m5  dwkns-mbp-ubuntu
 ```
 
 Column 1 is the machine's hostname, column 2 the account to log in as, the rest
