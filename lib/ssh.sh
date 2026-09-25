@@ -388,8 +388,10 @@ ssh_connect() {
   [[ -n "$found" ]] || die "No machine called $want in config/ssh/access — sys ssh lists them"
   a="$(ssh_alias "$found")"
 
-  # No tmux there? Then just a login shell, rather than an error.
-  remote='command -v tmux >/dev/null 2>&1 && exec tmux new -A -s main || exec "$SHELL" -l'
+  # Through a login shell: a non-interactive ssh command gets a bare PATH, so
+  # Homebrew's tmux would look missing and this would quietly hand back a
+  # plain shell. No tmux there at all? Then a login shell, not an error.
+  remote='exec bash -lc '"'"'command -v tmux >/dev/null 2>&1 && exec tmux new -A -s main || exec "$SHELL" -l'"'"''
 
   if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: connect to $a and attach tmux"; return 0; fi
 

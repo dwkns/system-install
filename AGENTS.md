@@ -63,6 +63,7 @@ double-width (📦 🔑 🩺); narrow ones (🛠 🛡 ⚠️) break column align
 | `bin/ssh-hosts` | `sys ssh` — lists reachable machines, live from `~/.ssh/config` and Tailscale |
 | `bin/ssh-reach` | Is NAME answering on port 22 within 2s? Used by the ssh aliases |
 | `lib/net.sh` | `sys net` — network shares from `config/net`, mounted through Finder |
+| `docs/ubuntu-box.md` | How the Ubuntu box was built — vendor repos `sys` does not manage |
 | `man/man1/sys.1` | Man page. Keep in step with behaviour |
 
 Config lives in `config/`, dotfiles in `dotfiles/`, palettes in `colors/`.
@@ -335,6 +336,22 @@ is newer than `~/.zcompdump` — with `-i`, because Homebrew ships a
 group-writable `_ghostty` and a plain `compinit` aborts on it, leaving the
 shell with no completions at all. Test it for real in a pty (a
 non-interactive zsh returns at the top of `.zshrc`).
+
+**A package for the Ubuntu box.** Add it to `config/apt-packages`. `sys sync`
+there installs whatever is missing — no stamp, because `dpkg-query` is cheap
+and it then self-heals if something is removed. Vendor-repo software (Docker,
+cloudflared, Tailscale) is out of scope by design; `docs/ubuntu-box.md` records
+it instead.
+
+**A dotfile for every OS, not just the Macs.** Add its path to
+`SHARED_DOTFILES` in `lib/setup.sh`. A full `sync_install` on Linux would drop
+`.zshrc` and friends there, and those assume Homebrew and macOS.
+
+**Anything that runs a command over ssh.** A non-interactive ssh session gets a
+bare PATH, so Homebrew binaries look missing — `sys ssh NAME` wraps its remote
+command in `bash -lc` for exactly this reason, and it silently handed back a
+plain shell instead of tmux until it did. Test it in a pty and check what you
+actually landed in.
 
 **A new command or setup step.** Add the `case` branch in `bin/sys`, bump
 `TOTAL` if it is a numbered setup step, and update **both** `README.md` and

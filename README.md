@@ -29,6 +29,7 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys push` | Save this machine's config into the repo and push |
 | `sys doctor` | Check everything is installed and signed in |
 | `sys ssh` | List the machines you can reach over SSH |
+| `sys ssh NAME` | Log in and attach the tmux session waiting there |
 | `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
 | `sys net` | List the network shares; `sys net dwkns-nas` mounts one |
 | `sys hostname` | Set the computer name (asks, or `sys hostname my-mac`) |
@@ -87,6 +88,16 @@ curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/bin/ssh
 
 After that it is `sys sync` there too, whenever a machine is added.
 
+## Sessions that survive a dropped connection
+
+`sys ssh mini-m1` logs in and attaches a tmux session called `main`, making one
+if there isn't one. Close the lid, lose signal, or quit the terminal on your
+phone: the session keeps running on the machine, and the next `sys ssh` picks
+it up exactly where you left it. `Ctrl-b d` detaches on purpose.
+
+The config is `dotfiles/.config/tmux/tmux.conf`, which the Macs get with the
+rest of the dotfiles and the Ubuntu box gets as a shared dotfile.
+
 ## Starting over
 
 `sys remove` removes everything setup installed — Homebrew and its packages,
@@ -126,6 +137,8 @@ bin/ssh-reach                Tailscale name or NAME.local? the aliases ask this
 config/ssh/access            who may log in where, and as which account
 config/ssh/no-sys            machines that cannot run sys; their access is pushed to them
 config/net                   network shares for `sys net`
+config/apt-packages          packages for the Ubuntu box, installed by sync there
+docs/ubuntu-box.md           how the Ubuntu box was built, and what sys does there
 config/ssh/keys/             each machine's public key, shared by sys sync
 dotfiles/                    copied into ~
 config/mas-apps.txt          App Store app IDs
