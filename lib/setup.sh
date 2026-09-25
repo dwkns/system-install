@@ -152,6 +152,49 @@ install_packages() {
   cp "$ROOT_DIR/Brewfile" "$ROOT_DIR/.state/Brewfile.last"
 }
 
+# Packages from config/apt-packages, for machines that use apt. Installs only
+# what is missing, so it is quick enough to check on every sync and self-heals
+# if something was removed. Vendor-repo software (Docker, cloudflared,
+# Tailscale) is deliberately not managed here — see docs/ubuntu-box.md.
+install_apt_packages() {
+  local file="$ROOT_DIR/config/apt-packages"
+  [[ -r "$file" ]] || return 0
+  has_cmd apt-get || return 0
+
+  local want missing=""
+  want="$(sed 's/#.*//' "$file" | awk 'NF{print $1}')"
+  local p
+  for p in $want; do
+    dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q "install ok installed" || missing="$missing $p"
+  done
+  [[ -n "$missing" ]] || return 0
+
+  doing "Installing:$missing"
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: apt-get install$missing"; return 0; fi
+  sudo_run apt-get update -qq || warn "apt-get update failed — trying the install anyway"
+  # shellcheck disable=SC2086
+  sudo_run apt-get install -y -qq $missing >/dev/null || { warn "Could not install:$missing"; return 1; }
+  ok "Installed:$missing"
+}
+
+# The few dotfiles that make sense on any machine. A full sync_install would
+# drop .zshrc and friends on the Ubuntu box, and those are all Homebrew, macOS
+# paths and duti.
+SHARED_DOTFILES=".config/tmux/tmux.conf"
+install_shared_dotfiles() {
+  local rel src dst n=0
+  for rel in $SHARED_DOTFILES; do
+    src="$ROOT_DIR/dotfiles/$rel"; dst="$HOME/$rel"
+    [[ -f "$src" ]] || continue
+    cmp -s "$src" "$dst" && continue
+    run mkdir -p "$(dirname "$dst")"
+    run cp -a "$src" "$dst" || continue
+    n=$((n + 1))
+  done
+  (( n > 0 )) && doing "Installed $n shared dotfile(s)"
+  return 0
+}
+
 # mise reads dotfiles/.config/mise/config.toml, so dotfiles must be synced first.
 install_languages() {
   has_cmd mise || { warn "mise not installed; skipping languages"; return 0; }

@@ -6,6 +6,8 @@
 # ── CLI ──────────────────────────────────────────────────────────────────────
 brew "git"
 brew "gh"
+brew "tmux"
+brew "mosh"
 brew "jq"
 brew "mise"             # ruby / node / python versions
 brew "uv"               # python packages + venvs

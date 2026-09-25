@@ -19,6 +19,7 @@ sys — system configuration
   sys push        Save this machine's config into the repo and push
   sys doctor      Check that everything is where it should be
   sys ssh         List the machines you can reach over SSH
+  sys ssh NAME    Log in and attach the session waiting there (mosh where set up)
   sys ssh harden  Keys only on this machine — optional, passwords stay on otherwise
   sys net         List the network shares; sys net NAME connects to one
   sys hostname    Set the computer name (asks, or pass one: sys hostname my-mac)
@@ -171,6 +172,8 @@ HEADSUP
     # Not a Mac (the Ubuntu box): the repo update above and SSH access are
     # all sync does. Dotfiles, Homebrew and macOS settings are Mac things.
     if ! is_macos; then
+      install_apt_packages || true
+      install_shared_dotfiles
       ssh_apply quiet
       ok "Done"
       [[ "$ARG" == "all" ]] && ssh_sync_others
@@ -353,7 +356,7 @@ HEADSUP
     case "${ARGS[0]:-}" in
       "")      "$ROOT_DIR/bin/ssh-hosts" ;;
       harden)  ssh_harden ;;
-      *) die "Unknown: sys ssh $ARG — sys ssh lists, sys ssh harden locks to keys" ;;
+      *)       ssh_connect "${ARGS[0]}" ;;
     esac
     ;;
 

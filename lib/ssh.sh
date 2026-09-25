@@ -377,6 +377,32 @@ ssh_apply() {
   return 0
 }
 
+# `sys ssh NAME`: log in and attach the session waiting there, so closing the
+# lid or losing signal costs nothing — tmux keeps the session on the machine,
+# and mosh, where both ends have it, keeps the link to it alive across a
+# changing network. Takes the alias or the full machine name.
+ssh_connect() {
+  local want="$1" m a found="" remote
+  while read -r m _; do
+    [[ "$m" == "$want" || "$(ssh_alias "$m")" == "$want" ]] && { found="$m"; break; }
+  done < <(ssh_access_lines)
+  [[ -n "$found" ]] || die "No machine called $want in config/ssh/access — sys ssh lists them"
+  a="$(ssh_alias "$found")"
+
+  # No tmux there? Then just a login shell, rather than an error.
+  remote='command -v tmux >/dev/null 2>&1 && exec tmux new -A -s main || exec "$SHELL" -l'
+
+  if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: connect to $a and attach tmux"; return 0; fi
+
+  # mosh needs a server at the far end and a client here; it also resolves the
+  # host itself, so it is given the real name rather than the ssh alias.
+  if has_cmd mosh && ssh -o BatchMode=yes -o ConnectTimeout=8 "$a" \
+       'command -v mosh-server >/dev/null 2>&1'; then
+    exec mosh --ssh="ssh" "$a" -- /bin/sh -c "$remote"
+  fi
+  exec ssh -t "$a" "$remote"
+}
+
 # Lock sshd to keys only. Refuses until at least one key is let in here, so a
 # headless machine can never lock itself out. Optional: passwords stay on
 # unless you run this.

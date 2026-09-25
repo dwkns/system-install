@@ -1,0 +1,9 @@
+# Packages for machines that use apt — the Ubuntu box. Installed by `sys sync`
+# there, when any of them is missing. One per line.
+#
+# Only ordinary packages from Ubuntu's own repositories belong here. Docker,
+# cloudflared and Tailscale come from vendor repositories with their own
+# signing keys, which this does not set up: see docs/ubuntu-box.md.
+
+tmux
+mosh
