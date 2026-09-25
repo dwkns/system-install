@@ -377,10 +377,9 @@ ssh_apply() {
   return 0
 }
 
-# `sys ssh NAME`: log in and attach the session waiting there, so closing the
-# lid or losing signal costs nothing — tmux keeps the session on the machine,
-# and mosh, where both ends have it, keeps the link to it alive across a
-# changing network. Takes the alias or the full machine name.
+# `sys ssh NAME`: log in and attach the session waiting there, so losing the
+# connection costs nothing — tmux keeps the session running on the machine and
+# you pick it up where you left it. Takes the alias or the full machine name.
 ssh_connect() {
   local want="$1" m a found="" remote
   while read -r m _; do
@@ -394,12 +393,6 @@ ssh_connect() {
 
   if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: connect to $a and attach tmux"; return 0; fi
 
-  # mosh needs a server at the far end and a client here; it also resolves the
-  # host itself, so it is given the real name rather than the ssh alias.
-  if has_cmd mosh && ssh -o BatchMode=yes -o ConnectTimeout=8 "$a" \
-       'command -v mosh-server >/dev/null 2>&1'; then
-    exec mosh --ssh="ssh" "$a" -- /bin/sh -c "$remote"
-  fi
   exec ssh -t "$a" "$remote"
 }
 

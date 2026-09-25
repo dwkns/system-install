@@ -6,4 +6,3 @@
 # signing keys, which this does not set up: see docs/ubuntu-box.md.
 
 tmux
-mosh
