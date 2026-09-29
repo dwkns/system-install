@@ -4,8 +4,11 @@
 window-width = 100
 window-height = 25
 
-# New windows start on the Desktop. Ghostty otherwise inherits the directory
-# of the window you opened it from, so a new window would land wherever the
-# last one happened to be.
+# New windows and tabs start on the Desktop. Ghostty otherwise inherits the
+# directory of whatever was focused, so they would land wherever the last one
+# happened to be. Splits still inherit: splitting is for working on the same
+# thing in the same place.
 window-inherit-working-directory = false
+tab-inherit-working-directory = false
+split-inherit-working-directory = true
 working-directory = /Users/dwkns/Desktop
