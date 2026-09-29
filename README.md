@@ -10,7 +10,8 @@ curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install
 
 Installs Homebrew and everything in the `Brewfile`, copies dotfiles into place,
 installs language versions with mise, downloads and verifies MailExporter
-from its GitHub release, installs App Store apps, and applies macOS defaults. It finishes by printing the
+from its GitHub release, builds Paywall Down from its private repo and installs
+it in `/Applications`, installs App Store apps, and applies macOS defaults. It finishes by printing the
 handful of steps that need a human (signing into things, granting Full Disk
 Access, logging out).
 
@@ -24,7 +25,7 @@ it finishes it opens a fresh shell with the new config loaded.
 
 | Command | What it does |
 |---|---|
-| `sys sync` | Pull the latest config and apply it here: apps, dotfiles, Dock, desktop colour, SSH access |
+| `sys sync` | Pull the latest config and apply it here: apps, dotfiles, Dock, desktop colour, SSH access, Paywall Down |
 | `sys sync all` | The same here, then on every machine this one may log into, one after another |
 | `sys push` | Save this machine's config into the repo and push |
 | `sys doctor` | Check everything is installed and signed in |

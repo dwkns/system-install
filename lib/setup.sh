@@ -543,6 +543,166 @@ build_mail_exporter() {
   ok "MailExporter built and installed"
 }
 
+# Paywall Down has no release other Macs can install. A Developer-signed .app
+# built on one machine is tied to that machine's signature, so setup clones
+# the private repo and builds the macOS scheme here. Xcode 27 rejects the
+# project's macOS deployment target of 10.14, so the build passes 12.0 on the
+# command line and leaves the repo alone. Signing stays on the project
+# settings (Automatic, team LD2427W529).
+PAYWALL_DOWN_REPO="${PAYWALL_DOWN_REPO:-dwkns/paywall-down}"
+PAYWALL_DOWN_DIR="${PAYWALL_DOWN_DIR:-$HOME/Developer/paywall-down}"
+PAYWALL_DOWN_APP="/Applications/Paywall Down.app"
+
+install_paywall_down() {
+  local quiet="${1:-}"
+  local stamp="$ROOT_DIR/.state/paywall-down"
+
+  has_cmd git || { warn "git missing; skipping Paywall Down"; return 1; }
+  if [[ ! -d /Applications/Xcode.app ]]; then
+    warn "Paywall Down needs Xcode — install it, then run sys setup again"
+    return 1
+  fi
+
+  if [[ -d "$PAYWALL_DOWN_DIR/.git" ]]; then
+    if [[ "${DRY_RUN:-0}" == "1" ]]; then
+      note "dry run: update $PAYWALL_DOWN_DIR and rebuild Paywall Down if it changed"
+      return 0
+    fi
+    paywall_down_update "$quiet"
+  elif [[ -e "$PAYWALL_DOWN_DIR" ]]; then
+    warn "$PAYWALL_DOWN_DIR exists but is not a git checkout — not touching it"
+    return 1
+  else
+    if [[ "${DRY_RUN:-0}" == "1" ]]; then
+      note "dry run: clone $PAYWALL_DOWN_REPO and build Paywall Down"
+      return 0
+    fi
+    doing "Cloning $PAYWALL_DOWN_REPO"
+    run mkdir -p "$(dirname "$PAYWALL_DOWN_DIR")"
+    if ! paywall_down_clone; then
+      warn "Could not clone $PAYWALL_DOWN_REPO"
+      note "The repo is private. Sign in with 'gh auth login', then run sys setup again."
+      return 1
+    fi
+  fi
+
+  local rev
+  rev="$(git -C "$PAYWALL_DOWN_DIR" rev-parse HEAD 2>/dev/null)" || {
+    warn "Could not read $PAYWALL_DOWN_DIR"; return 1; }
+
+  if [[ "${FORCE:-0}" != "1" && -d "$PAYWALL_DOWN_APP" && "$(cat "$stamp" 2>/dev/null)" == "$rev" ]]; then
+    [[ "$quiet" == "quiet" ]] || note "Paywall Down ${rev:0:7}: already installed"
+    return 0
+  fi
+
+  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: build and install Paywall Down"; return 0; }
+
+  doing "Building Paywall Down — a few minutes, no output while it works"
+  local dd log built
+  dd="$(mktemp -d /tmp/paywall-down-build.XXXXXX)"
+  log="$dd/build.log"
+  # Scheme "pwd (macOS)" builds the app and its extension only, not iOS.
+  # No code-sign overrides: Automatic signing and the project team are used.
+  if ! DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
+      xcodebuild \
+        -project "$PAYWALL_DOWN_DIR/paywall-down.xcodeproj" \
+        -scheme "pwd (macOS)" \
+        -configuration Debug \
+        -destination "platform=macOS" \
+        -derivedDataPath "$dd" \
+        MACOSX_DEPLOYMENT_TARGET=12.0 \
+        build >"$log" 2>&1; then
+    warn "Paywall Down build failed"
+    note "Xcode has to be signed in to an Apple ID that can use team LD2427W529"
+    tail -n 40 "$log" >&2 || true
+    rm -rf "$dd"
+    return 1
+  fi
+
+  built="$dd/Build/Products/Debug/Paywall Down.app"
+  if [[ ! -d "$built" ]]; then
+    warn "Build produced no Paywall Down.app"
+    rm -rf "$dd"
+    return 1
+  fi
+  if [[ ! -d "$built/Contents/PlugIns/pwd Extension.appex" ]]; then
+    warn "Build produced no Safari extension"
+    rm -rf "$dd"
+    return 1
+  fi
+
+  # Same replace as MailExporter: this user first, then the password already
+  # held for the run if /Applications will not take the copy.
+  if ! { rm -rf "$PAYWALL_DOWN_APP" 2>/dev/null &&
+         ditto "$built" "$PAYWALL_DOWN_APP" 2>/dev/null; }; then
+    note "Replacing Paywall Down needs administrator rights"
+    if ! { sudo_run rm -rf "$PAYWALL_DOWN_APP" &&
+           sudo_run ditto "$built" "$PAYWALL_DOWN_APP" &&
+           sudo_run chown -R "$(id -un)":admin "$PAYWALL_DOWN_APP"; }; then
+      error "Could not replace $PAYWALL_DOWN_APP"
+      note "macOS may be protecting it: System Settings ▸ Privacy & Security ▸ App Management ▸ allow your terminal app"
+      rm -rf "$dd"
+      return 1
+    fi
+  fi
+  rm -rf "$dd"
+
+  if ! codesign --verify --deep --strict "$PAYWALL_DOWN_APP" >/dev/null 2>&1; then
+    warn "Installed Paywall Down did not pass codesign --verify"
+    return 1
+  fi
+
+  # A copy that is already running (often from ~/Applications) keeps that
+  # path. Quit it, then open this one so Safari registers the extension.
+  osascript -e 'tell application id "com.dwkns.paywall-down" to quit' >/dev/null 2>&1 || true
+  local i
+  for i in 1 2 3 4 5 6 7 8 9 10; do
+    pgrep -x "Paywall Down" >/dev/null || break
+    sleep 0.3
+  done
+  if ! open "$PAYWALL_DOWN_APP"; then
+    warn "Could not launch Paywall Down — open it once so Safari registers the extension"
+    return 1
+  fi
+
+  mkdir -p "$(dirname "$stamp")" && printf '%s\n' "$rev" > "$stamp"
+  ok "Paywall Down ${rev:0:7} installed"
+  note "If its Safari button does nothing: Settings ▸ Developer ▸ Allow unsigned extensions (one time, by hand)"
+  return 0
+}
+
+# Fast-forward a clean checkout. Local edits and a detached HEAD are left
+# alone — this directory is a working copy, not a throwaway build tree.
+paywall_down_update() {
+  local quiet="${1:-}" branch
+  branch="$(git -C "$PAYWALL_DOWN_DIR" symbolic-ref --short HEAD 2>/dev/null || true)"
+  if [[ -z "$branch" ]]; then
+    [[ "$quiet" == "quiet" ]] || warn "Paywall Down checkout is not on a branch — not pulling"
+    return 0
+  fi
+  if [[ -n "$(git -C "$PAYWALL_DOWN_DIR" status --porcelain --untracked-files=no)" ]]; then
+    [[ "$quiet" == "quiet" ]] || note "Paywall Down checkout has local changes — not pulling"
+    return 0
+  fi
+  # GIT_TERMINAL_PROMPT=0: a missing login must fail the pull, not sit at
+  # "Username:". Quiet sync hides git's own fatal line; setup still shows it.
+  if [[ "$quiet" == "quiet" ]]; then
+    GIT_TERMINAL_PROMPT=0 git -C "$PAYWALL_DOWN_DIR" pull --ff-only --quiet >/dev/null 2>&1 || true
+  else
+    GIT_TERMINAL_PROMPT=0 git -C "$PAYWALL_DOWN_DIR" pull --ff-only --quiet || \
+      warn "Could not fast-forward $PAYWALL_DOWN_DIR"
+  fi
+  return 0
+}
+
+paywall_down_clone() {
+  if has_cmd gh && gh auth status >/dev/null 2>&1; then
+    GIT_TERMINAL_PROMPT=0 gh repo clone "$PAYWALL_DOWN_REPO" "$PAYWALL_DOWN_DIR" -- --quiet
+  else
+    GIT_TERMINAL_PROMPT=0 git clone --quiet "https://github.com/$PAYWALL_DOWN_REPO.git" "$PAYWALL_DOWN_DIR"
+  fi
+}
+
 # Optional extras — never run by `sys setup`, only by `sys extras`.
 install_extras() {
   local bf="$ROOT_DIR/Brewfile.optional"
@@ -772,6 +932,10 @@ print_manual_steps() {
   ssh_has_key && ! ssh_shared && \
     todo+=("🔑  Share this machine's SSH key: ${CYAN}sys sync${RESET} — it signs you in to GitHub once, in the browser")
 
+  [[ -d "/Applications/Paywall Down.app" ]] || \
+    todo+=("🧭  Paywall Down was not installed — it needs Xcode, signed in to team LD2427W529, then ${CYAN}sys setup${RESET}")
+
+  todo+=("🧭  Safari ▸ Settings ▸ Developer ▸ Allow unsigned extensions, if Paywall Down's button does nothing — by hand, once")
   todo+=("🔐  Sign in to 1Password, Slack, Notion and Figma")
   todo+=("🔓  Give Ghostty Full Disk Access — System Settings ▸ Privacy & Security")
   todo+=("🔄  Log out and back in — some macOS settings only apply at login")

@@ -54,7 +54,7 @@ double-width (📦 🔑 🩺); narrow ones (🛠 🛡 ⚠️) break column align
 | `bin/ssh-access` | One-line installer for a machine that is not a Mac (the Ubuntu box) |
 | `lib/common.sh` | Colours, logging, `run`, `confirm`, `ask_timeout`, `header` |
 | `lib/sync.sh` | Repo ⇄ system file mirroring, git plumbing, GitHub device login |
-| `lib/setup.sh` | Homebrew, mise, App Store, macOS settings, sudo, MailExporter, naming, removal |
+| `lib/setup.sh` | Homebrew, mise, App Store, macOS settings, sudo, MailExporter, Paywall Down, naming, removal |
 | `lib/ssh.sh` | Keys, `authorized_keys`, host-key pinning, aliases, `sys sync all` |
 | `macos.sh` | `defaults write` lines applied by setup and by sync |
 | `bin/set-dock` | Rebuilds the Dock atomically from `config/dock` |
@@ -80,10 +80,12 @@ Two gitignored directories hold local state:
 1. `update_self` — `git pull --ff-only --autostash`, then `restart_if_updated`
    re-execs sys if the pull changed `bin/` or `lib/` (guarded by `SYS_RESTARTED`).
 2. Prints the heads-up text, then `acquire_sudo` — the single password prompt.
-3. Ten numbered steps via `step()`, which records failures and carries on:
+3. Eleven numbered steps via `step()`, which records failures and carries on:
    packages → dotfiles → languages → Cursor extensions → MailExporter → App
-   Store → Remote Login → SSH key and access → Screen Sharing → macOS defaults.
-   `TOTAL=10` is hard-coded; update it if you add a step.
+   Store → Remote Login → SSH key and access → Paywall Down → Screen Sharing
+   → macOS defaults. Paywall Down is after SSH so a new machine has had its
+   chance to sign in to GitHub. `TOTAL=11` is hard-coded; update it if you
+   add a step.
 4. Then the once-only bits: hostname prompt, Dock, input settings, desktop
    colour, default terminal.
 5. Verdict, `sys doctor`, `print_manual_steps`, `request_reload`. If run from
@@ -97,7 +99,7 @@ Two gitignored directories hold local state:
 3. Not macOS? `ssh_apply` and exit — that is all sync does on Linux.
 4. `brew_changed` = Brewfile fingerprint ≠ `.state/brewfile` (or `--force`).
 5. `sync_install` (dotfiles), `apply_input_settings` (every sync), `ssh_apply
-   quiet`, `run_once dock`, `run_once desktop`.
+   quiet`, `install_paywall_down quiet`, `run_once dock`, `run_once desktop`.
 6. Nothing changed → "Already up to date — nothing to apply" and stop.
    Otherwise show Brewfile changes, `install_packages` if needed,
    `apply_macos_defaults`, `request_reload`.
@@ -116,7 +118,8 @@ extensions, `bin/dump-dock`, then `git add -A`, commit "Update config files",
 ### `sys doctor`
 Read-only table: tools present, mise versions, App Store reachable, SSH key
 made/shared and how many machines are let in, whether sshd is keys-only, Dock
-matches config, desktop colour, repo clean. Must never block — network calls go
+matches config, desktop colour, whether Paywall Down is in `/Applications`,
+repo clean. Must never block — network calls go
 through `with_timeout`.
 
 ### `sys remove`
@@ -336,6 +339,22 @@ is newer than `~/.zcompdump` — with `-i`, because Homebrew ships a
 group-writable `_ghostty` and a plain `compinit` aborts on it, leaving the
 shell with no completions at all. Test it for real in a pty (a
 non-interactive zsh returns at the top of `.zshrc`).
+
+**Paywall Down.** `install_paywall_down` in `lib/setup.sh`, called from
+`sys setup` and, quietly, from `sys sync`. It clones
+`https://github.com/dwkns/paywall-down.git` into `~/Developer/paywall-down`
+(or fast-forwards a clean checkout) and builds the scheme `pwd (macOS)` with
+`MACOSX_DEPLOYMENT_TARGET=12.0` on the command line. The project still says
+10.14, which Xcode 27 rejects; the repo is not edited to change that. Signing
+is the project's Automatic signing, team `LD2427W529` — do not pass a
+different identity, and do not install a `.app` built on another Mac. The
+built app is copied to `/Applications/Paywall Down.app` (same place as
+MailExporter) and launched so Safari registers
+`com.dwkns.paywall-down.Extension`. A stamp in `.state/paywall-down` holds the
+commit that was installed; a re-run with the same commit does not rebuild.
+Needs full Xcode, a GitHub login that can read the private repo, and an Apple
+ID in Xcode that can sign for that team. "Allow unsigned extensions" in Safari
+is not set from here.
 
 **A package for the Ubuntu box.** Add it to `config/apt-packages`. `sys sync`
 there installs whatever is missing — no stamp, because `dpkg-query` is cheap
