@@ -3,3 +3,9 @@
 # Initial window size, in terminal grid cells: 100 columns x 25 rows.
 window-width = 100
 window-height = 25
+
+# New windows start on the Desktop. Ghostty otherwise inherits the directory
+# of the window you opened it from, so a new window would land wherever the
+# last one happened to be.
+window-inherit-working-directory = false
+working-directory = /Users/dwkns/Desktop
