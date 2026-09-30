@@ -10,10 +10,8 @@
 # or types a password: those Keychain items are locked to Finder, so `sys net`
 # hands it the url and lets Finder authenticate.
 #
-# Only the dwkns shares are here. The NAS also has an admin account with its
-# own shares, but macOS keeps ONE SMB session per server, so mounting as both
-# accounts at once needs the same NAS reached by two different names. Not
-# worth it: for admin work, ssh in instead.
+# By name rather than by address, so it follows the NAS if its address ever
+# changes. dwkns-timemachine is deliberately absent: Time Machine mounts that
+# share itself, and a second mount of it would only get in the way.
 
-dwkns-nas    | smb://dwkns@192.168.5.45/dwkns-nas
-backup-nas   | smb://dwkns@192.168.5.45/backup-nas
+dwkns-nas    | smb://dwkns@dwkns-smb-nas.local/dwkns-nas
