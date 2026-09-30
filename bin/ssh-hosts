@@ -9,7 +9,7 @@ Tailscale being off is stated once rather than making every row look broken.
   sys ssh       the machines sys manages
   sys ssh all   those, plus anything hand-written in ~/.ssh/config
 """
-import concurrent.futures, glob, json, os, pathlib, socket, subprocess, sys
+import glob, json, os, pathlib, socket, subprocess, sys, threading, time
 
 G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
@@ -17,7 +17,8 @@ MANAGED = SSH_DIR / "config.d" / "sys"
 ROOT = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
 ACCESS = ROOT / "config" / "ssh" / "access"
 SHOW_ALL = "all" in sys.argv[1:]
-TIMEOUT = 2.0
+TIMEOUT = 2.0        # per connection attempt
+DEADLINE = 3.5       # for the whole check, however slow name lookup is
 
 
 def rule(title, emoji):
@@ -25,13 +26,15 @@ def rule(title, emoji):
     print(f"\n{D}{line}{R}\n {emoji}  {B}{title}{R}\n{D}{line}{R}\n")
 
 
-def reachable(host, port=22):
-    """Is anything answering on port 22? The only question that matters."""
+def probe(host, into, key, port=22):
+    """Is anything answering on port 22? Run in a daemon thread: a name that
+    does not resolve can block for seconds inside getaddrinfo, long past the
+    socket timeout, and nothing should wait for that."""
     try:
         socket.create_connection((host, port), timeout=TIMEOUT).close()
-        return True
+        into[key] = True
     except Exception:
-        return False
+        into[key] = False
 
 
 def access_rows():
@@ -121,27 +124,29 @@ def alias_of(machine, machines):
 
 me, rows = access_rows()
 ts_on, ts_self = tailscale_state()
+machines = [r[0] for r in rows]
+tty = sys.stdout.isatty()
 
-# Probe everything at once: two routes per machine, two seconds each at worst.
-targets = []
-for machine, account in rows:
-    targets.append((machine, "tailnet", machine))
-    targets.append((machine, "local", machine + ".local"))
 extra = []
 if SHOW_ALL:
-    managed_aliases = {alias_of(m, [r[0] for r in rows]) for m, _ in rows}
+    managed_aliases = {alias_of(m, machines) for m in machines}
     for h in ssh_config_hosts():
         if h["managed"] or h["alias"] in managed_aliases or not h["hostname"]:
             continue
         extra.append(h)
-        targets.append((h["alias"], "direct", h["hostname"]))
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=16) as pool:
-    results = dict(zip([(t[0], t[1]) for t in targets],
-                       pool.map(lambda t: reachable(t[2]), targets)))
+# Start every probe at once, in daemon threads: the commands are printed
+# immediately and each line is filled in as its answer arrives.
+found = {}
+for machine in machines:
+    for kind, host in (("tailnet", machine), ("local", machine + ".local")):
+        threading.Thread(target=probe, args=(host, found, (machine, kind)),
+                         daemon=True).start()
+for h in extra:
+    threading.Thread(target=probe, args=(h["hostname"], found, (h["alias"], "direct")),
+                     daemon=True).start()
 
 rule("SSH hosts", "🔌")
-
 if ts_on:
     print(f"  {G}Tailscale on{R}{D} — this machine is {ts_self}{R}")
 else:
@@ -150,36 +155,104 @@ print()
 
 if not rows:
     print(f"  {D}Nothing in config/ssh/access yet{R}\n")
+elif tty:
+    print(f"  {D}Checking both routes for each — Ctrl-C to skip{R}\n")
 
-machines = [r[0] for r in rows]
 width = max([len(alias_of(m, machines)) for m in machines] + [8])
+lines = []          # one per printed row, bottom-up addressing
+CHECKING = f"{D}checking…{R}"
+
+
+def row_text(alias, who, target, status, dim=False):
+    head = f"  {D}ssh {alias:<{width}}{R}" if dim else f"  {G}ssh {alias:<{width}}{R}"
+    return f"  {head} {D}{who}@{target}{R}  {status}"
+
+
+# Printed straight away, so the commands are there to read (and copy) while
+# the checks run. Only on a terminal, where the lines can be rewritten in
+# place; piped output gets one clean set of rows at the end.
 for machine, account in rows:
-    a = alias_of(machine, machines)
-    tail = results.get((machine, "tailnet"), False)
-    local = results.get((machine, "local"), False)
+    lines.append((machine, "machine", alias_of(machine, machines), account))
+    if tty:
+        print(row_text(alias_of(machine, machines), account, machine, CHECKING))
+if extra:
+    if tty:
+        print()
+        print(f"  {B}Hand-written in ~/.ssh/config{R}")
+    for h in extra:
+        lines.append((h["alias"], "extra", h["alias"], h["user"]))
+        if tty:
+            print(row_text(h["alias"], h["user"] or "", h["hostname"], CHECKING))
 
-    def mark(ok, label):
-        return f"{G}{label} ✓{R}" if ok else f"{D}{label} ✗{R}"
 
-    if tail or local:
-        via = f"  {mark(tail, 'tailnet')}  {mark(local, 'home')}"
-        head = f"  {G}ssh {a:<{width}}{R}"
-    else:
-        via = f"  {Y}not reachable{R}"
-        head = f"  {D}ssh {a:<{width}}{R}"
-    print(f"  {head} {D}{account}@{machine}{R}{via}")
+def status_for(key, kind):
+    if kind == "machine":
+        tail, local = found.get((key, "tailnet")), found.get((key, "local"))
+        if tail is None and local is None:
+            return CHECKING, False
+        if tail or local:
+            def mark(ok, label):
+                return f"{G}{label} ✓{R}" if ok else f"{D}{label} ✗{R}"
+            return f"  {mark(bool(tail), 'tailnet')}  {mark(bool(local), 'home')}", False
+        return f"{Y}not reachable{R}", True
+    got = found.get((key, "direct"))
+    if got is None:
+        return CHECKING, False
+    return (f"{G}reachable ✓{R}", False) if got else (f"{D}not reachable ✗{R}", True)
+
+
+drawn = {}
+
+
+def redraw(index, key, kind, alias, who, target):
+    """Rewrite one already-printed line in place, and only when its status has
+    actually changed — otherwise the whole list repaints ten times a second."""
+    status, dim = status_for(key, kind)
+    text = row_text(alias, who, target, status, dim)
+    if drawn.get(index) == text:
+        return
+    drawn[index] = text
+    up = len(lines) - index
+    sys.stdout.write(f"\033[{up}A\r\033[2K" + text + f"\033[{up}B\r")
+    sys.stdout.flush()
+
+
+targets = {m: m for m, _ in rows}
+targets.update({h["alias"]: h["hostname"] for h in extra})
+expected = len(machines) * 2 + len(extra)
+try:
+    deadline = time.time() + DEADLINE
+    while time.time() < deadline and len(found) < expected:
+        if tty:
+            for i, (key, kind, alias, who) in enumerate(lines):
+                redraw(i, key, kind, alias, who, targets[key])
+        time.sleep(0.1)
+except KeyboardInterrupt:
+    # The escape hatch: the commands above are already usable, so stop the
+    # checks and leave the list on screen rather than dumping a traceback.
+    if tty:
+        sys.stdout.write("\r\033[2K")
+    print(f"\n  {D}Stopped checking — the commands above still work.{R}\n")
+    os._exit(0)
+
+# Anything still unanswered timed out: say so rather than leaving "checking…".
+for machine in machines:
+    for kind in ("tailnet", "local"):
+        found.setdefault((machine, kind), False)
+for h in extra:
+    found.setdefault((h["alias"], "direct"), False)
+if tty:
+    for i, (key, kind, alias, who) in enumerate(lines):
+        redraw(i, key, kind, alias, who, targets[key])
+else:
+    for key, kind, alias, who in lines:
+        if kind == "extra" and key == extra[0]["alias"]:
+            print()
+            print(f"  {B}Hand-written in ~/.ssh/config{R}")
+        status, dim = status_for(key, kind)
+        print(row_text(alias, who, targets[key], status, dim))
 
 print()
-if extra:
-    print(f"  {B}Hand-written in ~/.ssh/config{R}")
-    ewidth = max(len(h["alias"]) for h in extra)
-    for h in extra:
-        ok = results.get((h["alias"], "direct"), False)
-        who = f'{h["user"]}@' if h["user"] else ""
-        state = f"{G}reachable ✓{R}" if ok else f"{D}not reachable ✗{R}"
-        print(f'  {G}ssh {h["alias"]:<{ewidth}}{R} {D}{who}{h["hostname"]}{R}  {state}')
-    print()
-
 if not SHOW_ALL:
     print(f"  {D}sys ssh all also lists hosts hand-written in ~/.ssh/config.{R}")
 print(f"  {D}Who may log in where: config/ssh/access. Edit it, sys push, then sys sync.{R}\n")
