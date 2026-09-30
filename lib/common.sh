@@ -17,8 +17,12 @@ ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 #           working, not a fault.
 #   RED     bad: failed, missing, unexplained — worth looking at
 #   WHITE   the subject: titles, machine and file names, commands to type
+# WHITE starts with 22 (normal intensity) because bold does NOT cancel dim:
+# inside a grey sentence a plain \033[1m stays grey-and-bold, which is what
+# made commands look half-lit. 97 is bright white, so it is white whatever
+# the terminal's default foreground happens to be.
 GREY=$'\033[2m'; GREEN=$'\033[0;32m'; RED=$'\033[0;31m'
-ORANGE=$'\033[38;5;208m'; WHITE=$'\033[1m'; RESET=$'\033[0m'
+ORANGE=$'\033[38;5;208m'; WHITE=$'\033[22;1;97m'; RESET=$'\033[0m'
 
 # Older names, kept so nothing breaks, mapped onto the four above.
 DIM="$GREY"; BOLD="$WHITE"; CYAN="$WHITE"; YELLOW="$RED"

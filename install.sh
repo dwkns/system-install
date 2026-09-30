@@ -10,7 +10,11 @@ set -euo pipefail
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 REPO="https://github.com/dwkns/system-install.git"
 
-say() { printf '\033[0;32m==>\033[0m %s\n' "$*"; }
+# The same colours as lib/common.sh, repeated because the repo is not cloned
+# yet when this runs: grey for copy, white for a command you would type.
+GREY=$'\033[2m'; WHITE=$'\033[22;1;97m'; GREEN=$'\033[0;32m'; RESET=$'\033[0m'
+say()  { printf '%s==>%s %s\n' "$GREEN" "$RESET" "$*"; }
+copy() { printf '%s%s%s\n' "$GREY" "$*" "$RESET"; }
 
 # Where to read answers from. NEVER redirect this script's own stdin: piped
 # into bash, stdin IS the script, so `exec </dev/tty` makes bash try to read
@@ -25,7 +29,7 @@ say "Setting up this Mac from $REPO"
 # bailing out and making the user start again.
 if ! xcode-select -p >/dev/null 2>&1; then
   say "Installing Xcode Command Line Tools"
-  echo "    A dialog will appear — click Install and accept the licence."
+  copy "    A dialog will appear — click Install and accept the licence."
   xcode-select --install >/dev/null 2>&1 || true
 
   printf '    Waiting for it to finish'
@@ -36,8 +40,8 @@ if ! xcode-select -p >/dev/null 2>&1; then
   echo
 
   if ! xcode-select -p >/dev/null 2>&1; then
-    echo "Command Line Tools did not install. Run 'xcode-select --install',"
-    echo "let it finish, then run this command again."
+    copy "Command Line Tools did not install. Run ${WHITE}xcode-select --install${RESET}${GREY},"
+    copy "let it finish, then run this command again."
     exit 1
   fi
   say "Command Line Tools installed"
@@ -45,8 +49,8 @@ fi
 
 # git can exist but refuse to run until the licence is agreed.
 if ! git --version >/dev/null 2>&1; then
-  echo "git is not working yet. Open Terminal, run 'git --version', accept any"
-  echo "prompt, then run this command again."
+  copy "git is not working yet. Open Terminal, run ${WHITE}git --version${RESET}${GREY}, accept any"
+  copy "prompt, then run this command again."
   exit 1
 fi
 
@@ -60,7 +64,7 @@ fi
 if [[ ! -d "$ROOT_DIR/.git" ]]; then
   say "Cloning into $ROOT_DIR"
   if ! git clone --quiet "$REPO" "$ROOT_DIR"; then
-    echo "Could not clone $REPO — check your network and try again."
+    copy "Could not clone $REPO — check your network and try again."
     exit 1
   fi
 fi

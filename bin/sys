@@ -17,7 +17,7 @@ usage() {
   while IFS='|' read -r cmd text; do
     [[ -z "$cmd$text" ]] && { echo; continue; }
     if [[ -z "$text" ]]; then printf '%s%s%s\n' "$g" "$cmd" "$x"
-    else printf '  %s%-16s%s%s%s%s\n' "$c" "$cmd" "$x" "$g" "$text" "$x"
+    else printf '  %s%-16s%s%s%s%s\n' "$c" "$cmd" "$x" "$g" "$(hl "$text" "$g")" "$x"
     fi
   done <<'USAGE'
 sys setup|Set up this machine from scratch
@@ -32,8 +32,8 @@ sys ssh NAME|Log in and attach the session waiting there
 sys ssh harden|Keys only on this machine — optional, passwords stay on otherwise
 sys ssh man|The manual
 |
-sys net|List the network shares; sys net NAME connects to one
-sys hostname|Set the computer name (asks, or pass one: sys hostname my-mac)
+sys net|List the network shares; {{sys net NAME}} connects to one
+sys hostname|Set the computer name (asks, or pass one: {{sys hostname my-mac}})
 sys extras|Install the optional extras (Office, Xcode, duckdb)
 sys remove|Undo everything setup installed (asks first; --dry-run to preview)
 |

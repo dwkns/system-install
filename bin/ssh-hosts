@@ -13,7 +13,9 @@ import glob, json, os, pathlib, socket, subprocess, sys, threading, time
 
 # The same four as lib/common.sh: grey is supporting copy, green is good,
 # red is a problem, white is the subject — titles, machines, commands.
-GREY, GREEN, RED, WHITE, R = "\033[2m", "\033[0;32m", "\033[0;31m", "\033[1m", "\033[0m"
+# WHITE leads with 22 so it cancels dim: bold alone inside a grey sentence
+# stays grey. See lib/common.sh, which defines the same five.
+GREY, GREEN, RED, WHITE, R = "\033[2m", "\033[0;32m", "\033[0;31m", "\033[22;1;97m", "\033[0m"
 ORANGE = "\033[38;5;208m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
 MANAGED = SSH_DIR / "config.d" / "sys"
@@ -54,8 +56,9 @@ def access_rows():
 
 
 def tailscale_state():
-    """(running, self name). running is False when the daemon is off or
-    logged out — the case that used to be reported as every host being stale."""
+    """(running, self name, tailnet name). running is False when the daemon is
+    off or logged out — the case that used to be reported as every host being
+    stale. The tailnet name (dwkns.github) labels the route it belongs to."""
     for cmd in ("tailscale", "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
                 "/usr/local/bin/tailscale"):
         try:
@@ -67,11 +70,12 @@ def tailscale_state():
             d = json.loads(out)
         except ValueError:
             continue
+        net = (d.get("CurrentTailnet") or {}).get("Name", "")
         if (d.get("BackendState") or "") != "Running":
-            return False, ""
+            return False, "", net
         me = (d.get("Self") or {}).get("DNSName", "").rstrip(".").split(".")[0]
-        return True, me
-    return False, ""
+        return True, me, net
+    return False, "", ""
 
 
 def ssh_config_hosts(path=SSH_DIR / "config", seen=None, by_alias=None):
@@ -126,7 +130,7 @@ def alias_of(machine, machines):
 
 
 me, rows = access_rows()
-ts_on, ts_self = tailscale_state()
+ts_on, ts_self, ts_net = tailscale_state()
 machines = [r[0] for r in rows]
 tty = sys.stdout.isatty()
 
@@ -195,12 +199,13 @@ def status_for(key, kind):
         if tail is None and local is None:
             return CHECKING, False
         expected = RED if ts_on else ORANGE   # off on purpose is not a fault
+        tailnet_label = f"{ts_net} tailnet" if ts_net else "tailnet"
 
         def mark(ok, label, miss):
             return f"{GREEN}{label} ✓{R}" if ok else f"{miss}{label} ✗{R}"
 
         if tail or local:
-            return (f"  {mark(bool(tail), 'tailnet', expected)}"
+            return (f"  {mark(bool(tail), tailnet_label, expected)}"
                     f"  {mark(bool(local), 'local network', RED)}", False)
         if not ts_on:
             return f"{ORANGE}not reachable{R}{GREY} — Tailscale is off{R}", True
