@@ -14,6 +14,7 @@ import glob, json, os, pathlib, socket, subprocess, sys, threading, time
 # The same four as lib/common.sh: grey is supporting copy, green is good,
 # red is a problem, white is the subject — titles, machines, commands.
 GREY, GREEN, RED, WHITE, R = "\033[2m", "\033[0;32m", "\033[0;31m", "\033[1m", "\033[0m"
+ORANGE = "\033[38;5;208m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
 MANAGED = SSH_DIR / "config.d" / "sys"
 ROOT = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
@@ -152,7 +153,7 @@ rule("SSH hosts", "🔌")
 if ts_on:
     print(f"  {GREEN}Tailscale on{R}{GREY} — this machine is {ts_self}{R}")
 else:
-    print(f"  {RED}Tailscale off{R}{GREY} — home network only, so anything elsewhere is out of reach{R}")
+    print(f"  {ORANGE}Tailscale off{R}{GREY} — home network only, so anything elsewhere is out of reach{R}")
 print()
 
 if not rows:
@@ -193,10 +194,16 @@ def status_for(key, kind):
         tail, local = found.get((key, "tailnet")), found.get((key, "local"))
         if tail is None and local is None:
             return CHECKING, False
+        expected = RED if ts_on else ORANGE   # off on purpose is not a fault
+
+        def mark(ok, label, miss):
+            return f"{GREEN}{label} ✓{R}" if ok else f"{miss}{label} ✗{R}"
+
         if tail or local:
-            def mark(ok, label):
-                return f"{GREEN}{label} ✓{R}" if ok else f"{RED}{label} ✗{R}"
-            return f"  {mark(bool(tail), 'tailnet')}  {mark(bool(local), 'home')}", False
+            return (f"  {mark(bool(tail), 'tailnet', expected)}"
+                    f"  {mark(bool(local), 'home', RED)}", False)
+        if not ts_on:
+            return f"{ORANGE}not reachable{R}{GREY} — Tailscale is off{R}", True
         return f"{RED}not reachable{R}", True
     got = found.get((key, "direct"))
     if got is None:

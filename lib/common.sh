@@ -10,12 +10,15 @@ ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 # Four colours, one meaning each. Everything sys prints uses only these, so
 # the colour tells you what kind of thing you are reading without reading it.
 #
-#   GREY   supporting copy: explanations, hints, what to do next
-#   GREEN  good: done, working, reachable, installed
-#   RED    bad: failed, missing, unreachable, needs attention
-#   WHITE  the subject: titles, machine and file names, commands to type
+#   GREY    supporting copy: explanations, hints, what to do next
+#   GREEN   good: done, working, reachable, installed
+#   ORANGE  off, but expected: the consequence of a choice you made, and we
+#           know it — a tailnet route while Tailscale is switched off. Not
+#           working, not a fault.
+#   RED     bad: failed, missing, unexplained — worth looking at
+#   WHITE   the subject: titles, machine and file names, commands to type
 GREY=$'\033[2m'; GREEN=$'\033[0;32m'; RED=$'\033[0;31m'
-WHITE=$'\033[1m'; RESET=$'\033[0m'
+ORANGE=$'\033[38;5;208m'; WHITE=$'\033[1m'; RESET=$'\033[0m'
 
 # Older names, kept so nothing breaks, mapped onto the four above.
 DIM="$GREY"; BOLD="$WHITE"; CYAN="$WHITE"; YELLOW="$RED"

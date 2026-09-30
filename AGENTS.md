@@ -50,10 +50,17 @@ mirrored in `bin/ssh-hosts` (Python, so it cannot source them):
 |---|---|
 | `GREY` | supporting copy — explanations, hints, what to do next |
 | `GREEN` | good — done, working, reachable, installed |
-| `RED` | bad — failed, missing, unreachable, needs attention |
+| `ORANGE` | off, but expected — the consequence of a choice, and we know it |
+| `RED` | bad — failed, missing, unexplained; worth looking at |
 | `WHITE` | the subject — titles, machine and file names, commands to type |
 
-There is no fifth colour. `DIM`, `BOLD`, `CYAN` and `YELLOW` still exist as
+`ORANGE` is the one that takes judgement. Use it only when the code *knows*
+why something is not working and that reason is the user's own switch: the
+tailnet routes while `tailscale status` says the daemon is off. The same row
+goes `RED` when Tailscale is running, because then it is a real fault. Never
+guess — if the cause is unknown, it is `RED`.
+
+There is no sixth colour. `DIM`, `BOLD`, `CYAN` and `YELLOW` still exist as
 aliases onto these so nothing breaks, but new code should use the four names.
 A command the user could type is always `WHITE`, whatever state it is in —
 state is carried by the status next to it, not by dimming the command.
