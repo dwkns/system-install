@@ -10,31 +10,39 @@ source "$ROOT_DIR/lib/ssh.sh"
 source "$ROOT_DIR/lib/net.sh"
 
 usage() {
-  cat <<'USAGE'
-sys — system configuration
-
-  sys setup       Set up this machine from scratch
-  sys sync        Pull the latest config and apply it here (apps, dotfiles, Dock, SSH…)
-  sys sync all    The same here, then on every machine this one may log into
-  sys push        Save this machine's config into the repo and push
-  sys doctor      Check that everything is where it should be
-  sys ssh         The machines sys manages, and whether each is reachable
-  sys ssh all     The same, plus anything hand-written in ~/.ssh/config
-  sys ssh man     The manual
-  sys ssh NAME    Log in and attach the session waiting there
-  sys ssh harden  Keys only on this machine — optional, passwords stay on otherwise
-  sys net         List the network shares; sys net NAME connects to one
-  sys hostname    Set the computer name (asks, or pass one: sys hostname my-mac)
-  sys extras      Install the optional extras (Office, Xcode, duckdb)
-  sys remove      Undo everything setup installed (asks first; --dry-run to preview)
-
-Options
-  --dry-run   Show what would happen, change nothing
-  --force     sync: reinstall and rebuild everything, even if nothing changed
-  --yes       Don't ask for confirmation (remove)
-
-Full documentation: man sys
+  # Commands in white, what they do in grey: the same scheme as every other
+  # thing sys prints (see lib/common.sh).
+  local c="$WHITE" g="$GREY" x="$RESET"
+  printf '%ssys%s %s— system configuration%s\n\n' "$WHITE" "$RESET" "$GREY" "$RESET"
+  while IFS='|' read -r cmd text; do
+    [[ -z "$cmd$text" ]] && { echo; continue; }
+    if [[ -z "$text" ]]; then printf '%s%s%s\n' "$g" "$cmd" "$x"
+    else printf '  %s%-16s%s%s%s%s\n' "$c" "$cmd" "$x" "$g" "$text" "$x"
+    fi
+  done <<'USAGE'
+sys setup|Set up this machine from scratch
+sys sync|Pull the latest config and apply it here (apps, dotfiles, Dock, SSH…)
+sys sync all|The same here, then on every machine this one may log into
+sys push|Save this machine's config into the repo and push
+sys doctor|Check that everything is where it should be
+|
+sys ssh|The machines sys manages, and whether each is reachable
+sys ssh all|The same, plus anything hand-written in ~/.ssh/config
+sys ssh NAME|Log in and attach the session waiting there
+sys ssh harden|Keys only on this machine — optional, passwords stay on otherwise
+sys ssh man|The manual
+|
+sys net|List the network shares; sys net NAME connects to one
+sys hostname|Set the computer name (asks, or pass one: sys hostname my-mac)
+sys extras|Install the optional extras (Office, Xcode, duckdb)
+sys remove|Undo everything setup installed (asks first; --dry-run to preview)
+|
+Options|
+--dry-run|Show what would happen, change nothing
+--force|sync: reinstall and rebuild everything, even if nothing changed
+--yes|Don't ask for confirmation (remove)
 USAGE
+  printf '\n%sFull documentation: %ssys ssh man%s\n' "$GREY" "$WHITE" "$RESET"
 }
 
 # Keep the original arguments: sync may have to re-exec after updating itself.
@@ -84,7 +92,7 @@ HEADSUP
     step() {
       local icon="$1" name="$2"; shift 2
       STEP=$((STEP + 1))
-      header "$icon" "$name" "[$STEP/$TOTAL]" "$CYAN"
+      header "$icon" "$name" "[$STEP/$TOTAL]" "$WHITE"
       if "$@"; then :; else
         FAILED="$FAILED|$name"
         warn "$name did not finish — carrying on"
@@ -271,9 +279,9 @@ HEADSUP
   doctor)
     # One emoji per row, then a fixed-width label, so columns line up even
     # though emoji are double width.
-    row() { printf '  %s  %s%-9s%s %s\n' "$1" "$BOLD" "$2" "$RESET" "$3"; }
-    good() { printf '%s%s%s' "$GREEN"  "$1" "$RESET"; }
-    bad()  { printf '%s%s%s' "$YELLOW" "$1" "$RESET"; }
+    row() { printf '  %s  %s%-9s%s %s\n' "$1" "$WHITE" "$2" "$RESET" "$3"; }
+    good() { printf '%s%s%s' "$GREEN" "$1" "$RESET"; }
+    bad()  { printf '%s%s%s' "$RED"   "$1" "$RESET"; }
     issues=0
 
     header "🩺" "System check"
@@ -281,7 +289,7 @@ HEADSUP
     tools="git brew mise uv gh jq mas duti"; missing=""
     for t in $tools; do has_cmd "$t" || missing="$missing $t"; done
     if [[ -z "$missing" ]]; then
-      row "🧰" "Tools" "$(good "all present") ${DIM}$(echo $tools | sed 's/ /, /g')${RESET}"
+      row "🧰" "Tools" "$(good "all present") ${GREY}$(echo $tools | sed 's/ /, /g')${RESET}"
     else
       row "🧰" "Tools" "$(bad "missing:$(echo $missing | sed 's/ /, /g')")"; issues=1
     fi
@@ -303,43 +311,43 @@ HEADSUP
     fi
 
     if ! ssh_has_key; then
-      row "🔑" "SSH key" "$(bad "none") ${DIM}sys sync makes one${RESET}"; issues=1
+      row "🔑" "SSH key" "$(bad "none") ${GREY}sys sync makes one${RESET}"; issues=1
     elif ssh_shared; then
-      row "🔑" "SSH key" "$(good shared) ${DIM}$(ssh_trusted_count) machine(s) let in here${RESET}"
+      row "🔑" "SSH key" "$(good shared) ${GREY}$(ssh_trusted_count) machine(s) let in here${RESET}"
     else
-      row "🔑" "SSH key" "$(bad "not shared yet") ${DIM}sys sync — may need a GitHub login once${RESET}"; issues=1
+      row "🔑" "SSH key" "$(bad "not shared yet") ${GREY}sys sync — may need a GitHub login once${RESET}"; issues=1
     fi
     # Passwords staying on is a choice, not a problem: never flagged.
     if ssh_keys_only; then
       row "🔐" "sshd" "$(good "keys only")"
     else
-      row "🔐" "sshd" "${DIM}keys and passwords — sys ssh harden turns passwords off${RESET}"
+      row "🔐" "sshd" "${GREY}keys and passwords — sys ssh harden turns passwords off${RESET}"
     fi
 
     if [[ "$(cat "$ROOT_DIR/.state/dock" 2>/dev/null)" == "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" ]]; then
-      row "🚀" "Dock" "$(good "matches config/dock") ${DIM}as of the last sync${RESET}"
+      row "🚀" "Dock" "$(good "matches config/dock") ${GREY}as of the last sync${RESET}"
     else
-      row "🚀" "Dock" "${DIM}config/dock changed — sys sync rebuilds it${RESET}"
+      row "🚀" "Dock" "${GREY}config/dock changed — sys sync rebuilds it${RESET}"
     fi
 
     colour="$("$ROOT_DIR/bin/set-desktop-colour" --check 2>&1)" && rc=0 || rc=$?
     case "$rc" in
-      0) row "🎨" "Desktop" "$(good "${colour%% on *}") ${DIM}${colour#* }${RESET}" ;;
-      2) row "🎨" "Desktop" "${DIM}no screen to check (over SSH?)${RESET}" ;;
-      *) row "🎨" "Desktop" "$(bad "not set") ${DIM}${colour} — sys sync --force${RESET}"; issues=1 ;;
+      0) row "🎨" "Desktop" "$(good "${colour%% on *}") ${GREY}${colour#* }${RESET}" ;;
+      2) row "🎨" "Desktop" "${GREY}no screen to check (over SSH?)${RESET}" ;;
+      *) row "🎨" "Desktop" "$(bad "not set") ${GREY}${colour} — sys sync --force${RESET}"; issues=1 ;;
     esac
 
     if [[ -d "/Applications/Paywall Down.app" ]]; then
       row "🧭" "Paywall" "$(good installed)"
     else
-      row "🧭" "Paywall" "$(bad "not installed") ${DIM}sys setup — needs Xcode${RESET}"; issues=1
+      row "🧭" "Paywall" "$(bad "not installed") ${GREY}sys setup — needs Xcode${RESET}"; issues=1
     fi
 
     if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
       if [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
         row "📦" "Repo" "$(good clean)"
       else
-        row "📦" "Repo" "$(bad "uncommitted changes") ${DIM}sys push${RESET}"; issues=1
+        row "📦" "Repo" "$(bad "uncommitted changes") ${GREY}sys push${RESET}"; issues=1
       fi
     else
       row "📦" "Repo" "$(bad "not a git repo")"; issues=1
@@ -349,7 +357,7 @@ HEADSUP
     if [[ "$issues" == "0" ]]; then
       printf '  ✅  %sEverything looks good.%s\n\n' "$GREEN" "$RESET"
     else
-      printf '  🔧  %sSome things need attention above.%s\n\n' "$YELLOW" "$RESET"
+      printf '  🔧  %sSome things need attention above.%s\n\n' "$RED" "$RESET"
     fi
     ;;
 

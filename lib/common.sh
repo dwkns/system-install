@@ -7,27 +7,37 @@ _SYSCFG_COMMON=1
 
 ROOT_DIR="${ROOT_DIR:-$HOME/.system-config}"
 
-RED=$'\033[0;31m'; GREEN=$'\033[0;32m'; YELLOW=$'\033[0;33m'
-CYAN=$'\033[0;36m'; BOLD=$'\033[1m'; DIM=$'\033[2m'; RESET=$'\033[0m'
+# Four colours, one meaning each. Everything sys prints uses only these, so
+# the colour tells you what kind of thing you are reading without reading it.
+#
+#   GREY   supporting copy: explanations, hints, what to do next
+#   GREEN  good: done, working, reachable, installed
+#   RED    bad: failed, missing, unreachable, needs attention
+#   WHITE  the subject: titles, machine and file names, commands to type
+GREY=$'\033[2m'; GREEN=$'\033[0;32m'; RED=$'\033[0;31m'
+WHITE=$'\033[1m'; RESET=$'\033[0m'
+
+# Older names, kept so nothing breaks, mapped onto the four above.
+DIM="$GREY"; BOLD="$WHITE"; CYAN="$WHITE"; YELLOW="$RED"
 
 # One glyph per kind of message, so output can be skimmed:
 #   ▸ doing something   ✓ it worked   · detail   ▲ careful   ✗ broken
 doing() { printf '%s▸%s %s\n'   "$GREEN"  "$RESET" "$*"; }
 ok()    { printf '%s✓%s %s\n'   "$GREEN"  "$RESET" "$*"; }
 note()  { printf '%s  ·%s %s\n' "$DIM"    "$RESET" "$*"; }
-warn()  { printf '%s  ▲%s %s\n' "$YELLOW" "$RESET" "$*" >&2; }
+warn()  { printf '%s  ▲%s %s\n' "$RED"    "$RESET" "$*" >&2; }
 error() { printf '%s  ✗%s %s\n' "$RED"    "$RESET" "$*" >&2; }
 die()   { error "$*"; exit 1; }
 
 # A titled rule, used at the top of anything worth reading properly.
 #   header "🩺" "System check"
-#   header "📦" "Installing apps" "[1/8]" "$CYAN"   coloured rules, dim suffix
+#   header "📦" "Installing apps" "[1/8]" "$WHITE"  rules in that colour
 header() {
   local rule="────────────────────────────────────────────────────────"
-  local colour="${4:-$DIM}" suffix=""
-  [[ -n "${3:-}" ]] && suffix="  $DIM$3$RESET"
+  local colour="${4:-$GREY}" suffix=""
+  [[ -n "${3:-}" ]] && suffix="  $GREY$3$RESET"
   printf '\n%s%s%s\n' "$colour" "$rule" "$RESET"
-  printf ' %s  %s%s%s%s\n' "$1" "$BOLD" "$2" "$RESET" "$suffix"
+  printf ' %s  %s%s%s%s\n' "$1" "$WHITE" "$2" "$RESET" "$suffix"
   printf '%s%s%s\n\n' "$colour" "$rule" "$RESET"
 }
 

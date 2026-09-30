@@ -268,7 +268,7 @@ ssh_sync_others() {
   [[ -n "$targets" ]] || { note "config/ssh/access lets $me into no other machine"; return 0; }
   for m in $targets; do
     a="$(ssh_alias "$m")"
-    header "🔄" "sys sync on $a" "" "$CYAN"
+    header "🔄" "sys sync on $a" "" "$WHITE"
     if ! "$ROOT_DIR/bin/ssh-reach" "$m" && ! "$ROOT_DIR/bin/ssh-reach" "$m.local"; then
       note "$a is not reachable right now — skipped"; continue
     fi

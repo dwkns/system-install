@@ -11,8 +11,9 @@ Tailscale being off is stated once rather than making every row look broken.
 """
 import glob, json, os, pathlib, socket, subprocess, sys, threading, time
 
-G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
-RED = "\033[0;31m"
+# The same four as lib/common.sh: grey is supporting copy, green is good,
+# red is a problem, white is the subject — titles, machines, commands.
+GREY, GREEN, RED, WHITE, R = "\033[2m", "\033[0;32m", "\033[0;31m", "\033[1m", "\033[0m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
 MANAGED = SSH_DIR / "config.d" / "sys"
 ROOT = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
@@ -24,7 +25,7 @@ DEADLINE = 3.5       # for the whole check, however slow name lookup is
 
 def rule(title, emoji):
     line = "─" * 56
-    print(f"\n{D}{line}{R}\n {emoji}  {B}{title}{R}\n{D}{line}{R}\n")
+    print(f"\n{GREY}{line}{R}\n {emoji}  {WHITE}{title}{R}\n{GREY}{line}{R}\n")
 
 
 def probe(host, into, key, port=22):
@@ -149,24 +150,25 @@ for h in extra:
 
 rule("SSH hosts", "🔌")
 if ts_on:
-    print(f"  {G}Tailscale on{R}{D} — this machine is {ts_self}{R}")
+    print(f"  {GREEN}Tailscale on{R}{GREY} — this machine is {ts_self}{R}")
 else:
-    print(f"  {RED}Tailscale off{R}{D} — home network only, so anything elsewhere is out of reach{R}")
+    print(f"  {RED}Tailscale off{R}{GREY} — home network only, so anything elsewhere is out of reach{R}")
 print()
 
 if not rows:
-    print(f"  {D}Nothing in config/ssh/access yet{R}\n")
+    print(f"  {GREY}Nothing in config/ssh/access yet{R}\n")
 elif tty:
-    print(f"  {D}Checking both routes for each — Ctrl-C to skip{R}\n")
+    print(f"  {GREY}Checking both routes for each — Ctrl-C to skip{R}\n")
 
 width = max([len(alias_of(m, machines)) for m in machines] + [8])
 lines = []          # one per printed row, bottom-up addressing
-CHECKING = f"{D}checking…{R}"
+CHECKING = f"{GREY}checking…{R}"
 
 
 def row_text(alias, who, target, status, dim=False):
-    head = f"  {D}ssh {alias:<{width}}{R}" if dim else f"  {G}ssh {alias:<{width}}{R}"
-    return f"  {head} {D}{who}@{target}{R}  {status}"
+    """The command in white, who and where in grey, the status in its own colour."""
+    head = f"  {WHITE}ssh {alias:<{width}}{R}"
+    return f"  {head} {GREY}{who}@{target}{R}  {status}"
 
 
 # Printed straight away, so the commands are there to read (and copy) while
@@ -179,7 +181,7 @@ for machine, account in rows:
 if extra:
     if tty:
         print()
-        print(f"  {B}Hand-written in ~/.ssh/config{R}")
+        print(f"  {WHITE}Hand-written in ~/.ssh/config{R}")
     for h in extra:
         lines.append((h["alias"], "extra", h["alias"], h["user"]))
         if tty:
@@ -193,13 +195,13 @@ def status_for(key, kind):
             return CHECKING, False
         if tail or local:
             def mark(ok, label):
-                return f"{G}{label} ✓{R}" if ok else f"{D}{label} ✗{R}"
+                return f"{GREEN}{label} ✓{R}" if ok else f"{RED}{label} ✗{R}"
             return f"  {mark(bool(tail), 'tailnet')}  {mark(bool(local), 'home')}", False
         return f"{RED}not reachable{R}", True
     got = found.get((key, "direct"))
     if got is None:
         return CHECKING, False
-    return (f"{G}reachable ✓{R}", False) if got else (f"{RED}not reachable ✗{R}", True)
+    return (f"{GREEN}reachable ✓{R}", False) if got else (f"{RED}not reachable ✗{R}", True)
 
 
 drawn = {}
@@ -233,7 +235,7 @@ except KeyboardInterrupt:
     # checks and leave the list on screen rather than dumping a traceback.
     if tty:
         sys.stdout.write("\r\033[2K")
-    print(f"\n  {D}Stopped checking — the commands above still work.{R}\n")
+    print(f"\n  {GREY}Stopped checking — the commands above still work.{R}\n")
     os._exit(0)
 
 # Anything still unanswered timed out: say so rather than leaving "checking…".
@@ -249,12 +251,12 @@ else:
     for key, kind, alias, who in lines:
         if kind == "extra" and key == extra[0]["alias"]:
             print()
-            print(f"  {B}Hand-written in ~/.ssh/config{R}")
+            print(f"  {WHITE}Hand-written in ~/.ssh/config{R}")
         status, dim = status_for(key, kind)
         print(row_text(alias, who, targets[key], status, dim))
 
 print()
 if SHOW_ALL:
-    print(f"  {D}More detail in {C}sys ssh man{R}{D}.{R}\n")
+    print(f"  {GREY}More detail in {WHITE}sys ssh man{R}{GREY}.{R}\n")
 else:
-    print(f"  {D}Show all connections with {C}sys ssh all{R}{D}, more detail in {C}sys ssh man{R}{D}.{R}\n")
+    print(f"  {GREY}Show all connections with {WHITE}sys ssh all{R}{GREY}, more detail in {WHITE}sys ssh man{R}{GREY}.{R}\n")

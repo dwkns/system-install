@@ -924,16 +924,16 @@ print_manual_steps() {
 
 
   [[ "${MAS_SKIPPED:-0}" == "1" ]] && \
-    todo+=("🛒  App Store apps were skipped — sign in, then ${CYAN}sys setup${RESET} again")
+    todo+=("🛒  App Store apps were skipped — sign in, then ${WHITE}sys setup${RESET} again")
 
   has_cmd cursor || \
-    todo+=("🧩  Open Cursor once so its command appears, then ${CYAN}sys setup${RESET} for its extensions")
+    todo+=("🧩  Open Cursor once so its command appears, then ${WHITE}sys setup${RESET} for its extensions")
 
   ssh_has_key && ! ssh_shared && \
-    todo+=("🔑  Share this machine's SSH key: ${CYAN}sys sync${RESET} — it signs you in to GitHub once, in the browser")
+    todo+=("🔑  Share this machine's SSH key: ${WHITE}sys sync${RESET} — it signs you in to GitHub once, in the browser")
 
   [[ -d "/Applications/Paywall Down.app" ]] || \
-    todo+=("🧭  Paywall Down was not installed — it needs Xcode, signed in to team LD2427W529, then ${CYAN}sys setup${RESET}")
+    todo+=("🧭  Paywall Down was not installed — it needs Xcode, signed in to team LD2427W529, then ${WHITE}sys setup${RESET}")
 
   todo+=("🧭  Safari ▸ Settings ▸ Developer ▸ Allow unsigned extensions, if Paywall Down's button does nothing — by hand, once")
   todo+=("🔐  Sign in to 1Password, Slack, Notion and Figma")
@@ -945,7 +945,7 @@ print_manual_steps() {
   header "🎉" "All set — a few things only you can do"
   printf '  %b\n' "${todo[@]}"
   echo
-  printf '  %sTip:%s %ssys doctor%s tells you if anything is still missing.\n\n' \
-    "$YELLOW" "$RESET" "$CYAN" "$RESET"
+  printf '  %sTip:%s %ssys doctor%s%s tells you if anything is still missing.%s\n\n' \
+    "$GREY" "$RESET" "$WHITE" "$RESET" "$GREY" "$RESET"
 }
 

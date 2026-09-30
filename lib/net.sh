@@ -43,17 +43,17 @@ net_list() {
     where="$(net_mount_of "$url")"
     if [[ -n "$where" ]]; then
       printf '    %ssys net %-12s%s %s→ %s%s  %s%s%s\n' \
-        "$GREEN" "$name" "$RESET" "$DIM" "$url" "$RESET" "$GREEN" "mounted at $where" "$RESET"
+        "$WHITE" "$name" "$RESET" "$GREY" "$url" "$RESET" "$GREEN" "mounted at $where" "$RESET"
     else
       printf '    %ssys net %-12s%s %s→ %s%s\n' \
-        "$GREEN" "$name" "$RESET" "$DIM" "$url" "$RESET"
+        "$WHITE" "$name" "$RESET" "$GREY" "$url" "$RESET"
     fi
   done < <(net_lines)
   if [[ "$any" == "0" ]]; then
     note "Nothing in config/net yet"
   fi
   echo
-  printf '  %sAdd one to config/net, then sys push.%s\n\n' "$DIM" "$RESET"
+  printf '  %sAdd one to config/net, then sys push.%s\n\n' "$GREY" "$RESET"
 }
 
 net_connect() {

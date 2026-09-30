@@ -43,6 +43,21 @@ something was not tested.
 error` from `lib/common.sh` give the glyphs. Emoji in headers and tables must be
 double-width (📦 🔑 🩺); narrow ones (🛠 🛡 ⚠️) break column alignment.
 
+**Colour means something.** Four colours, defined once in `lib/common.sh` and
+mirrored in `bin/ssh-hosts` (Python, so it cannot source them):
+
+| | |
+|---|---|
+| `GREY` | supporting copy — explanations, hints, what to do next |
+| `GREEN` | good — done, working, reachable, installed |
+| `RED` | bad — failed, missing, unreachable, needs attention |
+| `WHITE` | the subject — titles, machine and file names, commands to type |
+
+There is no fifth colour. `DIM`, `BOLD`, `CYAN` and `YELLOW` still exist as
+aliases onto these so nothing breaks, but new code should use the four names.
+A command the user could type is always `WHITE`, whatever state it is in —
+state is carried by the status next to it, not by dimming the command.
+
 ---
 
 ## 2. Entry points
