@@ -142,6 +142,7 @@ config/ssh/no-sys            machines that cannot run sys; their access is pushe
 config/net                   network shares for `sys net`
 config/apt-packages          packages for the Ubuntu box, installed by sync there
 docs/ubuntu-box.md           how the Ubuntu box was built, and what sys does there
+docs/nas.md                  the Synology: accounts, shares, Time Machine, Tailscale
 config/ssh/keys/             each machine's public key, shared by sys sync
 dotfiles/                    copied into ~
 config/mas-apps.txt          App Store app IDs
