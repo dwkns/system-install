@@ -1,25 +1,75 @@
 #!/usr/bin/env python3
 """List the machines this one can reach over SSH (`sys ssh`).
 
-Read live from the machine — ~/.ssh/config (following Include lines) and the
-Tailscale daemon. Entries that sys wrote from config/ssh/access are listed
-first; anything hand-written in ~/.ssh/config follows, and is flagged when its
-address is not a machine on your tailnet.
+Status, not guesswork: every machine in config/ssh/access is shown with both
+of its routes actually probed — the Tailscale name, and NAME.local on the home
+network — so "not reachable" means this machine just tried and failed, and
+Tailscale being off is stated once rather than making every row look broken.
+
+  sys ssh       the machines sys manages
+  sys ssh all   those, plus anything hand-written in ~/.ssh/config
 """
-import glob, json, os, pathlib, subprocess, sys
+import concurrent.futures, glob, json, os, pathlib, socket, subprocess, sys
 
 G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
 MANAGED = SSH_DIR / "config.d" / "sys"
+ROOT = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
+ACCESS = ROOT / "config" / "ssh" / "access"
+SHOW_ALL = "all" in sys.argv[1:]
+TIMEOUT = 2.0
+
 
 def rule(title, emoji):
     line = "─" * 56
     print(f"\n{D}{line}{R}\n {emoji}  {B}{title}{R}\n{D}{line}{R}\n")
 
+
+def reachable(host, port=22):
+    """Is anything answering on port 22? The only question that matters."""
+    try:
+        socket.create_connection((host, port), timeout=TIMEOUT).close()
+        return True
+    except Exception:
+        return False
+
+
+def access_rows():
+    """machine, account — from config/ssh/access, this machine left out."""
+    me = socket.gethostname().split(".")[0].lower()
+    rows = []
+    if not ACCESS.is_file():
+        return me, rows
+    for raw in ACCESS.read_text(errors="replace").splitlines():
+        line = raw.split("#", 1)[0].split()
+        if len(line) >= 2 and line[0] != me:
+            rows.append((line[0], line[1]))
+    return me, rows
+
+
+def tailscale_state():
+    """(running, self name). running is False when the daemon is off or
+    logged out — the case that used to be reported as every host being stale."""
+    for cmd in ("tailscale", "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
+                "/usr/local/bin/tailscale"):
+        try:
+            out = subprocess.run([cmd, "status", "--json"], capture_output=True,
+                                 timeout=10, check=True).stdout
+        except Exception:
+            continue
+        try:
+            d = json.loads(out)
+        except ValueError:
+            continue
+        if (d.get("BackendState") or "") != "Running":
+            return False, ""
+        me = (d.get("Self") or {}).get("DNSName", "").rstrip(".").split(".")[0]
+        return True, me
+    return False, ""
+
+
 def ssh_config_hosts(path=SSH_DIR / "config", seen=None, by_alias=None):
-    """Host blocks, ignoring wildcards. Include lines are followed, relative
-    to ~/.ssh. A line naming several aliases (a shared-settings block) applies
-    to each; the first value for a setting wins, as in ssh itself."""
+    """Host blocks from ~/.ssh/config, following Include lines."""
     seen = seen if seen is not None else set()
     by_alias = by_alias if by_alias is not None else {}
     if not path.is_file() or path in seen:
@@ -42,78 +92,94 @@ def ssh_config_hosts(path=SSH_DIR / "config", seen=None, by_alias=None):
                     hosts.extend(ssh_config_hosts(pathlib.Path(inc), seen, by_alias))
             cur = []
         elif key == "match":
-            cur = []          # a Match block is a route choice, not a host
+            cur = []
         elif key == "host":
             cur = []
             for alias in val.split():
                 if "*" in alias or "?" in alias:
                     continue
                 if alias not in by_alias:
-                    by_alias[alias] = {"alias": alias, "hostname": "", "user": "", "port": "",
-                                       "hostkeyalias": "", "managed": path == MANAGED}
+                    by_alias[alias] = {"alias": alias, "hostname": "", "user": "",
+                                       "managed": path == MANAGED}
                     hosts.append(by_alias[alias])
                 cur.append(by_alias[alias])
-        elif cur and key in ("hostname", "user", "port", "hostkeyalias"):
+        elif cur and key in ("hostname", "user"):
             for h in cur:
                 h[key] = h[key] or val
     return hosts
 
-def tailnet():
-    """Peers plus this machine, from whichever tailscale binary exists."""
-    for cmd in ("tailscale", "/Applications/Tailscale.app/Contents/MacOS/Tailscale",
-                "/usr/local/bin/tailscale"):
-        try:
-            out = subprocess.run([cmd, "status", "--json"], capture_output=True,
-                                 timeout=10, check=True).stdout
-        except Exception:
+
+def alias_of(machine, machines):
+    """dwkns-mini-m1 -> mini-m1, when every machine shares the first segment."""
+    if not all("-" in m for m in machines):
+        return machine
+    prefix = machines[0].split("-")[0] + "-"
+    if all(m.startswith(prefix) and len(m) > len(prefix) for m in machines):
+        return machine[len(prefix):]
+    return machine
+
+
+me, rows = access_rows()
+ts_on, ts_self = tailscale_state()
+
+# Probe everything at once: two routes per machine, two seconds each at worst.
+targets = []
+for machine, account in rows:
+    targets.append((machine, "tailnet", machine))
+    targets.append((machine, "local", machine + ".local"))
+extra = []
+if SHOW_ALL:
+    managed_aliases = {alias_of(m, [r[0] for r in rows]) for m, _ in rows}
+    for h in ssh_config_hosts():
+        if h["managed"] or h["alias"] in managed_aliases or not h["hostname"]:
             continue
-        d = json.loads(out)
-        rows, me = [], d.get("Self") or {}
-        for p in list((d.get("Peer") or {}).values()) + ([me] if me else []):
-            ips = p.get("TailscaleIPs") or []
-            dns = (p.get("DNSName") or "").rstrip(".")
-            rows.append({
-                # DNSName is the MagicDNS name; HostName can be "localhost" on phones.
-                "name": dns.split(".")[0] if dns else (p.get("HostName") or "?"),
-                "ip": ips[0] if ips else "",
-                "os": p.get("OS") or "",
-                "online": bool(p.get("Online")),
-                "self": p is me,
-            })
-        return sorted(rows, key=lambda r: (not r["online"], r["name"]))
-    return None
+        extra.append(h)
+        targets.append((h["alias"], "direct", h["hostname"]))
 
-net = tailnet()
-
-cfg = ssh_config_hosts()
-known = {r["name"] for r in net} if net else set()
+with concurrent.futures.ThreadPoolExecutor(max_workers=16) as pool:
+    results = dict(zip([(t[0], t[1]) for t in targets],
+                       pool.map(lambda t: reachable(t[2]), targets)))
 
 rule("SSH hosts", "🔌")
 
-def show(h):
-    # A managed entry has two routes (Tailscale, then NAME.local); show the
-    # machine it means, which HostKeyAlias carries, rather than either route.
-    target = h["hostkeyalias"] or h["hostname"] or h["alias"]
-    who = f'{h["user"]}@' if h["user"] else ""
-    port = f' {D}port {h["port"]}{R}' if h["port"] else ""
-    print(f'    {G}ssh {h["alias"]:<12}{R} {D}→ {who}{target}{R}{port}')
-    if known and target.split(".")[0] not in known:
-        print(f'                     {Y}not on your tailnet — an old entry?{R}')
-
-managed = [h for h in cfg if h["managed"]]
-manual = [h for h in cfg if not h["managed"]]
-if managed:
-    print(f"  {B}From config/ssh/access{R}  {D}(sys sync keeps these current){R}")
-    for h in managed:
-        show(h)
-    print()
+if ts_on:
+    print(f"  {G}Tailscale on{R}{D} — this machine is {ts_self}{R}")
 else:
-    print(f"  {D}Nothing from config/ssh/access yet — sys sync sets it up{R}\n")
-if manual:
+    print(f"  {Y}Tailscale off{R}{D} — home network only, so anything elsewhere is out of reach{R}")
+print()
+
+if not rows:
+    print(f"  {D}Nothing in config/ssh/access yet{R}\n")
+
+machines = [r[0] for r in rows]
+width = max([len(alias_of(m, machines)) for m in machines] + [8])
+for machine, account in rows:
+    a = alias_of(machine, machines)
+    tail = results.get((machine, "tailnet"), False)
+    local = results.get((machine, "local"), False)
+
+    def mark(ok, label):
+        return f"{G}{label} ✓{R}" if ok else f"{D}{label} ✗{R}"
+
+    if tail or local:
+        via = f"  {mark(tail, 'tailnet')}  {mark(local, 'home')}"
+        head = f"  {G}ssh {a:<{width}}{R}"
+    else:
+        via = f"  {Y}not reachable{R}"
+        head = f"  {D}ssh {a:<{width}}{R}"
+    print(f"  {head} {D}{account}@{machine}{R}{via}")
+
+print()
+if extra:
     print(f"  {B}Hand-written in ~/.ssh/config{R}")
-    for h in manual:
-        show(h)
+    ewidth = max(len(h["alias"]) for h in extra)
+    for h in extra:
+        ok = results.get((h["alias"], "direct"), False)
+        who = f'{h["user"]}@' if h["user"] else ""
+        state = f"{G}reachable ✓{R}" if ok else f"{D}not reachable ✗{R}"
+        print(f'  {G}ssh {h["alias"]:<{ewidth}}{R} {D}{who}{h["hostname"]}{R}  {state}')
     print()
 
-print(f"  {D}Who may log in where: config/ssh/access in the repo.{R}")
-print(f"  {D}Edit it, sys push, then sys sync on each machine.{R}\n")
+if not SHOW_ALL:
+    print(f"  {D}sys ssh all also lists hosts hand-written in ~/.ssh/config.{R}")
+print(f"  {D}Who may log in where: config/ssh/access. Edit it, sys push, then sys sync.{R}\n")

@@ -60,7 +60,7 @@ double-width (📦 🔑 🩺); narrow ones (🛠 🛡 ⚠️) break column align
 | `bin/set-dock` | Rebuilds the Dock atomically from `config/dock` |
 | `bin/dump-dock` | Captures the current Dock into `config/dock` (run by `sys push`) |
 | `bin/set-desktop-colour` | Solid desktop colour via JXA, with verification |
-| `bin/ssh-hosts` | `sys ssh` — lists reachable machines, live from `~/.ssh/config` and Tailscale |
+| `bin/ssh-hosts` | `sys ssh` — machines from `config/ssh/access`, both routes probed in parallel |
 | `bin/ssh-reach` | Is NAME answering on port 22 within 2s? Used by the ssh aliases |
 | `lib/net.sh` | `sys net` — network shares from `config/net`, mounted through Finder |
 | `docs/ubuntu-box.md` | How the Ubuntu box was built — vendor repos `sys` does not manage |
