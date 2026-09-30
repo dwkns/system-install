@@ -41,6 +41,19 @@ these change, and a stale keyring command is worse than none.
 - `openssh-server`, `avahi-daemon` and `ufw` (Ubuntu's firewall) are present
   from the base install.
 
+## Its two routes
+
+Like every other machine it should be reachable both over Tailscale
+(`dwkns-mbp-ubuntu`) and on the home network (`dwkns-mbp-ubuntu.local`, which
+is 192.168.4.200). The second one silently did not work for a long time:
+`/etc/avahi/avahi-daemon.conf` had `host-name=dwkns-mbp-unbutu` — a typo — so
+avahi advertised the box under a misspelled name and the correct one never
+resolved. Corrected to `dwkns-mbp-ubuntu`; the original file is kept beside it
+as `avahi-daemon.conf.before-sys`.
+
+If the `.local` name stops resolving again, that file is the first place to
+look, then `systemctl is-active avahi-daemon`.
+
 ## Ordinary packages
 
 Anything from Ubuntu's own repositories goes in `config/apt-packages`, one per

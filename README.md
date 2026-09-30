@@ -31,6 +31,7 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys doctor` | Check everything is installed and signed in |
 | `sys ssh` | The machines sys manages, and whether each is reachable right now |
 | `sys ssh all` | The same, plus anything hand-written in `~/.ssh/config` |
+| `sys ssh man` | The manual |
 | `sys ssh NAME` | Log in and attach the tmux session waiting there |
 | `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
 | `sys net` | List the network shares; `sys net dwkns-nas` mounts one |

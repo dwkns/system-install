@@ -12,6 +12,7 @@ Tailscale being off is stated once rather than making every row look broken.
 import glob, json, os, pathlib, socket, subprocess, sys, threading, time
 
 G, C, Y, D, B, R = "\033[0;32m", "\033[0;36m", "\033[0;33m", "\033[2m", "\033[1m", "\033[0m"
+RED = "\033[0;31m"
 SSH_DIR = pathlib.Path.home() / ".ssh"
 MANAGED = SSH_DIR / "config.d" / "sys"
 ROOT = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
@@ -150,7 +151,7 @@ rule("SSH hosts", "🔌")
 if ts_on:
     print(f"  {G}Tailscale on{R}{D} — this machine is {ts_self}{R}")
 else:
-    print(f"  {Y}Tailscale off{R}{D} — home network only, so anything elsewhere is out of reach{R}")
+    print(f"  {RED}Tailscale off{R}{D} — home network only, so anything elsewhere is out of reach{R}")
 print()
 
 if not rows:
@@ -194,11 +195,11 @@ def status_for(key, kind):
             def mark(ok, label):
                 return f"{G}{label} ✓{R}" if ok else f"{D}{label} ✗{R}"
             return f"  {mark(bool(tail), 'tailnet')}  {mark(bool(local), 'home')}", False
-        return f"{Y}not reachable{R}", True
+        return f"{RED}not reachable{R}", True
     got = found.get((key, "direct"))
     if got is None:
         return CHECKING, False
-    return (f"{G}reachable ✓{R}", False) if got else (f"{D}not reachable ✗{R}", True)
+    return (f"{G}reachable ✓{R}", False) if got else (f"{RED}not reachable ✗{R}", True)
 
 
 drawn = {}
@@ -253,6 +254,7 @@ else:
         print(row_text(alias, who, targets[key], status, dim))
 
 print()
-if not SHOW_ALL:
-    print(f"  {D}sys ssh all also lists hosts hand-written in ~/.ssh/config.{R}")
-print(f"  {D}Who may log in where: config/ssh/access. Edit it, sys push, then sys sync.{R}\n")
+if SHOW_ALL:
+    print(f"  {D}More detail in {C}sys ssh man{R}{D}.{R}\n")
+else:
+    print(f"  {D}Show all connections with {C}sys ssh all{R}{D}, more detail in {C}sys ssh man{R}{D}.{R}\n")
