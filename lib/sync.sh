@@ -67,7 +67,7 @@ sync_install() {
 
   if [[ "$drifted" == "1" ]]; then
     note "Replaced files that differed. The old copies are in .drift/"
-    note "Keep them instead?  cp -a .drift/<path> <destination>, or 'sys push' next time."
+    note "Keep them instead?  {{cp -a .drift/<path> <destination>}}, or {{sys push}} next time."
   fi
   return 0
 }
@@ -155,7 +155,7 @@ show_brewfile_changes() {
 # Push commits that already exist. Never stops at a bare "Username:" prompt: a
 # machine with no GitHub login saved is signed in, once.
 push_repo() {
-  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: git push"; return 0; }
+  [[ "${DRY_RUN:-0}" == "1" ]] && { note "dry run: {{git push}}"; return 0; }
   local err
   if err="$(env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>&1)"; then return 0; fi
 
@@ -163,7 +163,7 @@ push_repo() {
   # first, no network) is reported as what it is and retried next sync.
   if ! printf '%s' "$err" | grep -qiE 'could not read Username|Authentication failed|terminal prompts disabled|Permission to .* denied'; then
     warn "Could not push to GitHub — $(printf '%s' "$err" | grep -v '^$' | tail -1)"
-    note "Will try again on the next sys sync"
+    note "Will try again on the next {{sys sync}}"
     return 1
   fi
 
@@ -172,7 +172,7 @@ push_repo() {
   if has_cmd gh && { true </dev/tty; } 2>/dev/null; then
     doing "This machine needs a GitHub login to push — signing in once with gh"
     if ! gh auth status -h github.com >/dev/null 2>&1; then
-      github_device_login || { warn "GitHub sign-in did not finish — run sys sync again to retry"; return 1; }
+      github_device_login || { warn "GitHub sign-in did not finish — run {{sys sync}} again to retry"; return 1; }
     fi
     gh auth setup-git -h github.com >/dev/null 2>&1 || true
     if env GIT_TERMINAL_PROMPT=0 git -C "$ROOT_DIR" push --quiet 2>/dev/null; then
@@ -181,7 +181,7 @@ push_repo() {
     fi
   fi
   warn "Could not push to GitHub — this machine has no GitHub login saved"
-  note "Once, on this machine:  gh auth login  then  gh auth setup-git  — then sys sync again"
+  note "Once, on this machine: {{gh auth login}} then {{gh auth setup-git}} — then {{sys sync}} again"
   return 1
 }
 

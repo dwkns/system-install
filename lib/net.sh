@@ -53,7 +53,8 @@ net_list() {
     note "Nothing in config/net yet"
   fi
   echo
-  printf '  %sAdd one to config/net, then sys push.%s\n\n' "$GREY" "$RESET"
+  printf '  %sAdd one to %sconfig/net%s%s, then %ssys push%s%s.%s\n\n' \
+    "$GREY" "$WHITE" "$RESET" "$GREY" "$WHITE" "$RESET" "$GREY" "$RESET"
 }
 
 net_connect() {
@@ -91,6 +92,6 @@ net_connect() {
   # in the Keychain on this machine.
   warn "$want did not mount within 15s"
   note "If Finder is asking: pick the share, tick 'Remember this password in my keychain', and it will be silent from then on."
-  note "If the url has no share name, add one to config/net: $found/ShareName"
+  note "If the url has no share name, add one to config/net: {{$found/ShareName}}"
   return 1
 }

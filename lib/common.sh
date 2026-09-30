@@ -25,11 +25,22 @@ DIM="$GREY"; BOLD="$WHITE"; CYAN="$WHITE"; YELLOW="$RED"
 
 # One glyph per kind of message, so output can be skimmed:
 #   ▸ doing something   ✓ it worked   · detail   ▲ careful   ✗ broken
-doing() { printf '%s▸%s %s\n'   "$GREEN"  "$RESET" "$*"; }
-ok()    { printf '%s✓%s %s\n'   "$GREEN"  "$RESET" "$*"; }
-note()  { printf '%s  ·%s %s\n' "$DIM"    "$RESET" "$*"; }
-warn()  { printf '%s  ▲%s %s\n' "$RED"    "$RESET" "$*" >&2; }
-error() { printf '%s  ✗%s %s\n' "$RED"    "$RESET" "$*" >&2; }
+# Anything in {{double braces}} is a command the reader could type. It is
+# shown in white wherever it appears, so no message colours one by hand.
+# Braces rather than backticks: messages live in double quotes, where
+# backticks would run the command instead of printing it.
+# $2 is the colour the sentence returns to afterwards.
+hl() {
+  local ambient="${2:-$RESET}"
+  printf '%s' "$1" | sed "s/{{\\([^}]*\\)}}/${WHITE}\\1${RESET}${ambient}/g"
+}
+
+doing() { printf '%s▸%s %s\n'   "$GREEN" "$RESET" "$(hl "$*")"; }
+ok()    { printf '%s✓%s %s\n'   "$GREEN" "$RESET" "$(hl "$*")"; }
+# A note is supporting copy, so the sentence itself is grey.
+note()  { printf '%s  ·%s %s%s%s\n' "$GREY" "$RESET" "$GREY" "$(hl "$*" "$GREY")" "$RESET"; }
+warn()  { printf '%s  ▲%s %s\n' "$RED" "$RESET" "$(hl "$*")" >&2; }
+error() { printf '%s  ✗%s %s\n' "$RED" "$RESET" "$(hl "$*")" >&2; }
 die()   { error "$*"; exit 1; }
 
 # A titled rule, used at the top of anything worth reading properly.

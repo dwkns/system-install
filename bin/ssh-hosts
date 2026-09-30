@@ -153,13 +153,13 @@ rule("SSH hosts", "🔌")
 if ts_on:
     print(f"  {GREEN}Tailscale on{R}{GREY} — this machine is {ts_self}{R}")
 else:
-    print(f"  {ORANGE}Tailscale off{R}{GREY} — home network only, so anything elsewhere is out of reach{R}")
+    print(f"  {ORANGE}Tailscale off{R}{GREY} — local network only, so anything elsewhere is out of reach{R}")
 print()
 
 if not rows:
     print(f"  {GREY}Nothing in config/ssh/access yet{R}\n")
 elif tty:
-    print(f"  {GREY}Checking both routes for each — Ctrl-C to skip{R}\n")
+    print(f"  {GREY}Checking both routes for each — {WHITE}Ctrl-C{R}{GREY} to skip{R}\n")
 
 width = max([len(alias_of(m, machines)) for m in machines] + [8])
 lines = []          # one per printed row, bottom-up addressing
@@ -201,7 +201,7 @@ def status_for(key, kind):
 
         if tail or local:
             return (f"  {mark(bool(tail), 'tailnet', expected)}"
-                    f"  {mark(bool(local), 'home', RED)}", False)
+                    f"  {mark(bool(local), 'local network', RED)}", False)
         if not ts_on:
             return f"{ORANGE}not reachable{R}{GREY} — Tailscale is off{R}", True
         return f"{RED}not reachable{R}", True

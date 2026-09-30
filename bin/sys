@@ -72,16 +72,11 @@ case "$cmd" in
     # it starts from the latest config, restarting if that updated sys itself.
     update_self
 
-    cat <<'HEADSUP'
-
-This takes 15-30 minutes. Two things to expect:
-
-  * You will be asked for your password once, right at the start. It will
-    not appear as you type, which is normal. That is the only time.
-  * Some apps install with no output for several minutes. That is not a
-    hang. Leave it alone.
-
-HEADSUP
+    printf '%s\n%s\n' "$GREY" "This takes 15-30 minutes. Two things to expect:"
+    printf '%s\n' "  * You will be asked for your password once, right at the start. It will"
+    printf '%s\n' "    not appear as you type, which is normal. That is the only time."
+    printf '%s\n' "  * Some apps install with no output for several minutes. That is not a"
+    printf '%s\n%s\n' "    hang. Leave it alone." "$RESET"
 
     acquire_sudo
 
@@ -159,7 +154,7 @@ HEADSUP
           # --autostash: an edited-but-uncommitted file here is set aside and
           # put back afterwards, instead of stopping the pull.
           if ! run git -C "$ROOT_DIR" pull --rebase --autostash --quiet; then
-            die "The two sides changed the same lines. Fix it in $ROOT_DIR (git status shows where), then run sys sync again."
+            die "The two sides changed the same lines. Fix it in $ROOT_DIR ({{git status}} shows where), then run {{sys sync}} again."
           fi
           want_push=1
         elif [[ "$behind" -gt 0 ]]; then
@@ -232,21 +227,21 @@ HEADSUP
       if [[ "$brew_changed" == "1" ]]; then
         show_brewfile_changes
         doing "Brewfile changed — installing what is new"
-        install_packages || warn "brew bundle did not finish — will try again next sync"
+        install_packages || warn "{{brew bundle}} did not finish — will try again next sync"
       fi
       apply_macos_defaults
       request_reload
       if [[ -n "${SYS_RELOAD_FILE:-}" ]]; then
         ok "Done — reloading your shell"
       else
-        ok "Done — run 'exec zsh' (or rp) to reload your shell"
+        ok "Done — run {{exec zsh}} (or {{rp}}) to reload your shell"
       fi
     fi
     # sys sync all: now the other machines, each over ssh.
     if [[ "$ARG" == "all" ]]; then
       ssh_sync_others || true
     elif [[ -n "$ARG" ]]; then
-      die "Unknown: sys sync $ARG — try sys sync, or sys sync all"
+      die "Unknown: sys sync $ARG — try {{sys sync}}, or {{sys sync all}}"
     fi
     ;;
 
@@ -311,43 +306,43 @@ HEADSUP
     fi
 
     if ! ssh_has_key; then
-      row "🔑" "SSH key" "$(bad "none") ${GREY}sys sync makes one${RESET}"; issues=1
+      row "🔑" "SSH key" "$(bad "none") ${WHITE}sys sync${RESET}${GREY} makes one${RESET}"; issues=1
     elif ssh_shared; then
       row "🔑" "SSH key" "$(good shared) ${GREY}$(ssh_trusted_count) machine(s) let in here${RESET}"
     else
-      row "🔑" "SSH key" "$(bad "not shared yet") ${GREY}sys sync — may need a GitHub login once${RESET}"; issues=1
+      row "🔑" "SSH key" "$(bad "not shared yet") ${WHITE}sys sync${RESET}${GREY} — may need a GitHub login once${RESET}"; issues=1
     fi
     # Passwords staying on is a choice, not a problem: never flagged.
     if ssh_keys_only; then
       row "🔐" "sshd" "$(good "keys only")"
     else
-      row "🔐" "sshd" "${GREY}keys and passwords — sys ssh harden turns passwords off${RESET}"
+      row "🔐" "sshd" "${GREY}keys and passwords — ${RESET}${WHITE}sys ssh harden${RESET}${GREY} turns passwords off${RESET}"
     fi
 
     if [[ "$(cat "$ROOT_DIR/.state/dock" 2>/dev/null)" == "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" ]]; then
       row "🚀" "Dock" "$(good "matches config/dock") ${GREY}as of the last sync${RESET}"
     else
-      row "🚀" "Dock" "${GREY}config/dock changed — sys sync rebuilds it${RESET}"
+      row "🚀" "Dock" "${GREY}config/dock changed — ${RESET}${WHITE}sys sync${RESET}${GREY} rebuilds it${RESET}"
     fi
 
     colour="$("$ROOT_DIR/bin/set-desktop-colour" --check 2>&1)" && rc=0 || rc=$?
     case "$rc" in
       0) row "🎨" "Desktop" "$(good "${colour%% on *}") ${GREY}${colour#* }${RESET}" ;;
       2) row "🎨" "Desktop" "${GREY}no screen to check (over SSH?)${RESET}" ;;
-      *) row "🎨" "Desktop" "$(bad "not set") ${GREY}${colour} — sys sync --force${RESET}"; issues=1 ;;
+      *) row "🎨" "Desktop" "$(bad "not set") ${GREY}${colour} — ${RESET}${WHITE}sys sync --force${RESET}"; issues=1 ;;
     esac
 
     if [[ -d "/Applications/Paywall Down.app" ]]; then
       row "🧭" "Paywall" "$(good installed)"
     else
-      row "🧭" "Paywall" "$(bad "not installed") ${GREY}sys setup — needs Xcode${RESET}"; issues=1
+      row "🧭" "Paywall" "$(bad "not installed") ${WHITE}sys setup${RESET}${GREY} — needs Xcode${RESET}"; issues=1
     fi
 
     if git -C "$ROOT_DIR" rev-parse --git-dir >/dev/null 2>&1; then
       if [[ -z "$(git -C "$ROOT_DIR" status --porcelain)" ]]; then
         row "📦" "Repo" "$(good clean)"
       else
-        row "📦" "Repo" "$(bad "uncommitted changes") ${GREY}sys push${RESET}"; issues=1
+        row "📦" "Repo" "$(bad "uncommitted changes") ${WHITE}sys push${RESET}"; issues=1
       fi
     else
       row "📦" "Repo" "$(bad "not a git repo")"; issues=1

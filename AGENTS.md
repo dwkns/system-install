@@ -60,6 +60,19 @@ tailnet routes while `tailscale status` says the daemon is off. The same row
 goes `RED` when Tailscale is running, because then it is a real fault. Never
 guess — if the cause is unknown, it is `RED`.
 
+**Marking commands.** Never colour a command by hand inside a message. Put it
+in `{{double braces}}` and `doing/ok/note/warn/error` render it white,
+returning the sentence to its own colour afterwards (`hl` in `lib/common.sh`):
+
+```bash
+note "Add a line for it, {{sys push}}, {{sys sync}}"
+```
+
+Braces, not backticks: messages live in double quotes, where backticks would
+run the command instead of printing it. Hand-built `printf` output — the
+doctor table, `sys net`, `bin/ssh-hosts` — has to wrap commands itself, and
+must restore the surrounding colour after `RESET`.
+
 There is no sixth colour. `DIM`, `BOLD`, `CYAN` and `YELLOW` still exist as
 aliases onto these so nothing breaks, but new code should use the four names.
 A command the user could type is always `WHITE`, whatever state it is in —

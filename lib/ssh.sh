@@ -95,7 +95,7 @@ ssh_share_key() {
   # lying in the working tree either — an untracked copy of a file someone
   # then commits elsewhere makes every later pull refuse.
   if ! is_macos && ! has_cmd gh; then
-    warn "This machine cannot push to GitHub. On a Mac, paste these into the repo, then sys push:"
+    warn "This machine cannot push to GitHub. On a Mac, paste these into the repo, then {{sys push}}:"
     note "config/ssh/keys/$me.pub:      $(cat "$SSH_KEY.pub")"
     [[ -n "$hk" ]] && note "config/ssh/hostkeys/$me.pub:  $hk"
     return 0
@@ -110,9 +110,9 @@ ssh_share_key() {
     warn "Could not commit the keys — nothing shared"; return 0
   fi
   if push_repo; then
-    ok "Keys shared — other machines pick them up on their next sys sync"
+    ok "Keys shared — other machines pick them up on their next {{sys sync}}"
   else
-    note "The keys are committed here and will be pushed by the next sys sync that can"
+    note "The keys are committed here and will be pushed by the next {{sys sync}} that can"
   fi
   return 0
 }
@@ -127,7 +127,7 @@ ssh_install_access() {
   if [[ -z "$row" ]]; then
     # Not quiet: a machine outside the file is the commonest mistake, and the
     # only symptom would otherwise be "nobody can log in".
-    warn "$me is not in config/ssh/access — nothing is let in here. Add a line for it, sys push, sys sync"
+    warn "$me is not in config/ssh/access — nothing is let in here. Add a line for it, {{sys push}}, {{sys sync}}"
     return 0
   fi
   set -- $row
@@ -164,7 +164,7 @@ ssh_install_access() {
       printf '%s\n' "$new" > "$SSH_AUTH.tmp" && mv "$SSH_AUTH.tmp" "$SSH_AUTH" && chmod 600 "$SSH_AUTH"
     fi
   fi
-  [[ -n "$missing" ]] && note "No key in the repo yet for:$missing — run sys sync there"
+  [[ -n "$missing" ]] && note "No key in the repo yet for:$missing — run {{sys sync}} there"
   return 0
 }
 
@@ -272,7 +272,7 @@ ssh_sync_others() {
     if ! "$ROOT_DIR/bin/ssh-reach" "$m" && ! "$ROOT_DIR/bin/ssh-reach" "$m.local"; then
       note "$a is not reachable right now — skipped"; continue
     fi
-    if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: ssh $a sys sync"; continue
+    if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: {{ssh $a sys sync}}"; continue
     fi
     # -t: a real terminal there, so a one-time GitHub sign-in can show its code.
     if ssh -t -o BatchMode=yes -o ConnectTimeout=8 "$a" \
@@ -282,7 +282,7 @@ ssh_sync_others() {
       case $? in
         99)  warn "$a: sys is not installed there yet — run its setup command on it once" ;;
         255) warn "$a: could not log in — is this machine let in there?" ;;
-        *)   warn "$a: sys sync had problems there (see above)" ;;
+        *)   warn "$a: {{sys sync}} had problems there (see above)" ;;
       esac
       rc=1
     fi
@@ -385,7 +385,7 @@ ssh_connect() {
   while read -r m _; do
     [[ "$m" == "$want" || "$(ssh_alias "$m")" == "$want" ]] && { found="$m"; break; }
   done < <(ssh_access_lines)
-  [[ -n "$found" ]] || die "No machine called $want in config/ssh/access — sys ssh lists them"
+  [[ -n "$found" ]] || die "No machine called $want in config/ssh/access — {{sys ssh}} lists them"
   a="$(ssh_alias "$found")"
 
   # Through a login shell: a non-interactive ssh command gets a bare PATH, so
@@ -403,7 +403,7 @@ ssh_connect() {
 # unless you run this.
 ssh_harden() {
   local n; n="$(ssh_trusted_count)"
-  [[ "$n" -gt 0 ]] || die "No machine is let in here yet — nothing could log in. Check config/ssh/access, then sys sync"
+  [[ "$n" -gt 0 ]] || die "No machine is let in here yet — nothing could log in. Check config/ssh/access, then {{sys sync}}"
   grep -q '^Include /etc/ssh/sshd_config.d' /etc/ssh/sshd_config 2>/dev/null \
     || die "This sshd does not include /etc/ssh/sshd_config.d — set PasswordAuthentication no in /etc/ssh/sshd_config by hand"
 

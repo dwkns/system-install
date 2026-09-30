@@ -210,14 +210,14 @@ install_app_store_apps() {
   # The App Store needs you signed in, so never assume. Default to no, so an
   # unattended run walks past it rather than stalling on a password prompt.
   if ! ask_timeout 15 n "Install App Store apps? (needs you signed in)"; then
-    note "Skipped — run 'sys setup' again once you are signed in."
+    note "Skipped — run {{sys setup}} again once you are signed in."
     MAS_SKIPPED=1
     return 0
   fi
 
   local installed
   if ! installed="$(mas list 2>/dev/null)"; then
-    warn "Can't read the App Store — sign in, then run sys setup again"
+    warn "Can't read the App Store — sign in, then run {{sys setup}} again"
     MAS_SKIPPED=1
     return 0
   fi
@@ -268,7 +268,7 @@ run_once() {
   local name="$1" fp="$2"; shift 2
   local stamp="$ROOT_DIR/.state/$name"
   if [[ "${FORCE:-0}" != "1" && -e "$stamp" && "$(cat "$stamp" 2>/dev/null)" == "$fp" ]]; then
-    [[ "${RUN_ONCE_NOTE:-0}" == "1" ]] && note "$name: already done — skipping (sys sync --force redoes it)"
+    [[ "${RUN_ONCE_NOTE:-0}" == "1" ]] && note "$name: already done — skipping ({{sys sync --force}} redoes it)"
     return 0
   fi
   if "$@"; then
@@ -338,13 +338,13 @@ remove_everything() {
   plan+=("$ROOT_DIR/.state and $ROOT_DIR/.drift")
 
   doing "This will remove:"
-  printf '    %s\n' "${plan[@]}"
+  printf "    ${GREY}%s${RESET}\n" "${plan[@]}"
   echo
   note "It will NOT erase macOS, your user account, SSH or Screen Sharing."
   echo
 
   if [[ "$dry" == "1" ]]; then
-    warn "Dry run — nothing removed. Run 'sys remove' to do it."
+    warn "Dry run — nothing removed. Run {{sys remove}} to do it."
     return 0
   fi
 
@@ -400,13 +400,9 @@ remove_everything() {
 }
 
 print_fresh_user_steps() {
-  cat <<'STEPS'
-
-To install again from scratch:
-
-  curl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash
-
-STEPS
+  printf '\n%sTo install again from scratch:%s\n\n' "$GREY" "$RESET"
+  printf '  %scurl -fsSL https://raw.githubusercontent.com/dwkns/system-install/master/install.sh | bash%s\n\n' \
+    "$WHITE" "$RESET"
 }
 
 # MailExporter ships as a signed .app on GitHub Releases, so setup downloads
@@ -559,7 +555,7 @@ install_paywall_down() {
 
   has_cmd git || { warn "git missing; skipping Paywall Down"; return 1; }
   if [[ ! -d /Applications/Xcode.app ]]; then
-    warn "Paywall Down needs Xcode — install it, then run sys setup again"
+    warn "Paywall Down needs Xcode — install it, then run {{sys setup}} again"
     return 1
   fi
 
@@ -581,7 +577,7 @@ install_paywall_down() {
     run mkdir -p "$(dirname "$PAYWALL_DOWN_DIR")"
     if ! paywall_down_clone; then
       warn "Could not clone $PAYWALL_DOWN_REPO"
-      note "The repo is private. Sign in with 'gh auth login', then run sys setup again."
+      note "The repo is private. Sign in with {{gh auth login}}, then run {{sys setup}} again."
       return 1
     fi
   fi
@@ -943,7 +939,7 @@ print_manual_steps() {
   # No right-hand border: emoji are double-width and terminals disagree on
   # how much, so anything padded to a fixed column ends up ragged.
   header "🎉" "All set — a few things only you can do"
-  printf '  %b\n' "${todo[@]}"
+  printf "  ${GREY}%b${RESET}\n" "${todo[@]}"
   echo
   printf '  %sTip:%s %ssys doctor%s%s tells you if anything is still missing.%s\n\n' \
     "$GREY" "$RESET" "$WHITE" "$RESET" "$GREY" "$RESET"
