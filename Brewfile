@@ -36,6 +36,7 @@ cask "tailscale-app"    # mesh VPN — needed to reach anything on the tailnet
 
 # ── Password manager ─────────────────────────────────────────────────────────
 cask "1password"
+cask "1password-cli"
 
 # ── Browsers ─────────────────────────────────────────────────────────────────
 cask "google-chrome"

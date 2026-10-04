@@ -48,6 +48,11 @@ export EDITOR='code -w'
 # Trailing colon makes man append the system manpath, so `man sys` works.
 export MANPATH="$HOME/.system-config/man:"
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+# Homebrew otherwise checks for updates before almost every command, which
+# turns a 2-second install into a 30-second one. Once a month is plenty.
+export HOMEBREW_AUTO_UPDATE_SECS=2592000
+# And without the paragraph of advice about how to change that.
+export HOMEBREW_NO_ENV_HINTS=1
 export CLAUDE_CODE_OAUTH_TOKEN="$(security find-generic-password -a "$USER" -s claude-code-oauth-token -w 2>/dev/null)"
 
 # ── Config ───────────────────────────────────────────────────────────────────
