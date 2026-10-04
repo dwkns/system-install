@@ -13,3 +13,12 @@ __pycache__/
 id_*
 *.pem
 known_hosts*
+
+# Secrets live in 1Password (vault "Dev secrets"), never here. These are the
+# shapes a stray one would take.
+.op-service-token
+.env
+.secrets/
+*.p8
+*.p12
+*.cer
