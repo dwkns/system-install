@@ -74,9 +74,32 @@ keeps the others in step, and saves changes back. The repo is the source of
 truth; a machine is a copy of it. Anything the repo tracks is mirrored onto
 the machine by `sys sync` and mirrored back by `sys push`.
 
-Remote:  {sh('git', 'remote', 'get-url', 'origin')}  (PUBLIC — never commit a secret)
-Branch:  {sh('git', 'rev-parse', '--abbrev-ref', 'HEAD')} at {sh('git', 'log', '-1', '--format=%h %s')}
-Running on: {sh('hostname', '-s')}  ({sh('sw_vers', '-productVersion') or sh('uname', '-s')})""")
+Running on: {sh('hostname', '-s')}  ({sh('sw_vers', '-productVersion') or sh('uname', '-s')})
+Branch:  {sh('git', 'rev-parse', '--abbrev-ref', 'HEAD')} at {sh('git', 'log', '-1', '--format=%h %s')}""")
+
+# On GitHub, and whether this copy matches it — an AI reading the pushed code
+# needs to know if the machine it is on has moved on from it.
+web = re.sub(r"\.git$", "", sh("git", "remote", "get-url", "origin"))
+branch = sh("git", "rev-parse", "--abbrev-ref", "HEAD") or "master"
+behind_ahead = sh("git", "rev-list", "--left-right", "--count", f"origin/{branch}...HEAD")
+dirty = len([l for l in sh("git", "status", "--porcelain").splitlines() if l])
+state = []
+if behind_ahead:
+    behind, _, ahead = behind_ahead.partition("\t")
+    if ahead.strip() not in ("", "0"):
+        state.append(f"{ahead.strip()} commit(s) not pushed")
+    if behind.strip() not in ("", "0"):
+        state.append(f"{behind.strip()} commit(s) not pulled")
+if dirty:
+    state.append(f"{dirty} uncommitted file(s)")
+print(f"""
+On GitHub (PUBLIC — never commit a secret):
+  {web}
+  Whole repo, no checkout needed:  {web}/archive/refs/heads/{branch}.tar.gz
+  This file's companion:           {web}/blob/{branch}/AGENTS.md
+
+This copy vs origin/{branch}: {', '.join(state) if state else 'identical'}.
+{"Read the local files, not GitHub — they differ." if state else "GitHub matches, so either source is fine."}""")
 
 # ── Commands ─────────────────────────────────────────────────────────────────
 rule("COMMANDS")
