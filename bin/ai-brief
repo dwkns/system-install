@@ -52,6 +52,16 @@ def head_comment(path, limit=2):
     return " ".join(out)
 
 
+def trim(text, limit=220):
+    """Cut at the last sentence that fits, so a description never ends
+    mid-clause with a dangling comma."""
+    if len(text) <= limit and text.rstrip()[-1:] in ".?!":
+        return text
+    cut = text[:limit]
+    stop = max(cut.rfind(". "), cut.rfind("? "), cut.rfind("! "))
+    return cut[:stop + 1] if stop > 60 else cut.rsplit(" ", 1)[0] + "…"
+
+
 def rule(title):
     print(f"\n{'=' * 72}\n{title}\n{'=' * 72}")
 
@@ -110,14 +120,15 @@ for p in sorted((ROOT / "config").iterdir()) + [ROOT / "Brewfile", ROOT / "Brewf
         print(f"\n  config/{p.name}" if p.parent.name == "config" else f"\n  {p.name}")
         desc = head_comment(p, 3)
         if desc:
-            print(f"      {desc[:220]}")
+            print(f"      {trim(desc)}")
         else:
             n = len([l for l in p.read_text(errors="replace").splitlines()
                      if l.strip() and not l.startswith("#")])
             print(f"      {n} entries, one per line")
     elif p.is_dir():
         n = len([x for x in p.rglob("*") if x.is_file()])
-        print(f"\n  config/{p.name}/   ({n} files) {DIRS.get(p.name, '')}")
+        print(f"\n  config/{p.name}/   ({n} file{'' if n == 1 else 's'})"
+              f" {DIRS.get(p.name, '')}")
 
 # ── Sync ─────────────────────────────────────────────────────────────────────
 rule("WHAT SYNC COPIES WHERE")
