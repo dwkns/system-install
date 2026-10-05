@@ -1,0 +1,201 @@
+#!/usr/bin/env python3
+"""`sys ai` — everything an AI needs to know about this repo, in one go.
+
+Generated from the repo itself rather than written out by hand: the command
+list comes from sys's own usage table, the config descriptions from each
+file's opening comment, the machines from config/ssh/access. A hand-written
+version of this would be wrong within a fortnight.
+
+Plain text, no colour: the reader is a program.
+"""
+import os, pathlib, re, subprocess, sys
+
+ROOT = pathlib.Path(os.environ.get("ROOT_DIR", pathlib.Path.home() / ".system-config"))
+
+
+def sh(*args, cwd=ROOT):
+    try:
+        return subprocess.run(args, cwd=cwd, capture_output=True, text=True,
+                              timeout=10).stdout.strip()
+    except Exception:
+        return ""
+
+
+def head_comment(path, limit=2):
+    """The first prose lines of a file's opening comment block — or of its
+    docstring, since half these scripts are Python."""
+    try:
+        text = path.read_text(errors="replace")
+    except OSError:
+        return ""
+    doc = re.search(r'^(?:#![^\n]*\n)?"""(.*?)(?:"""|\n\n)', text, re.S)
+    if doc:
+        return " ".join(doc.group(1).strip().splitlines()[:limit])
+    lines = text.splitlines()
+    out = []
+    for line in lines:
+        s = line.strip()
+        if s.startswith("#!") or s.startswith('"""') or s == "#":
+            continue
+        if s.startswith("#"):
+            text = s.lstrip("#").strip()
+            if text:
+                out.append(text)
+            if len(out) >= limit:
+                break
+            continue
+        if out or s == "":
+            if out:
+                break
+            continue
+        break
+    return " ".join(out)
+
+
+def rule(title):
+    print(f"\n{'=' * 72}\n{title}\n{'=' * 72}")
+
+
+# ── What it is ───────────────────────────────────────────────────────────────
+print(f"""sys — one command for every machine dwkns owns.
+
+The repo at {ROOT} IS the configuration: it sets up a new Mac from scratch,
+keeps the others in step, and saves changes back. The repo is the source of
+truth; a machine is a copy of it. Anything the repo tracks is mirrored onto
+the machine by `sys sync` and mirrored back by `sys push`.
+
+Remote:  {sh('git', 'remote', 'get-url', 'origin')}  (PUBLIC — never commit a secret)
+Branch:  {sh('git', 'rev-parse', '--abbrev-ref', 'HEAD')} at {sh('git', 'log', '-1', '--format=%h %s')}
+Running on: {sh('hostname', '-s')}  ({sh('sw_vers', '-productVersion') or sh('uname', '-s')})""")
+
+# ── Commands ─────────────────────────────────────────────────────────────────
+rule("COMMANDS")
+usage = (ROOT / "bin/sys").read_text(errors="replace")
+block = re.search(r"<<'USAGE'\n(.*?)\nUSAGE", usage, re.S)
+if block:
+    for line in block.group(1).splitlines():
+        if "|" not in line:
+            continue
+        cmd, _, text = line.partition("|")
+        if not text.strip() and cmd.strip():
+            break          # the Options heading: its flags are summarised below
+        if not cmd.strip():
+            print()
+            continue
+        # {{braces}} mark a command for the terminal's colouring; plain here.
+        print(f"  {cmd:<16} {text.replace('{{', '').replace('}}', '')}")
+print("""
+Options: --dry-run (change nothing), --force (sync: redo everything),
+--yes (skip confirmations). DRY_RUN=1 and ASSUME_YES=1 do the same.""")
+
+# ── Layout ───────────────────────────────────────────────────────────────────
+rule("WHAT EACH FILE DOES")
+for rel in ["install.sh", "bin/sys", "macos.sh"] + \
+           sorted(f"lib/{p.name}" for p in (ROOT / "lib").glob("*.sh")) + \
+           sorted(f"bin/{p.name}" for p in (ROOT / "bin").iterdir() if p.name != "sys"):
+    p = ROOT / rel
+    if p.is_file():
+        print(f"  {rel:<28} {head_comment(p, 1)[:100]}")
+
+# ── Config ───────────────────────────────────────────────────────────────────
+DIRS = {
+    "ssh": "— access, each machine's public user key and sshd host key",
+    "cursor": "— Cursor settings, copied into its User dir",
+    "sublime-config": "— Sublime settings, copied into its User dir",
+    "terminfo": "— terminal descriptions every machine learns (Ghostty)",
+}
+rule("CONFIG — EDIT THESE, NOT THE CODE")
+for p in sorted((ROOT / "config").iterdir()) + [ROOT / "Brewfile", ROOT / "Brewfile.optional"]:
+    if p.is_file():
+        print(f"\n  config/{p.name}" if p.parent.name == "config" else f"\n  {p.name}")
+        desc = head_comment(p, 3)
+        if desc:
+            print(f"      {desc[:220]}")
+        else:
+            n = len([l for l in p.read_text(errors="replace").splitlines()
+                     if l.strip() and not l.startswith("#")])
+            print(f"      {n} entries, one per line")
+    elif p.is_dir():
+        n = len([x for x in p.rglob("*") if x.is_file()])
+        print(f"\n  config/{p.name}/   ({n} files) {DIRS.get(p.name, '')}")
+
+# ── Sync ─────────────────────────────────────────────────────────────────────
+rule("WHAT SYNC COPIES WHERE")
+targets = re.search(r"sync_targets\(\) \{\n  cat <<TARGETS\n(.*?)\nTARGETS",
+                    (ROOT / "lib/sync.sh").read_text(errors="replace"), re.S)
+if targets:
+    for line in targets.group(1).splitlines():
+        repo, _, system = line.partition("|")
+        system = (system.replace("$HOME", str(pathlib.Path.home()))
+                        .replace("$SUBLIME_USER_DIR",
+                                 str(pathlib.Path.home() /
+                                     "Library/Application Support/Sublime Text/User")))
+        print(f"  {repo:<24} -> {system}")
+print("""
+The CONTENTS of each repo directory are the manifest: add a file to track it,
+delete it to stop. sync_install copies repo -> system and the repo always
+wins; a system file that differs is stashed in .drift/ first. sync_backup
+(sys push) copies system -> repo for files the repo already tracks.""")
+
+# ── Machines ─────────────────────────────────────────────────────────────────
+rule("MACHINES")
+access = ROOT / "config/ssh/access"
+if access.is_file():
+    print("  machine              account   may be logged into from")
+    for raw in access.read_text(errors="replace").splitlines():
+        line = raw.split("#", 1)[0].split()
+        if len(line) >= 2:
+            print(f"  {line[0]:<20} {line[1]:<9} {' '.join(line[2:])}")
+no_sys = [l.split("#")[0].strip() for l in
+          (ROOT / "config/ssh/no-sys").read_text(errors="replace").splitlines()
+          if l.split("#")[0].strip()] if (ROOT / "config/ssh/no-sys").is_file() else []
+if no_sys:
+    print(f"\n  Cannot run sys (their authorized_keys is written to them over SSH,\n"
+          f"  and `sys sync all` skips them): {', '.join(no_sys)}")
+print("""
+Each machine makes its own SSH key, shares the public half into
+config/ssh/keys/, and pins every other machine's host key from
+config/ssh/hostkeys/. Private keys never leave the machine that made them.
+Aliases drop the shared prefix, so `ssh mini-m1` reaches dwkns-mini-m1 over
+Tailscale, or NAME.local when Tailscale is off.""")
+
+# ── State ────────────────────────────────────────────────────────────────────
+rule("LOCAL STATE (gitignored)")
+state = ROOT / ".state"
+print("  .state/   stamps for steps that run once per version of their config.")
+if state.is_dir():
+    for p in sorted(state.iterdir()):
+        print(f"      {p.name}")
+print("""      A stamp holds the fingerprint of the config its step last
+      succeeded with, so editing that config makes the step run again.
+      Written only on success. Delete one to force its step; sys sync
+      --force ignores them all.
+  .drift/   copies of system files that sync replaced because they differed.""")
+
+# ── Conventions ──────────────────────────────────────────────────────────────
+rule("CONVENTIONS TO FOLLOW WHEN CHANGING THIS")
+print("""  * macOS ships bash 3.2 — no associative arrays, no ${var^^}.
+  * lib/common.sh is also sourced by .zshrc, so it must stay valid in zsh.
+  * install.sh and bin/ssh-access run under `curl | bash`, where stdin IS the
+    script: never `exec </dev/tty` there.
+  * Colour means something. GREY supporting copy, GREEN good, ORANGE off but
+    expected, RED a problem, WHITE the subject (titles, names, commands).
+  * Mark commands inside messages as {{sys sync}} — the message helpers in
+    lib/common.sh render them white. Never colour one by hand.
+  * A dry run must never leave a "done" stamp.
+  * Verify, don't assume: read a setting back after writing it, and say
+    plainly when something was not tested.
+  * The repo is public. Secrets live in 1Password (vault "Dev secrets").""")
+
+# ── Docs ─────────────────────────────────────────────────────────────────────
+rule("READ NEXT")
+agents = ROOT / "AGENTS.md"
+if agents.is_file():
+    print("  AGENTS.md — how it works inside, and how to change it:")
+    for m in re.finditer(r"^## (.+)$", agents.read_text(errors="replace"), re.M):
+        print(f"      {m.group(1)}")
+for p in sorted((ROOT / "docs").glob("*.md")) if (ROOT / "docs").is_dir() else []:
+    first = next((l[2:] for l in p.read_text(errors="replace").splitlines()
+                  if l.startswith("# ")), p.stem)
+    print(f"  docs/{p.name} — {first}")
+print("  man/man1/sys.1 — the manual, also at `sys ssh man`\n")

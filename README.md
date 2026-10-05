@@ -29,6 +29,7 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys sync all` | The same here, then on every machine this one may log into, one after another |
 | `sys push` | Save this machine's config into the repo and push |
 | `sys doctor` | Check everything is installed and signed in |
+| `sys ai` | A generated brief of the whole repo, for an AI picking it up cold |
 | `sys ssh` | The machines sys manages, and whether each is reachable right now |
 | `sys ssh all` | The same, plus anything hand-written in `~/.ssh/config` |
 | `sys ssh man` | The manual |
@@ -137,6 +138,7 @@ lib/setup.sh                 brew, mise, App Store, macOS, the Dock
 lib/ssh.sh                   SSH keys, access and aliases from config/ssh/access (run by sync)
 bin/ssh-access               the one command for a machine that does not run sys
 bin/ssh-reach                Tailscale name or NAME.local? the aliases ask this
+bin/ai-brief                 `sys ai` — the repo explained, generated from the repo
 config/ssh/access            who may log in where, and as which account
 config/ssh/no-sys            machines that cannot run sys; their access is pushed to them
 config/net                   network shares for `sys net`

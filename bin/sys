@@ -25,6 +25,7 @@ sys sync|Pull the latest config and apply it here (apps, dotfiles, Dock, SSH…)
 sys sync all|The same here, then on every machine this one may log into
 sys push|Save this machine's config into the repo and push
 sys doctor|Check that everything is where it should be
+sys ai|Everything an AI needs to know about this repo, generated
 |
 sys ssh|The machines sys manages, and whether each is reachable
 sys ssh all|The same, plus anything hand-written in ~/.ssh/config
@@ -361,6 +362,9 @@ case "$cmd" in
     is_macos || die "macOS only."
     remove_everything
     ;;
+
+  ai)
+    exec "$ROOT_DIR/bin/ai-brief" ;;
 
   net)
     is_macos || die "macOS only."

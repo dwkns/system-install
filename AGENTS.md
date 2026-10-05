@@ -98,6 +98,7 @@ state is carried by the status next to it, not by dimming the command.
 | `bin/ssh-hosts` | `sys ssh` — machines from `config/ssh/access`, both routes probed in parallel |
 | `bin/ssh-reach` | Is NAME answering on port 22 within 2s? Used by the ssh aliases |
 | `lib/net.sh` | `sys net` — network shares from `config/net`, mounted through Finder |
+| `bin/ai-brief` | `sys ai` — this file's companion, generated: commands, config, machines, state |
 | `docs/ubuntu-box.md` | How the Ubuntu box was built — vendor repos `sys` does not manage |
 | `docs/nas.md` | The Synology — accounts, shares, Time Machine, Tailscale, and their failure modes |
 | `man/man1/sys.1` | Man page. Keep in step with behaviour |

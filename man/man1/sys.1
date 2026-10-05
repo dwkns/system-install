@@ -200,6 +200,13 @@ The same list, plus any host written by hand in
 Each machine's two routes are probed: its Tailscale name and
 .IR NAME.local
 on the home network. Tailscale being off is reported once, at the top.
+.TP
+.B ai
+Print a brief of the whole repository for an AI: every command, what each
+file does, the config files and their formats, what sync copies where, the
+machines, the local state, and the conventions to follow when changing it.
+Generated from the repository itself, so it cannot drift from the code. Plain
+text, no colour.
 .SH OPTIONS
 .TP
 .B \-\-dry\-run

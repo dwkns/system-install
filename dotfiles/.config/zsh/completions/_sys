@@ -12,6 +12,7 @@ _sys() {
     'sync:Pull the latest config and apply it here'
     'push:Save this machine'"'"'s config into the repo and push'
     'doctor:Check that everything is where it should be'
+    'ai:A generated brief of this repo, for an AI'
     'ssh:List the machines you can reach over SSH'
     'net:List the network shares, or connect to one'
     'hostname:Set the computer name'
