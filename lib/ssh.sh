@@ -219,6 +219,15 @@ ssh_write_aliases() {
   # not allowed by config/ssh/access or an impostor, and neither should ever
   # see a password typed at it. Plain `ssh user@host` still can.
   out="$out  IdentityFile ~/.ssh/id_ed25519"$'\n'"  IdentitiesOnly yes"$'\n'
+  # Never ask an SSH agent: these machines use their own key, made here and
+  # never copied. IdentitiesOnly does not stop ssh consulting an agent first,
+  # so a 1Password agent that had frozen after an update hung every login
+  # here with nothing on screen. This file is included before anything in
+  # ~/.ssh/config, and ssh takes the first value it finds, so this wins over a
+  # `Host *` agent line there without stopping it for other hosts.
+  out="$out  IdentityAgent none"$'\n'
+  # Bound the connect for a hand-typed `ssh mini-m1` too, not just sys's own.
+  out="$out  ConnectTimeout 5"$'\n'
   out="$out  PasswordAuthentication no"$'\n'"  KbdInteractiveAuthentication no"$'\n'
 
   out="$out  ServerAliveInterval 30"$'\n'"  ControlMaster auto"$'\n'"  ControlPath ~/.ssh/cm-%C"$'\n'"  ControlPersist 10m"
@@ -273,6 +282,12 @@ ssh_sync_others() {
       note "$a is not reachable right now — skipped"; continue
     fi
     if [[ "${DRY_RUN:-0}" == "1" ]]; then note "dry run: {{ssh $a sys sync}}"; continue
+    fi
+    # Log in once, within 15s, before the real run. The sync itself can rightly
+    # take many minutes, so it cannot have a total limit — but a login that
+    # never completes must not hang `sys sync all` silently.
+    if ! timed 15 ssh -o BatchMode=yes "$a" true 2>/dev/null; then
+      warn "$a: could not log in within 15s — skipped"; rc=1; continue
     fi
     # -t: a real terminal there, so a one-time GitHub sign-in can show its code.
     if ssh -t -o BatchMode=yes -o ConnectTimeout=8 "$a" \
@@ -331,7 +346,7 @@ ssh_push_access() {
     # argument would arrive as several commands. One base64 blob instead:
     # marker, marker, then the keys.
     payload="$(printf '%s\n%s\n%s' "$SSH_MARK_START" "$SSH_MARK_END" "$keys" | base64 | tr -d '\n')"
-    out="$(ssh -o BatchMode=yes -o ConnectTimeout=8 "$a" /bin/sh -s -- "$payload" <<'REMOTE' 2>&1
+    out="$(timed 30 ssh -o BatchMode=yes -o ConnectTimeout=8 "$a" /bin/sh -s -- "$payload" <<'REMOTE' 2>&1
 blob=$(printf '%s' "$1" | base64 -d) || { echo "could not decode"; exit 1; }
 start=$(printf '%s\n' "$blob" | sed -n 1p)
 end=$(printf '%s\n' "$blob" | sed -n 2p)

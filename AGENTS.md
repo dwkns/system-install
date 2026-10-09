@@ -461,6 +461,14 @@ Kept as a list because each one cost a debugging session.
 
 ---
 
+- **A frozen 1Password SSH agent hung every login, with nothing on screen.**
+  A `Host *` `IdentityAgent` line (and `SSH_AUTH_SOCK`) pointed ssh at it;
+  `IdentitiesOnly yes` does not stop ssh asking the agent first; and
+  `ConnectTimeout` only bounds the TCP connect, not authentication. Now sys's
+  hosts carry `IdentityAgent none` (they use their own on-disk key), every
+  unattended ssh call goes through `timed` in `lib/common.sh`, and `sys
+  doctor` reports the agent when anything points ssh at it.
+
 ## 9. Keeping docs in step
 
 `README.md` (what it does), `man/man1/sys.1` (reference), this file (how it

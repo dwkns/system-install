@@ -95,6 +95,22 @@ ssh -t smb-nas 'sudo chown -R tailscale:tailscale /volume1/@appdata/Tailscale &&
 `synopkg start` also sets the package to start at boot; `synopkg resume` does
 not.
 
+## Moving files onto it
+
+- **rsync over SSH needs DSM's rsync service** (File Services ▸ rsync ▸ Enable).
+  Without it DSM answers "Permission denied, please try again" — which looks
+  exactly like an SSH login failure and is not one. Enabled now.
+- **Copying from a Mac over SMB leaves `._` AppleDouble files** beside every
+  file and folder; copying over SSH does not.
+- **The USB drive (`dwkns-media`) is exFAT**: no owners or modes (`chmod` is
+  silently ignored), and names cannot contain `: * ? " < > | \`. A name SMB
+  cannot store — a trailing space, say — arrives as a private Unicode
+  character, as the `Chernobyl (2019)` folder did.
+- **Bulk copies belong on the NAS itself** (its disk to its USB port) or on a
+  wired Mac — and check the USB link says SuperSpeed (`dmesg | grep usb` on the
+  NAS, `system_profiler SPUSBHostDataType` on a Mac). Twice a cable or
+  adapter silently ran at USB 2, a third of the speed.
+
 ## Keychain on the Macs
 
 SMB passwords live in the login Keychain, one item per account **and per name

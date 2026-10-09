@@ -92,6 +92,24 @@ with_timeout() {
   return $rc
 }
 
+# Run a command with a time limit and its output intact (with_timeout throws
+# the output away). macOS has no timeout(1), but has perl. Exit 142 means the
+# limit was hit. For ssh, this is the only thing that bounds the LOGIN:
+# ConnectTimeout stops at the TCP connect, so a stuck agent or a server that
+# never answers authentication would otherwise wait for ever.
+timed() {
+  local secs="$1"; shift
+  # perl forks the command and waits, so on the limit it is perl that exits
+  # 142 — not the command dying of SIGALRM, which makes bash print
+  # "Alarm clock" into the middle of sys's output.
+  perl -e '
+    my $s = shift; my $pid = fork; defined $pid or exit 126;
+    if (!$pid) { exec @ARGV; exit 127 }
+    $SIG{ALRM} = sub { kill "TERM", $pid; waitpid $pid, 0; exit 142 };
+    alarm $s; waitpid $pid, 0;
+    exit($? & 127 ? 128 + ($? & 127) : $? >> 8);' "$secs" "$@"
+}
+
 # Ask a yes/no question that answers itself if left alone.
 #   ask_timeout <seconds> <default: y|n> <question>
 ask_timeout() {

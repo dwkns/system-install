@@ -55,7 +55,7 @@ nas_show() {
 
   # Everything else in one SSH call, as key=value lines.
   local facts
-  if ! facts="$(ssh -o BatchMode=yes -o ConnectTimeout=8 "$alias" 'sh -s' 2>/dev/null <<'REMOTE'
+  if ! facts="$(timed 20 ssh -o BatchMode=yes -o ConnectTimeout=8 "$alias" 'sh -s' 2>/dev/null <<'REMOTE'
 . /etc/VERSION 2>/dev/null
 echo "model=$(cat /proc/sys/kernel/syno_hw_version 2>/dev/null)"
 echo "dsm=$productversion build $buildnumber"
@@ -72,7 +72,7 @@ ip="$(/var/packages/Tailscale/target/bin/tailscale ip -4 2>/dev/null | head -1)"
 echo "ts=${ip:-stopped}"
 REMOTE
 )"; then
-    row "SSH" "$(bad "could not log in") $(grey "— is it on, and is this machine in config/ssh/access?")"
+    row "SSH" "$(bad "could not log in within 20s") $(grey "— is it on, and is this machine in config/ssh/access?")"
     echo; return 1
   fi
 

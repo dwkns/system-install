@@ -323,6 +323,21 @@ case "$cmd" in
       row "🔐" "sshd" "${GREY}keys and passwords — ${RESET}${WHITE}sys ssh harden${RESET}${GREY} turns passwords off${RESET}"
     fi
 
+    # 1Password's SSH agent — only when something points ssh at it. After a
+    # silent update it froze, held its socket and answered nothing, and every
+    # login through it hung with nothing on screen to explain why.
+    op_sock="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    if [[ -S "$op_sock" ]] && { grep -rqs "1password/t/agent.sock" "$HOME/.ssh/config" "$HOME/.ssh/config.d" ||
+                                [[ "${SSH_AUTH_SOCK:-}" == "$op_sock" ]]; }; then
+      op_out="$(SSH_AUTH_SOCK="$op_sock" timed 3 ssh-add -l 2>&1)" && op_rc=0 || op_rc=$?
+      case "$op_rc" in
+        0)   row "🔒" "1Password" "$(good "SSH agent answering") ${GREY}$(printf '%s\n' "$op_out" | grep -c .) key(s)${RESET}" ;;
+        1)   row "🔒" "1Password" "$(bad "SSH agent holds no keys") ${GREY}— something points ssh at it (an IdentityAgent line, or SSH_AUTH_SOCK) for nothing; sys's own hosts skip it either way${RESET}"; issues=1 ;;
+        142) row "🔒" "1Password" "$(bad "SSH agent not answering") ${GREY}— quit 1Password (Force Quit if needed) and reopen it${RESET}"; issues=1 ;;
+        *)   row "🔒" "1Password" "$(bad "SSH agent error") ${GREY}${op_out}${RESET}"; issues=1 ;;
+      esac
+    fi
+
     if [[ "$(cat "$ROOT_DIR/.state/dock" 2>/dev/null)" == "$(fingerprint "$ROOT_DIR/config/dock" "$ROOT_DIR/bin/set-dock")" ]]; then
       row "🚀" "Dock" "$(good "matches config/dock") ${GREY}as of the last sync${RESET}"
     else
