@@ -207,6 +207,15 @@ file does, the config files and their formats, what sync copies where, the
 machines, the local state, and the conventions to follow when changing it.
 Generated from the repository itself, so it cannot drift from the code. Plain
 text, no colour.
+.TP
+.BR nas " [" open ]
+Show the NAS: whether it can be reached over the local network and the
+tailnet, its model and DSM version, how full its disk is, whether Tailscale is
+running on it, and its shares \(em with any USB drive shown against the share
+that serves it. Read live over one SSH call, without root.
+.B sys nas open
+opens its web page in the browser. Both read
+.IR config/nas .
 .SH OPTIONS
 .TP
 .B \-\-dry\-run

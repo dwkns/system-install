@@ -3,6 +3,8 @@
 A Synology DS220j running DSM 7.1, on the tailnet as `dwkns-smb-nas` and on the
 home network as `dwkns-smb-nas.local` (192.168.5.45). One 3.6 TB volume.
 
+`sys nas` shows its state at a glance; `sys nas open` opens its web page.
+
 It cannot run `sys` — there is no git on DSM — so it is listed in
 `config/ssh/no-sys` and every Mac that syncs writes its `authorized_keys` over
 SSH instead. See section 4 of [AGENTS.md](../AGENTS.md).

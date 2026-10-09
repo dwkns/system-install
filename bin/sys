@@ -8,6 +8,7 @@ source "$ROOT_DIR/lib/sync.sh"
 source "$ROOT_DIR/lib/setup.sh"
 source "$ROOT_DIR/lib/ssh.sh"
 source "$ROOT_DIR/lib/net.sh"
+source "$ROOT_DIR/lib/nas.sh"
 
 usage() {
   # Commands in white, what they do in grey: the same scheme as every other
@@ -33,6 +34,8 @@ sys ssh NAME|Log in and attach the session waiting there
 sys ssh harden|Keys only on this machine — optional, passwords stay on otherwise
 sys ssh man|The manual
 |
+sys nas|The NAS: how to reach it, its disk, shares and Tailscale
+sys nas open|Open the NAS's web page in the browser
 sys net|List the network shares; {{sys net NAME}} connects to one
 sys hostname|Set the computer name (asks, or pass one: {{sys hostname my-mac}})
 sys extras|Install the optional extras (Office, Xcode, duckdb)
@@ -365,6 +368,14 @@ case "$cmd" in
 
   ai)
     exec "$ROOT_DIR/bin/ai-brief" ;;
+
+  nas)
+    case "${ARGS[0]:-}" in
+      "")    nas_show ;;
+      open)  nas_open ;;
+      *)     die "Unknown: sys nas $ARG — {{sys nas}} shows it, {{sys nas open}} opens its web page" ;;
+    esac
+    ;;
 
   net)
     is_macos || die "macOS only."

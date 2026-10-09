@@ -35,6 +35,8 @@ it finishes it opens a fresh shell with the new config loaded.
 | `sys ssh man` | The manual |
 | `sys ssh NAME` | Log in and attach the tmux session waiting there |
 | `sys ssh harden` | Keys only on this machine — optional; passwords stay on otherwise |
+| `sys nas` | The NAS: how to reach it, its disk, shares and Tailscale |
+| `sys nas open` | Open the NAS's web page |
 | `sys net` | List the network shares; `sys net dwkns-nas` mounts one |
 | `sys hostname` | Set the computer name (asks, or `sys hostname my-mac`) |
 | `sys extras` | Install optional extras (Office, Xcode, duckdb) |
@@ -142,6 +144,7 @@ bin/ai-brief                 `sys ai` — the repo explained, generated from the
 config/ssh/access            who may log in where, and as which account
 config/ssh/no-sys            machines that cannot run sys; their access is pushed to them
 config/net                   network shares for `sys net`
+config/nas                   the NAS's name and web page, for `sys nas`
 config/apt-packages          packages for the Ubuntu box, installed by sync there
 docs/ubuntu-box.md           how the Ubuntu box was built, and what sys does there
 docs/nas.md                  the Synology: accounts, shares, Time Machine, Tailscale

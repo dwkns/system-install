@@ -1,0 +1,8 @@
+# The NAS, for `sys nas`.
+#
+#   host   its machine name — the same one config/ssh/access uses, so
+#          `ssh` reaches it over the tailnet or the local network
+#   web    its admin web page, opened by `sys nas open`
+
+host dwkns-smb-nas
+web  http://dwkns-smb-nas.local:5000

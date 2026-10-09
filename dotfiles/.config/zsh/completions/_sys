@@ -14,6 +14,7 @@ _sys() {
     'doctor:Check that everything is where it should be'
     'ai:A generated brief of this repo, for an AI'
     'ssh:List the machines you can reach over SSH'
+    'nas:The NAS — reach, disk, shares, Tailscale'
     'net:List the network shares, or connect to one'
     'hostname:Set the computer name'
     'extras:Install the optional extras'
@@ -41,6 +42,10 @@ _sys() {
       items=( 'all:then every machine this one may log into' )
       _describe -t targets 'target' items
       _describe -t options 'option' opts
+      ;;
+    nas)
+      items=( 'open:the NAS'"'"'s web page, in the browser' )
+      _describe -t subcommands 'sys nas' items
       ;;
     ssh)
       items=( 'harden:keys only on this machine — passwords off' )
